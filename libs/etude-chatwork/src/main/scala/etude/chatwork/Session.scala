@@ -257,7 +257,8 @@ case class Session(email: String,
 
   def api(command: String,
           params: Map[String, String],
-          data: Option[JSONObject] = None): Either[Exception, Any] = {
+          data: Option[JSONObject] = None,
+          retries: Int = 1): Either[Exception, Any] = {
     throttle.execute {
       () => {
         val context = currentContext match {
@@ -302,7 +303,18 @@ case class Session(email: String,
                   if (status.get("success").get.asInstanceOf[Boolean]) {
                     Right(jsonObj.get("result").get)
                   } else {
-                    Left(CommandFailureException(command, status.get("message").get.asInstanceOf[String]))
+                    val message = status.get("message").get.asInstanceOf[String]
+                    if (message.contains("NO LOGIN") && retries > 0) {
+                      // In case of session time out.
+
+                      login match {
+                        case Left(e) => Left(e)
+                        case Right(r) =>
+                          api(command, params, data, retries - 1)
+                      }
+                    } else {
+                      Left(CommandFailureException(command, message))
+                    }
                   }
                 } catch {
                   case e: Exception => Left(e)
