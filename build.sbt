@@ -28,17 +28,20 @@ lazy val libsEtudeCalendar = project.in(file("libs/etude-calendar"))
 
 lazy val libsEtudeChatwork = project.in(file("libs/etude-chatwork"))
     .dependsOn(libsEtudeHttp)
+    .dependsOn(libsEtudeQos)
 
 lazy val libsEtudeFile = project.in(file("libs/etude-file"))
 
 lazy val libsEtudeHtml = project.in(file("libs/etude-html"))
 
 lazy val libsEtudeHttp = project.in(file("libs/etude-http"))
-	.dependsOn(libsEtudeIo)
+    .dependsOn(libsEtudeIo)
 
 lazy val libsEtudeIo = project.in(file("libs/etude-io"))
 
 lazy val libsEtudeMoney = project.in(file("libs/etude-money"))
+
+lazy val libsEtudeQos = project.in(file("libs/etude-qos"))
 
 lazy val libsEtudeRegion = project.in(file("libs/etude-region"))
 

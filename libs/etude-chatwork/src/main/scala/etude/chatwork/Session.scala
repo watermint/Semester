@@ -5,6 +5,8 @@ import java.net.URI
 import java.time.{Duration, Instant}
 import scala.util.parsing.json.{JSON, JSONArray, JSONObject}
 import scala.collection.mutable
+import org.slf4j.LoggerFactory
+import etude.qos.Throttle
 
 /**
  *
@@ -16,6 +18,8 @@ case class Session(email: String,
    * Wait login action for seconds.
    */
   lazy val LOGIN_ACTION_SPAN = 10
+
+  lazy val throttle: Throttle = Throttle(0.5)
 
   lazy val isKddiChatwork: Boolean = {
     orgId match {
@@ -44,6 +48,8 @@ case class Session(email: String,
   private var lastLoginAction: Option[Instant] = None
 
   private var currentContext: Option[SessionContext] = None
+
+  private val logger = LoggerFactory.getLogger(getClass)
 
   def login: Either[Exception, SessionContext] = {
     lastLoginAction match {
@@ -252,55 +258,60 @@ case class Session(email: String,
   def api(command: String,
           params: Map[String, String],
           data: Option[JSONObject] = None): Either[Exception, Any] = {
-
-    val context = currentContext match {
-      case None => login match {
-        case Left(e) => return Left(e)
-        case Right(c) => c
-      }
-      case Some(c) => c
-    }
-
-    val gatewayUri = baseUri.withPath("/gateway.php")
-      .withQuery("cmd", command)
-      .withQuery(params.toList)
-      .withQuery("myid", context.myId)
-      .withQuery("_v", "1.80a")
-      .withQuery("_av", "4")
-      .withQuery("_t", context.accessToken)
-      .withQuery("ln", "en")
-
-    val response = data match {
-      case Some(d) =>
-        context.client.post(
-          gatewayUri,
-          List("pdata" -> d.toString())
-        )
-      case _ => context.client.get(gatewayUri)
-    }
-
-    response match {
-      case Left(e) => Left(e)
-      case Right(r) =>
-        JSON.perThreadNumberParser = {
-          number: String => BigInt(number)
+    throttle.execute {
+      () => {
+        val context = currentContext match {
+          case None => login match {
+            case Left(e) => return Left(e)
+            case Right(c) => c
+          }
+          case Some(c) => c
         }
-        JSON.parseFull(r.contentAsString) match {
-          case Some(json) =>
-            try {
-              val jsonObj = json.asInstanceOf[Map[String, Any]]
-              val status = jsonObj.get("status").get.asInstanceOf[Map[String, Any]]
-              if (status.get("success").get.asInstanceOf[Boolean]) {
-                Right(jsonObj.get("result").get)
-              } else {
-                Left(CommandFailureException(command, status.get("message").get.asInstanceOf[String]))
-              }
-            } catch {
-              case e: Exception => Left(e)
+
+        val gatewayUri = baseUri.withPath("/gateway.php")
+          .withQuery("cmd", command)
+          .withQuery(params.toList)
+          .withQuery("myid", context.myId)
+          .withQuery("_v", "1.80a")
+          .withQuery("_av", "4")
+          .withQuery("_t", context.accessToken)
+          .withQuery("ln", "en")
+
+        val response = data match {
+          case Some(d) =>
+            context.client.post(
+              gatewayUri,
+              List("pdata" -> d.toString())
+            )
+          case _ => context.client.get(gatewayUri)
+        }
+
+        response match {
+          case Left(e) => Left(e)
+          case Right(r) =>
+            logger.debug(r.contentAsString)
+
+            JSON.perThreadNumberParser = {
+              number: String => BigInt(number)
             }
-          case _ =>
-            Left(UnknownChatworkProtocolException("invalid JSON format result for command [" + command + "]"))
+            JSON.parseFull(r.contentAsString) match {
+              case Some(json) =>
+                try {
+                  val jsonObj = json.asInstanceOf[Map[String, Any]]
+                  val status = jsonObj.get("status").get.asInstanceOf[Map[String, Any]]
+                  if (status.get("success").get.asInstanceOf[Boolean]) {
+                    Right(jsonObj.get("result").get)
+                  } else {
+                    Left(CommandFailureException(command, status.get("message").get.asInstanceOf[String]))
+                  }
+                } catch {
+                  case e: Exception => Left(e)
+                }
+              case _ =>
+                Left(UnknownChatworkProtocolException("invalid JSON format result for command [" + command + "]"))
+            }
         }
+      }
     }
   }
 }
