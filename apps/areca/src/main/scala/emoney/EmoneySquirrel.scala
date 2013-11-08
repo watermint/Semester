@@ -1,4 +1,4 @@
-package emoneyreader
+package emoney
 
 import squirrel.{SquirrelRecord, SquirrelCategory}
 import java.nio.file.Path

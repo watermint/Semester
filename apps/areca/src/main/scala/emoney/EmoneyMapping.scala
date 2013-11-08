@@ -1,4 +1,4 @@
-package emoneyreader
+package emoney
 
 import areca.Mapping
 

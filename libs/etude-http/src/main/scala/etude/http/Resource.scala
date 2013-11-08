@@ -1,23 +1,10 @@
 package etude.http
 
-import java.net.URI
-import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
-import org.apache.http.client.methods.HttpGet
-
 /**
  *
  */
-case class Resource(uri: URI) {
-  def httpClient: CloseableHttpClient = HttpClients.createDefault()
+case class Resource(uri: URIContainer) {
+  def get: Either[Exception, Response] =  Client().get(uri)
 
-  def get: Either[Exception, Response] = {
-    val client = httpClient
-    try {
-      Right(Response(client.execute(new HttpGet(uri))))
-    } catch {
-      case e: Exception => Left(e)
-    } finally {
-      client.close()
-    }
-  }
+  def post(formData: List[Pair[String, String]] = List()): Either[Exception, Response] = Client().post(uri, formData)
 }

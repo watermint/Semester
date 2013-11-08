@@ -1,6 +1,6 @@
 package areca
 
-import emoneyreader.EmoneyMapping
+import emoney.EmoneyMapping
 import saison.SaisonMapping
 import starbucks.StarbucksMapping
 import shinsei.ShinseiMapping

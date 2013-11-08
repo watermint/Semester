@@ -1,6 +1,5 @@
 package etude.http
 
-import java.io.InputStream
 import org.apache.http.{Header, HttpResponse}
 import etude.io.Memory._
 
@@ -11,7 +10,9 @@ case class Response(statusCode: StatusCode,
                     headers: Map[String, String],
                     contentType: Option[String],
                     contentEncoding: Option[String],
-                    content: InputStream) {
+                    content: Array[Byte]) {
+
+  lazy val contentAsString: String = new String(content)
 }
 
 object Response {
@@ -20,7 +21,7 @@ object Response {
     Response(
       statusCode = StatusCode(response.getStatusLine.getStatusCode),
       headers = response.getAllHeaders.map(h => h.getName -> h.getValue).toMap,
-      contentType = response.getEntity.getContentEncoding match {
+      contentType = response.getEntity.getContentType match {
         case h: Header => Some(h.getValue)
         case _ => None
       },
@@ -28,7 +29,7 @@ object Response {
         case h: Header => Some(h.getValue)
         case _ => None
       },
-      content = response.getEntity.getContent.onMemory
+      content = response.getEntity.getContent.asByteArray
     )
   }
 }

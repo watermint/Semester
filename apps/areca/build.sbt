@@ -2,8 +2,6 @@ name := "Areca"
 
 version := "0.0.1"
 
-scalaVersion := "2.10.3"
-
 resolvers ++= Seq(
   "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
   "time-sugar" at "http://watermint.github.io/time-sugar/mvn"

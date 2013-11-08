@@ -1,4 +1,4 @@
-package emoneyreader
+package emoney
 
 import java.time.{ZoneId, Instant}
 import java.nio.file.Path

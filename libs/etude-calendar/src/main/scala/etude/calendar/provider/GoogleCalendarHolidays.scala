@@ -152,7 +152,7 @@ case class GoogleCalendarHolidays(locale: Locale = Locale.getDefault) {
           case Right(r) =>
             r.statusCode match {
               case c: StatusSuccessful =>
-                Right((XML.load(r.content) \ "entry").map(holiday))
+                Right((XML.load(r.contentAsString) \ "entry").map(holiday))
               case c: StatusInternalServerError =>
                 Left(NoCalendarFoundException("No calendar found for: " + uri))
               case c =>

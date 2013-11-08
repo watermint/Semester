@@ -12,6 +12,11 @@ resolvers ++= Seq(
 )
 
 lazy val appsAreca = project.in(file("apps/areca"))
+    .dependsOn(libsEtudeMoney)
+    .dependsOn(libsEtudeHtml)
+
+lazy val appsStenographer = project.in(file("apps/stenographer"))
+    .dependsOn(libsEtudeChatwork)
 
 lazy val libsEtudeAggregation = project.in(file("libs/etude-aggregation"))
 
@@ -19,6 +24,9 @@ lazy val libsEtudeCalendar = project.in(file("libs/etude-calendar"))
     .dependsOn(libsEtudeAggregation)
     .dependsOn(libsEtudeRegion)
     .dependsOn(libsEtudeReligion)
+    .dependsOn(libsEtudeHttp)
+
+lazy val libsEtudeChatwork = project.in(file("libs/etude-chatwork"))
     .dependsOn(libsEtudeHttp)
 
 lazy val libsEtudeFile = project.in(file("libs/etude-file"))

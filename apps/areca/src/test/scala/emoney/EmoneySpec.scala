@@ -5,7 +5,7 @@ import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
 import com.typesafe.config.ConfigFactory
 import java.nio.file.FileSystems
-import emoneyreader.{EmoneySquirrel, EmoneyRecord}
+import emoney.{EmoneySquirrel, EmoneyRecord}
 import squirrel.SquirrelCategory
 
 @RunWith(classOf[JUnitRunner])
