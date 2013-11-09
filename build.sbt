@@ -9,7 +9,8 @@ conflictManager := ConflictManager.strict
 resolvers ++= Seq(
   "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
   "atlassian-public" at "https://maven.atlassian.com/repository/public",
-  "Maven Central Server" at "http://repo1.maven.org/maven2",
+  "maven-central" at "http://repo1.maven.org/maven2",
+  "twitter-repo" at "http://maven.twttr.com",
   Resolver.sonatypeRepo("snapshots")
 )
 

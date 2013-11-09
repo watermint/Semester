@@ -1,12 +1,11 @@
-package emoney
+package areca.emoney
 
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
 import com.typesafe.config.ConfigFactory
 import java.nio.file.FileSystems
-import emoney.{EmoneySquirrel, EmoneyRecord}
-import squirrel.SquirrelCategory
+import areca.squirrel.SquirrelCategory
 
 @RunWith(classOf[JUnitRunner])
 class EmoneySpec extends Specification {
@@ -17,7 +16,7 @@ class EmoneySpec extends Specification {
     }
 
     "Load record from csv" in {
-      val path = FileSystems.getDefault.getPath("apps/areca/src/test/resources/emoney/source01.csv")
+      val path = FileSystems.getDefault.getPath("apps/areca/src/test/resources/areca/emoney/source01.csv")
       val records = EmoneyRecord.fromFile(path)
 
       records must haveSize(9)
