@@ -1,8 +1,3 @@
 package etude.file
 
-/**
- *
- */
-trait InvalidPath extends Path {
-
-}
+trait InvalidPath extends Path

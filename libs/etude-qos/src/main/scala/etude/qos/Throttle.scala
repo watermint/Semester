@@ -1,11 +1,7 @@
 package etude.qos
 
 import java.time.{Duration, Instant}
-import java.time.temporal.ChronoUnit
 
-/**
- *
- */
 case class Throttle(maxQueryPerSecond: Double) {
   if (maxQueryPerSecond <= 0) {
     throw new IllegalArgumentException("maxQueryPerSecond should grater than zero.")

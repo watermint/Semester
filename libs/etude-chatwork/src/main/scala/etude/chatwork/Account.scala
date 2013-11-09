@@ -1,8 +1,5 @@
 package etude.chatwork
 
-/**
- *
- */
 case class Account(aid: BigInt,
                    gid: BigInt,
                    chatworkId: Option[String],

@@ -1,6 +1,5 @@
 package etude.religion
 
-
 case class Religion(id: String)
 
 object Religion {

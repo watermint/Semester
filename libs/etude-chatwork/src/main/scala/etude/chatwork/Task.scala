@@ -2,9 +2,6 @@ package etude.chatwork
 
 import java.time.Instant
 
-/**
- *
- */
 case class Task(roomId: BigInt,
                 taskId: BigInt,
                 status: String,

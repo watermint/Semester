@@ -1,8 +1,5 @@
 package etude.http
 
-/**
- *
- */
 case class Resource(uri: URIContainer) {
   def get: Either[Exception, Response] =  Client().get(uri)
 

@@ -1,6 +1,5 @@
 package etude.http
 
-
 trait StatusCode {
   val code: Int
   val label: String

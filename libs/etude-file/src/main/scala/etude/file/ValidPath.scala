@@ -2,9 +2,6 @@ package etude.file
 
 import java.nio.file.{Path => JavaPath, Files}
 
-/**
- *
- */
 trait ValidPath extends Path {
 
   def resolve(other: String): Path = Path(javaPath.resolve(other).normalize())

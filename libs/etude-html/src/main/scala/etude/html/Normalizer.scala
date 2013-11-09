@@ -1,10 +1,10 @@
 package etude.html
 
 import java.io.StringReader
-import scala.xml.{InputSource, Node}
-import scala.xml.parsing.NoBindingFactoryAdapter
-import nu.validator.htmlparser.sax.HtmlParser
 import nu.validator.htmlparser.common.XmlViolationPolicy
+import nu.validator.htmlparser.sax.HtmlParser
+import scala.xml.parsing.NoBindingFactoryAdapter
+import scala.xml.{InputSource, Node}
 
 /**
  * Normalize HTML as XML.

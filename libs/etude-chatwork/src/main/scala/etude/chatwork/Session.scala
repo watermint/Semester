@@ -1,16 +1,13 @@
 package etude.chatwork
 
 import etude.http._
+import etude.qos.Throttle
 import java.net.URI
 import java.time.{Duration, Instant}
-import scala.util.parsing.json.{JSON, JSONArray, JSONObject}
-import scala.collection.mutable
 import org.slf4j.LoggerFactory
-import etude.qos.Throttle
+import scala.collection.mutable
+import scala.util.parsing.json.{JSON, JSONArray, JSONObject}
 
-/**
- *
- */
 case class Session(email: String,
                    password: String,
                    orgId: Option[String]) {

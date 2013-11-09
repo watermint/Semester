@@ -1,14 +1,11 @@
 package etude.http
 
 import java.net.URI
-import scala.collection.JavaConverters._
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.NameValuePair
+import scala.collection.JavaConverters._
 
-/**
- *
- */
 case class URIContainer(uri: URI) {
   def withPath(path: String): URIContainer = {
     new URIContainer(

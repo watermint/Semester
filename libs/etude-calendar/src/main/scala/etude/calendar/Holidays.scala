@@ -2,10 +2,6 @@ package etude.calendar
 
 import java.time.LocalDate
 
-
-/**
- *
- */
 trait Holidays {
   def holidays(span: CalendarDateSpan): Seq[Holiday] = {
     holidaysWithReason(span) match {

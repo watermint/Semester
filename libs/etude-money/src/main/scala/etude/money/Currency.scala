@@ -2,8 +2,6 @@ package etude.money
 
 import java.util.{Currency => JavaCurrency, Locale}
 
-/**
-  */
 case class Currency(javaCurrency: JavaCurrency, fractionDigits: Int) {
   lazy val code: String = javaCurrency.getCurrencyCode
 

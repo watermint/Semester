@@ -1,8 +1,5 @@
 package etude.aggregation
 
-/**
- *
- */
 object Aggregation {
   def aggregate[R, V](funcSeq: Map[R, () => Either[Exception, V]]): Either[Exception, Seq[V]] = {
     val results = funcSeq.map {

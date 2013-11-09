@@ -1,8 +1,5 @@
 package etude.money
 
-/**
- *
- */
 case class MoneyPair(amountX: BigDecimal,
                      amountY: BigDecimal,
                      currency: Currency) {

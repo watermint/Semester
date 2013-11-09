@@ -1,11 +1,8 @@
 package etude.chatwork
 
-import scala.collection.mutable
 import java.time.Instant
+import scala.collection.mutable
 
-/**
- *
- */
 case class Stenographer(session: Session) {
   def loop(roomMeta: RoomMeta, after: Option[Instant], f: (List[Message]) => Boolean): Unit = {
     session.room(roomMeta) match {

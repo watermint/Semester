@@ -1,12 +1,9 @@
 package etude.calendar
 
-import java.time.{DayOfWeek, MonthDay, LocalDate}
 import etude.region.Country
 import etude.religion.Religion
+import java.time.{DayOfWeek, MonthDay, LocalDate}
 
-/**
- *
- */
 case class BusinessDays(patterns: Seq[BusinessHolidayPattern] = Seq()) {
   def -(day: LocalDate): BusinessDays =
     BusinessDays(patterns :+ BusinessHolidayPatternSpecificDay(day))

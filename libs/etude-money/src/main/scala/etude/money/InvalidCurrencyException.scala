@@ -1,8 +1,5 @@
 package etude.money
 
-/**
- *
- */
 class InvalidCurrencyException(message: String, cause: Throwable) extends RuntimeException(message, cause)
 
 object InvalidCurrencyException {

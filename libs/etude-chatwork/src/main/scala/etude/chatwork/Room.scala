@@ -1,8 +1,5 @@
 package etude.chatwork
 
-/**
- *
- */
 case class Room(roomId: BigInt,
                 description: String,
                 publicDescription: String,

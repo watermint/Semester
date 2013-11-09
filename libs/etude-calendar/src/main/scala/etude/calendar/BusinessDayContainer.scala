@@ -2,9 +2,6 @@ package etude.calendar
 
 import java.time.LocalDate
 
-/**
- *
- */
 case class BusinessDayContainer(date: LocalDate, businessDays: BusinessDays) extends CalendarDate {
   def and(end: LocalDate): Seq[BusinessDay] = {
     val span = CalendarDateSpan(date, end)

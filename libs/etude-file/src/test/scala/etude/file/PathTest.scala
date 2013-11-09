@@ -1,13 +1,10 @@
 package etude.file
 
+import java.nio.file.FileSystems
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
-import org.junit.runner.RunWith
-import java.nio.file.FileSystems
 
-/**
- *
- */
 @RunWith(classOf[JUnitRunner])
 class PathTest extends Specification {
   lazy val testHomePath = FileSystems.getDefault.getPath("libs/etude-file/src/test/resources/etude/file")

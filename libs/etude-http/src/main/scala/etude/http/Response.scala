@@ -1,11 +1,8 @@
 package etude.http
 
-import org.apache.http.{Header, HttpResponse}
 import etude.io.Memory._
+import org.apache.http.{Header, HttpResponse}
 
-/**
- *
- */
 case class Response(statusCode: StatusCode,
                     headers: Map[String, String],
                     contentType: Option[String],

@@ -1,14 +1,11 @@
 package etude.calendar
 
-import java.time.{DayOfWeek, MonthDay, LocalDate}
+import etude.aggregation.Aggregation
 import etude.region.Country
 import etude.religion.Religion
+import java.time.{DayOfWeek, MonthDay, LocalDate}
 import java.util.Locale
-import etude.aggregation.Aggregation
 
-/**
- *
- */
 case class BusinessHolidays(patterns: Seq[BusinessHolidayPattern] = Seq(),
                             locale: Locale = Locale.getDefault) extends Holidays {
 

@@ -1,16 +1,16 @@
 package etude.calendar.provider
 
-import scala.xml.{Node, XML}
-import java.util.Locale
+import etude.calendar._
+import etude.calendar.NationalHoliday
+import etude.calendar.ReligiousHoliday
+import etude.http._
+import etude.region.Country
+import etude.religion.Religion
 import java.net.URI
 import java.time.LocalDate
-import etude.religion.Religion
-import etude.region.Country
-import etude.calendar._
-import etude.http._
-import etude.calendar.ReligiousHoliday
-import etude.calendar.NationalHoliday
+import java.util.Locale
 import scala.Some
+import scala.xml.{Node, XML}
 
 case class GoogleCalendarHolidays(locale: Locale = Locale.getDefault) {
 

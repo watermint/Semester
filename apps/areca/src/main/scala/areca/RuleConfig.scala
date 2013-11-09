@@ -1,7 +1,7 @@
 package areca
 
-import scala.collection.JavaConversions._
 import org.slf4j.{LoggerFactory, Logger}
+import scala.collection.JavaConversions._
 
 object RuleConfig {
   val logger: Logger = LoggerFactory.getLogger(this.getClass)

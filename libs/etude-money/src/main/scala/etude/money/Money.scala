@@ -1,8 +1,5 @@
 package etude.money
 
-/**
- *
- */
 case class Money(amount: BigDecimal, currency: Currency) {
   def pair(other: BigDecimal): MoneyPair = MoneyPair(this, other)
 

@@ -4,6 +4,8 @@ version := "0.0.1"
 
 scalaVersion := "2.10.3"
 
+conflictManager := ConflictManager.strict
+
 resolvers ++= Seq(
   "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
   "atlassian-public" at "https://maven.atlassian.com/repository/public",
