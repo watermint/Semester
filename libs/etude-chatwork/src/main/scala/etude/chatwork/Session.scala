@@ -97,7 +97,7 @@ case class Session(email: String,
                 currentContext = Some(sc)
                 Right(sc)
               case _ =>
-                Left(UnknownChatworkProtocolException("Unknown response sequence on `login`"))
+                Left(LoginFailedException("Invalid email or password"))
             }
         }
     }
