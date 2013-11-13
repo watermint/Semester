@@ -12,7 +12,7 @@ class PathTest extends Specification {
   "Path" should {
     "Create correct instances" in {
       Path(testHomePath.resolve("EmptyFile")) must beAnInstanceOf[File]
-      Path(testHomePath.resolve("EmptyDir")) must beAnInstanceOf[Dir]
+      Path(testHomePath.resolve("RegularDir")) must beAnInstanceOf[Dir]
 //      Path(testHomePath.resolve("SymlinkToEmptyFile")) must beAnInstanceOf[Symlink]
       Path(testHomePath.resolve("NoExistent")) must beAnInstanceOf[NoExistent]
     }

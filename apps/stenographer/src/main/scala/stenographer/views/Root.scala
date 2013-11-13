@@ -1,7 +1,7 @@
-package stenographer.controllers
+package stenographer.views
 
 import com.twitter.finatra.Controller
-import stenographer.View
+import stenographer.{App}
 
 /**
  *
@@ -14,7 +14,7 @@ class Root extends Controller {
   get("/") {
     request =>
       render
-        .html(View.skeleton(title, content))
+        .html(App.html(title, content))
         .toFuture
   }
 }

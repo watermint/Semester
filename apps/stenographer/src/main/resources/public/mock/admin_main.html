@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin main</title>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="../css/stenographer.css"/>
+  <link rel="shortcut icon" id="favicon" type="image/png" href="../imgs/favicon.png">
+</head>
+<body class="admin">
+<div class="container">
+  <div class="page-header">
+    <img id="stenographer-logo" src="../imgs/logo@2x.png" alt="Stenographer"/>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="input-group room-search">
+        <input id="room-search-box" type="text" class="form-control" placeholder="Search Room"/>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+      </div>
+      <div class="progress progress-striped active"><div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Loading</div></div>
+      <div class="panel panel-info" id="chat-list-panel">
+        <div class="panel-heading">Chat Rooms <span class="badge" id="chat-list-badge"></span></div>
+        <div class="list-group" id="chat-list">
+          <div class="list-group-item"></div>
+          <div class="list-group-item"><span class="text-muted">Loading...</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9" id="chat-detail">
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<footer>
+  <div class="text-muted">
+    <a href="https://github.com/watermint/Semester/tree/master/apps/stenographer">Stenographer </a>
+    <span class="glyphicon glyphicon-copyright-mark"></span> Takayuki Okazaki
+  </div>
+</footer>
+<script src="../js/jquery-2.0.3.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/stenographer_admin.js"></script>
+</body>
+</html>

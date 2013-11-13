@@ -33,6 +33,8 @@ case class Session(email: String,
     }
   }
 
+  lazy val imageBaseUri: URI = new URI("https://tky-chat-work-appdata.s3.amazonaws.com/avatar/")
+
   case class SessionContext(client: Client,
                             accessToken: String,
                             myId: String,

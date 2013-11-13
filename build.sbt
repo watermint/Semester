@@ -19,9 +19,13 @@ lazy val appsAreca = project.in(file("apps/areca"))
     .dependsOn(libsEtudeHtml)
 
 lazy val appsStenographer = project.in(file("apps/stenographer"))
+    .dependsOn(libsEtudeBootstrap)
     .dependsOn(libsEtudeChatwork)
+    .dependsOn(libsEtudeFile)
 
 lazy val libsEtudeAggregation = project.in(file("libs/etude-aggregation"))
+
+lazy val libsEtudeBootstrap = project.in(file("libs/etude-bootstrap"))
 
 lazy val libsEtudeCalendar = project.in(file("libs/etude-calendar"))
     .dependsOn(libsEtudeAggregation)
