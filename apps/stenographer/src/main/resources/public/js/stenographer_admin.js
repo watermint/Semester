@@ -19,7 +19,7 @@ var Admin = {
       chatList.empty()
       chatList.append(jQuery.map(j.list, function (c) {
         var b = c.indexed ? '<span class="badge"><span class="glyphicon glyphicon-ok"></span></span>' : ''
-        var a = $('<a href="#" data-roomid="' + c.id + '" class="list-group-item">' + c.title + b + '</a>')
+        var a = $('<a data-roomid="' + c.id + '" class="list-group-item">' + c.title + b + '</a>')
         a.click(function () {
           var roomId = $(this).attr("data-roomid")
           $.ajax({

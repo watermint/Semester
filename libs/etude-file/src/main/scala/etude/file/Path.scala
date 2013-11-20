@@ -7,6 +7,8 @@ import java.nio.file.{Path => JavaPath, LinkOption, Files}
  */
 trait Path {
   val javaPath: JavaPath
+
+  lazy val javaFile: java.io.File = javaPath.toFile
 }
 
 object Path {

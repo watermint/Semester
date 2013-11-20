@@ -19,4 +19,8 @@ case class Dir(javaPath: JavaPath) extends ValidPath {
         Left(e)
     }
   }
+
+  def resolveDir(dir: String): Dir = {
+    Dir(javaPath.resolve(dir))
+  }
 }

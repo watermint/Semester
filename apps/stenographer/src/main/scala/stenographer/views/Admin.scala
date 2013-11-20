@@ -16,6 +16,16 @@ class Admin extends Controller {
       top(request).toFuture
   }
 
+  put("/admin/chat_index/:roomId") {
+    request =>
+      ???
+  }
+
+  delete("/admin/chat_index/:roomId") {
+    request =>
+      ???
+  }
+
   post("/admin/chat_detail/:roomId") {
     request =>
       if (Connect.isAdminUser(request.cookies.get(adminUserCookieName))) {

@@ -165,6 +165,10 @@ case class Session(email: String,
     }
   }
 
+  def accountsFromRoles(roles: List[Role]): List[Account] = {
+    accounts(roles.map(_.aid))
+  }
+
   def accounts(aid: List[BigInt]): List[Account] = {
     val aidOnCache = accountsCache.keys.toList.filter(aid.contains)
     val accountsOnCache = aidOnCache.flatMap(accountsCache.get)
@@ -254,6 +258,94 @@ case class Session(email: String,
     }
   }
 
+  def addAttendees(roomId: BigInt, newAttendees: List[Role]): List[Role] = {
+    val totalAttendees = attendees(roomId) ++ newAttendees
+    updateAttendees(roomId, totalAttendees)
+  }
+
+  def updateAttendees(roomId: BigInt, attendees: List[Role]): List[Role] = {
+    api(
+      "update_room",
+      Map(),
+      Some(
+        JSONObject(
+          Map(
+            "room_id" -> roomId.toString(),
+            "role" -> JSONObject(
+              attendees.map(a => a.aid.toString() -> a.roleName).toMap
+            )
+          )
+        )
+      )
+    ) match {
+      case Left(e) => throw e
+      case Right(r) => attendees
+    }
+  }
+
+  def markAsRead(room: Room): Unit = {
+    room.lastChatMessage match {
+      case Some(m) => markAsRead(room.roomId, m)
+      case _ =>
+        // nothing to do
+    }
+  }
+
+  def markAsRead(roomId: BigInt, message: Message): Unit = {
+    api(
+      "read",
+      Map(
+        "room_id" -> roomId.toString,
+        "last_chat_id" -> message.messageId.toString
+      )
+    ) match {
+      case Left(e) => throw e
+      case Right(r) =>
+        // response is like :  {"status":{"success":true},"result":{"read_num":372,"mention_num":0}}
+    }
+  }
+
+  def attendees(roomId: BigInt): List[Role] = {
+    api(
+      "get_room_info",
+      Map(),
+      Some(
+        JSONObject(
+          Map(
+            "type" -> "",
+            "rid" -> roomId,
+            "t" -> JSONObject(
+              Map(
+                roomId.toString() -> 1
+              )
+            ),
+            "d" -> JSONArray(List(roomId.toString())),
+            "m" -> JSONArray(List(roomId.toString())),
+            "p" -> JSONArray(List(roomId.toString())),
+            "i" -> JSONObject(
+              Map(
+                roomId.toString() -> JSONObject(
+                  Map(
+                    "t" -> 0,
+                    "l" -> 0,
+                    "u" -> 0,
+                    "c" -> 0
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ) match {
+      case Left(e) => throw e
+      case Right(r) =>
+        val roomDat = r.asInstanceOf[Map[String, Any]].get("room_dat").get.asInstanceOf[Map[String, Any]]
+        val roomInfo = roomDat.get(roomId.toString()).get.asInstanceOf[Map[String, Any]]
+        Role.fromRoomInfo(roomInfo.get("m").get.asInstanceOf[Map[String, BigInt]])
+    }
+  }
+
   def api(command: String,
           params: Map[String, String],
           data: Option[JSONObject] = None,
@@ -289,7 +381,7 @@ case class Session(email: String,
         response match {
           case Left(e) => Left(e)
           case Right(r) =>
-            logger.debug(r.contentAsString)
+//            logger.debug(r.contentAsString)
 
             JSON.perThreadNumberParser = {
               number: String => BigInt(number)

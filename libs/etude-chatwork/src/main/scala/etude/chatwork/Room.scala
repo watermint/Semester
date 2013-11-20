@@ -4,7 +4,16 @@ case class Room(roomId: BigInt,
                 description: String,
                 publicDescription: String,
                 tasks: Seq[Task],
-                messages: Seq[Message])
+                messages: Seq[Message]) {
+
+  lazy val lastChatMessage: Option[Message] = {
+    if (messages.length > 0) {
+      Some(messages.maxBy(_.timestamp))
+    } else {
+      None
+    }
+  }
+}
 
 object Room {
   def fromLoadChat(roomId: BigInt, result: Map[String, Any]): Room = {

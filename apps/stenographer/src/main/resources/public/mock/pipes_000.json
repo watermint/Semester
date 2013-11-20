@@ -1,0 +1,7 @@
+{
+  "chat-list": {
+    "html": "<h1>Chat List</h1>",
+    "css": "h1 { background-color: #c0c0c0; }",
+    "js": "Pipes.echo('hello')"
+  }
+}

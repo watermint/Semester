@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin main</title>
+  <title>Pipes</title>
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0"/>
   <link rel="stylesheet" href="../css/bootstrap.min.css"/>
   <link rel="stylesheet" href="../css/stenographer.css"/>
@@ -13,18 +13,7 @@
     <img id="stenographer-logo" src="../imgs/logo@2x.png" alt="Stenographer"/>
   </div>
   <div class="row">
-    <div class="col-md-3">
-      <div class="input-group room-search">
-        <input id="room-search-box" type="text" class="form-control" placeholder="Search"/>
-        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-      </div>
-      <div class="panel panel-info" id="chat-list-panel">
-        <div class="panel-heading">Chat Rooms <span class="badge" id="chat-list-badge"></span></div>
-        <div class="list-group" id="chat-list">
-          <a data-chat-list="a" class="list-group-item">Chat 1</a>
-          <a data-chat-list="b" class="list-group-item">Chat 2</a>
-        </div>
-      </div>
+    <div class="col-md-3" id="chat-list">
     </div>
     <div class="col-md-9" id="chat-detail">
     </div>
@@ -39,6 +28,6 @@
 </footer>
 <script src="../js/jquery-2.0.3.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
-<script src="../js/stenographer.js"></script>
+<script src="pipes_mock.js"></script>
 </body>
 </html>
