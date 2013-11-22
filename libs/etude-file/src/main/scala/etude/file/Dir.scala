@@ -20,7 +20,15 @@ case class Dir(javaPath: JavaPath) extends ValidPath {
     }
   }
 
+  def exists: Boolean = Files.exists(javaPath)
+
+  def mkdirs: Unit = Files.createDirectories(javaPath)
+
   def resolveDir(dir: String): Dir = {
     Dir(javaPath.resolve(dir))
+  }
+
+  def resolveFile(filename: String): File = {
+    File(javaPath.resolve(filename))
   }
 }

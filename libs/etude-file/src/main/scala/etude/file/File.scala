@@ -1,5 +1,7 @@
 package etude.file
 
-import java.nio.file.{Path => JavaPath}
+import java.nio.file.{Path => JavaPath, Files}
 
-case class File(javaPath: JavaPath) extends ValidPath
+case class File(javaPath: JavaPath) extends ValidPath {
+  def exists: Boolean = Files.exists(javaPath)
+}

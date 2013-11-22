@@ -129,9 +129,15 @@ case class Session(email: String,
       case Right(r) => {
         val result = r.asInstanceOf[Map[String, Any]]
 
-        val contacts = result.get("contact_dat").get.asInstanceOf[Map[String, Map[String, Any]]].map {
+        val contacts = result.get("contact_dat").get.asInstanceOf[Map[String, Map[String, Any]]].flatMap {
           d =>
-            Account.fromAccountDat(d._2)
+            try {
+              Some(Account.fromAccountDat(d._2))
+            } catch {
+              case e: Exception =>
+                //LoggerFactory.getLogger(getClass).debug(d.toString(), e)
+                None
+            }
         }.toList
 
         // update cache
@@ -186,9 +192,16 @@ case class Session(email: String,
       case Left(e) => throw e
       case Right(r) => {
         val result = r.asInstanceOf[Map[String, Any]]
-        val accounts = result.get("account_dat").get.asInstanceOf[Map[String, Map[String, Any]]].map {
+        val accounts = result.get("account_dat").get.asInstanceOf[Map[String, Map[String, Any]]].flatMap {
           d =>
-            Account.fromAccountDat(d._2)
+            try {
+              Some(Account.fromAccountDat(d._2))
+            } catch {
+              case e: Exception => {
+                //LoggerFactory.getLogger(getClass).debug(d.toString(), e)
+                None
+              }
+            }
         }.toList
 
         // update cache
