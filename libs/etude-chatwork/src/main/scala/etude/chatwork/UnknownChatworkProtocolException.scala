@@ -1,3 +1,11 @@
 package etude.chatwork
 
-case class UnknownChatworkProtocolException(message: String) extends RuntimeException(message)
+case class UnknownChatworkProtocolException(message: String, payload: Option[String] = None) extends RuntimeException(message)
+
+object UnknownChatworkProtocolException {
+  def apply(message: String, payload: String): UnknownChatworkProtocolException =
+    UnknownChatworkProtocolException(message, Some(payload))
+
+  def apply(message: String): UnknownChatworkProtocolException =
+    UnknownChatworkProtocolException(message)
+}

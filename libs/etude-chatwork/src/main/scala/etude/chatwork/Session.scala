@@ -2,6 +2,7 @@ package etude.chatwork
 
 import etude.http._
 import etude.qos.Throttle
+import etude.qos.Retry.retry
 import java.net.URI
 import java.time.{Duration, Instant}
 import org.slf4j.LoggerFactory
@@ -15,6 +16,8 @@ case class Session(email: String,
    * Wait login action for seconds.
    */
   lazy val LOGIN_ACTION_SPAN = 10
+
+  lazy val MAX_RETRIES = 3
 
   lazy val throttle: Throttle = Throttle(maxQueryPerSecond = 0.5, randomWaitRangeSeconds = 4)
 
@@ -283,7 +286,7 @@ case class Session(email: String,
           Map(
             "room_id" -> roomId.roomId,
             "role" -> JSONObject(
-              attendees.map(a => a.aid.toString() -> a.roleName).toMap
+              attendees.map(a => a.aid.toString -> a.roleName).toMap
             )
           )
         )
@@ -298,7 +301,7 @@ case class Session(email: String,
     room.lastChatMessage match {
       case Some(m) => markAsRead(room.roomId, m)
       case _ =>
-        // nothing to do
+      // nothing to do
     }
   }
 
@@ -312,7 +315,7 @@ case class Session(email: String,
     ) match {
       case Left(e) => throw e
       case Right(r) =>
-        // response is like :  {"status":{"success":true},"result":{"read_num":372,"mention_num":0}}
+      // response is like :  {"status":{"success":true},"result":{"read_num":372,"mention_num":0}}
     }
   }
 
@@ -327,7 +330,7 @@ case class Session(email: String,
             "rid" -> roomId,
             "t" -> JSONObject(
               Map(
-                roomId.toString() -> 1
+                roomId.toString -> 1
               )
             ),
             "d" -> JSONArray(List(roomId.roomId)),
@@ -357,73 +360,68 @@ case class Session(email: String,
     }
   }
 
+  private def apiUri(command: String, params: Map[String, String], data: Option[JSONObject], context: SessionContext): URI = {
+    baseUri.withPath("/gateway.php")
+      .withQuery("cmd", command)
+      .withQuery(params.toList)
+      .withQuery("myid", context.myId)
+      .withQuery("_v", "1.80a")
+      .withQuery("_av", "4")
+      .withQuery("_t", context.accessToken)
+      .withQuery("ln", "en")
+  }
+
+  private def apiResponseParser(command: String, response: Response): Either[Exception, Any] = {
+    JSON.perThreadNumberParser = {
+      number: String => BigInt(number)
+    }
+    JSON.parseFull(response.contentAsString) match {
+      case Some(json) =>
+        try {
+          val jsonObj = json.asInstanceOf[Map[String, Any]]
+          val status = jsonObj.get("status").get.asInstanceOf[Map[String, Any]]
+          if (status.get("success").get.asInstanceOf[Boolean]) {
+            Right(jsonObj.get("result").get)
+          } else {
+            val message = status.get("message").get.asInstanceOf[String]
+            if (message.contains("NO LOGIN")) {
+              Left(SessionTimeoutException(message))
+            } else {
+              Left(CommandFailureException(command, message))
+            }
+          }
+        } catch {
+          case e: Exception => Left(e)
+        }
+      case _ =>
+        Left(UnknownChatworkProtocolException("invalid JSON format result for command [" + command + "]",
+          response.contentAsString))
+    }
+  }
+
   def api(command: String,
           params: Map[String, String],
-          data: Option[JSONObject] = None,
-          retries: Int = 1): Either[Exception, Any] = {
-    throttle.execute {
-      () => {
+          data: Option[JSONObject] = None): Either[Exception, Any] = {
+    retry(MAX_RETRIES, {
+      case t: SessionTimeoutException => true
+      case _ => false
+    }) {
+      throttle.execute {
         val context = currentContext match {
+          case Some(c) => c
           case None => login match {
             case Left(e) => return Left(e)
             case Right(c) => c
           }
-          case Some(c) => c
         }
-
-        val gatewayUri = baseUri.withPath("/gateway.php")
-          .withQuery("cmd", command)
-          .withQuery(params.toList)
-          .withQuery("myid", context.myId)
-          .withQuery("_v", "1.80a")
-          .withQuery("_av", "4")
-          .withQuery("_t", context.accessToken)
-          .withQuery("ln", "en")
-
+        val gatewayUri = apiUri(command, params, data, context)
         val response = data match {
-          case Some(d) =>
-            context.client.post(
-              gatewayUri,
-              List("pdata" -> d.toString())
-            )
+          case Some(d) => context.client.post(gatewayUri, List("pdata" -> d.toString()))
           case _ => context.client.get(gatewayUri)
         }
-
         response match {
           case Left(e) => Left(e)
-          case Right(r) =>
-//            logger.debug(r.contentAsString)
-
-            JSON.perThreadNumberParser = {
-              number: String => BigInt(number)
-            }
-            JSON.parseFull(r.contentAsString) match {
-              case Some(json) =>
-                try {
-                  val jsonObj = json.asInstanceOf[Map[String, Any]]
-                  val status = jsonObj.get("status").get.asInstanceOf[Map[String, Any]]
-                  if (status.get("success").get.asInstanceOf[Boolean]) {
-                    Right(jsonObj.get("result").get)
-                  } else {
-                    val message = status.get("message").get.asInstanceOf[String]
-                    if (message.contains("NO LOGIN") && retries > 0) {
-                      // In case of session time out.
-
-                      login match {
-                        case Left(e) => Left(e)
-                        case Right(r) =>
-                          api(command, params, data, retries - 1)
-                      }
-                    } else {
-                      Left(CommandFailureException(command, message))
-                    }
-                  }
-                } catch {
-                  case e: Exception => Left(e)
-                }
-              case _ =>
-                Left(UnknownChatworkProtocolException("invalid JSON format result for command [" + command + "]"))
-            }
+          case Right(r) => apiResponseParser(command, r)
         }
       }
     }

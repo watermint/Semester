@@ -1,22 +1,25 @@
 package punchedtape.punch
 
-import punchedtape.{Main, Punch}
+import punchedtape.Punch
 import etude.chatwork._
 import scala.io.Source
 import scala.pickling._
 import scala.pickling.json._
-import java.time.Instant
 import etude.chatwork.RoomMeta
 import etude.file.File
 import etude.file.Dir
-import scalax.io.Resource
 import org.apache.commons.io.FileUtils
+import org.slf4j.LoggerFactory
+import etude.qos.Retry.RetryException
+import java.nio.file.FileSystems
 
-case class Archive() extends Punch {
-  lazy val archiveDir = Main.home.resolveDir("archive")
+case class Archive(destDir: String) extends Punch {
+  lazy val archiveDir = Dir(FileSystems.getDefault.getPath(destDir))
+
+  lazy val logger = LoggerFactory.getLogger(getClass)
 
   def archiveRoom(room: RoomMeta): ArchiveRoom = {
-    val filePath: File = archiveDir.resolveFile(room.roomId.toString() + ".json")
+    val filePath: File = archiveDir.resolveFile(room.roomId.toString + ".json")
     if (filePath.exists) {
       Source.fromFile(filePath.javaFile).getLines().toList.mkString.unpickle[ArchiveRoom]
     } else {
@@ -30,19 +33,19 @@ case class Archive() extends Punch {
   def archiveMessage(message: Message)(session: Session): ArchiveMessage = {
     session.account(message.aid) match {
       case Some(account) => ArchiveMessage(
-        account.aid,
-        account.gid,
+        account.aid.accountId,
+        account.gid.groupId,
         account.name,
-        message.messageId,
+        message.messageId.messageId,
         message.message,
         message.timestamp.toString
       )
       case _ =>
         ArchiveMessage(
-          message.aid,
-          GroupId.EMPTY,
+          message.aid.accountId,
+          GroupId.EMPTY.groupId,
           "",
-          message.messageId,
+          message.messageId.messageId,
           message.message,
           message.timestamp.toString
         )
@@ -87,14 +90,26 @@ case class Archive() extends Punch {
 
     val stenographer = Stenographer(session)
 
-    println("Archiving room: " + info.description)
+    logger.info("Archiving room: " + info.description)
 
-//    stenographer.loop(info.roomId, info.lowWaterMark, info.highWaterMark, archiveMessages)
     stenographer.loop(info.roomId, info.highWaterMark, None, archiveMessages)
   }
 
   def execute(session: Session): Boolean = {
-    session.rooms.filter(_.description.getOrElse("").length > 0).foreach(r => archive(archiveRoom(r))(session))
+    session.rooms.filter(_.description.getOrElse("").length > 0).foreach {
+      r =>
+        try {
+          archive(archiveRoom(r))(session)
+        } catch {
+          case e: RetryException =>
+            e.causes.foreach {
+              case c: UnknownChatworkProtocolException => logger.warn(c.getMessage + "\n" + c.payload.getOrElse("<EMPTY PAYLOAD>"), c)
+              case c: Exception => logger.warn(c.getMessage, c)
+            }
+          case e: Exception =>
+            logger.warn(e.getMessage, e)
+        }
+    }
     true
   }
 }
@@ -105,9 +120,9 @@ case class ArchiveRoom(roomId: RoomId,
                        highWaterMark: Option[MessageId] = None)
 
 
-case class ArchiveMessage(accountId: AccountId,
-                          accountGroupId: GroupId,
+case class ArchiveMessage(accountId: String,
+                          accountGroupId: String,
                           accountName: String,
-                          messageId: MessageId,
+                          messageId: String,
                           message: String,
                           timestamp: String)

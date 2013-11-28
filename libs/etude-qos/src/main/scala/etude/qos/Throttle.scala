@@ -11,7 +11,7 @@ case class Throttle(maxQueryPerSecond: Double, randomWaitRangeSeconds: Double) {
 
   lazy val minimumWaitMillis: Long = (1 / maxQueryPerSecond * 1000).toLong
 
-  def execute[T](f: () => T): T = {
+  def execute[T](f: => T): T = {
     lastExecutedOn match {
       case Some(l) => {
         val duration = Duration.between(l, Instant.now())
@@ -25,7 +25,7 @@ case class Throttle(maxQueryPerSecond: Double, randomWaitRangeSeconds: Double) {
     }
 
     lastExecutedOn = Some(Instant.now())
-    f()
+    f
   }
 
 }

@@ -1,7 +1,16 @@
 package etude.chatwork
 
+import org.slf4j.LoggerFactory
+import etude.qos.Retry.retry
+
 case class Stenographer(session: Session) {
-  def loop(roomId: RoomId, begin: Option[MessageId], end: Option[MessageId], f: (List[Message]) => Boolean): Unit = {
+  lazy val logger = LoggerFactory.getLogger(getClass)
+
+  def loop(roomId: RoomId,
+           begin: Option[MessageId],
+           end: Option[MessageId],
+           f: (List[Message]) => Boolean,
+           maxRetries: Int = 5): Unit = {
     session.room(roomId) match {
       case None =>
       case Some(room) => {
@@ -20,7 +29,7 @@ case class Stenographer(session: Session) {
           oldestMessage = currentMessages.minBy(_.timestamp)
           newestMessage = currentMessages.maxBy(_.timestamp)
 
-          currentMessages = session.messages(oldestMessage)
+          currentMessages = retry(maxRetries)(session.messages(oldestMessage))
         }
       }
     }
