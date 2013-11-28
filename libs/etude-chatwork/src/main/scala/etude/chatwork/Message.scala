@@ -2,18 +2,18 @@ package etude.chatwork
 
 import java.time.Instant
 
-case class Message(aid: BigInt,
-                   roomId: BigInt,
-                   messageId: BigInt,
+case class Message(aid: AccountId,
+                   roomId: RoomId,
+                   messageId: MessageId,
                    message: String,
                    timestamp: Instant)
 
 object Message {
-  def fromChatList(roomId: BigInt, chat: Map[String, Any]): Message = {
+  def fromChatList(roomId: RoomId, chat: Map[String, Any]): Message = {
     Message(
-      aid = chat.get("aid").get.asInstanceOf[BigInt],
+      aid = AccountId(chat.get("aid").get.asInstanceOf[BigInt]),
       roomId = roomId,
-      messageId = chat.get("id").get.asInstanceOf[BigInt],
+      messageId = MessageId(chat.get("id").get.asInstanceOf[BigInt]),
       message = chat.get("msg").get.asInstanceOf[String],
       timestamp = Instant.ofEpochSecond(chat.get("tm").get.asInstanceOf[BigInt].longValue())
     )

@@ -1,9 +1,9 @@
 name := "Semester"
 
 lazy val buildSettings = Seq(
-  version := "0.0.1",
+  version := "0.0.2",
   organization := "org.watermint",
-  scalaVersion := "2.10.3",
+  scalaVersion := "2.10.2",
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",

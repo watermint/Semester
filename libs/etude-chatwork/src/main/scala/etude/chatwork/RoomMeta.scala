@@ -1,4 +1,4 @@
 package etude.chatwork
 
-case class RoomMeta(roomId: BigInt, description: Option[String])
+case class RoomMeta(roomId: RoomId, description: Option[String])
 

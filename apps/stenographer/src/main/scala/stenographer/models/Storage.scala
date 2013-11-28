@@ -4,7 +4,7 @@ import stenographer.App
 import org.elasticsearch.common.settings.ImmutableSettings
 import org.elasticsearch.node.{Node, NodeBuilder}
 import org.elasticsearch.client.Client
-import etude.chatwork.RoomMeta
+import etude.chatwork.{RoomId, RoomMeta}
 import scala.collection.mutable
 
 object Storage {
@@ -23,7 +23,7 @@ object Storage {
 
   lazy val client: Client = node.client()
 
-  lazy val loadedRooms = mutable.HashMap[BigInt, RoomMeta]()
+  lazy val loadedRooms = mutable.HashMap[RoomId, RoomMeta]()
 
   def putRooms(rooms: List[RoomMeta]): Unit = {
     rooms.filter(_.description.isDefined).foreach(r => loadedRooms.put(r.roomId, r))

@@ -1,6 +1,6 @@
 package etude.chatwork
 
-case class Room(roomId: BigInt,
+case class Room(roomId: RoomId,
                 description: String,
                 publicDescription: String,
                 tasks: Seq[Task],
@@ -16,7 +16,7 @@ case class Room(roomId: BigInt,
 }
 
 object Room {
-  def fromLoadChat(roomId: BigInt, result: Map[String, Any]): Room = {
+  def fromLoadChat(roomId: RoomId, result: Map[String, Any]): Room = {
     Room(
       roomId = roomId,
       description = result.get("description").get.asInstanceOf[String],

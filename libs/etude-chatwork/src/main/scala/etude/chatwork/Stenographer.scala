@@ -1,10 +1,7 @@
 package etude.chatwork
 
-import java.time.Instant
-import scala.collection.mutable
-
 case class Stenographer(session: Session) {
-  def loop(roomId: BigInt, begin: Option[BigInt], end: Option[BigInt], f: (List[Message]) => Boolean): Unit = {
+  def loop(roomId: RoomId, begin: Option[MessageId], end: Option[MessageId], f: (List[Message]) => Boolean): Unit = {
     session.room(roomId) match {
       case None =>
       case Some(room) => {
@@ -12,13 +9,13 @@ case class Stenographer(session: Session) {
         var oldestMessage = currentMessages.minBy(_.timestamp)
         var newestMessage = currentMessages.maxBy(_.timestamp)
 
-        val beginId: BigInt = begin.getOrElse(0)
-        val endId: BigInt = end.getOrElse(newestMessage.messageId)
+        val beginId: MessageId = begin.getOrElse(MessageId.EPOCH)
+        val endId: MessageId = end.getOrElse(newestMessage.messageId)
 
         while (currentMessages.size > 0
           && f(currentMessages)
-          && beginId < oldestMessage.messageId
-          && endId >= newestMessage.messageId) {
+          && beginId.id < oldestMessage.messageId.id
+          && endId.id >= newestMessage.messageId.id) {
 
           oldestMessage = currentMessages.minBy(_.timestamp)
           newestMessage = currentMessages.maxBy(_.timestamp)

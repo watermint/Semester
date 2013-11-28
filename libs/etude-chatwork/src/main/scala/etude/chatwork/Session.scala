@@ -16,7 +16,7 @@ case class Session(email: String,
    */
   lazy val LOGIN_ACTION_SPAN = 10
 
-  lazy val throttle: Throttle = Throttle(0.5)
+  lazy val throttle: Throttle = Throttle(maxQueryPerSecond = 0.5, randomWaitRangeSeconds = 4)
 
   lazy val isKddiChatwork: Boolean = {
     orgId match {
@@ -40,9 +40,9 @@ case class Session(email: String,
                             myId: String,
                             loginTime: Instant)
 
-  private val accountsCache = mutable.HashMap[BigInt, Account]()
+  private val accountsCache = mutable.HashMap[AccountId, Account]()
 
-  private val sessionRooms = mutable.HashMap[BigInt, RoomMeta]()
+  private val sessionRooms = mutable.HashMap[RoomId, RoomMeta]()
 
   private var lastLoginAction: Option[Instant] = None
 
@@ -135,7 +135,6 @@ case class Session(email: String,
               Some(Account.fromAccountDat(d._2))
             } catch {
               case e: Exception =>
-                //LoggerFactory.getLogger(getClass).debug(d.toString(), e)
                 None
             }
         }.toList
@@ -146,7 +145,7 @@ case class Session(email: String,
         val rooms = result.get("room_dat").get.asInstanceOf[Map[String, Map[String, Any]]].map {
           m =>
             RoomMeta(
-              roomId = BigInt(m._1),
+              roomId = RoomId(BigInt(m._1)),
               description = m._2.get("n") match {
                 case Some(n) => Some(n.asInstanceOf[String])
                 case _ => None
@@ -162,7 +161,7 @@ case class Session(email: String,
     }
   }
 
-  def account(aid: BigInt): Option[Account] = {
+  def account(aid: AccountId): Option[Account] = {
     val r = accounts(List(aid))
     if (r.size < 1) {
       None
@@ -175,7 +174,7 @@ case class Session(email: String,
     accounts(roles.map(_.aid))
   }
 
-  def accounts(aid: List[BigInt]): List[Account] = {
+  def accounts(aid: List[AccountId]): List[Account] = {
     val aidOnCache = accountsCache.keys.toList.filter(aid.contains)
     val accountsOnCache = aidOnCache.flatMap(accountsCache.get)
     val aidNotOnCache = aid.filterNot(aidOnCache.contains)
@@ -187,7 +186,7 @@ case class Session(email: String,
     api(
       "get_account_info",
       Map(),
-      Some(JSONObject(Map("aid" -> JSONArray(aidNotOnCache.distinct))))
+      Some(JSONObject(Map("aid" -> JSONArray(aidNotOnCache.distinct.map(_.accountId)))))
     ) match {
       case Left(e) => throw e
       case Right(r) => {
@@ -198,7 +197,6 @@ case class Session(email: String,
               Some(Account.fromAccountDat(d._2))
             } catch {
               case e: Exception => {
-                //LoggerFactory.getLogger(getClass).debug(d.toString(), e)
                 None
               }
             }
@@ -216,8 +214,8 @@ case class Session(email: String,
     api(
       "load_old_chat",
       Map(
-        "room_id" -> before.roomId.toString,
-        "first_chat_id" -> before.messageId.toString
+        "room_id" -> before.roomId.roomId,
+        "first_chat_id" -> before.messageId.messageId
       )
     ) match {
       case Left(e) => throw e
@@ -239,8 +237,8 @@ case class Session(email: String,
         JSONObject(
           Map(
             "text" -> text,
-            "room_id" -> room.roomId.toString(),
-            "last_chat_id" -> room.messages.last.messageId,
+            "room_id" -> room.roomId.roomId,
+            "last_chat_id" -> room.messages.last.messageId.messageId,
             "read" -> 1,
             "edit_id" -> 0
           )
@@ -253,11 +251,11 @@ case class Session(email: String,
     room(roomMeta.roomId)
   }
 
-  def room(roomId: BigInt): Option[Room] = {
+  def room(roomId: RoomId): Option[Room] = {
     api(
       "load_chat",
       Map(
-        "room_id" -> roomId.toString,
+        "room_id" -> roomId.roomId,
         "last_chat_id" -> "0",
         "first_chat_id" -> "0",
         "jump_to_chat_id" -> "0",
@@ -271,19 +269,19 @@ case class Session(email: String,
     }
   }
 
-  def addAttendees(roomId: BigInt, newAttendees: List[Role]): List[Role] = {
+  def addAttendees(roomId: RoomId, newAttendees: List[Role]): List[Role] = {
     val totalAttendees = attendees(roomId) ++ newAttendees
     updateAttendees(roomId, totalAttendees)
   }
 
-  def updateAttendees(roomId: BigInt, attendees: List[Role]): List[Role] = {
+  def updateAttendees(roomId: RoomId, attendees: List[Role]): List[Role] = {
     api(
       "update_room",
       Map(),
       Some(
         JSONObject(
           Map(
-            "room_id" -> roomId.toString(),
+            "room_id" -> roomId.roomId,
             "role" -> JSONObject(
               attendees.map(a => a.aid.toString() -> a.roleName).toMap
             )
@@ -304,7 +302,7 @@ case class Session(email: String,
     }
   }
 
-  def markAsRead(roomId: BigInt, message: Message): Unit = {
+  def markAsRead(roomId: RoomId, message: Message): Unit = {
     api(
       "read",
       Map(
@@ -318,7 +316,7 @@ case class Session(email: String,
     }
   }
 
-  def attendees(roomId: BigInt): List[Role] = {
+  def attendees(roomId: RoomId): List[Role] = {
     api(
       "get_room_info",
       Map(),
@@ -332,12 +330,12 @@ case class Session(email: String,
                 roomId.toString() -> 1
               )
             ),
-            "d" -> JSONArray(List(roomId.toString())),
-            "m" -> JSONArray(List(roomId.toString())),
-            "p" -> JSONArray(List(roomId.toString())),
+            "d" -> JSONArray(List(roomId.roomId)),
+            "m" -> JSONArray(List(roomId.roomId)),
+            "p" -> JSONArray(List(roomId.roomId)),
             "i" -> JSONObject(
               Map(
-                roomId.toString() -> JSONObject(
+                roomId.roomId -> JSONObject(
                   Map(
                     "t" -> 0,
                     "l" -> 0,
@@ -354,7 +352,7 @@ case class Session(email: String,
       case Left(e) => throw e
       case Right(r) =>
         val roomDat = r.asInstanceOf[Map[String, Any]].get("room_dat").get.asInstanceOf[Map[String, Any]]
-        val roomInfo = roomDat.get(roomId.toString()).get.asInstanceOf[Map[String, Any]]
+        val roomInfo = roomDat.get(roomId.roomId).get.asInstanceOf[Map[String, Any]]
         Role.fromRoomInfo(roomInfo.get("m").get.asInstanceOf[Map[String, BigInt]])
     }
   }

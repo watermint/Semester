@@ -1,7 +1,7 @@
 package etude.chatwork
 
-case class Account(aid: BigInt,
-                   gid: BigInt,
+case class Account(aid: AccountId,
+                   gid: GroupId,
                    chatworkId: Option[String],
                    name: String,
                    avatarImagePath: String,
@@ -12,8 +12,8 @@ case class Account(aid: BigInt,
 object Account {
   def fromAccountDat(dat: Map[String, Any]): Account = {
     Account(
-      aid = dat.get("aid").get.asInstanceOf[BigInt],
-      gid = dat.get("gid").get.asInstanceOf[BigInt],
+      aid = AccountId(dat.get("aid").get.asInstanceOf[BigInt]),
+      gid = GroupId(dat.get("gid").get.asInstanceOf[BigInt]),
       chatworkId = dat.get("cwid") match {
         case Some(cwid) =>
           if (cwid == null) {

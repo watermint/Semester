@@ -21,7 +21,7 @@ case class Archive() extends Punch {
       Source.fromFile(filePath.javaFile).getLines().toList.mkString.unpickle[ArchiveRoom]
     } else {
       ArchiveRoom(
-        roomId = room.roomId.toString,
+        roomId = room.roomId,
         description = room.description.getOrElse("")
       )
     }
@@ -30,19 +30,19 @@ case class Archive() extends Punch {
   def archiveMessage(message: Message)(session: Session): ArchiveMessage = {
     session.account(message.aid) match {
       case Some(account) => ArchiveMessage(
-        account.aid.toString(),
-        account.gid.toString(),
+        account.aid,
+        account.gid,
         account.name,
-        message.messageId.toString(),
+        message.messageId,
         message.message,
         message.timestamp.toString
       )
       case _ =>
         ArchiveMessage(
-          message.aid.toString(),
+          message.aid,
+          GroupId.EMPTY,
           "",
-          "",
-          message.messageId.toString(),
+          message.messageId,
           message.message,
           message.timestamp.toString
         )
@@ -50,30 +50,30 @@ case class Archive() extends Punch {
   }
 
   def archive(info: ArchiveRoom)(session: Session): Unit = {
-    val roomDir: Dir = archiveDir.resolveDir(info.roomId)
-    val roomFilePath: File = archiveDir.resolveFile(info.roomId + ".json")
+    val roomDir: Dir = archiveDir.resolveDir(info.roomId.roomId)
+    val roomFilePath: File = archiveDir.resolveFile(info.roomId.roomId + ".json")
     val archiveMessages: (List[Message]) => Boolean = {
       (messages) =>
         messages.foreach {
           m =>
-            val messageFile = roomDir.resolveFile(m.messageId.toString() + ".json")
+            val messageFile = roomDir.resolveFile(m.messageId.messageId + ".json")
             val am = archiveMessage(m)(session)
             FileUtils.writeStringToFile(messageFile.javaFile, am.pickle.value)
         }
         val currentLwm: List[BigInt] = info.lowWaterMark match {
-          case Some(l) => List(BigInt(l))
+          case Some(l) => List(l.id)
           case _ => List()
         }
         val currentHwm: List[BigInt] = info.highWaterMark match {
-          case Some(h) => List(BigInt(h))
+          case Some(h) => List(h.id)
           case _ => List()
         }
 
-        val messageIds: List[BigInt] = messages.map(_.messageId)
+        val messageIds: List[BigInt] = messages.map(_.messageId.id)
 
         val newInfo = info.copy(
-          lowWaterMark = Some((messageIds ++ currentLwm).minBy(identity).toString()),
-          highWaterMark = Some((messageIds ++ currentHwm).maxBy(identity).toString())
+          lowWaterMark = Some(MessageId((messageIds ++ currentLwm).minBy(identity))),
+          highWaterMark = Some(MessageId((messageIds ++ currentHwm).maxBy(identity)))
         )
 
         FileUtils.writeStringToFile(roomFilePath.javaFile, newInfo.pickle.value)
@@ -89,35 +89,25 @@ case class Archive() extends Punch {
 
     println("Archiving room: " + info.description)
 
-    stenographer.loop(BigInt(info.roomId), info.lowWaterMarkAsBigInt, info.highWaterMarkAsBigInt, archiveMessages)
-    stenographer.loop(BigInt(info.roomId), info.highWaterMarkAsBigInt, None, archiveMessages)
+//    stenographer.loop(info.roomId, info.lowWaterMark, info.highWaterMark, archiveMessages)
+    stenographer.loop(info.roomId, info.highWaterMark, None, archiveMessages)
   }
 
   def execute(session: Session): Boolean = {
-    session.rooms.foreach(r => archive(archiveRoom(r))(session))
+    session.rooms.filter(_.description.getOrElse("").length > 0).foreach(r => archive(archiveRoom(r))(session))
     true
   }
 }
 
-case class ArchiveRoom(roomId: String,
+case class ArchiveRoom(roomId: RoomId,
                        description: String,
-                       lowWaterMark: Option[String] = None,
-                       highWaterMark: Option[String] = None) {
-
-  lazy val lowWaterMarkAsBigInt: Option[BigInt] = lowWaterMark match {
-    case Some(l) => Some(BigInt(l))
-    case _ => None
-  }
-  lazy val highWaterMarkAsBigInt: Option[BigInt] = highWaterMark match {
-    case Some(h) => Some(BigInt(h))
-    case _ => None
-  }
-}
+                       lowWaterMark: Option[MessageId] = None,
+                       highWaterMark: Option[MessageId] = None)
 
 
-case class ArchiveMessage(accountId: String,
-                          accountGroupId: String,
+case class ArchiveMessage(accountId: AccountId,
+                          accountGroupId: GroupId,
                           accountName: String,
-                          messageId: String,
+                          messageId: MessageId,
                           message: String,
                           timestamp: String)
