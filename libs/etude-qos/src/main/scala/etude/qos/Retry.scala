@@ -2,6 +2,7 @@ package etude.qos
 
 /**
  * forked from: https://gist.github.com/xuwei-k/2996927
+ * TODO: consider impl. with util.Try like: http://stackoverflow.com/questions/7930814/whats-the-scala-way-to-implement-a-retry-able-call-like-this-one
  */
 object Retry {
   case class RetryException(causes: List[Throwable]) extends Exception

@@ -1,7 +1,7 @@
 name := "Semester"
 
 lazy val buildSettings = Seq(
-  version := "0.0.3",
+  version := "0.0.4",
   organization := "org.watermint",
   scalaVersion := "2.10.3",
   resolvers ++= Seq(

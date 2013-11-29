@@ -309,8 +309,8 @@ case class Session(email: String,
     api(
       "read",
       Map(
-        "room_id" -> roomId.toString,
-        "last_chat_id" -> message.messageId.toString
+        "room_id" -> roomId.roomId,
+        "last_chat_id" -> message.messageId.messageId
       )
     ) match {
       case Left(e) => throw e
@@ -369,6 +369,7 @@ case class Session(email: String,
       .withQuery("_av", "4")
       .withQuery("_t", context.accessToken)
       .withQuery("ln", "en")
+      .withQuery("_", System.currentTimeMillis().toString)
   }
 
   private def apiResponseParser(command: String, response: Response): Either[Exception, Any] = {
@@ -383,11 +384,15 @@ case class Session(email: String,
           if (status.get("success").get.asInstanceOf[Boolean]) {
             Right(jsonObj.get("result").get)
           } else {
-            val message = status.get("message").get.asInstanceOf[String]
-            if (message.contains("NO LOGIN")) {
-              Left(SessionTimeoutException(message))
-            } else {
-              Left(CommandFailureException(command, message))
+            status.get("message") match {
+              case Some(msg: String) =>
+                if (msg.contains("NO LOGIN")) {
+                  Left(SessionTimeoutException(msg))
+                } else {
+                  Left(CommandFailureException(command, msg))
+                }
+              case _ =>
+                Left(CommandFailureException(command, response.contentAsString))
             }
           }
         } catch {

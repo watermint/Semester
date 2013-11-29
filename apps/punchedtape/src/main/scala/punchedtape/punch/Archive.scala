@@ -54,6 +54,12 @@ case class Archive(destDir: String) extends Punch {
 
   def archive(info: ArchiveRoom)(session: Session): Unit = {
     val roomDir: Dir = archiveDir.resolveDir(info.roomId.roomId)
+
+    if (roomDir.exists) {
+      logger.info("Skip room: " + info.description)
+      return
+    }
+
     val roomFilePath: File = archiveDir.resolveFile(info.roomId.roomId + ".json")
     val archiveMessages: (List[Message]) => Boolean = {
       (messages) =>

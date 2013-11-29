@@ -2,8 +2,15 @@ package punchedtape
 
 import etude.chatwork.Session
 
-case class Tape(punches: List[Punch]) {
+case class Tape(punches: List[Punch], infinite: Boolean) {
   def play(session: Session): Unit = {
-    punches.foreach(_.execute(session))
+    if (infinite) {
+      while (true) {
+        punches.foreach(_.execute(session))
+        Thread.sleep(30 * 1000)
+      }
+    } else {
+      punches.foreach(_.execute(session))
+    }
   }
 }
