@@ -1,9 +1,8 @@
-name := "Semester"
 
 lazy val buildSettings = Seq(
-  version := "0.0.4",
+  version := "0.0.5",
   organization := "org.watermint",
-  scalaVersion := "2.10.3",
+  scalaVersion := "2.10.2",
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
@@ -87,3 +86,7 @@ lazy val etudeStenographer = project.in(file("libs/etude-stenographer"))
   .settings(buildSettings: _*)
   .dependsOn(etudeChatwork)
   .dependsOn(etudeFile)
+
+lazy val pocJavaFX = project.in(file("poc/javafx"))
+  .settings(buildSettings: _*)
+
