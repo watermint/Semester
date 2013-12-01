@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.5",
+  version := "0.0.6",
   organization := "org.watermint",
   scalaVersion := "2.10.2",
   resolvers ++= Seq(
@@ -29,6 +29,7 @@ lazy val appsPunchedTape = project.in(file("apps/punchedtape"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
   .dependsOn(etudeChatwork)
+  .dependsOn(etudeChercher)
   .dependsOn(etudeFile)
 
 lazy val appsStenographer = project.in(file("apps/stenographer"))
@@ -56,6 +57,9 @@ lazy val etudeChatwork = project.in(file("libs/etude-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(etudeHttp)
   .dependsOn(etudeQos)
+
+lazy val etudeChercher = project.in(file("libs/etude-chercher"))
+  .settings(buildSettings: _*)
 
 lazy val etudeFile = project.in(file("libs/etude-file"))
   .settings(buildSettings: _*)
@@ -86,7 +90,3 @@ lazy val etudeStenographer = project.in(file("libs/etude-stenographer"))
   .settings(buildSettings: _*)
   .dependsOn(etudeChatwork)
   .dependsOn(etudeFile)
-
-lazy val pocJavaFX = project.in(file("poc/javafx"))
-  .settings(buildSettings: _*)
-

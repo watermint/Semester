@@ -1,0 +1,176 @@
+/**
+ * Base
+ */
+.root {
+  -fx-background-color: #ffffff;
+}
+
+/**
+ * Base
+ */
+
+.hbox,
+.vbox,
+.pane,
+.scroll-pane {
+  -fx-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -fx-font-size: 14px;
+  -fx-background-color: transparent;
+}
+
+.accordion,
+.button,
+.cell,
+.check-box,
+.choice-box,
+.color-picker,
+.combo-box,
+.label,
+.list-cell,
+.text-area,
+.text-field {
+  -fx-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -fx-font-size: 14px;
+  -fx-text-fill: #333333;
+}
+
+/**
+ * Controls
+ */
+.hyperlink {
+  -fx-text-fill: #428bca;
+}
+.hyperlink:hover,
+.hyperlink:focused {
+  -fx-text-fill: #2a6496;
+  -fx-underline: true;
+}
+
+/**
+ * Style
+ */
+.small {
+  -fx-font-size: 85%;
+}
+.code, .kbd, .pre, .samp {
+  -fx-font-family: monospace, serif;
+  -fx-font-size: 14px; /* 1em; There are bugs on focus. size of 'em' copied and over wrote from other control.  */
+}
+.text-muted {
+  -fx-text-fill: #999999;
+}
+.text-primary {
+  -fx-text-fill: #428bca;
+}
+.text-primary:hover {
+  -fx-text-fill: #3071a9;
+}
+.text-warning {
+  -fx-text-fill: #c09853;
+}
+.text-warning:hover {
+  -fx-text-fill: #a47e3c;
+}
+.text-danger {
+  -fx-text-fill: #b94a48;
+}
+.text-danger:hover {
+  -fx-text-fill: #953b39;
+}
+.text-success {
+  -fx-text-fill: #468847;
+}
+.text-success:hover {
+  -fx-text-fill: #356635;
+}
+.text-info {
+  -fx-text-fill: #3a87ad;
+}
+.text-info:hover {
+  -fx-text-fill: #2d6987;
+}
+.text-left {
+  -fx-text-alignment: left;
+}
+.text-center {
+  -fx-text-alignment: center;
+}
+.text-right {
+  -fx-text-alignment: right;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  -fx-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -fx-font-weight: 500;
+}
+.h1,
+.h2,
+.h3 {
+  -fx-padding: 20px 0 10px 0;
+}
+.h4,
+.h5,
+.h6 {
+  -fx-padding: 10px 0 10px 0;
+}
+.h1 {
+  -fx-font-size: 36px;
+}
+.h2 {
+  -fx-font-size: 30px;
+}
+.h3 {
+  -fx-font-size: 24px;
+}
+.h4 {
+  -fx-font-size: 18px;
+}
+.h5 {
+  -fx-font-size: 14px;
+}
+.h6 {
+  -fx-font-size: 12px;
+}
+
+.page-header {
+  -fx-padding: 40px 0 29px 0;
+}
+
+.container {
+  -fx-padding: 0 15px 0 15px;
+}
+
+.alert {
+  /* margin-bottom: 20px; Cannot found way to configure margins via css */
+  -fx-padding: 15px;
+  -fx-gap-start-and-end: true;
+  -fx-border-style: solid;
+  -fx-border-width: 1px;
+  -fx-border-radius: 4px;
+}
+
+.alert-success {
+  -fx-background-color: #dff0d8;
+  -fx-border-color: #d6e9c6;
+  -fx-text-fill: #468847;
+}
+.alert-info {
+  -fx-background-color: #d9edf7;
+  -fx-border-color: #bce8f1;
+  -fx-text-fill: #3a87ad;
+}
+.alert-warning {
+  -fx-background-color: #fcf8e3;
+  -fx-border-color: #faebcc;
+  -fx-text-fill: #c09853;
+}
+.alert-danger {
+  -fx-background-color: #f2dede;
+  -fx-border-color: #ebccd1;
+  -fx-text-fill: #b94a48;
+}
