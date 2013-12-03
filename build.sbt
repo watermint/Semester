@@ -55,10 +55,14 @@ lazy val etudeCalendar = project.in(file("libs/etude-calendar"))
 
 lazy val etudeChatwork = project.in(file("libs/etude-chatwork"))
   .settings(buildSettings: _*)
+  .dependsOn(etudeDdd)
   .dependsOn(etudeHttp)
   .dependsOn(etudeQos)
 
 lazy val etudeChercher = project.in(file("libs/etude-chercher"))
+  .settings(buildSettings: _*)
+
+lazy val etudeDdd = project.in(file("libs/etude-ddd"))
   .settings(buildSettings: _*)
 
 lazy val etudeFile = project.in(file("libs/etude-file"))

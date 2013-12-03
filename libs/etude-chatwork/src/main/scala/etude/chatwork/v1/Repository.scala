@@ -1,11 +1,12 @@
 package etude.chatwork.v1
 
 import scala.util.{Failure, Success, Try}
+import etude.ddd.model.{Entity, Identity}
 
-trait Repository[K <: Id[K, T], T <: Entity[K]] {
-  def resolve(identifier: K): Try[T]
+trait Repository[ID <: Identity[_], E <: Entity[_]] {
+  def resolve(identifier: ID): Try[E]
 
-  def contains(identifier: K): Try[Boolean] = {
+  def contains(identifier: ID): Try[Boolean] = {
     resolve(identifier) match {
       case Success(s) => Success(true)
       case Failure(a: EntityNotFoundException) => Success(false)
@@ -13,5 +14,5 @@ trait Repository[K <: Id[K, T], T <: Entity[K]] {
     }
   }
 
-  def contains(entity: T): Try[Boolean]
+  def contains(entity: E): Try[Boolean]
 }

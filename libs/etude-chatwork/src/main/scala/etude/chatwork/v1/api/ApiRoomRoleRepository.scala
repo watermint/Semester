@@ -18,9 +18,8 @@ case class ApiRoomRoleRepository(implicit authToken: AuthToken) extends RoomRole
       JField("account_id", JInt(accountId)) <- data
       JField("role", JString(role)) <- data
     } yield {
-      RoomRole(
-        AccountId(accountId),
-        roomId,
+      new RoomRole(
+        new RoomRoleId(new AccountId(accountId), roomId),
         RoomRoleType(role)
       )
     }
@@ -33,7 +32,7 @@ case class ApiRoomRoleRepository(implicit authToken: AuthToken) extends RoomRole
         JField(fieldName, JArray(list)) <- data
         JInt(accountId) <- list
       } yield {
-        RoomRole(AccountId(accountId), roomId, role)
+        new RoomRole(new RoomRoleId(new AccountId(accountId), roomId), role)
       }
     }
 
@@ -43,13 +42,20 @@ case class ApiRoomRoleRepository(implicit authToken: AuthToken) extends RoomRole
   }
 
   protected def updateRolesInRoom(roomId: RoomId, roomRoles: List[RoomRole]): Try[List[RoomRole]] = {
-    val endPoint = ENDPOINT_ROOMS + "/" + roomId.id + "/members"
+    val endPoint = s"$ENDPOINT_ROOMS/${roomId.value}/members"
     if (shouldFail(endPoint)) {
       return Failure(QoSException(endPoint))
     }
 
     try {
-      Api.get(endPoint) match {
+      Api.put(
+        path = endPoint,
+        data = List(
+          "members_admin_ids" -> roomRoles.filter(_.roleType.isInstanceOf[RoomRoleAdmin]).map(_.identity.accountId.value).mkString(","),
+          "members_member_ids" -> roomRoles.filter(_.roleType.isInstanceOf[RoomRoleMember]).map(_.identity.accountId.value).mkString(","),
+          "members_readonly_ids" -> roomRoles.filter(_.roleType.isInstanceOf[RoomRoleReadonly]).map(_.identity.accountId.value).mkString(",")
+        )
+      ) match {
         case Failure(f) => Failure(f)
         case Success(json) => Success(parseUpdatedRoomRole(roomId, json))
       }
@@ -60,7 +66,7 @@ case class ApiRoomRoleRepository(implicit authToken: AuthToken) extends RoomRole
 
   def updateRolesInRoom(roomRoles: List[RoomRole]): Try[List[RoomRole]] = {
     val roles = for {
-      (roomId, roles) <- roomRoles.groupBy(_.roomId)
+      (roomId, roles) <- roomRoles.groupBy(_.identity.roomId)
     } yield {
       updateRolesInRoom(roomId, roles) match {
         case Failure(f) => return Failure(f)
@@ -72,7 +78,7 @@ case class ApiRoomRoleRepository(implicit authToken: AuthToken) extends RoomRole
   }
 
   def rolesInRoom(roomId: RoomId): Try[List[RoomRole]] = {
-    val endPoint = ENDPOINT_ROOMS + "/" + roomId.id + "/members"
+    val endPoint = s"$ENDPOINT_ROOMS/${roomId.value}/members"
     if (shouldFail(endPoint)) {
       return Failure(QoSException(endPoint))
     }
@@ -94,9 +100,11 @@ case class ApiRoomRoleRepository(implicit authToken: AuthToken) extends RoomRole
         ApiRoomRepository().resolve(identifier.roomId) match {
           case Failure(f) => Failure(f)
           case Success(room) => Success(
-            RoomRole(
-              roomId = room.roomId,
-              accountId = me.accountId,
+            new RoomRole(
+              new RoomRoleId(
+                roomId = room.roomId,
+                accountId = me.accountId
+              ),
               roleType = room.roomRole
             )
           )

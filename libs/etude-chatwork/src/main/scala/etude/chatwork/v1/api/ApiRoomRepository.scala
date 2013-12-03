@@ -31,19 +31,21 @@ case class ApiRoomRepository(implicit authToken: AuthToken) extends RoomReposito
       JField("icon_path", JString(iconPath)) <- data
       JField("last_update_time", JInt(lastUpdateTime)) <- data
     } yield {
-      Room(
-        roomId = RoomId(roomId),
+      new Room(
+        roomId = new RoomId(roomId),
         name = name,
         description = None,
         roomType = RoomType(roomType),
         roomRole = RoomRoleType(roomRole),
-        sticky = sticky,
-        unreadCount = unreadNum,
-        mentionCount = mentionNum,
-        myTaskCount = myTaskNum,
-        totalTaskCount = taskNum,
-        totalMessageCount = messageNum,
-        fileCount = fileNum,
+        attributes = RoomAttributes(
+          sticky = sticky,
+          unreadCount = unreadNum,
+          mentionCount = mentionNum,
+          myTaskCount = myTaskNum,
+          totalTaskCount = taskNum,
+          totalMessageCount = messageNum,
+          fileCount = fileNum
+        ),
         avatar = new URI(iconPath),
         lastUpdateTime = Instant.ofEpochMilli(lastUpdateTime.toLong)
       )
@@ -66,7 +68,7 @@ case class ApiRoomRepository(implicit authToken: AuthToken) extends RoomReposito
   }
 
   def resolve(identifier: RoomId): Try[Room] = {
-    val endPoint = ENDPOINT_ROOMS + "/" + identifier.id
+    val endPoint = ENDPOINT_ROOMS + "/" + identifier.value
     if (shouldFail(endPoint)) {
       return Failure(QoSException(endPoint))
     }
@@ -88,7 +90,7 @@ case class ApiRoomRepository(implicit authToken: AuthToken) extends RoomReposito
                 case Some(rwd) => Success(rwd)
                 case _ => Success(room)
               }
-            case _ => Failure(EntityNotFoundException("Room not found for identifier: " + identifier))
+            case _ => Failure(EntityNotFoundException(s"Room not found for identifier: $identifier"))
           }
       }
     } finally {

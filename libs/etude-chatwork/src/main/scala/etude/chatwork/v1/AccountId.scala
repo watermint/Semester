@@ -1,3 +1,7 @@
 package etude.chatwork.v1
 
-case class AccountId(id: BigInt) extends Id[AccountId, Account]
+import etude.ddd.model.Identity
+
+class AccountId(id: BigInt) extends Identity[BigInt] {
+  def value: BigInt = id
+}

@@ -23,19 +23,19 @@ case class ApiAccountRepository(implicit authToken: AuthToken) extends AccountRe
       JField("department", JString(department)) <- data
       JField("avatar_image_url", JString(avatarImageUrl)) <- data
     } yield {
-      Account(
-        accountId = AccountId(accountId),
+      new Account(
+        accountId = new AccountId(accountId),
         name = name,
         chatWorkId = chatworkId match {
           case "" => None
-          case c => Some(ChatWorkId(c))
+          case c => Some(new ChatWorkId(c))
         },
         organization = organizationId match {
           case id if id < 1 => None
           case _ =>
             Some(
-              Organization(
-                OrganizationId(organizationId),
+              new Organization(
+                new OrganizationId(organizationId),
                 organizationName
               )
             )
@@ -84,11 +84,11 @@ case class ApiAccountRepository(implicit authToken: AuthToken) extends AccountRe
 
   def resolve(identifier: AccountId): Try[Account] = {
     contacts() match {
-      case Success(c) => c.find(_.accountId == identifier) match {
+      case Success(c) => c.find(_ == identifier) match {
         case Some(a) => Success(a)
-        case _ => Failure(EntityNotFoundException("Account not found for [" + identifier.id + "]"))
+        case _ => Failure(EntityNotFoundException(s"Account not found for ${identifier.value}"))
       }
-      case _ => Failure(EntityNotFoundException("Account not found for [" + identifier.id + "]"))
+      case _ => Failure(EntityNotFoundException(s"Account not found for ${identifier.value}"))
     }
   }
 }

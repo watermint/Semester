@@ -1,9 +1,14 @@
 package etude.chatwork.v1
 
 import java.time.Instant
+import etude.ddd.model.Entity
 
-case class Message(messageId: MessageId,
-                   account: Account,
-                   body: String,
-                   ctime: Instant,
-                   mtime: Option[Instant]) extends Entity[MessageId]
+class Message(val messageId: MessageId,
+              val account: Account,
+              val body: String,
+              val ctime: Instant,
+              val mtime: Option[Instant])
+  extends Entity[MessageId] {
+
+  val identity: MessageId = messageId
+}

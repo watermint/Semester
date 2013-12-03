@@ -1,5 +1,12 @@
 package etude.chatwork.v1
 
-case class RoomRoleId(accountId: AccountId,
-                      roomId: RoomId)
-  extends Id[RoomRoleId, RoomRole]
+import etude.ddd.model.Identity
+
+class RoomRoleId(val accountId: AccountId,
+                 val roomId: RoomId)
+  extends Identity[(BigInt, BigInt)] {
+
+  def value: (BigInt, BigInt) = accountId.value -> roomId.value
+
+
+}

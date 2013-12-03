@@ -1,7 +1,10 @@
 package etude.chatwork.v1
 
-case class RoomRole(accountId: AccountId,
-                    roomId: RoomId,
-                    roleType: RoomRoleType)
-  extends Entity[RoomRoleId]
+import etude.ddd.model.Entity
 
+class RoomRole(val roomRoleId: RoomRoleId,
+               val roleType: RoomRoleType)
+  extends Entity[RoomRoleId] {
+
+  val identity: RoomRoleId = roomRoleId
+}
