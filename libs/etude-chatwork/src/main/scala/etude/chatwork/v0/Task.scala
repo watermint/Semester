@@ -1,4 +1,4 @@
-package etude.chatwork
+package etude.chatwork.v0
 
 import java.time.Instant
 

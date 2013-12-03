@@ -1,4 +1,4 @@
-package etude.chatwork
+package etude.chatwork.v0
 
 import org.slf4j.LoggerFactory
 import etude.qos.Retry.retry

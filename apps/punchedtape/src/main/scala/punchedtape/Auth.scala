@@ -1,6 +1,6 @@
 package punchedtape
 
-import etude.chatwork.Session
+import etude.chatwork.v0.Session
 
 case class Auth(orgId: Option[String],
                 email: String,

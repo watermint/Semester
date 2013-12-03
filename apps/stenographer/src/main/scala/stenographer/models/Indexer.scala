@@ -1,9 +1,9 @@
 package stenographer.models
 
 import akka.actor.{Actor, Props, ActorSystem}
-import etude.chatwork.RoomMeta
 import stenographer.models.Indexer.IndexerTask
 import org.slf4j.LoggerFactory
+import etude.chatwork.v0.RoomMeta
 
 case class Indexer() extends Actor {
   def receive: Actor.Receive = {

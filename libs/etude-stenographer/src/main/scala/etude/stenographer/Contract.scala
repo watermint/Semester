@@ -1,8 +1,8 @@
 package etude.stenographer
 
 import org.apache.commons.codec.digest.DigestUtils
-import etude.chatwork.RoomMeta
 import scala.collection.mutable
+import etude.chatwork.v0.RoomMeta
 
 case class Contract(orgId: Option[String],
                     email: String) {

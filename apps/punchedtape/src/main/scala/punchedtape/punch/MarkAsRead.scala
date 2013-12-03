@@ -2,8 +2,8 @@ package punchedtape.punch
 
 import scala.Boolean
 import punchedtape.Punch
-import etude.chatwork.{RoomId, Session}
 import org.slf4j.LoggerFactory
+import etude.chatwork.v0.{Session, RoomId}
 
 case class MarkAsRead(roomId: String) extends Punch {
 

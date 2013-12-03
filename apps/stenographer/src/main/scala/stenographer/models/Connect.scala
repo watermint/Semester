@@ -1,8 +1,8 @@
 package stenographer.models
 
-import etude.chatwork.Session
 import com.twitter.finagle.http.Cookie
 import scala.collection.mutable
+import etude.chatwork.v0.Session
 
 object Connect {
   private var session: Option[Session] = None

@@ -5,13 +5,20 @@ import etude.chatwork._
 import scala.io.Source
 import scala.pickling._
 import scala.pickling.json._
-import etude.chatwork.RoomMeta
 import etude.file.File
 import etude.file.Dir
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import etude.qos.Retry.RetryException
 import java.nio.file.FileSystems
+import etude.chatwork.v0._
+import etude.qos.Retry.RetryException
+import punchedtape.punch.ArchiveMessage
+import scala.Some
+import etude.file.File
+import etude.file.Dir
+import punchedtape.punch.ArchiveRoom
+import Stenographer
 
 case class Archive(destDir: String) extends Punch {
   lazy val archiveDir = Dir(FileSystems.getDefault.getPath(destDir))

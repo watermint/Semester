@@ -2,6 +2,10 @@ package etude.http
 
 import etude.io.Memory._
 import org.apache.http.{Header, HttpResponse}
+import scala.util.parsing.json.{JSON, JSONObject}
+import scala.util.{Failure, Success, Try}
+import org.json4s.JValue
+import org.json4s.native.JsonMethods
 
 case class Response(statusCode: StatusCode,
                     headers: Map[String, String],
@@ -10,6 +14,8 @@ case class Response(statusCode: StatusCode,
                     content: Array[Byte]) {
 
   lazy val contentAsString: String = new String(content)
+
+  lazy val contentAsJson: JValue = JsonMethods.parse(contentAsString)
 }
 
 object Response {

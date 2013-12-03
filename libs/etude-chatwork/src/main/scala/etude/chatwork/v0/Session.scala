@@ -1,13 +1,17 @@
-package etude.chatwork
+package etude.chatwork.v0
 
 import etude.http._
-import etude.qos.Throttle
 import etude.qos.Retry.retry
 import java.net.URI
 import java.time.{Duration, Instant}
 import org.slf4j.LoggerFactory
 import scala.collection.mutable
-import scala.util.parsing.json.{JSON, JSONArray, JSONObject}
+import scala.util.parsing.json.JSON
+import scala.Some
+import etude.http.Client
+import scala.util.parsing.json.JSONArray
+import scala.util.parsing.json.JSONObject
+import etude.qos.Throttle
 
 case class Session(email: String,
                    password: String,
@@ -327,7 +331,7 @@ case class Session(email: String,
         JSONObject(
           Map(
             "type" -> "",
-            "rid" -> roomId,
+            "rid" -> roomId.roomId,
             "t" -> JSONObject(
               Map(
                 roomId.toString -> 1

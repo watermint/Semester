@@ -1,4 +1,5 @@
-package etude.chatwork
+package etude.chatwork.v0
+
 
 trait Role {
   val aid: AccountId

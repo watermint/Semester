@@ -1,4 +1,4 @@
-package etude.chatwork
+package etude.chatwork.v0
 
 case class UnknownChatworkProtocolException(message: String, payload: Option[String] = None) extends RuntimeException(message)
 

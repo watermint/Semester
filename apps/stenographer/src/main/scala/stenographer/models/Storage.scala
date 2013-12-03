@@ -4,8 +4,8 @@ import stenographer.App
 import org.elasticsearch.common.settings.ImmutableSettings
 import org.elasticsearch.node.{Node, NodeBuilder}
 import org.elasticsearch.client.Client
-import etude.chatwork.{RoomId, RoomMeta}
 import scala.collection.mutable
+import etude.chatwork.v0.{RoomMeta, RoomId}
 
 object Storage {
   lazy val node: Node = {

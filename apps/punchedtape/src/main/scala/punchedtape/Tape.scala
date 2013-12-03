@@ -1,6 +1,6 @@
 package punchedtape
 
-import etude.chatwork.Session
+import etude.chatwork.v0.Session
 
 case class Tape(punches: List[Punch], infinite: Boolean) {
   def play(session: Session): Unit = {

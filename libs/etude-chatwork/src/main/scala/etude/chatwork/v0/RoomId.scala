@@ -1,4 +1,4 @@
-package etude.chatwork
+package etude.chatwork.v0
 
 case class RoomId(roomId: String) {
   lazy val id: BigInt = BigInt(roomId)
