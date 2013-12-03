@@ -2,7 +2,10 @@ package etude.chatwork.v1
 
 import scala.util.Try
 
-trait AccountRepository extends Repository[AccountId, Account] {
+trait AccountRepository
+  extends Repository[AccountId, Account]
+  with EnumerableRepository[AccountId, Account] {
+
   def me(): Try[Account]
 
   def contacts(): Try[List[Account]]

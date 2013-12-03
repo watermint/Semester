@@ -20,6 +20,7 @@ case class ApiRoomRepository(implicit authToken: AuthToken) extends RoomReposito
       JField("room_id", JInt(roomId)) <- data
       JField("name", JString(name)) <- data
       JField("type", JString(roomType)) <- data
+      JField("role", JString(roomRole)) <- data
       JField("sticky", JBool(sticky)) <- data
       JField("unread_num", JInt(unreadNum)) <- data
       JField("mention_num", JInt(mentionNum)) <- data
@@ -35,6 +36,7 @@ case class ApiRoomRepository(implicit authToken: AuthToken) extends RoomReposito
         name = name,
         description = None,
         roomType = RoomType(roomType),
+        roomRole = RoomRoleType(roomRole),
         sticky = sticky,
         unreadCount = unreadNum,
         mentionCount = mentionNum,
