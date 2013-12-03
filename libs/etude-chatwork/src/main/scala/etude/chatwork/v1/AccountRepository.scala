@@ -6,4 +6,8 @@ trait AccountRepository extends Repository[AccountId, Account] {
   def me(): Try[Account]
 
   def contacts(): Try[List[Account]]
+
+  def contains(entity: Account): Try[Boolean] = contains(entity.accountId)
+
+  def asEntitiesList: Try[List[Account]] = contacts()
 }

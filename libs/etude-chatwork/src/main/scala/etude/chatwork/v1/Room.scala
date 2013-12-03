@@ -8,13 +8,14 @@ import java.time.Instant
  */
 case class Room(roomId: RoomId,
                 name: String,
-                description: String,
+                description: Option[String],
                 roomType: RoomType,
                 sticky: Boolean,
                 unreadCount: BigInt,
                 mentionCount: BigInt,
                 myTaskCount: BigInt,
-                totalTasksCount: BigInt,
+                totalTaskCount: BigInt,
+                totalMessageCount: BigInt,
                 fileCount: BigInt,
                 avatar: URI,
                 lastUpdateTime: Instant) extends Entity[RoomId]

@@ -15,3 +15,14 @@ case class RoomTypeDirect() extends RoomType {
 case class RoomTypeGroup() extends RoomType {
   val name: String = "group"
 }
+
+object RoomType {
+  def apply(name: String): RoomType = {
+    name match {
+      case "my" => RoomTypeMy()
+      case "direct" => RoomTypeDirect()
+      case "group" => RoomTypeGroup()
+      case _ => throw EntityNotFoundException("Unknown room type: " + name)
+    }
+  }
+}
