@@ -23,6 +23,8 @@ trait Identity[+A] {
   def value: A
 }
 
+/* Note: These trait/class are not used in this Semester now.
+
 trait OrderedIdentity[A, ID <: Identity[A]]
   extends Identity[A] with Ordered[ID]
 
@@ -77,3 +79,4 @@ object Identity {
 
   def unapply[A](v: Identity[A]): Option[A] = Some(v.value)
 }
+*/
