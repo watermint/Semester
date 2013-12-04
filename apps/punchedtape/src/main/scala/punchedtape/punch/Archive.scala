@@ -19,6 +19,46 @@ import etude.file.File
 import etude.file.Dir
 import punchedtape.punch.ArchiveRoom
 import Stenographer
+import etude.qos.Retry.RetryException
+import punchedtape.punch.ArchiveMessage
+import etude.chatwork.v0.RoomMeta
+import scala.Some
+import etude.file.File
+import etude.file.Dir
+import punchedtape.punch.ArchiveRoom
+import etude.chatwork.v0.Stenographer
+import etude.qos.Retry.RetryException
+import punchedtape.punch.ArchiveMessage
+import etude.chatwork.v0.RoomMeta
+import scala.Some
+import etude.file.File
+import etude.file.Dir
+import punchedtape.punch.ArchiveRoom
+import etude.chatwork.v0.Stenographer
+import etude.qos.Retry.RetryException
+import punchedtape.punch.ArchiveMessage
+import etude.chatwork.v0.RoomMeta
+import scala.Some
+import etude.file.File
+import etude.file.Dir
+import punchedtape.punch.ArchiveRoom
+import etude.chatwork.v0.Stenographer
+import etude.qos.Retry.RetryException
+import punchedtape.punch.ArchiveMessage
+import etude.chatwork.v0.RoomMeta
+import scala.Some
+import etude.file.File
+import etude.file.Dir
+import punchedtape.punch.ArchiveRoom
+import etude.chatwork.v0.Stenographer
+import etude.qos.Retry.RetryException
+import punchedtape.punch.ArchiveMessage
+import etude.chatwork.v0.RoomMeta
+import scala.Some
+import etude.file.File
+import etude.file.Dir
+import punchedtape.punch.ArchiveRoom
+import etude.chatwork.v0.Stenographer
 
 case class Archive(destDir: String) extends Punch {
   lazy val archiveDir = Dir(FileSystems.getDefault.getPath(destDir))
@@ -37,7 +77,7 @@ case class Archive(destDir: String) extends Punch {
     }
   }
 
-  def archiveMessage(message: Message)(session: Session): ArchiveMessage = {
+  def archiveMessage(message: model.Message)(session: Session): ArchiveMessage = {
     session.account(message.aid) match {
       case Some(account) => ArchiveMessage(
         account.aid.accountId,
@@ -68,7 +108,7 @@ case class Archive(destDir: String) extends Punch {
     }
 
     val roomFilePath: File = archiveDir.resolveFile(info.roomId.roomId + ".json")
-    val archiveMessages: (List[Message]) => Boolean = {
+    val archiveMessages: (List[model.Message]) => Boolean = {
       (messages) =>
         messages.foreach {
           m =>
@@ -127,10 +167,10 @@ case class Archive(destDir: String) extends Punch {
   }
 }
 
-case class ArchiveRoom(roomId: RoomId,
+case class ArchiveRoom(roomId: model.RoomId,
                        description: String,
-                       lowWaterMark: Option[MessageId] = None,
-                       highWaterMark: Option[MessageId] = None)
+                       lowWaterMark: Option[model.MessageId] = None,
+                       highWaterMark: Option[model.MessageId] = None)
 
 
 case class ArchiveMessage(accountId: String,
