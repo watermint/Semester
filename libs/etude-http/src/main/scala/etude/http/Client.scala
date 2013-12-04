@@ -8,6 +8,7 @@ import org.apache.http.impl.client.{HttpClients, CloseableHttpClient, BasicCooki
 import org.apache.http.message.BasicNameValuePair
 import scala.collection.JavaConverters._
 import java.net.URI
+import scala.util.{Failure, Try, Success}
 
 case class Client() {
   val cookieStore: CookieStore = new BasicCookieStore()
@@ -18,19 +19,19 @@ case class Client() {
     override def getMethod: String = "DELETE"
   }
 
-  private def request(req: HttpUriRequest): Either[Exception, Response] = {
+  private def request(req: HttpUriRequest): Try[Response] = {
     val client = httpClient
     try {
-      Right(Response(client.execute(req)))
+      Success(Response(client.execute(req)))
     } catch {
-      case e: Exception => Left(e)
+      case e: Exception => Failure(e)
     } finally {
       client.close()
     }
   }
 
   def get(uri: URIContainer,
-          headers: List[Pair[String, String]] = List()): Either[Exception, Response] = {
+          headers: List[Pair[String, String]] = List()): Try[Response] = {
 
     val get = new HttpGet(uri)
     headers.foreach(h => get.setHeader(h._1, h._2))
@@ -39,7 +40,7 @@ case class Client() {
 
   def post(uri: URIContainer,
            formData: List[Pair[String, String]] = List(),
-           headers: List[Pair[String, String]] = List()): Either[Exception, Response] = {
+           headers: List[Pair[String, String]] = List()): Try[Response] = {
     
     val post = new HttpPost(uri)
     entity(formData).foreach(post.setEntity)
@@ -49,7 +50,7 @@ case class Client() {
 
   def put(uri: URIContainer,
           formData: List[Pair[String, String]] = List(),
-          headers: List[Pair[String, String]] = List()): Either[Exception, Response] = {
+          headers: List[Pair[String, String]] = List()): Try[Response] = {
 
     val put = new HttpPut(uri)
     entity(formData).foreach(put.setEntity)
@@ -59,7 +60,7 @@ case class Client() {
 
   def delete(uri: URIContainer,
              formData: List[Pair[String, String]] = List(),
-             headers: List[Pair[String, String]] = List()): Either[Exception, Response] = {
+             headers: List[Pair[String, String]] = List()): Try[Response] = {
 
     val delete = new HttpDelete(uri)
     entity(formData).foreach(delete.setEntity)

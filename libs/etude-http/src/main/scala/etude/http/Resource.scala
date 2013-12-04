@@ -1,7 +1,9 @@
 package etude.http
 
-case class Resource(uri: URIContainer) {
-  def get: Either[Exception, Response] =  Client().get(uri)
+import scala.util.Try
 
-  def post(formData: List[Pair[String, String]] = List()): Either[Exception, Response] = Client().post(uri, formData)
+case class Resource(uri: URIContainer) {
+  def get: Try[Response] = Client().get(uri)
+
+  def post(formData: List[Pair[String, String]] = List()): Try[Response] = Client().post(uri, formData)
 }
