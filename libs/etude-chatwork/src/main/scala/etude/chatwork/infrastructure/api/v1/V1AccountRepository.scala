@@ -5,13 +5,13 @@ import java.time.Instant
 import org.json4s._
 import scala.util.Try
 import etude.chatwork.domain._
-import etude.chatwork.infrastructure.api.{QoSException, ApiQoS, TokenAuthentication}
+import etude.chatwork.infrastructure.api.{QoSException, ApiQoS}
 import etude.chatwork.domain.account._
 import scala.util.Failure
 import scala.Some
 import scala.util.Success
 
-case class V1AccountRepository(implicit authToken: TokenAuthentication) extends AccountRepository with ApiQoS {
+case class V1AccountRepository(implicit authToken: V1AuthToken) extends AccountRepository with ApiQoS {
   private val ENDPOINT_ME = "/v1/me"
 
   private val ENDPOINT_CONTACTS = "/v1/contacts"

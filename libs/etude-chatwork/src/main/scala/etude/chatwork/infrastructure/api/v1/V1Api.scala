@@ -4,7 +4,7 @@ import etude.http._
 import java.net.URI
 import scala.util.{Success, Failure, Try}
 import org.json4s.{JString, JArray, JValue}
-import etude.chatwork.infrastructure.api.{ApiQoS, TokenAuthentication}
+import etude.chatwork.infrastructure.api.ApiQoS
 
 object V1Api {
   lazy val endpoint: URI = new URI("https://api.chatwork.com/")
@@ -13,7 +13,7 @@ object V1Api {
 
   def get(path: String,
           params: List[Pair[String, String]] = List())
-         (implicit token: TokenAuthentication): Try[JValue] = {
+         (implicit token: V1AuthToken): Try[JValue] = {
 
     ApiQoS.throttle.execute {
       client.get(
@@ -29,7 +29,7 @@ object V1Api {
   def post(path: String,
            params: List[Pair[String, String]] = List(),
            data: List[Pair[String, String]] = List())
-          (implicit token: TokenAuthentication): Try[JValue] = {
+          (implicit token: V1AuthToken): Try[JValue] = {
 
     ApiQoS.throttle.execute {
       client.post(
@@ -46,7 +46,7 @@ object V1Api {
   def put(path: String,
           params: List[Pair[String, String]] = List(),
           data: List[Pair[String, String]] = List())
-         (implicit token: TokenAuthentication): Try[JValue] = {
+         (implicit token: V1AuthToken): Try[JValue] = {
 
     ApiQoS.throttle.execute {
       client.put(
@@ -63,7 +63,7 @@ object V1Api {
   def delete(path: String,
              params: List[Pair[String, String]] = List(),
              data: List[Pair[String, String]] = List())
-            (implicit token: TokenAuthentication): Try[JValue] = {
+            (implicit token: V1AuthToken): Try[JValue] = {
 
     ApiQoS.throttle.execute {
       client.delete(
@@ -87,7 +87,7 @@ object V1Api {
     }
   }
 
-  private def authHeaders(implicit authToken: TokenAuthentication): List[Pair[String, String]] = {
+  private def authHeaders(implicit authToken: V1AuthToken): List[Pair[String, String]] = {
     List(
       "X-ChatWorkToken" -> authToken.token
     )

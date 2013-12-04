@@ -5,7 +5,7 @@ import java.net.URI
 import org.json4s._
 import scala.util.Try
 import etude.chatwork.domain._
-import etude.chatwork.infrastructure.api.{QoSException, NotImplementedException, ApiQoS, TokenAuthentication}
+import etude.chatwork.infrastructure.api.{QoSException, NotImplementedException, ApiQoS}
 import etude.chatwork.domain.room._
 import scala.util.Failure
 import scala.Some
@@ -13,7 +13,7 @@ import etude.chatwork.domain.room.RoomAttributes
 import scala.util.Success
 import etude.chatwork.domain.message.MessageId
 
-case class V1RoomRepository(implicit authToken: TokenAuthentication) extends RoomRepository with ApiQoS {
+case class V1RoomRepository(implicit authToken: V1AuthToken) extends RoomRepository with ApiQoS {
   private val ENDPOINT_ROOMS = "/v1/rooms"
 
   def markAsRead(message: MessageId): Try[MessageId] = Failure(NotImplementedException("Not implemented by ChatWork"))

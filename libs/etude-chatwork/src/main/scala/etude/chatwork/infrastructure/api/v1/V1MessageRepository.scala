@@ -3,14 +3,14 @@ package etude.chatwork.infrastructure.api.v1
 import etude.chatwork.domain.message.{Message, MessageId, MessageRepository}
 import etude.chatwork.domain.room.RoomId
 import scala.util.{Success, Failure, Try}
-import etude.chatwork.infrastructure.api.{QoSException, ApiQoS, TokenAuthentication, NotImplementedException}
+import etude.chatwork.infrastructure.api.{QoSException, ApiQoS, NotImplementedException}
 import org.json4s._
 import etude.chatwork.domain.account.{AccountRepository, AccountId, Account}
 import java.net.URI
 import java.time.Instant
 import etude.chatwork.domain.EntityNotFoundException
 
-case class V1MessageRepository(implicit authToken: TokenAuthentication)
+case class V1MessageRepository(implicit authToken: V1AuthToken)
   extends MessageRepository
   with ApiQoS {
 

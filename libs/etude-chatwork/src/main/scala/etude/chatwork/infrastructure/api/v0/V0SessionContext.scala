@@ -6,7 +6,7 @@ trait V0SessionContext extends AuthContext {
 
   val organizationId: Option[String]
 
-  val user: String
+  val email: String
 
   val password: String
 

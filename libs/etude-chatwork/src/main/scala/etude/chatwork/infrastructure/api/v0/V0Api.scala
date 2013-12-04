@@ -48,7 +48,7 @@ object V0Api extends ApiQoS {
     client.post(
       uri = loginUri,
       formData = List(
-        "email" -> sessionContext.user,
+        "email" -> sessionContext.email,
         "password" -> sessionContext.password
       )
     ) match {

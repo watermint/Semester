@@ -3,7 +3,7 @@ package etude.chatwork.infrastructure.api.v1
 import scala.util.Try
 import java.time.Instant
 import org.json4s._
-import etude.chatwork.infrastructure.api.{QoSException, ApiQoS, TokenAuthentication}
+import etude.chatwork.infrastructure.api.{QoSException, ApiQoS}
 import etude.chatwork.domain.account.AccountId
 import etude.chatwork.domain.room._
 import etude.chatwork.domain.room.RoomRoleAdmin
@@ -12,7 +12,7 @@ import scala.util.Failure
 import scala.util.Success
 import etude.chatwork.domain.room.RoomRoleMember
 
-case class V1RoomRoleRepository(implicit authToken: TokenAuthentication) extends RoomRoleRepository with ApiQoS {
+case class V1RoomRoleRepository(implicit authToken: V1AuthToken) extends RoomRoleRepository with ApiQoS {
   private val ENDPOINT_ROOMS = "/v1/rooms"
 
   protected def parseRoomRole(roomId: RoomId, json: JValue): List[RoomRole] = {
