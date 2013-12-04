@@ -3,7 +3,6 @@ package stenographer
 import com.twitter.finatra.FinatraServer
 import stenographer.views.{Admin, Root, Assets}
 import etude.bootstrap._
-import scala.xml.Elem
 import etude.bootstrap.SiteConfig
 import scala.Some
 import etude.file.{Dir, Home}

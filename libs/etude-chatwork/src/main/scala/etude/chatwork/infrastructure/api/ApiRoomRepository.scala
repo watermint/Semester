@@ -6,7 +6,7 @@ import etude.chatwork.domain.message.MessageId
 import etude.chatwork.infrastructure.api.v1.V1RoomRepository
 import etude.chatwork.infrastructure.api.v0.V0RoomRepository
 
-class ApiRoomRepository(implicit authContext: MixedAuthContext) extends RoomRepository {
+case class ApiRoomRepository(implicit authContext: MixedAuthContext) extends RoomRepository {
   def rooms(): Try[List[Room]] =
     V1RoomRepository().rooms()
 

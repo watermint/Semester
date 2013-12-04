@@ -90,12 +90,12 @@ object V0Api extends ApiQoS {
 
   private def apiResponseParser(command: String, response: Response): Try[JValue] = {
     val JBool(success) = response.contentAsJson \ "status" \ "success"
-    val JString(message) = response.contentAsJson \ "status" \ "message"
     val result = response.contentAsJson \ "result"
 
     if (success) {
       Success(result)
     } else {
+      val JString(message) = response.contentAsJson \ "status" \ "message"
       if (message.contains("NO LOGIN")) {
         Failure(V0SessionTimeoutException(message))
       } else {

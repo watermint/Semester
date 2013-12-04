@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.8",
+  version := "0.0.9",
   organization := "org.watermint",
   scalaVersion := "2.10.2",
   resolvers ++= Seq(
@@ -25,30 +25,18 @@ lazy val appsAreca = project.in(file("apps/areca"))
   .dependsOn(etudeMoney)
   .dependsOn(etudeHtml)
 
-lazy val appsPunchedTape = project.in(file("apps/punchedtape"))
-  .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
-  .dependsOn(etudeChatwork)
-  .dependsOn(etudeChercher)
-  .dependsOn(etudeFile)
-
 lazy val appsStenographer = project.in(file("apps/stenographer"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
   .dependsOn(etudeBootstrap)
   .dependsOn(etudeChatwork)
   .dependsOn(etudeFile)
-  .dependsOn(etudeStenographer)
-
-lazy val etudeAggregation = project.in(file("libs/etude-aggregation"))
-  .settings(buildSettings: _*)
 
 lazy val etudeBootstrap = project.in(file("libs/etude-bootstrap"))
   .settings(buildSettings: _*)
 
 lazy val etudeCalendar = project.in(file("libs/etude-calendar"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeAggregation)
   .dependsOn(etudeRegion)
   .dependsOn(etudeReligion)
   .dependsOn(etudeHttp)
@@ -89,8 +77,3 @@ lazy val etudeRegion = project.in(file("libs/etude-region"))
 
 lazy val etudeReligion = project.in(file("libs/etude-religion"))
   .settings(buildSettings: _*)
-
-lazy val etudeStenographer = project.in(file("libs/etude-stenographer"))
-  .settings(buildSettings: _*)
-  .dependsOn(etudeChatwork)
-  .dependsOn(etudeFile)

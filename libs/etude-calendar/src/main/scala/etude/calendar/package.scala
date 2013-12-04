@@ -3,6 +3,7 @@ package etude
 import etude.region.Country
 import etude.religion.Religion
 import java.time.LocalDate
+import etude.calendar.domain.{ReligiousHolidays, NationalHolidays, BusinessHolidays, BusinessDays}
 
 package object calendar {
   def businessHolidays: BusinessHolidays = BusinessHolidays()
