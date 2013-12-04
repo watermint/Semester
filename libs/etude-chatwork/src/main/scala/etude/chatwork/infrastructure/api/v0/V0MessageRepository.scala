@@ -8,7 +8,7 @@ import etude.chatwork.domain.room.RoomId
 import etude.chatwork.domain.account.{Account, AccountId, AccountRepository}
 import java.time.Instant
 
-case class V0MessageRepository(implicit authToken: V0AuthUserPassword)
+case class V0MessageRepository(implicit authToken: V0Api)
   extends MessageRepository {
 
   //  def messages(before: Message): List[Message] = {
