@@ -2,6 +2,10 @@ package etude.chatwork.domain.account
 
 import java.net.URI
 import etude.ddd.model.Entity
+import etude.chatwork.domain.JSONSerializable
+
+import org.json4s._
+import org.json4s.JsonDSL._
 
 /**
  * Account in ChatWork.
@@ -14,7 +18,8 @@ class Account(val accountId: AccountId,
               val organization: Option[Organization] = None,
               val department: Option[String] = None,
               val avatarImage: Option[URI])
-  extends Entity[AccountId] {
+  extends Entity[AccountId]
+  with JSONSerializable {
 
   val identity: AccountId = accountId
 }

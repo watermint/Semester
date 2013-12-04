@@ -6,6 +6,7 @@ import etude.ddd.model.Entity
 import etude.chatwork.domain.account.AccountId
 import scala.util.Success
 import scala.util.Failure
+import etude.chatwork.domain.JSONSerializable
 
 /**
  * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms
@@ -18,7 +19,8 @@ class Room(val roomId: RoomId,
            val roomRole: RoomRoleType,
            val avatar: URI,
            val lastUpdateTime: Instant)
-  extends Entity[RoomId] {
+  extends Entity[RoomId]
+  with JSONSerializable {
 
   val identity: RoomId = roomId
 
