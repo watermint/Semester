@@ -1,5 +1,7 @@
 package etude.chatwork.infrastructure.api.v1
 
-import etude.chatwork.infrastructure.api.TokenAuthentication
+import etude.chatwork.infrastructure.api.AuthContext
 
-case class V1AuthToken(token: String) extends TokenAuthentication
+trait V1AuthToken extends AuthContext {
+  val token: String
+}

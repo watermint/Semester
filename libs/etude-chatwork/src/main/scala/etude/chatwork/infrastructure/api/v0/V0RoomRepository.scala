@@ -6,7 +6,7 @@ import etude.chatwork.domain.message.MessageId
 import etude.chatwork.infrastructure.api.NotImplementedException
 import org.json4s._
 
-case class V0RoomRepository(implicit authToken: V0Api) extends RoomRepository {
+case class V0RoomRepository(implicit session: V0SessionContext) extends RoomRepository {
   def rooms(): Try[List[Room]] = Failure(NotImplementedException("Migrated to v1 API"))
 
   def create(name: String, roles: List[RoomRole], description: String, icon: RoomIcon): Try[RoomId] = Failure(NotImplementedException("Migrated to v1 API"))
@@ -64,7 +64,7 @@ case class V0RoomRepository(implicit authToken: V0Api) extends RoomRepository {
   //  }
 
   def latestMessage(roomId: RoomId): Try[MessageId] = {
-    authToken.api(
+    V0Api.api(
       "load_chat",
       Map(
         "room_id" -> roomId.value.toString(),
@@ -105,7 +105,7 @@ case class V0RoomRepository(implicit authToken: V0Api) extends RoomRepository {
   //  }
 
   def markAsRead(message: MessageId): Try[MessageId] = {
-    authToken.api(
+    V0Api.api(
       "read",
       Map(
         "room_id" -> message.roomId.value.toString(),

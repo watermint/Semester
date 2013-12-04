@@ -8,7 +8,7 @@ import etude.chatwork.domain.room.RoomId
 import etude.chatwork.domain.account.{Account, AccountId, AccountRepository}
 import java.time.Instant
 
-case class V0MessageRepository(implicit authToken: V0Api)
+case class V0MessageRepository(implicit session: V0SessionContext)
   extends MessageRepository {
 
   //  def messages(before: Message): List[Message] = {
@@ -68,7 +68,7 @@ case class V0MessageRepository(implicit authToken: V0Api)
   }
 
   def messages(baseline: MessageId)(implicit accountRepository: AccountRepository): Try[List[Message]] = {
-    authToken.api(
+    V0Api.api(
       "load_old_chat",
       Map(
         "room_id" -> baseline.roomId.value.toString(),

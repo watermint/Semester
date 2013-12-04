@@ -72,7 +72,11 @@ object V0Api extends ApiQoS {
     }
   }
 
-  private def apiUri(command: String, params: Map[String, String], tokens: V0SessionTokens): URI = {
+  private def apiUri(command: String,
+                     params: Map[String, String],
+                     tokens: V0SessionTokens)
+                    (implicit sessionContext: V0SessionContext): URI = {
+
     baseUri.withPath("/gateway.php")
       .withQuery("cmd", command)
       .withQuery(params.toList)
