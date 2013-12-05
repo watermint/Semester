@@ -1,7 +1,7 @@
 package etude.chatwork.domain.account
 
-import etude.ddd.model.Entity
 import etude.chatwork.domain.JSONSerializable
+import etude.commons.domain.Entity
 
 class Organization(val organizationId: OrganizationId,
                    val name: String)

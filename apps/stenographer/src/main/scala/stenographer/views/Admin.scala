@@ -3,7 +3,7 @@ package stenographer.views
 import com.twitter.finatra.{Request, Response, Controller}
 import java.util.UUID
 import org.jboss.netty.handler.codec.http.{Cookie, DefaultCookie}
-import etude.http.security.Csrf
+import etude.commons.utility.html.Csrf
 
 class Admin extends Controller {
   val adminUserCookieName = "U"

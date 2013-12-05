@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.9",
+  version := "0.0.10",
   organization := "org.watermint",
   scalaVersion := "2.10.2",
   resolvers ++= Seq(
@@ -22,58 +22,24 @@ lazy val buildSettings = Seq(
 lazy val appsAreca = project.in(file("apps/areca"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
-  .dependsOn(etudeMoney)
-  .dependsOn(etudeHtml)
+  .dependsOn(etudeCommons)
 
 lazy val appsStenographer = project.in(file("apps/stenographer"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
   .dependsOn(etudeBootstrap)
   .dependsOn(etudeChatwork)
-  .dependsOn(etudeFile)
 
 lazy val etudeBootstrap = project.in(file("libs/etude-bootstrap"))
   .settings(buildSettings: _*)
 
-lazy val etudeCalendar = project.in(file("libs/etude-calendar"))
-  .settings(buildSettings: _*)
-  .dependsOn(etudeRegion)
-  .dependsOn(etudeReligion)
-  .dependsOn(etudeHttp)
-
 lazy val etudeChatwork = project.in(file("libs/etude-chatwork"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeDdd)
-  .dependsOn(etudeHttp)
-  .dependsOn(etudeQos)
+  .dependsOn(etudeCommons)
 
 lazy val etudeChercher = project.in(file("libs/etude-chercher"))
   .settings(buildSettings: _*)
 
-lazy val etudeDdd = project.in(file("libs/etude-ddd"))
+lazy val etudeCommons = project.in(file("libs/etude-commons"))
   .settings(buildSettings: _*)
 
-lazy val etudeFile = project.in(file("libs/etude-file"))
-  .settings(buildSettings: _*)
-
-lazy val etudeHtml = project.in(file("libs/etude-html"))
-  .settings(buildSettings: _*)
-
-lazy val etudeHttp = project.in(file("libs/etude-http"))
-  .settings(buildSettings: _*)
-  .dependsOn(etudeIo)
-
-lazy val etudeIo = project.in(file("libs/etude-io"))
-  .settings(buildSettings: _*)
-
-lazy val etudeMoney = project.in(file("libs/etude-money"))
-  .settings(buildSettings: _*)
-
-lazy val etudeQos = project.in(file("libs/etude-qos"))
-  .settings(buildSettings: _*)
-
-lazy val etudeRegion = project.in(file("libs/etude-region"))
-  .settings(buildSettings: _*)
-
-lazy val etudeReligion = project.in(file("libs/etude-religion"))
-  .settings(buildSettings: _*)

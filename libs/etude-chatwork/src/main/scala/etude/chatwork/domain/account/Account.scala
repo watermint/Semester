@@ -1,11 +1,11 @@
 package etude.chatwork.domain.account
 
 import java.net.URI
-import etude.ddd.model.Entity
 import etude.chatwork.domain.JSONSerializable
 
 import org.json4s._
 import org.json4s.JsonDSL._
+import etude.commons.domain.Entity
 
 /**
  * Account in ChatWork.

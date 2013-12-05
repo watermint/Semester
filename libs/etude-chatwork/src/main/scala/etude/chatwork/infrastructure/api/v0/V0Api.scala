@@ -1,12 +1,11 @@
 package etude.chatwork.infrastructure.api.v0
 
-import etude.http._
 import java.net.URI
 import scala.Some
-import etude.http.Client
 import scala.util.{Success, Failure, Try}
 import etude.chatwork.infrastructure.api.{QoSException, ApiQoS}
 import org.json4s._
+import etude.commons.infrastructure.http._
 
 object V0Api extends ApiQoS {
 

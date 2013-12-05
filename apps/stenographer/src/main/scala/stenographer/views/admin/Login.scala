@@ -2,8 +2,8 @@ package stenographer.views.admin
 
 import stenographer.App
 import etude.bootstrap.{Alert, Form, Html}
-import etude.http.security.Csrf
 import scala.xml.Elem
+import etude.commons.utility.html.Csrf
 
 object Login {
   def loginContainer(v: Any): Elem = <div class="col-md-6 col-md-offset-3">{v}</div>

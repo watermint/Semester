@@ -5,8 +5,8 @@ import stenographer.views.{Admin, Root, Assets}
 import etude.bootstrap._
 import etude.bootstrap.SiteConfig
 import scala.Some
-import etude.file.{Dir, Home}
 import java.util.UUID
+import etude.commons.domain.file.{Home, Dir}
 
 object App extends FinatraServer {
   // This is Semester project structure specific configuration.

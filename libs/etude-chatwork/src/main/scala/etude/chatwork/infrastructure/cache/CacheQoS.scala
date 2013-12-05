@@ -1,9 +1,9 @@
 package etude.chatwork.infrastructure.cache
 
-import etude.ddd.model.{Entity, Identity}
 import scala.collection.mutable
 import java.time.Instant
 import scala.util.{Failure, Success, Try}
+import etude.commons.domain.{Identity, Entity}
 
 trait CacheQoS[ID <: Identity[_], E <: Entity[ID]] {
   protected val ENTITY_LIST_OPERATION_CACHE_IN_SECONDS = 180

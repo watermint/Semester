@@ -1,10 +1,10 @@
 package etude.chatwork.infrastructure.api.v1
 
-import etude.http._
 import java.net.URI
 import scala.util.{Success, Failure, Try}
 import org.json4s.{JString, JArray, JValue}
 import etude.chatwork.infrastructure.api.ApiQoS
+import etude.commons.infrastructure.http._
 
 object V1Api {
   lazy val endpoint: URI = new URI("https://api.chatwork.com/")

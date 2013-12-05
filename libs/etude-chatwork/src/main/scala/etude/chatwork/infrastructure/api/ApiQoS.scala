@@ -2,7 +2,7 @@ package etude.chatwork.infrastructure.api
 
 import scala.collection.mutable
 import java.time.Instant
-import etude.qos.Throttle
+import etude.commons.utility.qos.Throttle
 
 trait ApiQoS {
   protected val QOS_RETRY_DURATION_OF_FAILURE_IN_SECONDS = 3

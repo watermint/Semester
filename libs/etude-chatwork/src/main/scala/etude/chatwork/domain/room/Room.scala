@@ -2,11 +2,11 @@ package etude.chatwork.domain.room
 
 import java.net.URI
 import java.time.Instant
-import etude.ddd.model.Entity
 import etude.chatwork.domain.account.AccountId
 import scala.util.Success
 import scala.util.Failure
 import etude.chatwork.domain.JSONSerializable
+import etude.commons.domain.Entity
 
 /**
  * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms

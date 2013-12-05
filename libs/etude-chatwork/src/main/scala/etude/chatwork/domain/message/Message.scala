@@ -1,9 +1,9 @@
 package etude.chatwork.domain.message
 
 import java.time.Instant
-import etude.ddd.model.Entity
 import etude.chatwork.domain.account.Account
 import etude.chatwork.domain.JSONSerializable
+import etude.commons.domain.Entity
 
 class Message(val messageId: MessageId,
               val account: Account,

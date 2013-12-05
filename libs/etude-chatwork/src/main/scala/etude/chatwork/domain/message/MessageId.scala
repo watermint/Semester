@@ -1,7 +1,7 @@
 package etude.chatwork.domain.message
 
-import etude.ddd.model.Identity
 import etude.chatwork.domain.room.RoomId
+import etude.commons.domain.Identity
 
 class MessageId(val roomId: RoomId,
                 val messageId: BigInt)
