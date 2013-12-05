@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.11",
+  version := "0.0.12",
   organization := "org.watermint",
   scalaVersion := "2.10.2",
   resolvers ++= Seq(
@@ -37,9 +37,9 @@ lazy val etudeChatwork = project.in(file("libs/etude-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(etudeCommons)
 
-lazy val etudeChercher = project.in(file("libs/etude-chercher"))
+lazy val etudeCommons = project.in(file("libs/etude-commons"))
   .settings(buildSettings: _*)
 
-lazy val etudeCommons = project.in(file("libs/etude-commons"))
+lazy val etudeFextile = project.in(file("libs/etude-fextile"))
   .settings(buildSettings: _*)
 

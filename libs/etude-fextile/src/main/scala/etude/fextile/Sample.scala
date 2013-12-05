@@ -1,10 +1,10 @@
-package chercher
+package etude.fextile
 
 import scalafx.application.JFXApp
 import scalafx.scene._
 import scalafx.scene.layout._
 import scalafx.scene.control._
-import Chercher._
+import Fextile._
 
 object Sample extends JFXApp {
   lazy val sample = new VBox {
@@ -58,11 +58,11 @@ object Sample extends JFXApp {
   }
 
   stage = new JFXApp.PrimaryStage {
-    title = "Chercher"
+    title = "Fextile"
     width = 800
     height = 600
     scene = new Scene {
-      stylesheets.add("chercher.css")
+      stylesheets.add("fextile.css")
       root = sample
     }
   }

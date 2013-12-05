@@ -1,10 +1,10 @@
-package chercher
+package etude.fextile
 
 import javafx.event.{EventHandler, Event}
 import scalafx.scene.control.Label
 import scalafx.geometry.Insets
 
-object Chercher {
+object Fextile {
   def eventHandler[T <: Event](f: T => Unit): EventHandler[T] = new EventHandler[T] {
     def handle(e: T) = f(e)
   }
