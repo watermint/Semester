@@ -32,6 +32,13 @@ object Mock extends JFXApp {
     }
   }
 
+  def gridRow = new GridRow {
+    (1 to 24).foreach {
+      i =>
+        add(new Label { text = s"c${i}r0"; style = s"-fx-background-color: #${i.toLong.toHexString}04040" }, GridSpanMedium(span = i % 2 + 1))
+    }
+  }
+
   lazy val connectButton = new ButtonPrimary {
     alignment = Pos.CENTER
     text = "Connect"
@@ -69,6 +76,10 @@ object Mock extends JFXApp {
       },
       new ButtonPrimary {
         text = "Primary"
+        onAction = event {
+          e =>
+            basePane.pushNode(gridRow)
+        }
       },
       new ButtonSuccess {
         text = "Success"
@@ -84,7 +95,6 @@ object Mock extends JFXApp {
       },
       new Button {
         text = "Next"
-        styleClass = Seq("button", "btn-default")
         onAction = event {
           e =>
             basePane.pushNode(yayPane)
@@ -123,7 +133,7 @@ object Mock extends JFXApp {
     height = 600
     scene = new Scene {
       stylesheets.add("fextile.css")
-      root = basePane
+      root = gridRow
     }
   }
 }

@@ -10,22 +10,27 @@ import scalafx.animation.TranslateTransition
  * UINavigationController like push/pop view.
  * @param firstNode first node.
  */
-class PushNodePane(firstNode: Node) extends GridPane {
+class PushNodePane(firstNode: Node) extends Pane {
   private val nodes: mutable.Stack[Node] = mutable.Stack[Node](firstNode)
-  private val container: Pane = this
+  private val tape: GridPane = new GridPane {
+    add(firstNode, 0, 0)
+    columnConstraints = List(baseWidthConstraints())
+    rowConstraints = List(baseHeightConstraints())
+  }
 
   lazy val paneWidth: DoubleProperty = new DoubleProperty()
   lazy val paneHeight: DoubleProperty = new DoubleProperty()
 
+  content = tape
+
   hgrow = Priority.ALWAYS
   vgrow = Priority.ALWAYS
 
-  paneWidth.bind(this.width)
   paneHeight.bind(this.height)
-
-  add(firstNode, 0, 0)
-  columnConstraints = List(baseWidthConstraints())
-  rowConstraints = List(baseHeightConstraints())
+  paneWidth.bind(this.width)
+  paneWidth.onChange {
+    tape.translateX = -paneWidth.value * (nodes.size - 1)
+  }
 
   protected def baseWidthConstraints(): ColumnConstraints = {
     new ColumnConstraints {
@@ -47,7 +52,7 @@ class PushNodePane(firstNode: Node) extends GridPane {
 
   protected def pushTransition(index: Int): Unit = {
     new TranslateTransition {
-      node = container
+      node = tape
       toX = -paneWidth.value * index
       fromX = -paneWidth.value * (index - 1)
     }.play()
@@ -55,7 +60,7 @@ class PushNodePane(firstNode: Node) extends GridPane {
 
   protected def popTransition(index: Int): Unit = {
     new TranslateTransition {
-      node = container
+      node = tape
       toX = -paneWidth.value * (index - 1)
       fromX = -paneWidth.value * index
     }.play()
@@ -68,9 +73,9 @@ class PushNodePane(firstNode: Node) extends GridPane {
   case class NodeCannotReusableOnPushNodePaneException(message: String, cause: Throwable) extends Exception(message, cause)
 
   def pushNode(node: Node): Node = {
-    columnConstraints = (0 to nodes.size).map(i => baseWidthConstraints()).toList
+    tape.columnConstraints = (0 to nodes.size).map(i => baseWidthConstraints()).toList
     try {
-      add(node, nodes.size, 0)
+      tape.add(node, nodes.size, 0)
     } catch {
       case e: IllegalArgumentException =>
         throw NodeCannotReusableOnPushNodePaneException(
@@ -85,7 +90,7 @@ class PushNodePane(firstNode: Node) extends GridPane {
 
   def popNode(): Node = {
     val node = nodes.pop()
-    add(emptyNode, nodes.size, 0)
+    tape.add(emptyNode, nodes.size, 0)
     popTransition(nodes.size)
     node
   }
