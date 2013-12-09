@@ -133,7 +133,7 @@ object Mock extends JFXApp {
     height = 600
     scene = new Scene {
       stylesheets.add("fextile.css")
-      root = gridRow
+      root = basePane
     }
   }
 }

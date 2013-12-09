@@ -109,7 +109,7 @@ class GridRow extends VBox {
   }
 
   protected def offsetAppend(node: Node, offset: Int, span: Int = 1): Unit = {
-    if (currentCol + offset + span >= 12) {
+    if (currentCol + offset + span > 12) {
       currentRow += 1
       currentCol = offset
     } else if (offset > currentCol) {
@@ -120,13 +120,14 @@ class GridRow extends VBox {
   }
 
   protected def simpleAppend(node: Node, span: Int = 1): Unit = {
-    placeNode(node, currentCol, currentRow, span)
-    if (currentCol + span >= 12) {
+    if (currentCol + span > 12) {
       currentRow += 1
       currentCol = 0
+      placeNode(node, currentCol, currentRow, span)
     } else {
-      currentCol += span
+      placeNode(node, currentCol, currentRow, span)
     }
+    currentCol += span
   }
 
   protected def rebalance(): Unit = {
