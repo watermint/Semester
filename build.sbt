@@ -29,6 +29,7 @@ lazy val appsStenographer = project.in(file("apps/stenographer"))
   .settings(assemblySettings: _*)
   .dependsOn(etudeBootstrap)
   .dependsOn(etudeChatwork)
+  .dependsOn(etudeFextile)
 
 lazy val etudeBootstrap = project.in(file("libs/etude-bootstrap"))
   .settings(buildSettings: _*)

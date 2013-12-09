@@ -1,10 +1,10 @@
-package etude.fextile
+package etude.fextile.sample
 
 import scalafx.application.JFXApp
 import scalafx.scene._
 import scalafx.scene.layout._
 import scalafx.scene.control._
-import Fextile._
+import etude.fextile._
 
 object Sample extends JFXApp {
   lazy val sample = new VBox {

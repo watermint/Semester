@@ -10,6 +10,7 @@ import etude.chatwork.domain.account._
 import scala.util.Failure
 import scala.Some
 import scala.util.Success
+import etude.commons.domain.EntityNotFoundException
 
 case class V1AccountRepository(implicit authToken: V1AuthToken) extends AccountRepository with ApiQoS {
   private val ENDPOINT_ME = "/v1/me"

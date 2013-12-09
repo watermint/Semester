@@ -12,6 +12,7 @@ import scala.Some
 import etude.chatwork.domain.room.RoomAttributes
 import scala.util.Success
 import etude.chatwork.domain.message.MessageId
+import etude.commons.domain.EntityNotFoundException
 
 case class V1RoomRepository(implicit authToken: V1AuthToken) extends RoomRepository with ApiQoS {
   private val ENDPOINT_ROOMS = "/v1/rooms"

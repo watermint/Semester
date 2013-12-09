@@ -3,6 +3,7 @@ package etude.chatwork.domain.room
 import scala.util.Try
 import etude.chatwork.domain._
 import etude.chatwork.domain.message.MessageId
+import etude.commons.domain.{Repository, EnumerableRepository}
 
 trait RoomRepository
   extends Repository[RoomId, Room]

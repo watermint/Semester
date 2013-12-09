@@ -1,7 +1,6 @@
-package etude.chatwork.domain
+package etude.commons.domain
 
 import scala.util.{Failure, Success, Try}
-import etude.commons.domain.{Identity, Entity}
 
 trait Repository[ID <: Identity[_], E <: Entity[ID]] {
   def resolve(identifier: ID): Try[E]

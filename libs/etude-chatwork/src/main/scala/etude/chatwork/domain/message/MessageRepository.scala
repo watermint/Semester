@@ -1,8 +1,8 @@
 package etude.chatwork.domain.message
 
 import scala.util.Try
-import etude.chatwork.domain.Repository
 import etude.chatwork.domain.account.AccountRepository
+import etude.commons.domain.Repository
 
 trait MessageRepository
   extends Repository[MessageId, Message] {

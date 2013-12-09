@@ -1,7 +1,8 @@
 package stenographer.views.admin
 
-import stenographer.App
 import etude.bootstrap.Div
+import stenographer.web.App
+import scala.App
 
 object Main {
   def adminMenu(): String =

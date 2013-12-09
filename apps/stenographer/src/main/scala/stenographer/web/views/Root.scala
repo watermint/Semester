@@ -1,7 +1,8 @@
 package stenographer.views
 
 import com.twitter.finatra.Controller
-import stenographer.App
+import stenographer.web.App
+import scala.App
 
 /**
  *

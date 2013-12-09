@@ -8,7 +8,7 @@ import org.json4s._
 import etude.chatwork.domain.account.{AccountRepository, AccountId, Account}
 import java.net.URI
 import java.time.Instant
-import etude.chatwork.domain.EntityNotFoundException
+import etude.commons.domain.EntityNotFoundException
 
 case class V1MessageRepository(implicit authToken: V1AuthToken)
   extends MessageRepository

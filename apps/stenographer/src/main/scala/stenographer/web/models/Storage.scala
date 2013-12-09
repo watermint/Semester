@@ -1,10 +1,11 @@
 package stenographer.models
 
-import stenographer.App
 import org.elasticsearch.common.settings.ImmutableSettings
 import org.elasticsearch.node.{Node, NodeBuilder}
 import org.elasticsearch.client.Client
 import scala.collection.mutable
+import stenographer.web.App
+import scala.App
 
 object Storage {
   lazy val node: Node = {

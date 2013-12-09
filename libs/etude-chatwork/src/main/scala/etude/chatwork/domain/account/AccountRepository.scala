@@ -1,7 +1,7 @@
 package etude.chatwork.domain.account
 
 import scala.util.Try
-import etude.chatwork.domain.{Repository, EnumerableRepository}
+import etude.commons.domain.{Repository, EnumerableRepository}
 
 trait AccountRepository
   extends Repository[AccountId, Account]

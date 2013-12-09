@@ -1,4 +1,4 @@
-package stenographer
+package stenographer.web
 
 import com.twitter.finatra.FinatraServer
 import stenographer.views.{Admin, Root, Assets}
