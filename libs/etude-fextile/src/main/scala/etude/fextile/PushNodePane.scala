@@ -31,9 +31,10 @@ class PushNodePane(firstNode: Region) extends Pane {
   paneWidth.onChange {
     tape.translateX = -paneWidth.value * (nodes.size - 1)
     nodes.foreach {
-      node =>
-        node.minWidth = paneWidth.value
-        node.maxWidth = paneWidth.value
+      case r: Pane =>
+        r.minWidth = paneWidth.value
+        r.maxWidth = paneWidth.value
+      case _ =>
     }
   }
 
@@ -63,11 +64,15 @@ class PushNodePane(firstNode: Region) extends Pane {
     }.play()
   }
 
-  protected def popTransition(index: Int): Unit = {
+  protected def popTransition(index: Int, targetNode: Region): Unit = {
     new TranslateTransition {
       node = tape
       toX = -paneWidth.value * (index - 1)
       fromX = -paneWidth.value * index
+      onFinished = event {
+        e =>
+          tape.children.removeAll(targetNode)
+      }
     }.play()
   }
 
@@ -98,7 +103,7 @@ class PushNodePane(firstNode: Region) extends Pane {
   def popNode(): Node = {
     val node = nodes.pop()
     tape.add(emptyNode, nodes.size, 0)
-    popTransition(nodes.size)
+    popTransition(nodes.size, node)
     node
   }
 }

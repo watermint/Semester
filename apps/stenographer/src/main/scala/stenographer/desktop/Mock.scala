@@ -2,11 +2,10 @@ package stenographer.desktop
 
 import etude.fextile._
 import scalafx.application.JFXApp
-import scalafx.scene.{Parent, Node, Scene}
-import scalafx.scene.layout._
+import scalafx.scene.Node
 import scalafx.scene.control.{PasswordField, TextField, Label}
 import scalafx.scene.text.TextAlignment
-import scalafx.geometry.{HPos, Insets, Pos}
+import scalafx.geometry.{HPos, Pos}
 
 object Mock extends JFXApp {
   lazy val apiKeyField = new TextField {}
@@ -33,7 +32,7 @@ object Mock extends JFXApp {
   }
 
   def gridRow = new GridRow {
-    (1 to 24).foreach {
+    (1 to 15).foreach {
       i =>
         add(new Label {
           text = s"c${i}r0"
@@ -53,10 +52,8 @@ object Mock extends JFXApp {
 
   lazy val authPane = new GridRow {
     add(new H1 {
-      alignment = Pos.CENTER
-      textAlignment = TextAlignment.CENTER
       text = "Connect to ChatWork"
-    }, xs12, sm12, md10.offset(1), lg10.offset(1))
+    }, xs12, sm12, md10.offset(1), lg10.offset(1)).hpos(HPos.CENTER)
     add(labelControl("API Key", apiKeyField), xs12, sm4, md3.offset(1), lg3.offset(1)).hpos(HPos.RIGHT)
     add(apiKeyField, xs12, sm4, md3, lg3)
     add(requiredLabel(), xs12, sm4, md3, lg3)
@@ -126,7 +123,6 @@ object Mock extends JFXApp {
     width = 800
     height = 600
     scene = new Scene {
-      stylesheets.add("fextile.css")
       root = basePane
     }
   }
