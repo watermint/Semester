@@ -10,8 +10,8 @@ import scalafx.animation.TranslateTransition
  * UINavigationController like push/pop view.
  * @param firstNode first node.
  */
-class PushNodePane(firstNode: Node) extends Pane {
-  private val nodes: mutable.Stack[Node] = mutable.Stack[Node](firstNode)
+class PushNodePane(firstNode: Region) extends Pane {
+  private val nodes: mutable.Stack[Region] = mutable.Stack[Region](firstNode)
   private val tape: GridPane = new GridPane {
     add(firstNode, 0, 0)
     columnConstraints = List(baseWidthConstraints())
@@ -30,6 +30,11 @@ class PushNodePane(firstNode: Node) extends Pane {
   paneWidth.bind(this.width)
   paneWidth.onChange {
     tape.translateX = -paneWidth.value * (nodes.size - 1)
+    nodes.foreach {
+      node =>
+        node.minWidth = paneWidth.value
+        node.maxWidth = paneWidth.value
+    }
   }
 
   protected def baseWidthConstraints(): ColumnConstraints = {
@@ -72,7 +77,7 @@ class PushNodePane(firstNode: Node) extends Pane {
 
   case class NodeCannotReusableOnPushNodePaneException(message: String, cause: Throwable) extends Exception(message, cause)
 
-  def pushNode(node: Node): Node = {
+  def pushNode(node: Region): Node = {
     tape.columnConstraints = (0 to nodes.size).map(i => baseWidthConstraints()).toList
     try {
       tape.add(node, nodes.size, 0)
@@ -85,6 +90,8 @@ class PushNodePane(firstNode: Node) extends Pane {
     }
     pushTransition(nodes.size)
     nodes.push(node)
+    node.minWidth.bind(paneWidth)
+    node.maxWidth.bind(paneWidth)
     node
   }
 

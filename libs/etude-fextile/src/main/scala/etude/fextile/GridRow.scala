@@ -4,85 +4,68 @@ import javafx.scene.layout.{GridPane => FxGridPane}
 import scalafx.scene.layout._
 import scalafx.scene.Node
 import scalafx.beans.property.DoubleProperty
-import scalafx.geometry.Pos
+import scalafx.geometry.{VPos, HPos, Insets, Pos}
 import scala.collection.mutable
 import scala.Some
+import org.slf4j.{Logger, LoggerFactory}
 
-/**
- *
- */
-class GridRow extends VBox {
+class GridRow extends GridPane {
   private val nodes: mutable.ListBuffer[Node] = mutable.ListBuffer[Node]()
   private val spans: mutable.HashMap[Node, Seq[GridSpan]] = mutable.HashMap[Node, Seq[GridSpan]]()
   private var currentCol: Int = 0
   private var currentRow: Int = 0
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   lazy val paneWidth: DoubleProperty = new DoubleProperty()
   lazy val container = new GridPane() {
-    style = "-fx-background-color: #404040;"
-    alignment = Pos.CENTER
-    columnConstraints = (1 to 12).map(i => new ColumnConstraints {
-      percentWidth = 100.0 / 12.0
-    })
-    content = (1 to 12).map(i => new Pane())
+    alignment = Pos.TOP_CENTER
+    hgap = 15
+    vgap = 15
   }
 
-  style = "-fx-background-color: #804040;"
-  content = container
-  alignment = Pos.TOP_CENTER
+  alignment = Pos.CENTER
   hgrow = Priority.ALWAYS
   vgrow = Priority.ALWAYS
-
-  trait SizeConstraints extends DeviceSize {
-    val containerWidth: Option[Int]
-    val columnWidth: Option[Int]
+  paneWidth.bind(this.width)
+  paneWidth.onChange {
+    resizeContainer()
+    rebalance()
   }
+  add(container, 0, 0)
+  columnConstraints = List(new ColumnConstraints {
+    percentWidth = 100
+    halignment = HPos.CENTER
+  })
+  rowConstraints = List(new RowConstraints() {
+    percentHeight = 100
+    alignment = Pos.CENTER
+  })
 
-  case class SizeConstraintsExtraSmall() extends SizeConstraints with DeviceSizeExtraSmall {
-    val containerWidth: Option[Int] = None
-    val columnWidth: Option[Int] = None
-  }
-
-  case class SizeConstraintsSmall() extends SizeConstraints with DeviceSizeSmall {
-    val containerWidth: Option[Int] = Some(750)
-    val columnWidth: Option[Int] = Some(60)
-  }
-
-  case class SizeConstraintsMedium() extends SizeConstraints with DeviceSizeMedium {
-    val containerWidth: Option[Int] = Some(970)
-    val columnWidth: Option[Int] = Some(78)
-  }
-
-  case class SizeConstraintsLarge() extends SizeConstraints with DeviceSizeLarge {
-    val containerWidth: Option[Int] = Some(1170)
-    val columnWidth: Option[Int] = Some(95)
-  }
-
-  lazy val sizeConstraints: Seq[SizeConstraints] = Seq(
-    SizeConstraintsExtraSmall(),
-    SizeConstraintsSmall(),
-    SizeConstraintsMedium(),
-    SizeConstraintsLarge()
-  )
+  resizeContainer()
 
   protected def resizeContainer(): Unit = {
-    sizeConstraints.find(_.widthRange.contains(paneWidth.value.toInt)) match {
+    ContainerSize.sizes.find(_.widthRange.contains(paneWidth.value.toInt)) match {
+      case None => logger.warn(s"Size definition not found for width: ${paneWidth.value}")
       case Some(sc) =>
         sc.containerWidth match {
           case Some(w: Int) =>
             container.minWidth = w
             container.maxWidth = w
           case _ =>
+            container.minWidth = 1
+            container.maxWidth = Double.MaxValue
         }
         sc.columnWidth match {
           case Some(w: Int) =>
             container.columnConstraints = (1 to 12).map(i => new ColumnConstraints {
               percentWidth = 100.0 / 12.0
+              padding = Insets(0, 15, 0, 15)
               maxWidth = w
             })
           case _ =>
             container.columnConstraints = (1 to 12).map(i => new ColumnConstraints {
               percentWidth = 100.0 / 12.0
+              padding = Insets(0, 15, 0, 15)
             })
         }
     }
@@ -91,14 +74,16 @@ class GridRow extends VBox {
   protected def offsetAndSpanForNode(node: Node): Option[Pair[Option[Int], Int]] = {
     spans.get(node) match {
       case None => None
-      case Some(s) => s.find(_.widthRange.contains(paneWidth.value.toInt)) match {
-        case Some(sc) => Some(sc.offset -> sc.span)
-        case _ => None
-      }
+      case Some(s) =>
+        s.find(_.widthRange.contains(paneWidth.value.toInt)) match {
+          case Some(sc) => Some(sc.gridOffset -> sc.gridSpan)
+          case _ => None
+        }
     }
   }
 
   protected def placeNode(node: Node, col: Int, row: Int, span: Int): Unit = {
+    logger.debug(s"place: $node, col: $col, row: $row, span: $span")
     if (container.children.contains(node)) {
       FxGridPane.setColumnIndex(node, col)
       FxGridPane.setRowIndex(node, row)
@@ -148,14 +133,26 @@ class GridRow extends VBox {
     }
   }
 
-  resizeContainer()
-  paneWidth.bind(this.width)
-  paneWidth.onChange {
-    resizeContainer()
-    rebalance()
+  case class NodeContainer(node: Node) {
+    def hpos(hpos: HPos): NodeContainer = {
+      FxGridPane.setHalignment(node, hpos)
+      this
+    }
+    def vpos(node: Node, vpos: VPos): NodeContainer = {
+      FxGridPane.setValignment(node, vpos)
+      this
+    }
   }
 
-  def add(node: Node, span: GridSpan*): Unit = {
+  def updateHpos(node: Node, hpos: HPos): Unit = {
+    FxGridPane.setHalignment(node, hpos)
+  }
+
+  def updateVpos(node: Node, vpos: VPos): Unit = {
+    FxGridPane.setValignment(node, vpos)
+  }
+
+  def add(node: Node, span: GridSpan*): NodeContainer = {
     nodes += node
     spans.put(node, span)
 
@@ -169,6 +166,7 @@ class GridRow extends VBox {
         }
     }
     rebalance()
+    NodeContainer(node)
   }
 }
 

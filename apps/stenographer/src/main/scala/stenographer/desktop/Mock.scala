@@ -6,7 +6,7 @@ import scalafx.scene.{Parent, Node, Scene}
 import scalafx.scene.layout._
 import scalafx.scene.control.{PasswordField, TextField, Label}
 import scalafx.scene.text.TextAlignment
-import scalafx.geometry.{Insets, Pos}
+import scalafx.geometry.{HPos, Insets, Pos}
 
 object Mock extends JFXApp {
   lazy val apiKeyField = new TextField {}
@@ -35,7 +35,10 @@ object Mock extends JFXApp {
   def gridRow = new GridRow {
     (1 to 24).foreach {
       i =>
-        add(new Label { text = s"c${i}r0"; style = s"-fx-background-color: #${i.toLong.toHexString}04040" }, GridSpanMedium(span = i % 2 + 1))
+        add(new Label {
+          text = s"c${i}r0"
+          style = s"-fx-background-color: #${i.toLong.toHexString}04040"
+        }, GridSpanMedium(gridSpan = i % 2 + 1))
     }
   }
 
@@ -48,28 +51,19 @@ object Mock extends JFXApp {
     }
   }
 
-  lazy val authPane: Parent = new VContainer {
-    alignment = Pos.CENTER
-    content = Seq(
-      new H1 {
-        alignment = Pos.CENTER
-        textAlignment = TextAlignment.CENTER
-        text = "Connect to ChatWork"
-      },
-      new GridPane {
-        alignment = Pos.CENTER
-        hgap = 8
-        vgap = 8
-        addRow(0, labelControl("API Key", apiKeyField), apiKeyField, requiredLabel())
-        addRow(1, labelControl("Organization ID", apiOrgIdField), apiOrgIdField)
-        addRow(2, labelControl("Email", apiEmailField), apiEmailField)
-        addRow(3, labelControl("Password", apiPasswordField), apiPasswordField)
-      },
-      connectButton
-    )
+  lazy val authPane = new GridRow {
+    add(new H1 {
+      alignment = Pos.CENTER
+      textAlignment = TextAlignment.CENTER
+      text = "Connect to ChatWork"
+    }, xs12, sm12, md10.offset(1), lg10.offset(1))
+    add(labelControl("API Key", apiKeyField), xs12, sm4, md3.offset(1), lg3.offset(1)).hpos(HPos.RIGHT)
+    add(apiKeyField, xs12, sm4, md3, lg3)
+    add(requiredLabel(), xs12, sm4, md3, lg3)
+    add(connectButton, xs12, sm4.offset(4), md4.offset(4), lg3.offset(3))
   }
 
-  lazy val connectValidationPane: Parent = new VContainer {
+  lazy val connectValidationPane = new VContainer {
     content = Seq(
       new H1 {
         text = "In progress..."
@@ -110,7 +104,7 @@ object Mock extends JFXApp {
     )
   }
 
-  def yayPane: Parent = new VContainer {
+  def yayPane = new VContainer {
     content = Seq(
       new H1 {
         text = "Yay!"
