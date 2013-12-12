@@ -1,4 +1,4 @@
-package etude.fextile
+package fextile
 
 trait GridSpan extends DeviceSize {
   val gridSpan: Int

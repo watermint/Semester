@@ -1,4 +1,4 @@
-package etude.fextile
+package fextile
 
 trait DeviceSize {
   val widthRange: Range

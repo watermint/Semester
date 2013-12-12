@@ -2,12 +2,17 @@
 
 Twitter Bootstrap like UI framework for JavaFX.
 Apply themes to your application just like [Twitter Bootstrap](http://getbootstrap.com) via JavaFX CSS.
-The name Fextile is the coined term, FX + textile.
+The name Fextile is the coined term, JavaFX + textile.
 
-# Objective
+# Requirements
 
-* Provide simplified interfaces which are usually wrapped/syntax sugar for existing APIs.
-* This project is the practice for Scala and designing APIs.
+* JDK 8 (tested on b117)
+* Scala 2.10
+* sbt 0.13
+
+# Overview
+
+
 
 # License
 

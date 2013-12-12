@@ -1,4 +1,4 @@
-package etude.fextile
+package fextile
 
 import scala.collection.mutable
 import scalafx.scene.Node
@@ -80,19 +80,9 @@ class PushNodePane(firstNode: Region) extends Pane {
     new Pane()
   }
 
-  case class NodeCannotReusableOnPushNodePaneException(message: String, cause: Throwable) extends Exception(message, cause)
-
   def pushNode(node: Region): Node = {
     tape.columnConstraints = (0 to nodes.size).map(i => baseWidthConstraints()).toList
-    try {
-      tape.add(node, nodes.size, 0)
-    } catch {
-      case e: IllegalArgumentException =>
-        throw NodeCannotReusableOnPushNodePaneException(
-          message = "Node cannot reusable on push node pane. Please recreate your node each time on pushView.",
-          cause = e
-        )
-    }
+    tape.add(node, nodes.size, 0)
     pushTransition(nodes.size)
     nodes.push(node)
     node.minWidth.bind(paneWidth)

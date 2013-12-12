@@ -1,51 +1,37 @@
-package etude.fextile
+package fextile
 
 import javafx.scene.layout.{GridPane => FxGridPane}
 import scalafx.scene.layout._
 import scalafx.scene.Node
-import scalafx.beans.property.DoubleProperty
 import scalafx.geometry.{VPos, HPos, Insets, Pos}
 import scala.collection.mutable
 import scala.Some
 import org.slf4j.{Logger, LoggerFactory}
 
-class GridRow extends GridPane {
+class GridRow extends BorderPane {
   private val nodes: mutable.ListBuffer[Node] = mutable.ListBuffer[Node]()
   private val spans: mutable.HashMap[Node, Seq[GridSpan]] = mutable.HashMap[Node, Seq[GridSpan]]()
   private var currentCol: Int = 0
   private var currentRow: Int = 0
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  lazy val paneWidth: DoubleProperty = new DoubleProperty()
   lazy val container = new GridPane() {
     alignment = Pos.TOP_CENTER
     hgap = 15
     vgap = 15
   }
 
-  alignment = Pos.CENTER
+  center = container
   hgrow = Priority.ALWAYS
   vgrow = Priority.ALWAYS
-  paneWidth.bind(this.width)
-  paneWidth.onChange {
+  this.width.onChange {
     resizeContainer()
     rebalance()
   }
-  add(container, 0, 0)
-  columnConstraints = List(new ColumnConstraints {
-    percentWidth = 100
-    halignment = HPos.CENTER
-  })
-  rowConstraints = List(new RowConstraints() {
-    percentHeight = 100
-    alignment = Pos.CENTER
-  })
-
-  resizeContainer()
 
   protected def resizeContainer(): Unit = {
-    ContainerSize.sizes.find(_.widthRange.contains(paneWidth.value.toInt)) match {
-      case None => logger.warn(s"Size definition not found for width: ${paneWidth.value}")
+    ContainerSize.sizes.find(_.widthRange.contains(this.width.value.toInt)) match {
+      case None => logger.warn(s"Size definition not found for width: ${this.width.value}")
       case Some(sc) =>
         sc.containerWidth match {
           case Some(w: Int) =>
@@ -75,7 +61,7 @@ class GridRow extends GridPane {
     spans.get(node) match {
       case None => None
       case Some(s) =>
-        s.find(_.widthRange.contains(paneWidth.value.toInt)) match {
+        s.find(_.widthRange.contains(this.width.value.toInt)) match {
           case Some(sc) => Some(sc.gridOffset -> sc.gridSpan)
           case _ => None
         }
@@ -83,7 +69,6 @@ class GridRow extends GridPane {
   }
 
   protected def placeNode(node: Node, col: Int, row: Int, span: Int): Unit = {
-    logger.debug(s"place: $node, col: $col, row: $row, span: $span")
     if (container.children.contains(node)) {
       FxGridPane.setColumnIndex(node, col)
       FxGridPane.setRowIndex(node, row)
@@ -142,14 +127,6 @@ class GridRow extends GridPane {
       FxGridPane.setValignment(node, vpos)
       this
     }
-  }
-
-  def updateHpos(node: Node, hpos: HPos): Unit = {
-    FxGridPane.setHalignment(node, hpos)
-  }
-
-  def updateVpos(node: Node, vpos: VPos): Unit = {
-    FxGridPane.setValignment(node, vpos)
   }
 
   def add(node: Node, span: GridSpan*): NodeContainer = {

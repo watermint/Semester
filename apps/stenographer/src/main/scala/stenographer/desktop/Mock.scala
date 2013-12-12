@@ -1,6 +1,6 @@
 package stenographer.desktop
 
-import etude.fextile._
+import fextile._
 import scalafx.application.JFXApp
 import scalafx.scene.Node
 import scalafx.scene.control.{PasswordField, TextField, Label}
@@ -101,7 +101,7 @@ object Mock extends JFXApp {
     )
   }
 
-  def yayPane = new VContainer {
+  lazy val yayPane = new VContainer {
     content = Seq(
       new H1 {
         text = "Yay!"

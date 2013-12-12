@@ -1,4 +1,4 @@
-package etude.fextile
+package fextile
 
 import scalafx.scene.control.Label
 
