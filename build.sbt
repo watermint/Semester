@@ -38,6 +38,7 @@ lazy val etudeChatworkElasticsearch = project.in(file("etude/chatwork/elasticsea
 
 lazy val etudeElasticsearchCore = project.in(file("etude/elasticsearch/core"))
   .settings(buildSettings: _*)
+  .dependsOn(etudeFoundationUtility)
 
 lazy val etudeFoundationDomain = project.in(file("etude/foundation/domain"))
   .settings(buildSettings: _*)
