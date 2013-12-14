@@ -38,6 +38,17 @@ lazy val etudeChatwork = project.in(file("libs/etude-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(etudeCommons)
 
+lazy val etudeChatworkTeam = project.in(file("libs/etude-chatwork-team"))
+  .settings(buildSettings: _*)
+  .dependsOn(etudeCommons)
+  .dependsOn(etudeChatwork)
+  .dependsOn(etudeChatworkElasticsearch)
+
+lazy val etudeChatworkElasticsearch = project.in(file("libs/etude-chatwork-elasticsearch"))
+  .settings(buildSettings: _*)
+  .dependsOn(etudeCommons)
+  .dependsOn(etudeChatwork)
+
 lazy val etudeCommons = project.in(file("libs/etude-commons"))
   .settings(buildSettings: _*)
 
