@@ -1,5 +1,7 @@
 # Semester
 
+[![Build Status](https://travis-ci.org/watermint/Semester.png)](https://travis-ci.org/watermint/Semester)
+
 Collection of small apps and libraries. This project collection is the practice for Scala and designing APIs in real life use cases. 
 
 # License
