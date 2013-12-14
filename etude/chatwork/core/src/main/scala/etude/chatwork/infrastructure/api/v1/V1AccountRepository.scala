@@ -4,7 +4,6 @@ import java.net.URI
 import java.time.Instant
 import org.json4s._
 import scala.util.Try
-import etude.chatwork.domain._
 import etude.chatwork.infrastructure.api.{QoSException, ApiQoS}
 import etude.chatwork.domain.account._
 import scala.util.Failure

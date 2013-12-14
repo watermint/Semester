@@ -5,7 +5,6 @@ import java.time.Instant
 import etude.chatwork.domain.account.AccountId
 import scala.util.Success
 import scala.util.Failure
-import etude.chatwork.domain.JSONSerializable
 import etude.foundation.domain.Entity
 
 /**
@@ -19,8 +18,7 @@ class Room(val roomId: RoomId,
            val roomRole: RoomRoleType,
            val avatar: URI,
            val lastUpdateTime: Instant)
-  extends Entity[RoomId]
-  with JSONSerializable {
+  extends Entity[RoomId] {
 
   val identity: RoomId = roomId
 

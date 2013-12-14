@@ -5,7 +5,6 @@ import etude.chatwork.domain.room._
 import scala.util.Failure
 import scala.util.Success
 import etude.chatwork.domain.message.MessageId
-import etude.chatwork.infrastructure.api.NotImplementedException
 
 case class CachedRoomRepository(repository: RoomRepository)
   extends RoomRepository

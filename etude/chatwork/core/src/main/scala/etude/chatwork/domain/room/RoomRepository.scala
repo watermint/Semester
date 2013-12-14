@@ -1,7 +1,6 @@
 package etude.chatwork.domain.room
 
 import scala.util.Try
-import etude.chatwork.domain._
 import etude.chatwork.domain.message.MessageId
 import etude.foundation.domain.{Repository, EnumerableRepository}
 
