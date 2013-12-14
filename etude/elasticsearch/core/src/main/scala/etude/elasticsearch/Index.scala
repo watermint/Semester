@@ -1,18 +1,16 @@
 package etude.elasticsearch
 
 import scala.concurrent._
-import ExecutionContext.Implicits.global
-import org.json4s._
-import org.json4s.native.JsonMethods._
+import scala.concurrent.ExecutionContext.Implicits.global
 
-case class Index(name: String)(implicit engine: Engine) {
+case class Index(indexName: String)(implicit engine: Engine) {
   def exists: Future[Boolean] = {
     future {
       engine
         .client
         .admin()
         .indices()
-        .prepareExists(name)
+        .prepareExists(indexName)
         .execute()
         .get()
         .isExists
@@ -25,7 +23,7 @@ case class Index(name: String)(implicit engine: Engine) {
         .client
         .admin()
         .indices()
-        .prepareCreate(name)
+        .prepareCreate(indexName)
         .execute()
         .get()
         .isAcknowledged
@@ -38,25 +36,15 @@ case class Index(name: String)(implicit engine: Engine) {
         .client
         .admin()
         .indices()
-        .prepareDelete(name)
+        .prepareDelete(indexName)
         .execute()
         .get()
         .isAcknowledged
     }
   }
 
-  def putMapping(typeName: String, mapping: JValue): Future[Boolean] = {
-    future {
-      engine
-        .client
-        .admin()
-        .indices()
-        .preparePutMapping(name)
-        .setType(typeName)
-        .setSource(render(mapping))
-        .execute()
-        .get()
-        .isAcknowledged
-    }
+  def indexType(typeName: String): Type = {
+    Type(indexName, typeName)
   }
+
 }
