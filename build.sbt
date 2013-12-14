@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.14",
+  version := "0.0.15",
   organization := "org.watermint",
   scalaVersion := "2.10.2",
   resolvers ++= Seq(
@@ -19,39 +19,39 @@ lazy val buildSettings = Seq(
 )
 
 
-lazy val appsAreca = project.in(file("apps/areca"))
+lazy val etudeChatworkCore = project.in(file("etude/chatwork/core"))
   .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
-  .dependsOn(etudeCommons)
+  .dependsOn(etudeFoundationDomain)
+  .dependsOn(etudeFoundationHttp)
 
-lazy val appsStenographer = project.in(file("apps/stenographer"))
+lazy val etudeChatworkTeam = project.in(file("etude/chatwork/team"))
   .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
-  .dependsOn(etudeBootstrap)
-  .dependsOn(etudeChatwork)
-  .dependsOn(etudeFextile)
-
-lazy val etudeBootstrap = project.in(file("libs/etude-bootstrap"))
-  .settings(buildSettings: _*)
-
-lazy val etudeChatwork = project.in(file("libs/etude-chatwork"))
-  .settings(buildSettings: _*)
-  .dependsOn(etudeCommons)
-
-lazy val etudeChatworkTeam = project.in(file("libs/etude-chatwork-team"))
-  .settings(buildSettings: _*)
-  .dependsOn(etudeCommons)
-  .dependsOn(etudeChatwork)
+  .dependsOn(etudeFoundationDomain)
+  .dependsOn(etudeChatworkCore)
   .dependsOn(etudeChatworkElasticsearch)
 
-lazy val etudeChatworkElasticsearch = project.in(file("libs/etude-chatwork-elasticsearch"))
+lazy val etudeChatworkElasticsearch = project.in(file("etude/chatwork/elasticsearch"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeCommons)
-  .dependsOn(etudeChatwork)
+  .dependsOn(etudeFoundationDomain)
+  .dependsOn(etudeChatworkCore)
+  .dependsOn(etudeElasticsearchCore)
 
-lazy val etudeCommons = project.in(file("libs/etude-commons"))
+lazy val etudeElasticsearchCore = project.in(file("etude/elasticsearch/core"))
   .settings(buildSettings: _*)
 
-lazy val etudeFextile = project.in(file("libs/etude-fextile"))
+lazy val etudeFoundationDomain = project.in(file("etude/foundation/domain"))
+  .settings(buildSettings: _*)
+
+lazy val etudeFoundationHtml = project.in(file("etude/foundation/html"))
+  .settings(buildSettings: _*)
+
+lazy val etudeFoundationHttp = project.in(file("etude/foundation/http"))
+  .settings(buildSettings: _*)
+  .dependsOn(etudeFoundationUtility)
+
+lazy val etudeFoundationUtility = project.in(file("etude/foundation/utility"))
+  .settings(buildSettings: _*)
+
+lazy val etudeDesktopFextile = project.in(file("etude/desktop/fextile"))
   .settings(buildSettings: _*)
 
