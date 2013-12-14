@@ -43,6 +43,20 @@ case class Index(indexName: String)(implicit engine: Engine) {
     }
   }
 
+  def flush: Future[Boolean] = {
+    future {
+      engine
+        .client
+        .admin()
+        .indices()
+        .prepareFlush(indexName)
+        .setFull(true)
+        .execute()
+        .get()
+        .getFailedShards < 1
+    }
+  }
+
   def indexType(typeName: String): Type = {
     Type(indexName, typeName)
   }

@@ -5,6 +5,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 import org.json4s.JValue
+import org.elasticsearch.action.search.SearchResponse
+import org.elasticsearch.index.query.QueryBuilders
 
 case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
 
@@ -46,7 +48,7 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
 
   case class GetResult(id: String, version: Long, data: JValue)
 
-  def get(id: String): Future[GetResult] = {
+  def get(id: String): Future[Option[GetResult]] = {
     future {
       val result = engine
         .client
@@ -54,11 +56,29 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
         .execute()
         .get()
 
-      GetResult(
-        result.getId,
-        result.getVersion,
-        parse(result.getSourceAsString)
-      )
+      if (result.isExists) {
+        Some(
+          GetResult(
+            result.getId,
+            result.getVersion,
+            parse(result.getSourceAsString)
+          )
+        )
+      } else {
+        None
+      }
+    }
+  }
+
+  def all(): Future[SearchResponse] = {
+    future {
+      engine
+        .client
+        .prepareSearch(indexName)
+        .setQuery(QueryBuilders.matchAllQuery())
+        .setTypes(typeName)
+        .execute()
+        .get()
     }
   }
 

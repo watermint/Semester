@@ -59,7 +59,7 @@ class IndexSpec extends Specification {
       val data1 = Map("name" -> "takayuki", "mail" -> "takayuki@localhost")
 
       Await.result(indexType.index(data1, Some(id1)), awaitDuration).id must equalTo(id1)
-      val result1 = Await.result(indexType.get(id1), awaitDuration)
+      val result1 = Await.result(indexType.get(id1), awaitDuration).get
       result1.id must equalTo(id1)
       for {
         JObject(r1) <- result1.data
@@ -69,6 +69,14 @@ class IndexSpec extends Specification {
         name must equalTo("takayuki")
         mail must equalTo("takayuki@localhost")
       }
+
+      val id2 = "k"
+      Await.result(indexType.get(id2), awaitDuration) must beNone
+
+      Await.result(index.flush, awaitDuration) must beTrue
+
+      val all = Await.result(indexType.all(), awaitDuration)
+      all.getHits.getTotalHits must equalTo(1)
 
       Await.result(index.delete, awaitDuration) must beTrue
     }
