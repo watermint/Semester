@@ -6,7 +6,8 @@ import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 import org.json4s.JValue
 import org.elasticsearch.action.search.SearchResponse
-import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
+import org.elasticsearch.action.get.GetResponse
 
 case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
 
@@ -46,9 +47,7 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
     }
   }
 
-  case class GetResult(id: String, version: Long, data: JValue)
-
-  def get(id: String): Future[Option[GetResult]] = {
+  def get(id: String): Future[Option[GetResponse]] = {
     future {
       val result = engine
         .client
@@ -57,13 +56,7 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
         .get()
 
       if (result.isExists) {
-        Some(
-          GetResult(
-            result.getId,
-            result.getVersion,
-            parse(result.getSourceAsString)
-          )
-        )
+        Some(result)
       } else {
         None
       }
@@ -71,40 +64,19 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
   }
 
   def all(): Future[SearchResponse] = {
+    search(QueryBuilders.matchAllQuery())
+  }
+
+  def search(query: QueryBuilder): Future[SearchResponse] = {
     future {
       engine
         .client
         .prepareSearch(indexName)
-        .setQuery(QueryBuilders.matchAllQuery())
+        .setQuery(query)
         .setTypes(typeName)
         .execute()
         .get()
     }
   }
-
-  /*
-   * Drop support due to error like below.
-   * [error] error while loading ImmutableMapEntry, class file '<snip>(org/elasticsearch/common/collect/ImmutableMapEntry.class)' is broken
-   */
-  //  import scala.collection.JavaConverters._
-  //  import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsResponse
-  //  def mapping(): Future[Map[String, Map[String, GetFieldMappingsResponse.FieldMappingMetaData]]] = {
-  //    future {
-  //      engine
-  //        .client
-  //        .admin()
-  //        .indices()
-  //        .prepareGetFieldMappings(typeName)
-  //        .execute()
-  //        .get()
-  //        .mappings()
-  //        .asScala
-  //        .map { m => m._1 -> (m._2.asScala flatMap {
-  //          m1 => m1._2.asScala
-  //        })
-  //      }
-  //    }
-  //  }
-
 
 }

@@ -9,6 +9,9 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import etude.foundation.utility.file.Directory
 import org.json4s._
+import org.json4s.JsonDSL._
+import org.json4s.native.JsonMethods._
+import org.elasticsearch.index.query.QueryBuilders
 
 @RunWith(classOf[JUnitRunner])
 class IndexSpec extends Specification {
@@ -16,16 +19,9 @@ class IndexSpec extends Specification {
 
   val storagePath: Path = Files.createTempDirectory("embedded-engine")
 
-  val embeddedEngine: Engine = EmbeddedEngine(clusterName, storagePath)
+  val embeddedEngine: EmbeddedEngine = EmbeddedEngine(clusterName, storagePath)
 
   val awaitDuration: Duration = Duration(30, SECONDS)
-
-  {
-    // Configure logger
-    import org.apache.log4j.{Level, BasicConfigurator, Logger}
-    BasicConfigurator.configure()
-    Logger.getLogger("org.elasticsearch").setLevel(Level.WARN)
-  }
 
   "EmbeddedEngine" should {
     "Index create/delete" in {
@@ -53,16 +49,14 @@ class IndexSpec extends Specification {
       Await.result(index.create, awaitDuration) must beTrue
       Await.result(indexType.putMapping(mapping), awaitDuration) must beTrue
 
-      import org.json4s.JsonDSL._
-
       val id1 = "t"
       val data1 = Map("name" -> "takayuki", "mail" -> "takayuki@localhost")
 
       Await.result(indexType.index(data1, Some(id1)), awaitDuration).id must equalTo(id1)
       val result1 = Await.result(indexType.get(id1), awaitDuration).get
-      result1.id must equalTo(id1)
+      result1.getId must equalTo(id1)
       for {
-        JObject(r1) <- result1.data
+        JObject(r1) <- parse(result1.getSourceAsString)
         JField("name", JString(name)) <- r1
         JField("mail", JString(mail)) <- r1
       } {
@@ -80,13 +74,45 @@ class IndexSpec extends Specification {
 
       Await.result(index.delete, awaitDuration) must beTrue
     }
+
+    "Kuromoji and Japanese" in {
+      implicit val engine = embeddedEngine
+
+      val index = Index.withKuromoji("japanese")
+      val indexType = index.indexType("ja")
+      val mapping = Map(
+        "message" -> Map("type" -> "string", "index" -> "analyzed", "analyzer" -> "kuromoji")
+      )
+
+      Await.result(index.create, awaitDuration) must beTrue
+      Await.result(indexType.putMapping(mapping), awaitDuration) must beTrue
+
+      Await.result(indexType.index(Map("message" -> "寿司がおいしい")), awaitDuration)
+
+      Await.result(index.flush, awaitDuration) must beTrue
+
+      val shouldMatch = Seq(
+        "寿司",
+        "おいしい"
+      )
+      val shouldNotMatch = Seq(
+        "がお",
+        "いしい"
+      )
+
+      shouldMatch.forall {
+        t =>
+          Await.result(indexType.search(QueryBuilders.fieldQuery("message", t)), awaitDuration).getHits.totalHits() == 1
+      } must beTrue
+      shouldNotMatch.forall {
+        t =>
+          Await.result(indexType.search(QueryBuilders.fieldQuery("message", t)), awaitDuration).getHits.totalHits() == 0
+      } must beTrue
+    }
   }
 
-  "clean up storage" should {
-    "shutdown and remove storagePath" in {
-      embeddedEngine.client.close()
-      Directory.delete(storagePath)
-      Directory.exists(storagePath) must beFalse
-    }
+  {
+    embeddedEngine.client.close()
+    Directory.delete(storagePath)
   }
 }
