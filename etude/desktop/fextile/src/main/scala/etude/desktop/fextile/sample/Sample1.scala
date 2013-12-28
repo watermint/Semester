@@ -1,6 +1,6 @@
-package fextile.sample
+package etude.desktop.fextile.sample
 
-import fextile._
+import etude.desktop.fextile._
 import scalafx.application.JFXApp
 import scalafx.scene.control.Label
 

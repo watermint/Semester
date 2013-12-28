@@ -1,4 +1,4 @@
-package fextile
+package etude.desktop.fextile
 
 import scalafx.scene.control.Label
 import scalafx.geometry.Insets

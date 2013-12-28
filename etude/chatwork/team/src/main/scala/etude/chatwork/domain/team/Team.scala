@@ -1,7 +1,7 @@
 package etude.chatwork.domain.team
 
 import etude.chatwork.domain.account.Account
-import etude.foundation.domain.Entity
+import etude.foundation.domain.model.Entity
 
 /**
  * Team aggregates account(s) for teaming.

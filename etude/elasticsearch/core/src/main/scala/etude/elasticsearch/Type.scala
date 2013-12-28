@@ -63,17 +63,19 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
     }
   }
 
-  def all(): Future[SearchResponse] = {
+  def all(from: Int = 0, size: Int = 10): Future[SearchResponse] = {
     search(QueryBuilders.matchAllQuery())
   }
 
-  def search(query: QueryBuilder): Future[SearchResponse] = {
+  def search(query: QueryBuilder, from: Int = 0, size: Int = 10): Future[SearchResponse] = {
     future {
       engine
         .client
         .prepareSearch(indexName)
         .setQuery(query)
         .setTypes(typeName)
+        .setFrom(from)
+        .setSize(size)
         .execute()
         .get()
     }

@@ -1,9 +1,6 @@
 package etude.chatwork.domain.account
 
-import etude.foundation.domain.Identity
+import etude.foundation.domain.model.Identity
 
-class ChatWorkId(val id: String)
-  extends Identity[String] {
-
-  def value: String = id
-}
+class ChatWorkId(val value: String)
+  extends Identity[String]

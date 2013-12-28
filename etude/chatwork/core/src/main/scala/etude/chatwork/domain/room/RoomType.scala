@@ -1,6 +1,6 @@
 package etude.chatwork.domain.room
 
-import etude.foundation.domain.EntityNotFoundException
+import etude.foundation.domain.lifecycle.EntityNotFoundException
 
 trait RoomType {
   val name: String

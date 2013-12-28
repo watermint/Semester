@@ -1,4 +1,4 @@
-package fextile
+package etude.desktop.fextile
 
 import scalafx.scene.layout.{Priority, HBox, VBox}
 

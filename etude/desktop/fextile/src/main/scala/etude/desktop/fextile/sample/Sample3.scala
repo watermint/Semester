@@ -1,12 +1,12 @@
-package fextile.sample
+package etude.desktop.fextile.sample
 
-import fextile._
+import etude.desktop.fextile._
 import scalafx.application.JFXApp
 import scalafx.scene.control.Label
 
 object Sample3 extends JFXApp {
   lazy val pushPane = new PushNodePane(screen1)
-  
+
   lazy val screen1: VContainer = new VContainer {
     content = Seq(
       new H1 {

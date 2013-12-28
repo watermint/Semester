@@ -1,4 +1,4 @@
-package fextile
+package etude.desktop.fextile
 
 import javafx.scene.layout.{GridPane => FxGridPane}
 import scalafx.scene.layout._
@@ -123,6 +123,7 @@ class GridRow extends BorderPane {
       FxGridPane.setHalignment(node, hpos)
       this
     }
+
     def vpos(node: Node, vpos: VPos): NodeContainer = {
       FxGridPane.setValignment(node, vpos)
       this

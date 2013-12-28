@@ -1,7 +1,5 @@
 package etude.chatwork.domain.room
 
-import etude.foundation.domain.Identity
+import etude.foundation.domain.model.Identity
 
-class RoomId(val id: BigInt) extends Identity[BigInt] {
-  def value: BigInt = id
-}
+class RoomId(val value: BigInt) extends Identity[BigInt]

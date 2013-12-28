@@ -1,4 +1,4 @@
-package fextile
+package etude.desktop.fextile
 
 trait ContainerSize extends DeviceSize {
   val containerWidth: Option[Int]

@@ -1,7 +1,6 @@
 package etude.chatwork.domain.account
 
-import etude.foundation.domain.Identity
+import etude.foundation.domain.model.Identity
 
-class OrganizationId(val id: BigInt) extends Identity[BigInt] {
-  def value: BigInt = id
-}
+class OrganizationId(val value: BigInt)
+  extends Identity[BigInt]

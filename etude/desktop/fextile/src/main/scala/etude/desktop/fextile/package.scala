@@ -1,3 +1,5 @@
+package etude.desktop
+
 import javafx.event.{EventHandler, Event}
 
 package object fextile {

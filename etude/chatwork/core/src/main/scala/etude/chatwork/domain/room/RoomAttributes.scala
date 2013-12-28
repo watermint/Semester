@@ -1,5 +1,7 @@
 package etude.chatwork.domain.room
 
+import etude.foundation.domain.model.ValueObject
+
 case class RoomAttributes(sticky: Boolean,
                           unreadCount: BigInt,
                           mentionCount: BigInt,
@@ -7,3 +9,4 @@ case class RoomAttributes(sticky: Boolean,
                           totalTaskCount: BigInt,
                           totalMessageCount: BigInt,
                           fileCount: BigInt)
+  extends ValueObject

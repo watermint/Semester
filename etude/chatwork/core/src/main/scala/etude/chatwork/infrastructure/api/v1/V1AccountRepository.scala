@@ -1,20 +1,22 @@
 package etude.chatwork.infrastructure.api.v1
 
 import java.net.URI
-import java.time.Instant
 import org.json4s._
-import scala.util.Try
-import etude.chatwork.infrastructure.api.{QoSException, ApiQoS}
+import etude.chatwork.infrastructure.api.ApiQoS
 import etude.chatwork.domain.account._
-import scala.util.Failure
 import scala.Some
-import scala.util.Success
-import etude.foundation.domain.EntityNotFoundException
+import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
+import scala.concurrent.Future
 
-case class V1AccountRepository(implicit authToken: V1AuthToken) extends AccountRepository with ApiQoS {
-  private val ENDPOINT_ME = "/v1/me"
+case class V1AccountRepository
+  extends AsyncAccountRepository
+  with ApiQoS {
 
-  private val ENDPOINT_CONTACTS = "/v1/contacts"
+  type This <: V1AccountRepository
+
+  protected val ENDPOINT_ME = "/v1/me"
+
+  protected val ENDPOINT_CONTACTS = "/v1/contacts"
 
   protected def parseAccount(result: JValue): List[Account] = {
     for {
@@ -53,46 +55,52 @@ case class V1AccountRepository(implicit authToken: V1AuthToken) extends AccountR
     }
   }
 
-  def me(): Try[Account] = {
-    if (shouldFail(ENDPOINT_ME)) {
-      return Failure(QoSException(ENDPOINT_ME))
-    }
+  //  def me(): Try[Account] = {
+  //    if (shouldFail(ENDPOINT_ME)) {
+  //      return Failure(QoSException(ENDPOINT_ME))
+  //    }
+  //
+  //    try {
+  //      V1AsyncApi.get(ENDPOINT_ME) match {
+  //        case Failure(f) => Failure(f)
+  //        case Success(r) => parseAccount(r).lastOption match {
+  //          case Some(m) => Success(m)
+  //          case _ => Failure(V1ApiException("Unknown chatwork protocol"))
+  //        }
+  //      }
+  //    } finally {
+  //      lastLoad.put(ENDPOINT_ME, Instant.now)
+  //    }
+  //  }
+  //
 
-    try {
-      V1Api.get(ENDPOINT_ME) match {
-        case Failure(f) => Failure(f)
-        case Success(r) => parseAccount(r).lastOption match {
-          case Some(m) => Success(m)
-          case _ => Failure(V1ApiException("Unknown chatwork protocol"))
+  def contacts()(implicit context: EntityIOContext[Future]): Future[List[Account]] = {
+    implicit val executor = getExecutionContext(context)
+    V1AsyncApi.get(ENDPOINT_CONTACTS) map {
+      json =>
+        parseAccount(json)
+    }
+  }
+
+  def resolve(identity: AccountId)(implicit context: EntityIOContext[Future]): Future[Account] = {
+    implicit val executor = getExecutionContext(context)
+    contacts() map {
+      accounts =>
+        accounts.find(_ == identity) match {
+          case Some(a) => a
+          case _ => throw EntityNotFoundException(s"Account not found for ${identity.value}")
         }
-      }
-    } finally {
-      lastLoad.put(ENDPOINT_ME, Instant.now)
     }
   }
 
-  def contacts(): Try[List[Account]] = {
-    if (shouldFail(ENDPOINT_CONTACTS)) {
-      return Failure(QoSException(ENDPOINT_CONTACTS))
-    }
-
-    try {
-      V1Api.get(ENDPOINT_CONTACTS) match {
-        case Success(r) => Success(parseAccount(r))
-        case Failure(f) => Failure(f)
-      }
-    } finally {
-      lastLoad.put(ENDPOINT_CONTACTS, Instant.now)
-    }
-  }
-
-  def resolve(identifier: AccountId): Try[Account] = {
-    contacts() match {
-      case Success(c) => c.find(_ == identifier) match {
-        case Some(a) => Success(a)
-        case _ => Failure(EntityNotFoundException(s"Account not found for ${identifier.value}"))
-      }
-      case _ => Failure(EntityNotFoundException(s"Account not found for ${identifier.value}"))
+  def containsByIdentity(identity: AccountId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
+    implicit val executor = getExecutionContext(context)
+    contacts() map {
+      accounts =>
+        accounts.find(_ == identity) match {
+          case Some(a) => true
+          case _ => false
+        }
     }
   }
 }

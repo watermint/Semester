@@ -1,4 +1,4 @@
-package fextile
+package etude.desktop.fextile
 
 import scala.collection.mutable
 import scalafx.scene.Node
