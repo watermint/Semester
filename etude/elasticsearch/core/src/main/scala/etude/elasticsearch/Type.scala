@@ -9,11 +9,12 @@ import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
 import org.elasticsearch.action.get.GetResponse
 
-case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
+case class Type(indexName: String, typeName: String)(implicit context: IOContext) {
 
   def putMapping(mapping: String): Future[Boolean] = {
     future {
-      engine
+      context
+        .engine
         .client
         .admin()
         .indices()
@@ -34,7 +35,7 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
 
   def index(data: JValue, id: Option[String] = None): Future[IndexResult] = {
     future {
-      val source = engine.client
+      val source = context.engine.client
         .prepareIndex(indexName, typeName)
         .setSource(compact(render(data)))
       val prepare = id match {
@@ -49,7 +50,8 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
 
   def get(id: String): Future[Option[GetResponse]] = {
     future {
-      val result = engine
+      val result = context
+        .engine
         .client
         .prepareGet(indexName, typeName, id)
         .execute()
@@ -69,7 +71,8 @@ case class Type(indexName: String, typeName: String)(implicit engine: Engine) {
 
   def search(query: QueryBuilder, from: Int = 0, size: Int = 10): Future[SearchResponse] = {
     future {
-      engine
+      context
+        .engine
         .client
         .prepareSearch(indexName)
         .setQuery(query)

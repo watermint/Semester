@@ -1,16 +1,17 @@
 package etude.elasticsearch
 
 import scala.concurrent._
-import scala.concurrent.ExecutionContext.Implicits.global
 import org.elasticsearch.action.search.{SearchResponse, SearchRequestBuilder}
 import org.elasticsearch.common.settings.ImmutableSettings
 
 case class Index(indexName: String,
-                 settingsJson: Option[String] = None)(implicit engine: Engine) {
+                 settingsJson: Option[String] = None)(implicit context: IOContext) {
 
   def exists: Future[Boolean] = {
+    implicit val executor = context.executor
     future {
-      engine
+      context
+        .engine
         .client
         .admin()
         .indices()
@@ -22,8 +23,10 @@ case class Index(indexName: String,
   }
 
   def create: Future[Boolean] = {
+    implicit val executor = context.executor
     future {
-      val builder = engine
+      val builder = context
+        .engine
         .client
         .admin()
         .indices()
@@ -39,8 +42,10 @@ case class Index(indexName: String,
   }
 
   def delete: Future[Boolean] = {
+    implicit val executor = context.executor
     future {
-      engine
+      context
+        .engine
         .client
         .admin()
         .indices()
@@ -52,8 +57,10 @@ case class Index(indexName: String,
   }
 
   def flush: Future[Boolean] = {
+    implicit val executor = context.executor
     future {
-      engine
+      context
+        .engine
         .client
         .admin()
         .indices()
@@ -70,12 +77,15 @@ case class Index(indexName: String,
   }
 
   def searchRequestBuilder: SearchRequestBuilder = {
-    engine
+    implicit val executor = context.executor
+    context
+      .engine
       .client
       .prepareSearch(indexName)
   }
 
   def searchRequest(request: SearchRequestBuilder): Future[SearchResponse] = {
+    implicit val executor = context.executor
     future {
       request
         .execute()
@@ -86,7 +96,7 @@ case class Index(indexName: String,
 }
 
 object Index {
-  def withKuromoji(indexName: String)(implicit engine: Engine): Index = {
+  def withKuromoji(indexName: String)(implicit context: IOContext): Index = {
     import org.json4s._
     import org.json4s.native._
     import org.json4s.native.Serialization.write

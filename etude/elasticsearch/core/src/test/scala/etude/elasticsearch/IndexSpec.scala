@@ -12,6 +12,7 @@ import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 import org.elasticsearch.index.query.QueryBuilders
+import java.util.concurrent.{ExecutorService, Executors}
 
 @RunWith(classOf[JUnitRunner])
 class IndexSpec extends Specification {
@@ -23,9 +24,13 @@ class IndexSpec extends Specification {
 
   val awaitDuration: Duration = Duration(30, SECONDS)
 
+  val executorsPool: ExecutorService = Executors.newCachedThreadPool()
+
+  implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
+
   "EmbeddedEngine" should {
     "Index create/delete" in {
-      implicit val engine = embeddedEngine
+      implicit val context = IOContext.apply(embeddedEngine)
 
       val index = Index("test")
 
@@ -37,7 +42,7 @@ class IndexSpec extends Specification {
     }
 
     "Type mapping" in {
-      implicit val engine = embeddedEngine
+      implicit val context = IOContext.apply(embeddedEngine)
 
       val index = Index("mapping")
       val indexType = index.indexType("testMapping")
@@ -76,7 +81,7 @@ class IndexSpec extends Specification {
     }
 
     "Kuromoji and Japanese" in {
-      implicit val engine = embeddedEngine
+      implicit val context = IOContext.apply(embeddedEngine)
 
       val index = Index.withKuromoji("japanese")
       val indexType = index.indexType("ja")
