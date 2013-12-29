@@ -5,3 +5,4 @@ import scala.concurrent.Future
 
 trait AsyncFactory
   extends Factory
+  with AsyncEntityIO

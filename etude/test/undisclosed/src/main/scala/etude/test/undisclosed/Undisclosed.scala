@@ -23,7 +23,7 @@ case class Undisclosed(name: String) {
         Some(p)
       } catch {
         case e: Throwable =>
-          logger.warn(s"Failed to load file: $file", e)
+          logger.warn(s"Failed to load file: $file for test $name", e)
           None
       }
     } else {
@@ -33,7 +33,9 @@ case class Undisclosed(name: String) {
 
   def undisclosed(f: Properties => Result): Result = {
     context match {
-      case Some(c) => f(c)
+      case Some(c) =>
+        logger.info(s"Testing: $name")
+        f(c)
       case _ =>
         logger.warn(s"Skipping test: $name, place file at $file")
         Result.unit()

@@ -8,7 +8,8 @@ import scala.concurrent.{Await, Future, ExecutionContext}
 import scala.concurrent.duration._
 import etude.test.undisclosed._
 import java.util.Properties
-import etude.chatwork.domain.room.Room
+import etude.chatwork.domain.room.{RoomType, RoomId, Room}
+import etude.chatwork.domain.message.Text
 
 @RunWith(classOf[JUnitRunner])
 class V1AsyncApiSpec extends Specification {
@@ -39,6 +40,35 @@ class V1AsyncApiSpec extends Specification {
           room.identity.value.toInt must beGreaterThan(0)
 
           result(roomRepo.resolve(room.identity)) must equalTo(room)
+          result(roomRepo.containsByIdentity(room.identity)) must beTrue
+          result(roomRepo.containsByIdentity(RoomId(12345))) must beFalse
+      }
+    }
+
+    "Work within My Room" in {
+      undisclosed(getClass.getName) {
+        properties =>
+          implicit val context = getEntityIOContext(properties)
+          val roomRepo = new V1RoomRepository()
+          val myRoom: Future[Room] = roomRepo.rooms() map {
+            rooms =>
+              rooms.filter(r => RoomType.isMyRoom(r.roomType)).last
+          }
+          val my = result(myRoom)
+
+          RoomType.isMyRoom(my.roomType) must beTrue
+          my.identity.value.toInt must beGreaterThan(0)
+
+          val messageFactory = new V1AsyncMessageFactory()
+          val text = Text(s"Test: ${getClass.getName}")
+          val message = messageFactory.create(text)(my)
+          val testMessage = result(message)
+          testMessage.messageId.toInt must beGreaterThan(0)
+
+          val messageRepo = new V1MessageRepository()
+          val resolvedTestMessage = result(messageRepo.resolve(testMessage))
+
+          resolvedTestMessage.body must equalTo(text.text)
       }
     }
   }

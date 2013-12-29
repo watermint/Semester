@@ -7,5 +7,5 @@ import etude.foundation.domain.lifecycle.{EntityIOContext, Factory}
 trait MessageFactory[M[+A]]
   extends Factory {
 
-  def create(text: Text)(room: Room)(implicit context: EntityIOContext[M]): M[Message]
+  def create(text: Text)(room: Room)(implicit context: EntityIOContext[M]): M[MessageId]
 }
