@@ -2,5 +2,5 @@ package etude.chatwork.domain.account
 
 import etude.foundation.domain.model.Identity
 
-class ChatWorkId(val value: String)
+case class ChatWorkId(value: String)
   extends Identity[String]

@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.18",
+  version := "0.0.19",
   organization := "org.watermint",
   scalaVersion := "2.10.3",
   resolvers ++= Seq(
@@ -13,7 +13,7 @@ lazy val buildSettings = Seq(
   libraryDependencies ++= Seq(
     "ch.qos.logback" % "logback-classic" % "1.0.13",
     "org.slf4j" % "slf4j-api" % "1.7.5",
-    "org.specs2" %% "specs2" % "2.2.3" % "test",
+    "org.specs2" %% "specs2" % "2.3.7" % "test",
     "junit" % "junit" % "4.7" % "test"
   )
 )
@@ -23,6 +23,7 @@ lazy val etudeChatworkCore = project.in(file("etude/chatwork/core"))
   .settings(buildSettings: _*)
   .dependsOn(etudeFoundationDomain)
   .dependsOn(etudeFoundationHttp)
+  .dependsOn(etudeTextUndisclosed % "test")
 
 lazy val etudeChatworkTeam = project.in(file("etude/chatwork/team"))
   .settings(buildSettings: _*)
@@ -54,5 +55,8 @@ lazy val etudeFoundationUtility = project.in(file("etude/foundation/utility"))
   .settings(buildSettings: _*)
 
 lazy val etudeDesktopFextile = project.in(file("etude/desktop/fextile"))
+  .settings(buildSettings: _*)
+
+lazy val etudeTextUndisclosed = project.in(file("etude/test/undisclosed"))
   .settings(buildSettings: _*)
 

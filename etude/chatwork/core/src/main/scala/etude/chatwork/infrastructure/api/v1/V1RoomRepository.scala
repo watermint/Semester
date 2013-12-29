@@ -41,7 +41,7 @@ class V1RoomRepository
       JField("last_update_time", JInt(lastUpdateTime)) <- data
     } yield {
       new Room(
-        roomId = new RoomId(roomId),
+        roomId = RoomId(roomId),
         name = name,
         description = None,
         roomType = RoomType(roomType),
@@ -120,6 +120,13 @@ class V1RoomRepository
   //    }
   //  }
 
+  def rooms()(implicit context: EntityIOContext[Future]): Future[List[Room]] = {
+    implicit val executor = getExecutionContext(context)
+    V1AsyncApi.get(ENDPOINT_ROOMS) map {
+      json =>
+        parseRoom(json)
+    }
+  }
 
   def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Room] = {
     implicit val executor = getExecutionContext(context)

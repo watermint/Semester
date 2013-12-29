@@ -12,7 +12,6 @@ import scala.concurrent.{future, Future}
 import etude.foundation.domain.lifecycle.EntityIOContext
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 
-private[v0]
 object V0AsyncApi
   extends V0EntityIO[Future]
   with AsyncEntityIO
@@ -33,12 +32,8 @@ object V0AsyncApi
     }
   }
 
-  protected def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
-    if (shouldFail("login")) {
-      return Failure(QoSException("login"))
-    }
-
-    val client = Client()
+  private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
+    val client = getClient(context)
 
     val loginUri = getOrganizationId(context) match {
       case Some(s) =>
@@ -100,7 +95,7 @@ object V0AsyncApi
     }
   }
 
-  protected def apiResponseParser(command: String, response: Response): Try[JValue] = {
+  private[v0] def apiResponseParser(command: String, response: Response): Try[JValue] = {
     val JBool(success) = response.contentAsJson \ "status" \ "success"
     val result = response.contentAsJson \ "result"
 
@@ -116,7 +111,7 @@ object V0AsyncApi
     }
   }
 
-  protected def syncApi(command: String,
+  private[v0] def syncApi(command: String,
                         params: Map[String, String],
                         retries: Int = 2)
                        (implicit context: EntityIOContext[Future]): JValue = {

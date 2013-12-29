@@ -8,7 +8,7 @@ import scala.Some
 import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent.Future
 
-case class V1AccountRepository
+class V1AccountRepository
   extends AsyncAccountRepository
   with ApiQoS {
 
@@ -30,7 +30,7 @@ case class V1AccountRepository
       JField("avatar_image_url", JString(avatarImageUrl)) <- data
     } yield {
       new Account(
-        accountId = new AccountId(accountId),
+        accountId = AccountId(accountId),
         name = Some(name),
         chatWorkId = chatworkId match {
           case "" => None

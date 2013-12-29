@@ -30,8 +30,8 @@ class V1MessageRepository
       JField("update_time", JInt(mtime)) <- data
     } yield {
       new Message(
-        messageId = new MessageId(roomId, messageId),
-        accountId = new AccountId(accountId),
+        messageId = MessageId(roomId, messageId),
+        accountId = AccountId(accountId),
         body = body,
         ctime = Instant.ofEpochSecond(ctime.toLong),
         mtime = mtime.toLong match {
