@@ -14,7 +14,7 @@ lazy val buildSettings = Seq(
     "ch.qos.logback" % "logback-classic" % "1.0.13",
     "org.slf4j" % "slf4j-api" % "1.7.5",
     "org.specs2" %% "specs2" % "2.3.7" % "test",
-    "junit" % "junit" % "4.7" % "test"
+    "junit" % "junit" % "4.11" % "test"
   )
 )
 
