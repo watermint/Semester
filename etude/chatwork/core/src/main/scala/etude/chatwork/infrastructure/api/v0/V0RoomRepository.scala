@@ -18,6 +18,9 @@ class V0RoomRepository
   def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] =
     Future.failed(NotImplementedException("Migrated to v1 API"))
 
+  def myRoom()(implicit context: EntityIOContext[Future]): Future[Room] =
+    Future.failed(NotImplementedException("Use v1 API"))
+
   def latestMessage(roomId: RoomId)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executor = getExecutionContext(context)
     V0AsyncApi.api(
@@ -42,20 +45,6 @@ class V0RoomRepository
           messageId
         }
         new MessageId(roomId, messageIds.maxBy(identity))
-    }
-  }
-
-  def markAsRead(message: MessageId)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
-    implicit val executor = getExecutionContext(context)
-    V0AsyncApi.api(
-      "read",
-      Map(
-        "room_id" -> message.roomId.value.toString(),
-        "last_chat_id" -> message.messageId.toString()
-      )
-    ) map {
-      json =>
-        message
     }
   }
 }

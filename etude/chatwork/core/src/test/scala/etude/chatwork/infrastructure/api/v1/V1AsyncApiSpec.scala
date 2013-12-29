@@ -45,27 +45,34 @@ class V1AsyncApiSpec extends Specification {
       }
     }
 
-    "Work within My Room" in {
+    "My Room" in {
       undisclosed(getClass.getName) {
         properties =>
           implicit val context = getEntityIOContext(properties)
           val roomRepo = new V1RoomRepository()
-          val myRoom: Future[Room] = roomRepo.rooms() map {
-            rooms =>
-              rooms.filter(r => RoomType.isMyRoom(r.roomType)).last
-          }
-          val my = result(myRoom)
+          val myRoom: Room = result(roomRepo.myRoom())
 
-          RoomType.isMyRoom(my.roomType) must beTrue
-          my.identity.value.toInt must beGreaterThan(0)
+          RoomType.isMyRoom(myRoom.roomType) must beTrue
+          myRoom.identity.value.toInt must beGreaterThan(0)
+      }
+    }
 
+    "Message write/read" in {
+      undisclosed(getClass.getName) {
+        properties =>
+          implicit val context = getEntityIOContext(properties)
+          val roomRepo = new V1RoomRepository()
           val messageFactory = new V1AsyncMessageFactory()
-          val text = Text(s"Test: ${getClass.getName}")
-          val message = messageFactory.create(text)(my)
+          val messageRepo = new V1MessageRepository()
+
+          val myRoom: Room = result(roomRepo.myRoom())
+
+          val text = Text(s"Test: ${getClass.getName} ${java.util.UUID.randomUUID()}")
+          val message = messageFactory.create(text)(myRoom)
           val testMessage = result(message)
+
           testMessage.messageId.toInt must beGreaterThan(0)
 
-          val messageRepo = new V1MessageRepository()
           val resolvedTestMessage = result(messageRepo.resolve(testMessage))
 
           resolvedTestMessage.body must equalTo(text.text)

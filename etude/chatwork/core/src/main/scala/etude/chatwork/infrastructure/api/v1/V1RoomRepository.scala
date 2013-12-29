@@ -120,6 +120,14 @@ class V1RoomRepository
   //    }
   //  }
 
+  def myRoom()(implicit context: EntityIOContext[Future]): Future[Room] = {
+    implicit val executor = getExecutionContext(context)
+    rooms() map {
+      rooms =>
+        rooms.filter(r => RoomType.isMyRoom(r.roomType)).last
+    }
+  }
+
   def rooms()(implicit context: EntityIOContext[Future]): Future[List[Room]] = {
     implicit val executor = getExecutionContext(context)
     V1AsyncApi.get(ENDPOINT_ROOMS) map {

@@ -46,6 +46,20 @@ class V0MessageRepository
     }
   }
 
+  def markAsRead(message: MessageId)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
+    implicit val executor = getExecutionContext(context)
+    V0AsyncApi.api(
+      "read",
+      Map(
+        "room_id" -> message.roomId.value.toString(),
+        "last_chat_id" -> message.messageId.toString()
+      )
+    ) map {
+      json =>
+        message
+    }
+  }
+
   def resolve(identity: MessageId)(implicit context: EntityIOContext[Future]): Future[Message] =
     Future.failed(NotImplementedException("Migrated to v1 API"))
 
