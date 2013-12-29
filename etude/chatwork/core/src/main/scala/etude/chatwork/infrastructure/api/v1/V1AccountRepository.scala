@@ -55,24 +55,13 @@ class V1AccountRepository
     }
   }
 
-  //  def me(): Try[Account] = {
-  //    if (shouldFail(ENDPOINT_ME)) {
-  //      return Failure(QoSException(ENDPOINT_ME))
-  //    }
-  //
-  //    try {
-  //      V1AsyncApi.get(ENDPOINT_ME) match {
-  //        case Failure(f) => Failure(f)
-  //        case Success(r) => parseAccount(r).lastOption match {
-  //          case Some(m) => Success(m)
-  //          case _ => Failure(V1ApiException("Unknown chatwork protocol"))
-  //        }
-  //      }
-  //    } finally {
-  //      lastLoad.put(ENDPOINT_ME, Instant.now)
-  //    }
-  //  }
-  //
+  def self()(implicit context: EntityIOContext[Future]): Future[Account] = {
+    implicit val executor = getExecutionContext(context)
+    V1AsyncApi.get(ENDPOINT_ME) map {
+      json =>
+        parseAccount(json).last
+    }
+  }
 
   def contacts()(implicit context: EntityIOContext[Future]): Future[List[Account]] = {
     implicit val executor = getExecutionContext(context)

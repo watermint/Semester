@@ -6,14 +6,14 @@ import java.nio.file.Files
 import org.slf4j.{Logger, LoggerFactory}
 import java.util.Properties
 
-case class Undisclosed(name: String) {
+case class Undisclosed(clazzName: String) {
   lazy val logger: Logger = LoggerFactory.getLogger(getClass)
 
   val pathPrefix: String = ".etude-test/undisclosed"
 
   val home: File = new File(System.getProperty("user.home"), pathPrefix)
 
-  val file: File = new File(home, name)
+  val file: File = new File(home, clazzName + ".properties")
 
   protected def context: Option[Properties] = {
     if (Files.exists(file.toPath)) {
@@ -23,7 +23,7 @@ case class Undisclosed(name: String) {
         Some(p)
       } catch {
         case e: Throwable =>
-          logger.warn(s"Failed to load file: $file for test $name", e)
+          logger.warn(s"Failed to load file: $file for test $clazzName", e)
           None
       }
     } else {
@@ -34,10 +34,10 @@ case class Undisclosed(name: String) {
   def undisclosed(f: Properties => Result): Result = {
     context match {
       case Some(c) =>
-        logger.info(s"Testing: $name")
+        logger.info(s"Testing: $clazzName")
         f(c)
       case _ =>
-        logger.warn(s"Skipping test: $name, place file at $file")
+        logger.warn(s"Skipping test: $clazzName, place file at $file")
         Result.unit()
     }
   }

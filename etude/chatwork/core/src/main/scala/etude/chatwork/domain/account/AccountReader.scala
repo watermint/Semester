@@ -1,7 +1,12 @@
 package etude.chatwork.domain.account
 
 import scala.language.higherKinds
-import etude.foundation.domain.lifecycle.EntityReader
+import etude.foundation.domain.lifecycle.{EntityIOContext, EntityReader}
 
 trait AccountReader[M[+A]]
-  extends EntityReader[AccountId, Account, M]
+  extends EntityReader[AccountId, Account, M] {
+
+  def contacts()(implicit context: EntityIOContext[M]): M[List[Account]]
+
+  def self()(implicit context: EntityIOContext[M]): M[Account]
+}
