@@ -44,12 +44,20 @@ lazy val etudeElasticsearchCore = project.in(file("etude/elasticsearch/core"))
 lazy val etudeFoundationDomain = project.in(file("etude/foundation/domain"))
   .settings(buildSettings: _*)
 
+lazy val etudeFoundationHoliday = project.in(file("etude/foundation/holiday"))
+  .settings(buildSettings: _*)
+  .dependsOn(etudeFoundationDomain)
+  .dependsOn(etudeFoundationI18n)
+
 lazy val etudeFoundationHtml = project.in(file("etude/foundation/html"))
   .settings(buildSettings: _*)
 
 lazy val etudeFoundationHttp = project.in(file("etude/foundation/http"))
   .settings(buildSettings: _*)
   .dependsOn(etudeFoundationUtility)
+
+lazy val etudeFoundationI18n = project.in(file("etude/foundation/i18n"))
+  .settings(buildSettings: _*)
 
 lazy val etudeFoundationUtility = project.in(file("etude/foundation/utility"))
   .settings(buildSettings: _*)
