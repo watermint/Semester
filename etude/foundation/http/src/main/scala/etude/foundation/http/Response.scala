@@ -12,7 +12,7 @@ case class Response(statusCode: StatusCode,
                     contentEncoding: Option[String],
                     content: Array[Byte]) {
 
-  lazy val contentAsString: String = new String(content)
+  lazy val contentAsString: String = new String(content, "UTF-8")
 
   lazy val contentAsJson: JValue = JsonMethods.parse(contentAsString)
 }

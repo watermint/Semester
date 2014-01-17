@@ -1,4 +1,4 @@
-name := "etude-foundation-holiday"
+name := "etude-foundation-calendar"
 
 libraryDependencies ++= Seq(
   "commons-codec" % "commons-codec" % "1.8",
