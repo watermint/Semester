@@ -1,13 +1,12 @@
 package etude.foundation.holiday.domain
 
-import etude.foundation.domain.model.Entity
 import java.time.LocalDate
+import java.util.Locale
 
-class Holiday(val holidayId: HolidayId,
-              val holidayType: HolidayType.Value,
-              val title: String,
-              val date: LocalDate)
-  extends Entity[HolidayId] {
+trait Holiday {
+  val holidayType: HolidayType.Value
 
-  val identity: HolidayId = holidayId
+  val date: LocalDate
+
+  def title(locale: Locale): String
 }
