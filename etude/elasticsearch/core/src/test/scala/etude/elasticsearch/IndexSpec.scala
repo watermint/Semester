@@ -107,11 +107,11 @@ class IndexSpec extends Specification {
 
       shouldMatch.forall {
         t =>
-          Await.result(indexType.search(QueryBuilders.fieldQuery("message", t)), awaitDuration).getHits.totalHits() == 1
+          Await.result(indexType.search(QueryBuilders.termQuery("message", t)), awaitDuration).getHits.totalHits() == 1
       } must beTrue
       shouldNotMatch.forall {
         t =>
-          Await.result(indexType.search(QueryBuilders.fieldQuery("message", t)), awaitDuration).getHits.totalHits() == 0
+          Await.result(indexType.search(QueryBuilders.termQuery("message", t)), awaitDuration).getHits.totalHits() == 0
       } must beTrue
     }
   }
