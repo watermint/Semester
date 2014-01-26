@@ -1,19 +1,23 @@
 package etude.foundation.calendar.holiday.infrastructure.google
 
-import etude.foundation.calendar.holiday.domain.{NationalHoliday, NationalHolidays, NationalHolidaysId, AsyncNationalHolidaysRepository}
+import etude.foundation.calendar.holiday.domain._
 import etude.foundation.domain.lifecycle.EntityIOContext
 import scala.concurrent.{future, Future}
 import etude.foundation.i18n.region.iso.Country
 import java.net.URI
-import etude.foundation.http.{Response, Client}
-import etude.foundation.calendar.CalendarNotFoundException
-import scala.util.{Success, Failure}
+import etude.foundation.http.Response
 import scala.xml.{XML, Node}
 import java.time.LocalDate
+import etude.foundation.http.Client
+import scala.util.Success
+import etude.foundation.calendar.holiday.domain.CalendarId
+import scala.util.Failure
+import etude.foundation.calendar.CalendarNotFoundException
+import scala.Some
 
-case class AsyncGoogleNationalHolidaysRepository()
-  extends AsyncNationalHolidaysRepository {
-  type This <: AsyncGoogleNationalHolidaysRepository
+case class AsyncGoogleCalendarRepository()
+  extends AsyncCalendarRepository {
+  type This <: AsyncGoogleCalendarRepository
 
   lazy val client: Client = new Client
 
@@ -73,27 +77,37 @@ case class AsyncGoogleNationalHolidaysRepository()
     (XML.loadString(response.contentAsString) \ "entry").map(holiday)
   }
 
-  def resolve(identity: NationalHolidaysId)(implicit context: EntityIOContext[Future]): Future[NationalHolidays] = {
+  def resolve(identity: CalendarId)(implicit context: EntityIOContext[Future]): Future[Calendar] = {
     implicit val executionContext = getExecutionContext(context)
     future {
-      supportedCountries.get(identity.country) match {
-        case None =>
-          throw CalendarNotFoundException(s"Calendar name not found for country: ${identity.country}")
-        case Some(calendarName) =>
-          client.get(calendarUri(calendarName, identity.year)) match {
-            case Failure(failure) =>
-              throw failure
-            case Success(response) =>
-              new NationalHolidays(identity, holidays(response))
+      identity.name match {
+        case n: NationalHolidayCalendarName =>
+          supportedCountries.get(n.country) match {
+            case None =>
+              throw CalendarNotFoundException(s"Calendar name not found for country: ${n.country}")
+            case Some(calendarName) =>
+              client.get(calendarUri(calendarName, identity.year)) match {
+                case Failure(failure) =>
+                  throw failure
+                case Success(response) =>
+                  new Calendar(identity, holidays(response))
+              }
           }
+        case _ =>
+          throw CalendarNotFoundException(s"Calendar not found for CalendarName: ${identity.name}")
       }
     }
   }
 
-  def containsByIdentity(identity: NationalHolidaysId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
+  def containsByIdentity(identity: CalendarId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
     implicit val executionContext = getExecutionContext(context)
     future {
-      supportedCountries.contains(identity.country)
+      identity.name match {
+        case n: NationalHolidayCalendarName =>
+          supportedCountries.contains(n.country)
+        case _ =>
+          false
+      }
     }
   }
 }

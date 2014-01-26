@@ -4,5 +4,5 @@ import scala.language.higherKinds
 import etude.foundation.domain.lifecycle.EntityReader
 
 private[domain]
-trait NationalHolidaysReader[M[+A]]
-  extends EntityReader[NationalHolidaysId, NationalHolidays, M]
+trait CalendarReader[M[+A]]
+  extends EntityReader[CalendarId, Calendar, M]
