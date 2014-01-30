@@ -3,9 +3,10 @@ package etude.app.holiday.application.api
 import com.twitter.finatra.test.FlatSpecHelper
 import etude.app.holiday.application.App
 import com.twitter.finatra.FinatraServer
+import java.io.File
 
 class CountrySpec extends FlatSpecHelper {
-  override def server: FinatraServer = App
+  override def server: FinatraServer = new App(new File("etude/app/holiday/src/test/data/calendars.json"))
 
   "GET /country/JP/2014-01-01" should "respond 200 with true" in {
     get("/country/JP/2014-01-01")

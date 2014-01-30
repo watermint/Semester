@@ -20,6 +20,7 @@ lazy val buildSettings = Seq(
 
 lazy val etudeAppHoliday = project.in(file("etude/app/holiday"))
   .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
   .dependsOn(etudeFoundationCalendar)
 
 lazy val etudeChatworkCore = project.in(file("etude/chatwork/core"))

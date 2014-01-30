@@ -6,7 +6,7 @@ import scala.util.{Success, Failure, Try}
 import java.time.LocalDate
 import scala.concurrent.Await
 
-class Named(val calendarRepository: AsyncCalendarRepository)
+class Business(val calendarRepository: AsyncCalendarRepository)
   extends ControllerBase {
 
   def getNamedHoliday(name: String, year: Int, month: Int, day: Int): Try[Boolean] = {
@@ -22,7 +22,7 @@ class Named(val calendarRepository: AsyncCalendarRepository)
     }
   }
 
-  get("/named/:name/:date") {
+  get("/business/:name/:date") {
     request =>
       val datePattern = "([0-9]{4})-([0-1][0-9])-([0-3][0-9])".r
 
