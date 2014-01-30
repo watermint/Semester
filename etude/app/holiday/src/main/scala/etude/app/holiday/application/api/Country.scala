@@ -46,7 +46,6 @@ class Country(val calendarRepository: AsyncCalendarRepository)
           getCountryHoliday(country, year.toInt, month.toInt, day.toInt) match {
             case Success(h) => render.json(Map("holiday" -> h)).toFuture
             case Failure(f) =>
-              f.printStackTrace()
               render.notFound.toFuture
           }
         case _ =>
