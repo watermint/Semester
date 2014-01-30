@@ -18,6 +18,10 @@ lazy val buildSettings = Seq(
   )
 )
 
+lazy val etudeAppGare = project.in(file("etude/app/gare"))
+  .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
+
 lazy val etudeAppHoliday = project.in(file("etude/app/holiday"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
