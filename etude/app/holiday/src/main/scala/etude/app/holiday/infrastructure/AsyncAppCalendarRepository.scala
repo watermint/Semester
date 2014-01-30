@@ -11,7 +11,7 @@ class AsyncAppCalendarRepository
 
   type This <: AsyncAppCalendarRepository
 
-  protected val delegate = AsyncCachedCalendarRepository()
+  protected val delegate = new AsyncNamedCalendarRepository(AsyncCachedCalendarRepository())
 
   def containsByIdentity(identity: CalendarId)
                         (implicit context: EntityIOContext[Future]): Future[Boolean] = {

@@ -9,16 +9,10 @@ import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
 import java.time.LocalDate
 import etude.foundation.domain.lifecycle.async.AsyncEntityIOContext
+import etude.app.holiday.application.ControllerBase
 
 class Country(val calendarRepository: AsyncCalendarRepository)
-  extends Controller {
-  val executorsPool: ExecutorService = Executors.newCachedThreadPool()
-
-  implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
-
-  implicit val entityIOContext = AsyncEntityIOContext()
-
-  val timeout = Duration(10, SECONDS)
+  extends ControllerBase {
 
   def getCountryHoliday(country: String, year: Int, month: Int, day: Int): Try[Boolean] = {
     if (year < 2000 || LocalDate.now.getYear + 1 < year) {
