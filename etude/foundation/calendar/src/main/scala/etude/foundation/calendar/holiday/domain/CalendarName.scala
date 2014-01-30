@@ -18,3 +18,6 @@ case class CompositeCalendarName(country: Country,
                                  dayOfWeek: Seq[DayOfWeek],
                                  monthDay: Seq[MonthDay])
   extends CalendarName
+
+case class NamedCalendarName(name: String)
+  extends CalendarName
