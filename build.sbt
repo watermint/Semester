@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.0.23",
+  version := "0.1.0",
   organization := "org.watermint",
   scalaVersion := "2.10.3",
   resolvers ++= Seq(
@@ -18,62 +18,63 @@ lazy val buildSettings = Seq(
   )
 )
 
-lazy val etudeAppGare = project.in(file("etude/app/gare"))
+lazy val appGare = project.in(file("etude/app/gare"))
+  .dependsOn(foundationDomain)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
-lazy val etudeAppHoliday = project.in(file("etude/app/holiday"))
+lazy val appHoliday = project.in(file("etude/app/holiday"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
-  .dependsOn(etudeFoundationCalendar)
+  .dependsOn(foundationCalendar)
 
-lazy val etudeChatworkCore = project.in(file("etude/chatwork/core"))
+lazy val chatworkCore = project.in(file("etude/chatwork/core"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeFoundationDomain)
-  .dependsOn(etudeFoundationHttp)
-  .dependsOn(etudeTextUndisclosed % "test")
+  .dependsOn(foundationDomain)
+  .dependsOn(foundationHttp)
+  .dependsOn(testUndisclosed % "test")
 
-lazy val etudeChatworkTeam = project.in(file("etude/chatwork/team"))
+lazy val chatworkTeam = project.in(file("etude/chatwork/team"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeFoundationDomain)
-  .dependsOn(etudeChatworkCore)
-  .dependsOn(etudeChatworkElasticsearch)
+  .dependsOn(foundationDomain)
+  .dependsOn(chatworkCore)
+  .dependsOn(chatworkElasticsearch)
 
-lazy val etudeChatworkElasticsearch = project.in(file("etude/chatwork/elasticsearch"))
+lazy val chatworkElasticsearch = project.in(file("etude/chatwork/elasticsearch"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeFoundationDomain)
-  .dependsOn(etudeChatworkCore)
-  .dependsOn(etudeElasticsearchCore)
+  .dependsOn(foundationDomain)
+  .dependsOn(chatworkCore)
+  .dependsOn(elasticsearchCore)
 
-lazy val etudeElasticsearchCore = project.in(file("etude/elasticsearch/core"))
+lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeFoundationUtility)
+  .dependsOn(foundationUtility)
 
-lazy val etudeFoundationDomain = project.in(file("etude/foundation/domain"))
-  .settings(buildSettings: _*)
-
-lazy val etudeFoundationCalendar = project.in(file("etude/foundation/calendar"))
-  .settings(buildSettings: _*)
-  .dependsOn(etudeFoundationDomain)
-  .dependsOn(etudeFoundationHttp)
-  .dependsOn(etudeFoundationI18n)
-
-lazy val etudeFoundationHtml = project.in(file("etude/foundation/html"))
+lazy val foundationDomain = project.in(file("etude/foundation/domain"))
   .settings(buildSettings: _*)
 
-lazy val etudeFoundationHttp = project.in(file("etude/foundation/http"))
+lazy val foundationCalendar = project.in(file("etude/foundation/calendar"))
   .settings(buildSettings: _*)
-  .dependsOn(etudeFoundationUtility)
+  .dependsOn(foundationDomain)
+  .dependsOn(foundationHttp)
+  .dependsOn(foundationI18n)
 
-lazy val etudeFoundationI18n = project.in(file("etude/foundation/i18n"))
-  .settings(buildSettings: _*)
-
-lazy val etudeFoundationUtility = project.in(file("etude/foundation/utility"))
-  .settings(buildSettings: _*)
-
-lazy val etudeDesktopFextile = project.in(file("etude/desktop/fextile"))
+lazy val foundationHtml = project.in(file("etude/foundation/html"))
   .settings(buildSettings: _*)
 
-lazy val etudeTextUndisclosed = project.in(file("etude/test/undisclosed"))
+lazy val foundationHttp = project.in(file("etude/foundation/http"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationUtility)
+
+lazy val foundationI18n = project.in(file("etude/foundation/i18n"))
+  .settings(buildSettings: _*)
+
+lazy val foundationUtility = project.in(file("etude/foundation/utility"))
+  .settings(buildSettings: _*)
+
+lazy val desktopFextile = project.in(file("etude/desktop/fextile"))
+  .settings(buildSettings: _*)
+
+lazy val testUndisclosed = project.in(file("etude/test/undisclosed"))
   .settings(buildSettings: _*)
 
