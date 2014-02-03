@@ -1,2 +1,0 @@
-name := "etude-chatwork-team"
-

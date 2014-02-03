@@ -13,7 +13,7 @@ Collection of small apps and libraries. This project collection is the practice 
 
 ## Libraries
 
-* [ChatWork Core](etude/chatwork) - Core APIs for [ChatWork](chatwork.com)
+* [ChatWork Core](etude/messaging/chatwork) - Core APIs for [ChatWork](chatwork.com)
 * [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
 * [ElasticSearch Core](etude/elasticsearch/core) - API wrapper for ElasticSearch
 * [Calendar](etude/foundation/calendar) - Calendar API

@@ -1,0 +1,1 @@
+name := "etude-messaging-core"
