@@ -4,9 +4,29 @@
 
 Collection of small apps and libraries. This project collection is the practice for Scala and designing APIs in real life use cases. 
 
+# Projects
+
+## Application
+
+* [Gare](etude/gare) - Application dispatcher
+* [Holiday](etude/holiday) - Holiday information API
+
+## Libraries
+
+* [ChatWork Core](etude/chatwork) - Core APIs for [ChatWork](chatwork.com)
+* [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
+* [ElasticSearch Core](etude/elasticsearch/core] - API wrapper for ElasticSearch
+* [Calendar](etude/foundation/calendar] - Calendar API
+* [Domain](etude/foundation/domain] - Libraries for Domain Driven Development (DDD).
+* [Html](etude/foundation/html] - HTML parse wrapper API
+* [Http](etude/foundation/http] - HTTP Client wrapper API
+* [i18n](etude/foundation/i18n] - Internationalization (i18n) API
+* [Utility](etude/foundation/utility] - Generic utilities
+* [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
+
 # License
 
-The MIT License (MIT) Copyright (c) 2013 Takayuki Okazaki
+The MIT License (MIT) Copyright (c) 2013, 2014 Takayuki Okazaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

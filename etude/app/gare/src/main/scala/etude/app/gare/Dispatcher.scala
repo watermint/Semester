@@ -41,7 +41,8 @@ case class Dispatcher(dispatcherPort: Int,
 
   def getClient(port: Int): Option[Service[HttpRequest, HttpResponse]] = {
     portToClient.get(port) match {
-      case Some(client) => Some(client)
+      case Some(client) =>
+        Some(client)
       case None =>
         newClient(port) match {
           case Some(client) =>
