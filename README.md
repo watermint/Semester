@@ -15,13 +15,13 @@ Collection of small apps and libraries. This project collection is the practice 
 
 * [ChatWork Core](etude/chatwork) - Core APIs for [ChatWork](chatwork.com)
 * [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
-* [ElasticSearch Core](etude/elasticsearch/core] - API wrapper for ElasticSearch
-* [Calendar](etude/foundation/calendar] - Calendar API
-* [Domain](etude/foundation/domain] - Libraries for Domain Driven Development (DDD).
-* [Html](etude/foundation/html] - HTML parse wrapper API
-* [Http](etude/foundation/http] - HTTP Client wrapper API
-* [i18n](etude/foundation/i18n] - Internationalization (i18n) API
-* [Utility](etude/foundation/utility] - Generic utilities
+* [ElasticSearch Core](etude/elasticsearch/core) - API wrapper for ElasticSearch
+* [Calendar](etude/foundation/calendar) - Calendar API
+* [Domain](etude/foundation/domain) - Libraries for Domain Driven Development (DDD).
+* [Html](etude/foundation/html) - HTML parse wrapper API
+* [Http](etude/foundation/http) - HTTP Client wrapper API
+* [i18n](etude/foundation/i18n) - Internationalization (i18n) API
+* [Utility](etude/foundation/utility) - Generic utilities
 * [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
 
 # License
