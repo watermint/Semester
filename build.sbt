@@ -34,25 +34,29 @@ lazy val appHoliday = project.in(file("etude/app/holiday"))
   .settings(assemblySettings: _*)
   .dependsOn(foundationCalendar)
 
-lazy val messagingCore = project.in(file("etude/messaging/core"))
+lazy val collaborationGithub = project.in(file("etude/collaboration/github"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationDomain)
+
+lazy val messagingCommon = project.in(file("etude/messaging/common"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
 
 lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .settings(buildSettings: _*)
-  .dependsOn(messagingCore)
+  .dependsOn(messagingCommon)
   .dependsOn(foundationDomain)
   .dependsOn(foundationHttp)
   .dependsOn(testUndisclosed % "test")
 
 lazy val messagingIdobata = project.in(file("etude/messaging/idobata"))
   .settings(buildSettings: _*)
-  .dependsOn(messagingCore)
+  .dependsOn(messagingCommon)
   .dependsOn(foundationDomain)
 
 lazy val messagingTypetalk = project.in(file("etude/messaging/typetalk"))
   .settings(buildSettings: _*)
-  .dependsOn(messagingCore)
+  .dependsOn(messagingCommon)
   .dependsOn(foundationDomain)
 
 lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))
