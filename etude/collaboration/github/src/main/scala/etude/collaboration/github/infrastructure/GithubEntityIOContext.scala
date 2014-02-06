@@ -7,5 +7,5 @@ import java.net.URI
 trait GithubEntityIOContext[M[+A]]
   extends EntityIOContext[M] {
 
-  val githubUri: URI
+  val githubEndpoint: URI
 }
