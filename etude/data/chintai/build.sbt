@@ -1,0 +1,2 @@
+name := "etude-data-chintai"
+

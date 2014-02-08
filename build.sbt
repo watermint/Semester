@@ -38,6 +38,13 @@ lazy val collaborationGithub = project.in(file("etude/collaboration/github"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
 
+lazy val dataChintai = project.in(file("etude/data/chintai"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationDomain)
+  .dependsOn(foundationHtml)
+  .dependsOn(foundationHttp)
+  .dependsOn(foundationUtility)
+
 lazy val messagingCommon = project.in(file("etude/messaging/common"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
