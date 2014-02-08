@@ -5,12 +5,13 @@ import scala.xml.parsing.NoBindingFactoryAdapter
 import scala.xml.{InputSource, Node}
 import nu.validator.htmlparser.sax.HtmlParser
 import nu.validator.htmlparser.common.XmlViolationPolicy
+import scala.util.{Success, Try}
 
 /**
  * Normalize HTML as XML.
  */
 object Normalizer {
-  def html(text: String): Either[Exception, Node] = {
+  def html(text: String): Try[Node] = {
     // reference:
     // http://www.mwsoft.jp/programming/scala/web_scraping.html
     try {
@@ -21,9 +22,7 @@ object Normalizer {
       htmlParser.setContentHandler(contentHandler)
       htmlParser.parse(new InputSource(new StringReader(text)))
 
-      Right(contentHandler.rootElem)
-    } catch {
-      case e: Exception => Left(e)
+      Success(contentHandler.rootElem)
     }
   }
 }
