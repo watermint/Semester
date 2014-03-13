@@ -6,9 +6,8 @@ import etude.foundation.domain.lifecycle.{ResultWithEntity, EntityIOContext}
 import scala.concurrent.Future
 
 class V1AsyncParticipantRepository
-//  extends AsyncParticipantRepository
-//  with ApiQoS
-{
+  extends AsyncParticipantRepository
+  with ApiQoS {
   //  private val ENDPOINT_ROOMS = "/v1/rooms"
   //
   //  protected def parseRoomRole(roomId: RoomId, json: JValue): List[RoomRole] = {
@@ -111,13 +110,27 @@ class V1AsyncParticipantRepository
   //    }
   //
   //  }
-//  type This <: V1AsyncParticipantRepository
-//
-//  def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] = ???
-//
-//  def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Participant] = ???
-//
-//  def deleteByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[V1AsyncParticipantRepository, RoomId, Participant, Future]] = ???
-//
-//  def store(entity: Participant)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[V1AsyncParticipantRepository, RoomId, Participant, Future]] = ???
+  type This <: V1AsyncParticipantRepository
+
+  def containsByIdentity(identity: RoomId)
+                        (implicit context: EntityIOContext[Future]): Future[Boolean] = {
+    ???
+  }
+
+  def resolve(identity: RoomId)
+             (implicit context: EntityIOContext[Future]): Future[Participant] = {
+    ???
+  }
+
+  def deleteByIdentity(identity: RoomId)
+                      (implicit context: EntityIOContext[Future]):
+      Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
+    ???
+  }
+
+  def store(entity: Participant)
+           (implicit context: EntityIOContext[Future]):
+      Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
+    ???
+  }
 }

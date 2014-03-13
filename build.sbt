@@ -38,33 +38,11 @@ lazy val collaborationGithub = project.in(file("etude/collaboration/github"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
 
-lazy val dataChintai = project.in(file("etude/data/chintai"))
-  .settings(buildSettings: _*)
-  .dependsOn(foundationDomain)
-  .dependsOn(foundationHtml)
-  .dependsOn(foundationHttp)
-  .dependsOn(foundationUtility)
-
-lazy val messagingCommon = project.in(file("etude/messaging/common"))
-  .settings(buildSettings: _*)
-  .dependsOn(foundationDomain)
-
 lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .settings(buildSettings: _*)
-  .dependsOn(messagingCommon)
   .dependsOn(foundationDomain)
   .dependsOn(foundationHttp)
   .dependsOn(testUndisclosed % "test")
-
-lazy val messagingIdobata = project.in(file("etude/messaging/idobata"))
-  .settings(buildSettings: _*)
-  .dependsOn(messagingCommon)
-  .dependsOn(foundationDomain)
-
-lazy val messagingTypetalk = project.in(file("etude/messaging/typetalk"))
-  .settings(buildSettings: _*)
-  .dependsOn(messagingCommon)
-  .dependsOn(foundationDomain)
 
 lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))
   .settings(buildSettings: _*)
