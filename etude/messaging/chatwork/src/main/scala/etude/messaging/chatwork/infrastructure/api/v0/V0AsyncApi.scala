@@ -4,13 +4,14 @@ import java.net.URI
 import scala.Some
 import scala.language.higherKinds
 import scala.util.{Success, Failure, Try}
-import etude.messaging.chatwork.infrastructure.api.{QoSException, ApiQoS}
+import etude.messaging.chatwork.infrastructure.api.ApiQoS
 import org.json4s._
 import etude.foundation.http._
-import etude.foundation.http.{Response, Client}
+import etude.foundation.http.Response
 import scala.concurrent.{future, Future}
 import etude.foundation.domain.lifecycle.EntityIOContext
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import etude.messaging.chatwork.infrastructure.api.v0.auth.Auth
 
 object V0AsyncApi
   extends V0EntityIO[Future]
@@ -33,45 +34,11 @@ object V0AsyncApi
   }
 
   private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
-    val client = getClient(context)
-
-    val loginUri = getOrganizationId(context) match {
-      case Some(s) =>
-        baseUri
-          .withPath("/login.php")
-          .withQuery("s" -> s)
-          .withQuery("lang" -> "en")
-          .withQuery("package" -> "chatwork")
-      case _ =>
-        baseUri
-          .withPath("/login.php")
-          .withQuery("lang" -> "en")
-    }
-
-    client.post(
-      uri = loginUri,
-      formData = List(
-        "email" -> getEmail(context),
-        "password" -> getPassword(context)
-      )
-    ) match {
-      case Failure(e) => Failure(e)
-      case _ =>
-        client.get(baseUri) match {
-          case Failure(e) => Failure(e)
-          case Success(r) =>
-            val accessTokenRegex = """var ACCESS_TOKEN = '(\w+)';""".r
-            val myIdRegex = """var myid = '(\d+)';""".r
-
-            (accessTokenRegex.findFirstMatchIn(r.contentAsString), myIdRegex.findFirstMatchIn(r.contentAsString)) match {
-              case (Some(token), Some(myId)) =>
-                setAccessToken(Some(token.group(1)), context)
-                setMyId(Some(myId.group(1)), context)
-                Success(true)
-              case _ =>
-                Failure(V0LoginFailedException("Invalid email or password"))
-            }
-        }
+    Auth.login map {
+      token =>
+        setAccessToken(Some(token.accessToken), context)
+        setMyId(Some(token.myId), context)
+        true
     }
   }
 
@@ -112,18 +79,18 @@ object V0AsyncApi
   }
 
   private[v0] def syncApi(command: String,
-                        params: Map[String, String],
-                        retries: Int = 2)
-                       (implicit context: EntityIOContext[Future]): JValue = {
+                          params: Map[String, String],
+                          retries: Int = 1)
+                         (implicit context: EntityIOContext[Future]): JValue = {
     ApiQoS.throttle.execute {
       if (!hasToken(context)) {
-        login
+        if (login.isFailure) {
+          throw V0CommandFailureException(command, "Login failed")
+        }
       }
       val gatewayUri = apiUri(command, params)
-      val response = getClient(context).get(gatewayUri) match {
-        case Failure(e) => throw e
-        case Success(r) => r
-      }
+      val client = getClient(context)
+      val response = client.get(gatewayUri).get
 
       apiResponseParser(command, response) match {
         case Failure(e: V0SessionTimeoutException) =>

@@ -9,7 +9,7 @@ trait V0EntityIOContext[M[+A]]
 
   val organizationId: Option[String]
 
-  val email: String
+  val username: String
 
   val password: String
 

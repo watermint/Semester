@@ -8,10 +8,6 @@ trait V0AsyncEntityIOContext
   with AsyncEntityIOContext
 
 object V0AsyncEntityIOContext {
-  def apply(organizationId: Option[String], email: String, password: String)(implicit executor: ExecutionContext): V0AsyncEntityIOContext = {
-    new V0AsyncEntityIOContextImpl(organizationId, email, password)
-  }
-
   def apply(organizationId: String, email: String, password: String)(implicit executor: ExecutionContext): V0AsyncEntityIOContext = {
     new V0AsyncEntityIOContextImpl(Some(organizationId), email, password)
   }
@@ -23,7 +19,7 @@ object V0AsyncEntityIOContext {
 
 private[v0]
 class V0AsyncEntityIOContextImpl(val organizationId: Option[String],
-                                 val email: String,
+                                 val username: String,
                                  val password: String)
                                 (implicit val executor: ExecutionContext)
   extends V0AsyncEntityIOContext

@@ -1,8 +1,8 @@
 
 lazy val buildSettings = Seq(
-  version := "0.1.0",
+  version := "0.1.1",
   organization := "org.watermint",
-  scalaVersion := "2.10.3",
+  scalaVersion := "2.10.4",
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
@@ -42,6 +42,8 @@ lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
   .dependsOn(foundationHttp)
+  .dependsOn(foundationHtml)
+  .dependsOn(foundationUtility)
   .dependsOn(testUndisclosed % "test")
 
 lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))

@@ -4,30 +4,35 @@ import org.apache.http.client.CookieStore
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGet}
 import org.apache.http.HttpEntity
-import org.apache.http.impl.client.{HttpClients, CloseableHttpClient, BasicCookieStore}
+import org.apache.http.impl.client.{LaxRedirectStrategy, HttpClients, CloseableHttpClient, BasicCookieStore}
 import org.apache.http.message.BasicNameValuePair
 import scala.collection.JavaConverters._
 import java.net.URI
 import scala.util.{Failure, Try, Success}
+import org.apache.http.client.protocol.HttpClientContext
+import org.apache.http.cookie.Cookie
 
 case class Client() {
   val cookieStore: CookieStore = new BasicCookieStore()
 
-  def httpClient: CloseableHttpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build()
+  val clientContext: HttpClientContext = HttpClientContext.create()
+
+  val httpClient: CloseableHttpClient = HttpClients.custom()
+    .setDefaultCookieStore(cookieStore)
+    .setRedirectStrategy(new LaxRedirectStrategy)
+    .build()
 
   class HttpDelete(uri: URI) extends HttpPost(uri) {
     override def getMethod: String = "DELETE"
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
-    val client = httpClient
-    try {
-      Success(Response(client.execute(req)))
-    } catch {
-      case e: Exception => Failure(e)
-    } finally {
-      client.close()
-    }
+    Success(
+      Response(
+        httpClient.execute(req, clientContext),
+        clientContext
+      )
+    )
   }
 
   def get(uri: URIContainer,
@@ -41,7 +46,7 @@ case class Client() {
   def post(uri: URIContainer,
            formData: List[Pair[String, String]] = List(),
            headers: List[Pair[String, String]] = List()): Try[Response] = {
-    
+
     val post = new HttpPost(uri)
     entity(formData).foreach(post.setEntity)
     headers.foreach(h => post.setHeader(h._1, h._2))

@@ -14,9 +14,9 @@ trait V0EntityIO[M[+A]]
     }
   }
 
-  protected def getEmail(context: EntityIOContext[M]): String = {
+  protected def getUsername(context: EntityIOContext[M]): String = {
     context match {
-      case v0: V0EntityIOContext[M] => v0.email
+      case v0: V0EntityIOContext[M] => v0.username
       case _ => throw new IllegalArgumentException(s"$context must compatible with V0EntityIOContext")
     }
   }
