@@ -1,10 +1,10 @@
-package etude.messaging.chatwork.domain.infrastructure.v0
+package etude.messaging.chatwork.domain.infrastructure.api
 
 import scala.language.higherKinds
 import etude.foundation.http.Client
 import etude.foundation.domain.lifecycle.EntityIOContext
 
-trait V0EntityIOContext[M[+A]]
+trait EntityIOContextOnV0Api[M[+A]]
   extends EntityIOContext[M] {
 
   val organizationId: Option[String]

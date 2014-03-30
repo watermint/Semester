@@ -4,9 +4,9 @@ import etude.messaging.chatwork.domain.model.room.{RoomId, Participant}
 import scala.concurrent.Future
 import etude.foundation.domain.lifecycle.{ResultWithEntity, EntityIOContext}
 import etude.foundation.domain.lifecycle.async.AsyncResultWithEntity
-import etude.messaging.chatwork.domain.infrastructure.NotImplementedException
-import etude.messaging.chatwork.domain.infrastructure.v0.{V0AsyncApi, V0AsyncInitLoad, V0EntityIO}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad, V0EntityIO}
 
+private[room]
 class AsyncParticipantRepositoryOnV0Api extends AsyncParticipantRepository with V0EntityIO[Future] {
   type This <: AsyncParticipantRepositoryOnV0Api
 
@@ -52,6 +52,6 @@ class AsyncParticipantRepositoryOnV0Api extends AsyncParticipantRepository with 
   }
 
   def deleteByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
-    Future.failed(NotImplementedException("delete operation is not supported"))
+    Future.failed(new UnsupportedOperationException("delete operation is not supported"))
   }
 }

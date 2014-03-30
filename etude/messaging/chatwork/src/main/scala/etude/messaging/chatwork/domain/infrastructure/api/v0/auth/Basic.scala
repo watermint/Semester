@@ -1,7 +1,7 @@
-package etude.messaging.chatwork.domain.infrastructure.v0.auth
+package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 
 import scala.util.Try
-import etude.messaging.chatwork.domain.infrastructure.v0.V0UnknownChatworkProtocolException
+import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UnknownChatworkProtocolException
 
 class Basic extends Auth {
   def acceptable(context: AuthContext): Boolean = {

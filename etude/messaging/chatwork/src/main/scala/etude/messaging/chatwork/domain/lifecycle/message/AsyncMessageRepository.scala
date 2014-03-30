@@ -10,3 +10,11 @@ trait AsyncMessageRepository
 
   type This <: AsyncMessageRepository
 }
+
+object AsyncMessageRepository {
+  def ofV0Api(): AsyncMessageRepository =
+    new AsyncMessageRepositoryOnV0Api
+
+  def ofV1Api(): AsyncMessageRepository =
+    new AsyncMessageRepositoryOnV1Api
+}

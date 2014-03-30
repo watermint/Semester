@@ -1,4 +1,4 @@
-package etude.messaging.chatwork.domain.infrastructure.v0.auth
+package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 
 import etude.foundation.http.Client
 import java.net.URI

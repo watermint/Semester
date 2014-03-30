@@ -10,3 +10,11 @@ trait AsyncAccountRepository
 
   type This <: AsyncAccountRepository
 }
+
+object AsyncAccountRepository {
+  def ofV0Api(): AsyncAccountRepository =
+    new AsyncAccountRepositoryOnV0Api
+
+  def ofV1Api(): AsyncAccountRepository =
+    new AsyncAccountRepositoryOnV1Api
+}

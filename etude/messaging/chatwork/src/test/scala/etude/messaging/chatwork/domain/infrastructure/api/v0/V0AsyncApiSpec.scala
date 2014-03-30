@@ -1,4 +1,4 @@
-package etude.messaging.chatwork.domain.infrastructure.v0
+package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner

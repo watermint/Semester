@@ -1,9 +1,9 @@
-package etude.messaging.chatwork.domain.infrastructure.v0.auth
+package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 
 import scala.util.Try
 import scala.concurrent.Future
 import java.net.URI
-import etude.messaging.chatwork.domain.infrastructure.v0.{V0UnknownChatworkProtocolException, V0AsyncApi, V0EntityIO}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0UnknownChatworkProtocolException, V0AsyncApi, V0EntityIO}
 import etude.foundation.http._
 import etude.foundation.domain.lifecycle.EntityIOContext
 

@@ -1,4 +1,4 @@
-package etude.messaging.chatwork.domain.infrastructure.v0
+package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import java.net.URI
 import scala.Some
@@ -10,13 +10,12 @@ import etude.foundation.http.Response
 import scala.concurrent.{future, Future}
 import etude.foundation.domain.lifecycle.EntityIOContext
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
-import etude.messaging.chatwork.domain.infrastructure.v0.auth.Auth
-import etude.messaging.chatwork.domain.infrastructure.ApiQoS
+import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
+import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
 object V0AsyncApi
   extends V0EntityIO[Future]
-  with AsyncEntityIO
-  with ApiQoS {
+  with AsyncEntityIO {
 
   def isKddiChatwork(implicit context: EntityIOContext[Future]): Boolean = {
     getOrganizationId(context) match {

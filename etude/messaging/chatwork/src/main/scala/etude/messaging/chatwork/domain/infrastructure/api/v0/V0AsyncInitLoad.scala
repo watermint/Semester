@@ -1,4 +1,4 @@
-package etude.messaging.chatwork.domain.infrastructure.v0
+package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import java.net.URI
 import etude.foundation.domain.lifecycle.EntityIOContext
@@ -14,9 +14,7 @@ import scala.Some
 import etude.messaging.chatwork.domain.model.account.AccountId
 import java.time.Instant
 
-case class V0AsyncInitLoadContents(contacts: List[Account],
-                                   rooms: List[Room],
-                                   participants: List[Participant])
+
 
 /**
  * facade for jumbo api 'init_load'.

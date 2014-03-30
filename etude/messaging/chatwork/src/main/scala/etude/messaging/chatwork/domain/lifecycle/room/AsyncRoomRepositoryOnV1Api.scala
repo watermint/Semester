@@ -9,12 +9,12 @@ import etude.messaging.chatwork.domain.model.room.RoomAttributes
 import etude.messaging.chatwork.domain.model.message.MessageId
 import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent.Future
-import etude.messaging.chatwork.domain.infrastructure.ApiQoS
-import etude.messaging.chatwork.domain.infrastructure.v1.{V1ApiException, V1AsyncApi}
+import etude.messaging.chatwork.domain.infrastructure.api.v1.{V1ApiException, V1AsyncApi}
+import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
+private[room]
 class AsyncRoomRepositoryOnV1Api
-  extends AsyncRoomRepository
-  with ApiQoS {
+  extends AsyncRoomRepository {
 
   def latestMessage(roomId: RoomId)(implicit context: EntityIOContext[Future]): Future[MessageId] = ???
 
@@ -116,6 +116,9 @@ class AsyncRoomRepositoryOnV1Api
   //      lastLoad.put(operation, Instant.now)
   //    }
   //  }
+
+
+  def create(name: String, description: String, icon: RoomIcon)(implicit context: EntityIOContext[Future]): Future[RoomId] = ???
 
   def myRoom()(implicit context: EntityIOContext[Future]): Future[Room] = {
     implicit val executor = getExecutionContext(context)

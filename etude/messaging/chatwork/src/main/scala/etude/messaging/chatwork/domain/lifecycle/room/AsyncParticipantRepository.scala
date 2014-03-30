@@ -10,3 +10,11 @@ trait AsyncParticipantRepository
 
   type This <: AsyncParticipantRepository
 }
+
+object AsyncParticipantRepository {
+  def ofV0Api(): AsyncParticipantRepository =
+    new AsyncParticipantRepositoryOnV0Api
+
+  def ofV1Api(): AsyncParticipantRepository =
+    new AsyncParticipantRepositoryOnV1Api
+}

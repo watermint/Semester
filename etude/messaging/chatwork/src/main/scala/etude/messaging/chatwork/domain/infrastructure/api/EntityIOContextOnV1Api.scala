@@ -1,9 +1,9 @@
-package etude.messaging.chatwork.domain.infrastructure.v1
+package etude.messaging.chatwork.domain.infrastructure.api
 
 import scala.language.higherKinds
 import etude.foundation.domain.lifecycle.EntityIOContext
 
-trait V1EntityIOContext[M[+A]]
+trait EntityIOContextOnV1Api[M[+A]]
   extends EntityIOContext[M] {
 
   val token: String

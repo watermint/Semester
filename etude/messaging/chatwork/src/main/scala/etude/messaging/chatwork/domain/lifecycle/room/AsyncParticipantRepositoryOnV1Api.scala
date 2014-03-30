@@ -3,11 +3,11 @@ package etude.messaging.chatwork.domain.lifecycle.room
 import etude.messaging.chatwork.domain.model.room.{RoomId, Participant}
 import etude.foundation.domain.lifecycle.{ResultWithEntity, EntityIOContext}
 import scala.concurrent.Future
-import etude.messaging.chatwork.domain.infrastructure.ApiQoS
+import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
+private[room]
 class AsyncParticipantRepositoryOnV1Api
-  extends AsyncParticipantRepository
-  with ApiQoS {
+  extends AsyncParticipantRepository {
   //  private val ENDPOINT_ROOMS = "/v1/rooms"
   //
   //  protected def parseRoomRole(roomId: RoomId, json: JValue): List[RoomRole] = {

@@ -1,4 +1,4 @@
-package etude.messaging.chatwork.domain.infrastructure.v1
+package etude.messaging.chatwork.domain.infrastructure.api.v1
 
 import java.net.URI
 import scala.util.{Success, Failure}
@@ -7,7 +7,7 @@ import etude.foundation.http._
 import etude.foundation.domain.lifecycle.EntityIOContext
 import scala.concurrent.{future, Future}
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
-import etude.messaging.chatwork.domain.infrastructure.ApiQoS
+import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
 object V1AsyncApi
   extends V1EntityIO[Future]

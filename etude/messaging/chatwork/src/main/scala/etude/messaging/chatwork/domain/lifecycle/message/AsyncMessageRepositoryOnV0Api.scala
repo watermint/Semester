@@ -7,9 +7,9 @@ import etude.messaging.chatwork.domain.model.account.AccountId
 import java.time.Instant
 import scala.concurrent._
 import etude.foundation.domain.lifecycle.EntityIOContext
-import etude.messaging.chatwork.domain.infrastructure.NotImplementedException
-import etude.messaging.chatwork.domain.infrastructure.v0.V0AsyncApi
+import etude.messaging.chatwork.domain.infrastructure.api.v0.V0AsyncApi
 
+private[message]
 class AsyncMessageRepositoryOnV0Api
   extends AsyncMessageRepository {
 
@@ -67,8 +67,8 @@ class AsyncMessageRepositoryOnV0Api
   }
 
   def resolve(identity: MessageId)(implicit context: EntityIOContext[Future]): Future[Message] =
-    Future.failed(NotImplementedException("Migrated to v1 API"))
+    Future.failed(new UnsupportedOperationException("No implementation"))
 
   def containsByIdentity(identity: MessageId)(implicit context: EntityIOContext[Future]): Future[Boolean] =
-    Future.failed(NotImplementedException("Migrated to v1 API"))
+    Future.failed(new UnsupportedOperationException("No implementation"))
 }

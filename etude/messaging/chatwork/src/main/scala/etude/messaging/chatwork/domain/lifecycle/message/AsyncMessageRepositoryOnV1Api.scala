@@ -8,13 +8,13 @@ import java.time.Instant
 import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent._
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
-import etude.messaging.chatwork.domain.infrastructure.{NotImplementedException, ApiQoS}
-import etude.messaging.chatwork.domain.infrastructure.v1.{V1ApiException, V1AsyncApi}
+import etude.messaging.chatwork.domain.infrastructure.api.v1.{V1ApiException, V1AsyncApi}
+import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
+private[message]
 class AsyncMessageRepositoryOnV1Api
   extends AsyncMessageRepository
-  with AsyncEntityIO
-  with ApiQoS {
+  with AsyncEntityIO {
 
   type This <: AsyncMessageRepositoryOnV1Api
 
@@ -54,10 +54,10 @@ class AsyncMessageRepositoryOnV1Api
   }
 
   def markAsRead(message: MessageId)(implicit context: EntityIOContext[Future]): Future[MessageId] =
-    Future.failed(NotImplementedException("Mark as read is not yet supported."))
+    Future.failed(new UnsupportedOperationException("Mark as read is not yet supported."))
 
   def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[Future]): Future[List[Message]] =
-    Future.failed(NotImplementedException("see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-messages"))
+    Future.failed(new UnsupportedOperationException("see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-messages"))
 
   def containsByIdentity(identity: MessageId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
     implicit val executor = getExecutionContext(context)
