@@ -1,7 +1,9 @@
 package etude.foundation.utility
 
 import scala.concurrent.Future
+import scala.collection.JavaConverters._
 import scala.util.{Try, Success, Failure}
+import java.util.Properties
 
 object Converter {
   /**
@@ -15,5 +17,12 @@ object Converter {
       case Success(s) => Future.successful(s)
       case Failure(ex) => Future.failed(ex)
     }
+  }
+
+  def propertiesToMap(p: Properties): Map[String, String] = {
+    p.entrySet().asScala.map {
+      e =>
+        e.getKey.toString -> e.getValue.toString
+    }.toMap
   }
 }
