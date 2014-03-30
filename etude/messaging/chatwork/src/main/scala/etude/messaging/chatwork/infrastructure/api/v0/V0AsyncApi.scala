@@ -80,6 +80,7 @@ object V0AsyncApi
 
   private[v0] def syncApi(command: String,
                           params: Map[String, String],
+                          data: Map[String, String] = Map(),
                           retries: Int = 1)
                          (implicit context: EntityIOContext[Future]): JValue = {
     ApiQoS.throttle.execute {
@@ -90,13 +91,17 @@ object V0AsyncApi
       }
       val gatewayUri = apiUri(command, params)
       val client = getClient(context)
-      val response = client.get(gatewayUri).get
+      val response = data.size match {
+        case 0 => client.get(gatewayUri).get
+        case _ =>
+          client.post(gatewayUri, data.toList).get
+      }
 
       apiResponseParser(command, response) match {
         case Failure(e: V0SessionTimeoutException) =>
           clearToken(context)
           if (retries > 0) {
-            syncApi(command, params, retries - 1)
+            syncApi(command, params, data, retries - 1)
           } else {
             throw V0CommandFailureException(command, "Exceeds retry count")
           }
@@ -108,12 +113,13 @@ object V0AsyncApi
 
   def api(command: String,
           params: Map[String, String],
+          data: Map[String, String] = Map(),
           retries: Int = 2)
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
 
     future {
-      syncApi(command, params, retries)
+      syncApi(command, params, data, retries)
     }
   }
 }
