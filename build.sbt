@@ -1,8 +1,8 @@
 
 lazy val buildSettings = Seq(
-  version := "0.1.1",
+  version := "0.1.2",
   organization := "org.watermint",
-  scalaVersion := "2.10.4",
+  scalaVersion := "2.10.3",
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
@@ -18,11 +18,11 @@ lazy val buildSettings = Seq(
   )
 )
 
-lazy val appCulvert = project.in(file("etude/app/culvert"))
-  .dependsOn(foundationDomain)
-  .dependsOn(messagingChatwork)
-  .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
+//lazy val appCulvert = project.in(file("etude/app/culvert"))
+//  .dependsOn(foundationDomain)
+//  .dependsOn(messagingChatwork)
+//  .settings(buildSettings: _*)
+//  .settings(assemblySettings: _*)
 
 lazy val appGare = project.in(file("etude/app/gare"))
   .dependsOn(foundationDomain)
@@ -34,10 +34,6 @@ lazy val appGare = project.in(file("etude/app/gare"))
 //  .settings(assemblySettings: _*)
 //  .dependsOn(foundationCalendar)
 
-lazy val collaborationGithub = project.in(file("etude/collaboration/github"))
-  .settings(buildSettings: _*)
-  .dependsOn(foundationDomain)
-
 lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
@@ -46,9 +42,9 @@ lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .dependsOn(foundationUtility)
   .dependsOn(testUndisclosed % "test")
 
-lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))
-  .settings(buildSettings: _*)
-  .dependsOn(foundationUtility)
+//lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))
+//  .settings(buildSettings: _*)
+//  .dependsOn(foundationUtility)
 
 lazy val foundationDomain = project.in(file("etude/foundation/domain"))
   .settings(buildSettings: _*)
