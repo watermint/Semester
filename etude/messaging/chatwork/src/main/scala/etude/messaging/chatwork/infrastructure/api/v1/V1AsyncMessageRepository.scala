@@ -45,7 +45,7 @@ class V1AsyncMessageRepository
   def markAsRead(message: MessageId)(implicit context: EntityIOContext[Future]): Future[MessageId] =
     Future.failed(NotImplementedException("Mark as read is not yet supported."))
 
-  def messages(baseline: MessageId): Future[List[Message]] =
+  def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[Future]): Future[List[Message]] =
     Future.failed(NotImplementedException("see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-messages"))
 
   def containsByIdentity(identity: MessageId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {

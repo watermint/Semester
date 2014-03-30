@@ -32,17 +32,20 @@ class V0AsyncMessageRepository
     }
   }
 
-  def messages(baseline: MessageId)(implicit context: EntityIOContext[Future]): Future[List[Message]] = {
+  def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[Future]): Future[List[Message]] = {
+    if (!from.roomId.equals(roomId)) {
+      throw new IllegalArgumentException(s"Inconsistent roomId[$roomId] / messageId[${from.roomId}]")
+    }
     implicit val executor = getExecutionContext(context)
     V0AsyncApi.api(
       "load_old_chat",
       Map(
-        "room_id" -> baseline.roomId.value.toString(),
-        "first_chat_id" -> baseline.messageId.toString()
+        "room_id" -> from.roomId.value.toString(),
+        "first_chat_id" -> from.messageId.toString()
       )
     ) map {
       json =>
-        parseMessage(baseline.roomId, json)
+        parseMessage(from.roomId, json).take(count)
     }
   }
 

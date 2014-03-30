@@ -9,7 +9,7 @@ import etude.messaging.chatwork.domain.room._
 import scala.util.Failure
 import scala.Some
 import etude.messaging.chatwork.domain.room.RoomAttributes
-import etude.messaging.chatwork.domain.message.MessageId
+import etude.messaging.chatwork.domain.message.{Message, MessageId}
 import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent.Future
 
@@ -17,11 +17,9 @@ class V1AsyncRoomRepository
   extends AsyncRoomRepository
   with ApiQoS {
 
+  def latestMessage(roomId: RoomId)(implicit context: EntityIOContext[Future]): Future[MessageId] = ???
+
   private val ENDPOINT_ROOMS = "/v1/rooms"
-
-  def markAsRead(message: MessageId): Try[MessageId] = Failure(NotImplementedException("Not implemented by ChatWork"))
-
-  def latestMessage(roomId: RoomId): Try[MessageId] = Failure(NotImplementedException("Not implemented by ChatWork"))
 
   protected def parseRoom(result: JValue): List[Room] = {
     for {
