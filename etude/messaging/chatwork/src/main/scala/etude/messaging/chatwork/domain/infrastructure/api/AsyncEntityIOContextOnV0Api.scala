@@ -17,7 +17,7 @@ object AsyncEntityIOContextOnV0Api {
   }
 }
 
-private[v0]
+private[api]
 class AsyncEntityIOContextOnV0ApiImpl(val organizationId: Option[String],
                                  val username: String,
                                  val password: String)

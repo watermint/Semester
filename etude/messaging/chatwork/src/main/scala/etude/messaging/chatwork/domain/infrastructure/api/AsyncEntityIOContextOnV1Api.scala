@@ -12,6 +12,6 @@ object AsyncEntityIOContextOnV1Api {
     AsyncEntityIOContextOnV1ApiImpl(token)
 }
 
-private[v1]
+private[api]
 case class AsyncEntityIOContextOnV1ApiImpl(token: String)(implicit val executor: ExecutionContext)
   extends AsyncEntityIOContextOnV1Api

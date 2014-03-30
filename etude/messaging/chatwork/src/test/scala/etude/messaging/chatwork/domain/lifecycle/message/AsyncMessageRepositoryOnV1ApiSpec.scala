@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.message
 
 import etude.messaging.chatwork.domain.model.room.Room
-import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepositoryOnV1Api
+import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.messaging.chatwork.domain.model.message.Text
 import etude.messaging.chatwork.domain.infrastructure.api.v1.V1AsyncApiSpecBase
 import org.specs2.mutable.Specification
@@ -19,8 +19,8 @@ class AsyncMessageRepositoryOnV1ApiSpec
       undisclosed(getClass.getName) {
         properties =>
           implicit val context = getEntityIOContext(properties)
-          val roomRepo = new AsyncRoomRepositoryOnV1Api()
-          val messageRepo = new AsyncMessageRepositoryOnV1Api()
+          val roomRepo = AsyncRoomRepository.ofV1Api()
+          val messageRepo = AsyncMessageRepository.ofV1Api()
 
           val myRoom: Room = result(roomRepo.myRoom())
 
