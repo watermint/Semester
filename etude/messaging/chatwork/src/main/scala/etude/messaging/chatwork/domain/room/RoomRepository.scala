@@ -9,5 +9,7 @@ trait RoomRepository[M[+A]]
 
   def myRoom()(implicit context: EntityIOContext[M]): M[Room]
 
+  def rooms()(implicit context: EntityIOContext[M]): M[List[Room]]
+
   def latestMessage(roomId: RoomId)(implicit context: EntityIOContext[M]): M[MessageId]
 }

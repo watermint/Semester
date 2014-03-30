@@ -12,14 +12,39 @@ class V0AsyncRoomRepository
 
   type This <: V0AsyncRoomRepository
 
-  def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Room] =
-    Future.failed(NotImplementedException("Migrated to v1 API"))
+  def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Room] = {
+    implicit val executor = getExecutionContext(context)
+    V0AsyncInitLoad.initLoad() map {
+      p =>
+        p.rooms.find(_.roomId.equals(identity)).last
+    }
+  }
 
-  def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] =
-    Future.failed(NotImplementedException("Migrated to v1 API"))
+  def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
+    implicit val executor = getExecutionContext(context)
+    V0AsyncInitLoad.initLoad() map {
+      p =>
+        p.rooms.exists(_.roomId.equals(identity))
+    }
+  }
 
-  def myRoom()(implicit context: EntityIOContext[Future]): Future[Room] =
-    Future.failed(NotImplementedException("Use v1 API"))
+  def myRoom()(implicit context: EntityIOContext[Future]): Future[Room] = {
+    implicit val executor = getExecutionContext(context)
+    V0AsyncInitLoad.initLoad() map {
+      p =>
+        p.rooms.map { r => r -> r.roomType }.collect {
+          case (r, t: RoomTypeMy) => r
+        }.last
+    }
+  }
+
+  def rooms()(implicit context: EntityIOContext[Future]): Future[List[Room]] = {
+    implicit val executor = getExecutionContext(context)
+    V0AsyncInitLoad.initLoad() map {
+      p =>
+        p.rooms
+    }
+  }
 
   def latestMessage(roomId: RoomId)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executor = getExecutionContext(context)

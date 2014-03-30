@@ -12,8 +12,8 @@ class Room(val roomId: RoomId,
            val description: Option[String],
            val attributes: Option[RoomAttributes],
            val roomType: RoomType,
-           val avatar: URI,
-           val lastUpdateTime: Instant)
+           val avatar: Option[URI],
+           val lastUpdateTime: Option[Instant])
   extends Entity[RoomId] {
 
   val identity: RoomId = roomId

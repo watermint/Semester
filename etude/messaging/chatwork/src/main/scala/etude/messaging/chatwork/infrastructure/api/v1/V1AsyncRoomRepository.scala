@@ -52,8 +52,8 @@ class V1AsyncRoomRepository
           totalMessageCount = messageNum,
           fileCount = fileNum
         )),
-        avatar = new URI(iconPath),
-        lastUpdateTime = Instant.ofEpochSecond(lastUpdateTime.toLong)
+        avatar = Some(new URI(iconPath)),
+        lastUpdateTime = Some(Instant.ofEpochSecond(lastUpdateTime.toLong))
       )
     }
   }

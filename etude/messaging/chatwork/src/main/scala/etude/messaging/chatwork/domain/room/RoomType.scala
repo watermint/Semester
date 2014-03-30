@@ -18,6 +18,10 @@ case class RoomTypeGroup() extends RoomType {
   val name: String = "group"
 }
 
+case class RoomTypeUnknown() extends RoomType {
+  val name: String = "unknown"
+}
+
 object RoomType {
   def isMyRoom(roomType: RoomType): Boolean = roomType.isInstanceOf[RoomTypeMy]
 
