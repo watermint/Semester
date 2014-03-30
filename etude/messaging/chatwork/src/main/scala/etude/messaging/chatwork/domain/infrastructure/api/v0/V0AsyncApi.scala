@@ -11,7 +11,6 @@ import scala.concurrent.{future, Future}
 import etude.foundation.domain.lifecycle.EntityIOContext
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
-import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
 object V0AsyncApi
   extends V0EntityIO[Future]
@@ -82,7 +81,7 @@ object V0AsyncApi
                           data: Map[String, String] = Map(),
                           retries: Int = 1)
                          (implicit context: EntityIOContext[Future]): JValue = {
-    ApiQoS.throttle.execute {
+    V0ApiQoS.throttle.execute {
       if (!hasToken(context)) {
         if (login.isFailure) {
           throw V0CommandFailureException(command, "Login failed")
@@ -92,8 +91,7 @@ object V0AsyncApi
       val client = getClient(context)
       val response = data.size match {
         case 0 => client.get(gatewayUri).get
-        case _ =>
-          client.post(gatewayUri, data.toList).get
+        case _ => client.post(gatewayUri, data.toList).get
       }
 
       apiResponseParser(command, response) match {

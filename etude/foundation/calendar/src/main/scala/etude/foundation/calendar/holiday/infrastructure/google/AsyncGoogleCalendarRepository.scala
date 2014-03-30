@@ -8,7 +8,7 @@ import java.net.URI
 import etude.foundation.http.Response
 import scala.xml.{XML, Node}
 import java.time.LocalDate
-import etude.foundation.http.Client
+import etude.foundation.http.SyncClient
 import scala.util.Success
 import etude.foundation.calendar.holiday.domain.CalendarId
 import scala.util.Failure
@@ -19,7 +19,7 @@ case class AsyncGoogleCalendarRepository()
   extends AsyncCalendarRepository {
   type This <: AsyncGoogleCalendarRepository
 
-  lazy val client: Client = new Client
+  lazy val client: SyncClient = new SyncClient
 
   val titleLanguage: String = "en"
 

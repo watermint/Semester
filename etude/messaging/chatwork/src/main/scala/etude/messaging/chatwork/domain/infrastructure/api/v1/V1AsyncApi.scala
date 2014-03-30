@@ -1,13 +1,12 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v1
 
 import java.net.URI
-import scala.util.{Success, Failure}
+import scala.util.Failure
 import org.json4s.{JString, JArray, JValue}
 import etude.foundation.http._
 import etude.foundation.domain.lifecycle.EntityIOContext
-import scala.concurrent.{future, Future}
+import scala.concurrent.Future
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
-import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
 
 object V1AsyncApi
   extends V1EntityIO[Future]
@@ -15,22 +14,17 @@ object V1AsyncApi
 
   lazy val endpoint: URI = new URI("https://api.chatwork.com/")
 
-  lazy val client: Client = Client()
+  lazy val client: Client[Future] = AsyncClient()
 
   def get(path: String,
           params: List[Pair[String, String]] = List())
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    future {
-      ApiQoS.throttle.execute {
-        client.get(
-          uri = uriWithPathAndParams(path, params),
-          headers = authHeaders
-        ) match {
-          case Failure(e) => throw e
-          case Success(r) => parseResponse(r)
-        }
-      }
+    V1ApiQoS.throttle.execute {
+      client.get(
+        uri = uriWithPathAndParams(path, params),
+        headers = authHeaders
+      ).map(parseResponse)
     }
   }
 
@@ -39,17 +33,12 @@ object V1AsyncApi
            data: List[Pair[String, String]] = List())
           (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    future {
-      ApiQoS.throttle.execute {
-        client.post(
-          uri = uriWithPathAndParams(path, params),
-          formData = data,
-          headers = authHeaders
-        ) match {
-          case Failure(e) => throw e
-          case Success(r) => parseResponse(r)
-        }
-      }
+    V1ApiQoS.throttle.execute {
+      client.post(
+        uri = uriWithPathAndParams(path, params),
+        formData = data,
+        headers = authHeaders
+      ).map(parseResponse)
     }
   }
 
@@ -58,17 +47,12 @@ object V1AsyncApi
           data: List[Pair[String, String]] = List())
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    future {
-      ApiQoS.throttle.execute {
-        client.put(
-          uri = uriWithPathAndParams(path, params),
-          formData = data,
-          headers = authHeaders
-        ) match {
-          case Failure(e) => throw e
-          case Success(r) => parseResponse(r)
-        }
-      }
+    V1ApiQoS.throttle.execute {
+      client.put(
+        uri = uriWithPathAndParams(path, params),
+        formData = data,
+        headers = authHeaders
+      ).map(parseResponse)
     }
   }
 
@@ -77,17 +61,12 @@ object V1AsyncApi
              data: List[Pair[String, String]] = List())
             (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    future {
-      ApiQoS.throttle.execute {
-        client.delete(
-          uri = uriWithPathAndParams(path, params),
-          formData = data,
-          headers = authHeaders
-        ) match {
-          case Failure(e) => throw e
-          case Success(r) => parseResponse(r)
-        }
-      }
+    V1ApiQoS.throttle.execute {
+      client.delete(
+        uri = uriWithPathAndParams(path, params),
+        formData = data,
+        headers = authHeaders
+      ).map(parseResponse)
     }
   }
 

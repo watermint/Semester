@@ -2,6 +2,7 @@ package etude.messaging.chatwork.domain.infrastructure.api
 
 import scala.concurrent.{ExecutionContext, Future}
 import etude.foundation.domain.lifecycle.async.AsyncEntityIOContext
+import etude.foundation.http.{Client, AsyncClient}
 
 trait AsyncEntityIOContextOnV0Api
   extends EntityIOContextOnV0Api[Future]
@@ -19,7 +20,7 @@ object AsyncEntityIOContextOnV0Api {
 
 private[api]
 class AsyncEntityIOContextOnV0ApiImpl(val organizationId: Option[String],
-                                 val username: String,
-                                 val password: String)
-                                (implicit val executor: ExecutionContext)
+                                      val username: String,
+                                      val password: String)
+                                     (implicit val executor: ExecutionContext)
   extends AsyncEntityIOContextOnV0Api

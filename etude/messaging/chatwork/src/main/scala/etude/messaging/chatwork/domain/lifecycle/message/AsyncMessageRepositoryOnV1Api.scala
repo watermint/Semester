@@ -9,7 +9,7 @@ import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundExcepti
 import scala.concurrent._
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.infrastructure.api.v1.{V1ApiException, V1AsyncApi}
-import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
+import etude.messaging.chatwork.domain.infrastructure.api.v0.V0ApiQoS
 
 private[message]
 class AsyncMessageRepositoryOnV1Api

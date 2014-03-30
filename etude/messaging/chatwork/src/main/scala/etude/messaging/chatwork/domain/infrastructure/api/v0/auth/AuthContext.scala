@@ -1,9 +1,9 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 
-import etude.foundation.http.Client
+import etude.foundation.http.SyncClient
 import java.net.URI
 
-case class AuthContext(client: Client,
+case class AuthContext(client: SyncClient,
                        username: String,
                        password: String,
                        redirectedUri: Option[URI],

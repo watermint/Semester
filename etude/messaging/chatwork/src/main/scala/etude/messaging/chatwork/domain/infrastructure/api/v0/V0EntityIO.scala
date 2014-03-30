@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import scala.language.higherKinds
-import etude.foundation.http.Client
+import etude.foundation.http.{Client, AsyncClient, SyncClient}
 import etude.foundation.domain.lifecycle.{EntityIO, EntityIOContext}
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 
@@ -29,7 +29,7 @@ trait V0EntityIO[M[+A]]
     }
   }
 
-  protected def getClient(context: EntityIOContext[M]): Client = {
+  protected def getClient(context: EntityIOContext[M]): SyncClient = {
     context match {
       case v0: EntityIOContextOnV0Api[M] => v0.client
       case _ => throw new IllegalArgumentException(s"$context must compatible with V0EntityIOContext")

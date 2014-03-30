@@ -7,7 +7,7 @@ import scala.Some
 import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.v1.V1AsyncApi
-import etude.messaging.chatwork.domain.infrastructure.api.ApiQoS
+import etude.messaging.chatwork.domain.infrastructure.api.v0.V0ApiQoS
 
 class AsyncAccountRepositoryOnV1Api
   extends AsyncAccountRepository {
