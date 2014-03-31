@@ -19,6 +19,7 @@ Collection of small apps and libraries. This project collection is the practice 
 * [Http](etude/foundation/http) - HTTP Client wrapper API
 * [i18n](etude/foundation/i18n) - Internationalization (i18n) API
 * [Utility](etude/foundation/utility) - Generic utilities
+* [Things](etude/ticket/things) - [Things](https://culturedcode.com/things/) app integration.
 * [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
 
 ## Archived projects
