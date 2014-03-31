@@ -49,11 +49,14 @@ class Exaggerated extends Auth {
     context.client.post(
       uri,
       List("SAMLResponse" -> assertion.assertion)
-    ) map {
+    ) flatMap {
       response =>
-        parsePage(response.contentAsString) match {
-          case Some(token) => token
-          case _ => throw new V0UnknownChatworkProtocolException("Authentication failed")
+        response.contentAsString map {
+          content =>
+            parsePage(content) match {
+              case Some(token) => token
+              case _ => throw new V0UnknownChatworkProtocolException("Authentication failed")
+            }
         }
     }
   }
@@ -71,9 +74,12 @@ class Exaggerated extends Auth {
   }
 
   private def parseSubmitResponse(response: Response): Try[ExaggeratedAssertion] = {
-    Normalizer.html(response.contentAsString) map {
-      node =>
-        parseSubmitResponse(node)
+    response.contentAsString flatMap {
+      content =>
+        Normalizer.html(content) map {
+          node =>
+            parseSubmitResponse(node)
+        }
     }
   }
 

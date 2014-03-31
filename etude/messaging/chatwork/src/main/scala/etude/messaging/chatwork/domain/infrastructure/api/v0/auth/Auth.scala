@@ -57,20 +57,23 @@ object Auth extends V0EntityIO[Future] {
 
     client.get(loginUri) flatMap {
       r =>
-        val ac = AuthContext(
-          client,
-          getUsername(context),
-          getPassword(context),
-          r.redirectLocation(),
-          loginUri,
-          r.contentAsString
-        )
+        r.contentAsString flatMap {
+          content =>
+            val ac = AuthContext(
+              client,
+              getUsername(context),
+              getPassword(context),
+              r.redirectLocation(),
+              loginUri,
+              content
+            )
 
-        providers.find(_.acceptable(ac)) match {
-          case Some(provider) =>
-            provider.acquireToken(ac)
-          case _ =>
-            throw new V0UnknownChatworkProtocolException("Unsupported authentication method")
+            providers.find(_.acceptable(ac)) match {
+              case Some(provider) =>
+                provider.acquireToken(ac)
+              case _ =>
+                throw new V0UnknownChatworkProtocolException("Unsupported authentication method")
+            }
         }
     }
   }

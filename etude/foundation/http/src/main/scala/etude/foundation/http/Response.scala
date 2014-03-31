@@ -8,6 +8,8 @@ import scala.Some
 import org.apache.http.client.protocol.HttpClientContext
 import java.net.URI
 import scala.collection.JavaConverters._
+import scala.util.Try
+import java.nio.charset.StandardCharsets
 
 case class Response(statusCode: StatusCode,
                     headers: Map[String, String],
@@ -16,9 +18,16 @@ case class Response(statusCode: StatusCode,
                     content: Array[Byte],
                     context: HttpClientContext) {
 
-  lazy val contentAsString: String = new String(content, "UTF-8")
+  lazy val contentAsString: Try[String] = Try {
+    new String(content, StandardCharsets.UTF_8)
+  }
 
-  lazy val contentAsJson: JValue = JsonMethods.parse(contentAsString)
+  lazy val contentAsJson: Try[JValue] = {
+    contentAsString map {
+      json =>
+        JsonMethods.parse(json)
+    }
+  }
 
   def redirectLocation(): Option[URI] = {
     if (context.getRedirectLocations == null || context.getRedirectLocations.size() < 1) {

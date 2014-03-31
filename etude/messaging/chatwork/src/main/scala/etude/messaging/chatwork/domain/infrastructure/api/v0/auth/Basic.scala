@@ -26,11 +26,14 @@ class Basic extends Auth {
   }
 
   private def getTopPage(context: AuthContext): Try[AuthToken] = {
-    context.client.get(context.startPageUri) map {
+    context.client.get(context.startPageUri) flatMap {
       responseOfTop =>
-        parsePage(responseOfTop.contentAsString) match {
-          case Some(t) => t
-          case _ => throw new V0UnknownChatworkProtocolException("No Access Token found")
+        responseOfTop.contentAsString map {
+          page =>
+            parsePage(page) match {
+              case Some(t) => t
+              case _ => throw new V0UnknownChatworkProtocolException("No Access Token found")
+            }
         }
     }
   }

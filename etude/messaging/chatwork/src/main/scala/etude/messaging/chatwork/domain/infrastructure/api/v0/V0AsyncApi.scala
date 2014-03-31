@@ -61,18 +61,21 @@ object V0AsyncApi
   }
 
   private[v0] def apiResponseParser(command: String, response: Response): Try[JValue] = {
-    val JBool(success) = response.contentAsJson \ "status" \ "success"
-    val result = response.contentAsJson \ "result"
+    response.contentAsJson map {
+      json =>
+        val JBool(success) = json \ "status" \ "success"
+        val result = json \ "result"
 
-    if (success) {
-      Success(result)
-    } else {
-      val JString(message) = response.contentAsJson \ "status" \ "message"
-      if (message.contains("NO LOGIN")) {
-        Failure(V0SessionTimeoutException(message))
-      } else {
-        Failure(V0CommandFailureException(command, message))
-      }
+        if (success) {
+          result
+        } else {
+          val JString(message) = json \ "status" \ "message"
+          if (message.contains("NO LOGIN")) {
+            throw V0SessionTimeoutException(message)
+          } else {
+            throw V0CommandFailureException(command, message)
+          }
+        }
     }
   }
 

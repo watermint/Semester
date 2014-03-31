@@ -94,9 +94,9 @@ object V1AsyncApi
 
   protected def parseResponse(response: Response): JValue = {
     response.statusCode match {
-      case _: StatusOK => response.contentAsJson
+      case _: StatusOK => response.contentAsJson.get
       case _ =>
-        response.contentAsJson \ "errors" match {
+        response.contentAsJson.get \ "errors" match {
           case errors: JArray =>
             throw V1ApiException(
               "API Error",
@@ -105,7 +105,7 @@ object V1AsyncApi
               }
             )
           case _ =>
-            throw V1ApiException(response.contentAsString)
+            throw V1ApiException(response.contentAsString.get)
         }
     }
   }
