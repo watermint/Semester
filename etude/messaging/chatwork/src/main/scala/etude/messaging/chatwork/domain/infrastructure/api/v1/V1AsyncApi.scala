@@ -14,12 +14,12 @@ object V1AsyncApi
 
   lazy val endpoint: URI = new URI("https://api.chatwork.com/")
 
-  lazy val client: Client[Future] = AsyncClient()
-
   def get(path: String,
           params: List[Pair[String, String]] = List())
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
+    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+
     V1ApiQoS.throttle.execute {
       client.get(
         uri = uriWithPathAndParams(path, params),
@@ -33,6 +33,8 @@ object V1AsyncApi
            data: List[Pair[String, String]] = List())
           (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
+    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+
     V1ApiQoS.throttle.execute {
       client.post(
         uri = uriWithPathAndParams(path, params),
@@ -47,6 +49,8 @@ object V1AsyncApi
           data: List[Pair[String, String]] = List())
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
+    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+
     V1ApiQoS.throttle.execute {
       client.put(
         uri = uriWithPathAndParams(path, params),
@@ -61,6 +65,8 @@ object V1AsyncApi
              data: List[Pair[String, String]] = List())
             (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
+    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+
     V1ApiQoS.throttle.execute {
       client.delete(
         uri = uriWithPathAndParams(path, params),

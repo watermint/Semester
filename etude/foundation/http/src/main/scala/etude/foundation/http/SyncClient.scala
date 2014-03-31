@@ -4,7 +4,7 @@ import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGe
 import java.net.URI
 import scala.util.{Try, Success}
 
-case class SyncClient() extends Client[Try] {
+case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
   class HttpDelete(uri: URI) extends HttpPost(uri) {
     override def getMethod: String = "DELETE"
   }
@@ -12,8 +12,8 @@ case class SyncClient() extends Client[Try] {
   private def request(req: HttpUriRequest): Try[Response] = {
     Success(
       Response(
-        httpClient.execute(req, clientContext),
-        clientContext
+        context.httpClient.execute(req, context.httpClientContext),
+        context.httpClientContext
       )
     )
   }

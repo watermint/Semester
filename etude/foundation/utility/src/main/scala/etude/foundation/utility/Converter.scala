@@ -19,6 +19,13 @@ object Converter {
     }
   }
 
+  def unwrapTry[T](t: Try[T]): T = {
+    t match {
+      case Success(s) => s
+      case Failure(e) => throw e
+    }
+  }
+
   def propertiesToMap(p: Properties): Map[String, String] = {
     p.entrySet().asScala.map {
       e =>

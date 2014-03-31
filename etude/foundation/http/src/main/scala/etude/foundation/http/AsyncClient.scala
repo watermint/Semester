@@ -1,24 +1,36 @@
 package etude.foundation.http
 
-import scala.concurrent.Future
+import scala.concurrent.{Future, future}
 import etude.foundation.utility.Converter
 
-case class AsyncClient() extends Client[Future] {
-  private val syncClient = SyncClient()
+case class AsyncClient(context: AsyncClientContext) extends Client[Future] {
+  private val syncClient = SyncClient(context)
 
   def delete(uri: URIContainer, formData: List[(String, String)], headers: List[(String, String)]): Future[Response] = {
-    Converter.tryToFuture(syncClient.delete(uri, formData, headers))
+    implicit val executor = context.executionContext
+    future {
+      Converter.unwrapTry(syncClient.delete(uri, formData, headers))
+    }
   }
 
   def put(uri: URIContainer, formData: List[(String, String)], headers: List[(String, String)]): Future[Response] = {
-    Converter.tryToFuture(syncClient.put(uri, formData, headers))
+    implicit val executor = context.executionContext
+    future {
+      Converter.unwrapTry(syncClient.put(uri, formData, headers))
+    }
   }
 
   def post(uri: URIContainer, formData: List[(String, String)], headers: List[(String, String)]): Future[Response] = {
-    Converter.tryToFuture(syncClient.post(uri, formData, headers))
+    implicit val executor = context.executionContext
+    future {
+      Converter.unwrapTry(syncClient.post(uri, formData, headers))
+    }
   }
 
   def get(uri: URIContainer, headers: List[(String, String)]): Future[Response] = {
-    Converter.tryToFuture(syncClient.get(uri, headers))
+    implicit val executor = context.executionContext
+    future {
+      Converter.unwrapTry(syncClient.get(uri, headers))
+    }
   }
 }

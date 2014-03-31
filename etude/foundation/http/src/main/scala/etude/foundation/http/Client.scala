@@ -10,14 +10,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import scala.collection.JavaConverters._
 
 trait Client[M[+A]] {
-  val cookieStore: CookieStore = new BasicCookieStore()
-
-  val clientContext: HttpClientContext = HttpClientContext.create()
-
-  val httpClient: CloseableHttpClient = HttpClients.custom()
-    .setDefaultCookieStore(cookieStore)
-    .setRedirectStrategy(new LaxRedirectStrategy)
-    .build()
 
   def entity(formData: List[Pair[String, String]]): Option[HttpEntity] = {
     if (formData.size < 1) {

@@ -36,7 +36,7 @@ class Room(val roomId: RoomId,
     )
   }
 
-  def say[M[+A]](text: Text)(implicit repository: MessageRepository[M], context: EntityIOContext[M]): M[MessageId] = {
+  def say[M[+A]](text: Text)(implicit repository: MessageRepository[M], context: EntityIOContext[M]): M[Option[MessageId]] = {
     repository.say(text)(this)
   }
 }

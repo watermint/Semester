@@ -7,13 +7,14 @@ import java.util.concurrent.{Executors, ExecutorService}
 import org.specs2.execute.Result
 import etude.test.undisclosed._
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV1Api
+import etude.foundation.domain.lifecycle.async.AsyncEntityIOContext
 
 trait V1AsyncApiSpecBase {
   def result[T](f: Future[T]): T = {
     Await.result(f, Duration(30, SECONDS))
   }
 
-  def getEntityIOContext(prop: Properties): AsyncEntityIOContextOnV1Api = {
+  def getEntityIOContext(prop: Properties): AsyncEntityIOContext = {
     AsyncEntityIOContextOnV1Api(prop.getProperty("token"))
   }
 
@@ -21,7 +22,7 @@ trait V1AsyncApiSpecBase {
 
   implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
 
-  def withContext(spec: AsyncEntityIOContextOnV1Api => Result): Result = {
+  def withContext(spec: AsyncEntityIOContext => Result): Result = {
     undisclosed("etude.chatwork.infrastructure.api.v1.V1AsyncApi") {
       properties =>
         spec(getEntityIOContext(properties))
