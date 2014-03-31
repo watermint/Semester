@@ -15,12 +15,12 @@ object AsyncEntityIOContextOnV0Api {
       case None => throw new IllegalStateException("thin config file not found")
       case Some(p) =>
         (p.get("org"), p.get("username"), p.get("password")) match {
-          case (Some(org), Some(username), Some(password)) =>
-            apply(org, username, password)
           case (None, Some(username), Some(password)) =>
             apply(username, password)
-          case ("", Some(username), Some(password)) =>
+          case (Some(""), Some(username), Some(password)) =>
             apply(username, password)
+          case (Some(org), Some(username), Some(password)) =>
+            apply(org, username, password)
           case _ =>
             throw new IllegalStateException("username and/or password not found in thin config")
         }
