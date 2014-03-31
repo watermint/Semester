@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.1.4",
+  version := "0.1.5",
   organization := "org.watermint",
   scalaVersion := "2.10.3",
   resolvers ++= Seq(
@@ -69,6 +69,9 @@ lazy val foundationUtility = project.in(file("etude/foundation/utility"))
   .settings(buildSettings: _*)
 
 lazy val desktopFextile = project.in(file("etude/desktop/fextile"))
+  .settings(buildSettings: _*)
+
+lazy val ticketThings = project.in(file("etude/ticket/things"))
   .settings(buildSettings: _*)
 
 lazy val testUndisclosed = project.in(file("etude/test/undisclosed"))
