@@ -8,7 +8,7 @@ import etude.messaging.chatwork.domain.model.message.{Text, Message, MessageId}
 trait MessageRepository[M[+A]]
   extends MessageReader[M] {
 
-  def say(text: Text)(room: Room)(implicit context: EntityIOContext[M]): M[MessageId]
+  def say(text: Text)(room: Room)(implicit context: EntityIOContext[M]): M[Option[MessageId]]
 
   def markAsRead(message: MessageId)(implicit context: EntityIOContext[M]): M[MessageId]
 

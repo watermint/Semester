@@ -26,7 +26,7 @@ class AsyncMessageRepositoryOnV1ApiSpec
 
           val text = Text(s"Test: ${getClass.getName} ${java.util.UUID.randomUUID()}")
           val message = messageRepo.say(text)(myRoom)
-          val testMessage = result(message)
+          val testMessage = result(message).get
 
           testMessage.messageId.toInt must beGreaterThan(0)
 

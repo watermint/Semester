@@ -43,13 +43,13 @@ class AsyncMessageRepositoryOnV1Api
     }
   }
 
-  def say(text: Text)(room: Room)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
+  def say(text: Text)(room: Room)(implicit context: EntityIOContext[Future]): Future[Option[MessageId]] = {
     implicit val executor = getExecutionContext(context)
     val endPoint = s"/v1/rooms/${room.roomId.value}/messages"
     V1AsyncApi.post(endPoint, data = List("body" -> text.text)) map {
       json =>
         val JInt(messageId) = json \ "message_id"
-        MessageId(room.identity, messageId)
+        Some(MessageId(room.identity, messageId))
     }
   }
 
