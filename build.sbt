@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.1.5",
+  version := "0.1.6",
   organization := "org.watermint",
   scalaVersion := "2.10.3",
   resolvers ++= Seq(
@@ -23,6 +23,11 @@ lazy val buildSettings = Seq(
 //  .dependsOn(messagingChatwork)
 //  .settings(buildSettings: _*)
 //  .settings(assemblySettings: _*)
+
+lazy val appFedelini = project.in(file("etude/app/fedelini"))
+  .dependsOn(messagingChatwork)
+  .dependsOn(ticketThings)
+  .settings(buildSettings: _*)
 
 lazy val appGare = project.in(file("etude/app/gare"))
   .dependsOn(foundationDomain)
