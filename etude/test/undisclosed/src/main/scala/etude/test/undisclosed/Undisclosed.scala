@@ -3,11 +3,11 @@ package etude.test.undisclosed
 import java.io.{FileInputStream, File}
 import org.specs2.execute.Result
 import java.nio.file.Files
-import org.slf4j.{Logger, LoggerFactory}
 import java.util.Properties
+import grizzled.slf4j.Logger
 
 case class Undisclosed(clazzName: String) {
-  lazy val logger: Logger = LoggerFactory.getLogger(getClass)
+  lazy val logger: Logger = Logger[this.type]
 
   val pathPrefix: String = ".etude-test/undisclosed"
 

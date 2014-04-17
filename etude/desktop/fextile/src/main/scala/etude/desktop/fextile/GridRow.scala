@@ -6,14 +6,14 @@ import scalafx.scene.Node
 import scalafx.geometry.{VPos, HPos, Insets, Pos}
 import scala.collection.mutable
 import scala.Some
-import org.slf4j.{Logger, LoggerFactory}
+import grizzled.slf4j.Logger
 
 class GridRow extends BorderPane {
   private val nodes: mutable.ListBuffer[Node] = mutable.ListBuffer[Node]()
   private val spans: mutable.HashMap[Node, Seq[GridSpan]] = mutable.HashMap[Node, Seq[GridSpan]]()
   private var currentCol: Int = 0
   private var currentRow: Int = 0
-  private val logger: Logger = LoggerFactory.getLogger(getClass)
+  private val logger: Logger = Logger[this.type]
 
   lazy val container = new GridPane() {
     alignment = Pos.TOP_CENTER

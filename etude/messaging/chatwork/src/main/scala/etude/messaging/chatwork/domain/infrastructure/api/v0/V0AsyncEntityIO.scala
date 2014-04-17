@@ -91,7 +91,7 @@ trait V0AsyncEntityIO
 
   protected def endLogin(context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
-      v0 => v0.loginMutex.acquire()
+      v0 => v0.loginMutex.release()
     }
   }
 

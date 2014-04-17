@@ -3,13 +3,18 @@ package etude.foundation.http
 import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGet}
 import java.net.URI
 import scala.util.{Try, Success}
+import grizzled.slf4j.Logger
 
 case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
+  val logger = Logger[this.type]
+
   class HttpDelete(uri: URI) extends HttpPost(uri) {
     override def getMethod: String = "DELETE"
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
+    logger.debug(req)
+
     Success(
       Response(
         context.httpClient.execute(req, context.httpClientContext),

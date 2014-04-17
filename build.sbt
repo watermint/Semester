@@ -11,8 +11,8 @@ lazy val buildSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "ch.qos.logback" % "logback-classic" % "1.0.13",
-    "org.slf4j" % "slf4j-api" % "1.7.5",
+    "org.clapper" % "grizzled-slf4j_2.10" % "1.0.1",
+    "org.slf4j" % "slf4j-simple" % "1.7.6",
     "org.specs2" %% "specs2" % "2.3.7" % "test",
     "junit" % "junit" % "4.11" % "test"
   )
