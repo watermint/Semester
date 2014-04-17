@@ -1,4 +1,4 @@
-package etude.app.fedelini
+package etude.app.fedelini.app
 
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
@@ -8,8 +8,7 @@ import scalafx.scene.control._
 import org.controlsfx.control.NotificationPane
 import javafx.event.{ActionEvent, EventHandler, Event}
 import org.controlsfx.control.action.AbstractAction
-import org.controlsfx.dialog.{AbstractDialogAction, Dialogs, Dialog}
-import org.controlsfx.control.textfield.TextFields
+import org.controlsfx.dialog.{AbstractDialogAction, Dialog}
 
 object Fedelini extends JFXApp {
   def event[T <: Event](f: T => Unit): EventHandler[T] = new EventHandler[T] {

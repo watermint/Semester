@@ -6,8 +6,7 @@ import etude.foundation.domain.lifecycle.EntityIOContext
 import org.json4s._
 
 object V0AsyncUpdate
-  extends V0EntityIO[Future]
-  with AsyncEntityIO {
+  extends V0AsyncEntityIO {
 
   def parseLastId(json: JValue): Option[String] = {
     val lastId: List[String] = for {

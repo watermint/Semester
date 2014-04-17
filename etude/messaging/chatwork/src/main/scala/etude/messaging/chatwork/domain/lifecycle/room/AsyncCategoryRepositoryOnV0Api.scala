@@ -3,7 +3,7 @@ package etude.messaging.chatwork.domain.lifecycle.room
 import scala.concurrent.Future
 import etude.foundation.domain.lifecycle.{ResultWithEntity, EntityIOContext}
 import etude.messaging.chatwork.domain.model.room.{RoomId, CategoryId, Category}
-import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0EntityIO}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
@@ -12,7 +12,7 @@ import etude.foundation.domain.lifecycle.async.AsyncResultWithEntity
 private[room]
 class AsyncCategoryRepositoryOnV0Api
   extends AsyncCategoryRepository
-  with V0EntityIO[Future] {
+  with V0AsyncEntityIO {
 
   type This <: AsyncCategoryRepositoryOnV0Api
 

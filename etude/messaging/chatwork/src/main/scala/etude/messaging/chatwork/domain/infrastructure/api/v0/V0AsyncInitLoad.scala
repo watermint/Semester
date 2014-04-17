@@ -19,8 +19,7 @@ import java.time.Instant
  * facade for jumbo api 'init_load'.
  */
 object V0AsyncInitLoad
-  extends V0EntityIO[Future]
-  with AsyncEntityIO {
+  extends V0AsyncEntityIO {
 
   private def asOptionString(value: String): Option[String] = {
     if (value == null || "".equals(value)) {

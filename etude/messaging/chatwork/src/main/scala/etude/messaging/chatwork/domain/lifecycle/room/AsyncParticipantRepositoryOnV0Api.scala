@@ -4,10 +4,13 @@ import etude.messaging.chatwork.domain.model.room.{RoomId, Participant}
 import scala.concurrent.Future
 import etude.foundation.domain.lifecycle.{ResultWithEntity, EntityIOContext}
 import etude.foundation.domain.lifecycle.async.AsyncResultWithEntity
-import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad, V0EntityIO}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad, V0AsyncEntityIO}
 
 private[room]
-class AsyncParticipantRepositoryOnV0Api extends AsyncParticipantRepository with V0EntityIO[Future] {
+class AsyncParticipantRepositoryOnV0Api
+  extends AsyncParticipantRepository
+  with V0AsyncEntityIO {
+
   type This <: AsyncParticipantRepositoryOnV0Api
 
   def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {

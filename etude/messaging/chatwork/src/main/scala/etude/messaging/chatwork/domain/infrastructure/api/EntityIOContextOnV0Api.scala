@@ -8,6 +8,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{SyncVar, Lock}
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, ScheduledExecutorService}
 
 trait EntityIOContextOnV0Api[M[+A]]
   extends EntityIOContext[M] {
@@ -36,4 +37,10 @@ trait EntityIOContextOnV0Api[M[+A]]
   val lastId: SyncVar[String] = new SyncVar[String]
 
   val updateSubscribers: ArrayBuffer[V0UpdateSubscriber] = new ArrayBuffer[V0UpdateSubscriber]
+
+  val updateHandler: SyncVar[ScheduledFuture[_]] = new SyncVar[ScheduledFuture[_]]
+
+  val updateSchedulerMutex: Lock = new Lock
+
+  lazy val updateScheduler: ScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1)
 }

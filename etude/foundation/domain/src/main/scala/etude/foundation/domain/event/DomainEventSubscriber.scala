@@ -9,5 +9,5 @@ import etude.foundation.domain.lifecycle.EntityIOContext
  * @tparam MR type of monad value.
  */
 trait DomainEventSubscriber[E <: DomainEvent[_], M[+A], +MR] {
-  def handleEvent(event: E)(implicit ctx: EntityIOContext[M]): M[MR]
+  def handleEvent(event: E)(implicit context: EntityIOContext[M]): M[MR]
 }

@@ -14,8 +14,7 @@ import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
 import java.time.Instant
 
 object V0AsyncApi
-  extends V0EntityIO[Future]
-  with AsyncEntityIO {
+  extends V0AsyncEntityIO {
 
   val loginFailureThreshold = 3
   val loginDuration = 3

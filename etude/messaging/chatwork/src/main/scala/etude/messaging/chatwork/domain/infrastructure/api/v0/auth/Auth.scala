@@ -3,7 +3,7 @@ package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 import scala.util.Try
 import scala.concurrent.Future
 import java.net.URI
-import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0UnknownChatworkProtocolException, V0AsyncApi, V0EntityIO}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0UnknownChatworkProtocolException, V0AsyncApi, V0AsyncEntityIO}
 import etude.foundation.http._
 import etude.foundation.domain.lifecycle.EntityIOContext
 
@@ -30,7 +30,7 @@ trait Auth {
   }
 }
 
-object Auth extends V0EntityIO[Future] {
+object Auth extends V0AsyncEntityIO {
   val providers = Seq(
     new Basic,
     new Exaggerated
