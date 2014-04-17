@@ -19,8 +19,8 @@ class V0AsyncApiSpec
 
           context match {
             case c: AsyncEntityIOContextOnV0Api =>
-              c.myId.isDefined must beTrue
-              c.accessToken.isDefined must beTrue
+              c.myId.isSet must beTrue
+              c.accessToken.isSet must beTrue
           }
       }
     }
@@ -31,8 +31,8 @@ class V0AsyncApiSpec
           V0AsyncApi.syncApi("init_load", Map())
           context match {
             case c: AsyncEntityIOContextOnV0Api =>
-              c.myId.isDefined must beTrue
-              c.accessToken.isDefined must beTrue
+              c.myId.isSet must beTrue
+              c.accessToken.isSet must beTrue
           }
       }
     }

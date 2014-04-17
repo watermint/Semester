@@ -11,10 +11,14 @@ import scala.concurrent.{future, Future}
 import etude.foundation.domain.lifecycle.EntityIOContext
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
+import java.time.Instant
 
 object V0AsyncApi
   extends V0EntityIO[Future]
   with AsyncEntityIO {
+
+  val loginFailureThreshold = 3
+  val loginDuration = 3
 
   def isKddiChatwork(implicit context: EntityIOContext[Future]): Boolean = {
     getOrganizationId(context) match {
@@ -32,11 +36,36 @@ object V0AsyncApi
   }
 
   private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
-    Auth.login map {
-      token =>
-        setAccessToken(Some(token.accessToken), context)
-        setMyId(Some(token.myId), context)
-        true
+    beginLogin(context)
+    try {
+      // assert login failure threshold
+      if (getLoginFailure(context).get() >= loginFailureThreshold) {
+        return Failure(new IllegalStateException(s"Abort Login: due to failed more than $loginFailureThreshold times"))
+      }
+
+      // assert login action time span
+      getLoginTime(context) match {
+        case Some(t) if t.isBefore(Instant.now.minusSeconds(loginDuration)) =>
+          return getAccessToken(context) match {
+            case Some(_) => Success(true)
+            case _ => Failure(new IllegalStateException("Login QoS exception"))
+          }
+        case _ =>
+      }
+
+      Auth.login map {
+        token =>
+          setAccessToken(token.accessToken, context)
+          setMyId(token.myId, context)
+          true
+      } recover {
+        case _ =>
+          getLoginFailure(context).incrementAndGet()
+          throw new IllegalStateException("Login failed")
+      }
+    } finally {
+      setLoginTime(Instant.now, context)
+      endLogin(context)
     }
   }
 

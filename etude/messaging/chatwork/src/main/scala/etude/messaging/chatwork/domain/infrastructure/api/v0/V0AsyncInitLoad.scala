@@ -15,7 +15,6 @@ import etude.messaging.chatwork.domain.model.account.AccountId
 import java.time.Instant
 
 
-
 /**
  * facade for jumbo api 'init_load'.
  */
@@ -47,9 +46,20 @@ object V0AsyncInitLoad
     )
   }
 
+  def parseLastId(json: JValue): Option[String] = {
+    val lastId: List[String] = for {
+      JObject(doc) <- json
+      JField("last_id", JString(lastId)) <- doc
+    } yield {
+      lastId
+    }
+    lastId.lastOption
+  }
+
   def parseContacts(json: JValue): List[Account] = {
     for {
-      JObject(contactDat) <- json
+      JObject(doc) <- json
+      JField("contact_dat", JObject(contactDat)) <- doc
       JField(accountId, JObject(contact)) <- contactDat
       JField("av", JString(avatarImage)) <- contact
       JField("cwid", JString(chatWorkId)) <- contact
@@ -71,7 +81,8 @@ object V0AsyncInitLoad
 
   def parseRooms(json: JValue): List[Room] = {
     for {
-      JObject(roomDat) <- json
+      JObject(doc) <- json
+      JField("room_dat", JObject(roomDat)) <- doc
       JField(roomId, JObject(room)) <- roomDat
       JField("tp", JInt(roomType)) <- room
       JField("lt", JInt(lastUpdateTime)) <- room
@@ -88,6 +99,21 @@ object V0AsyncInitLoad
           case _ => null
         }
       )
+
+      /* Room Attributes
+       *
+       * r ... read (internal sequence number)
+       * c ... current chat id (internal sequence number)
+       * f ... files
+       * t ... tasks
+       * s ... sticky (only appears on the room is sticky. value is 1)
+       */
+      val unreadCount = (r.get("r"), r.get("c")) match {
+        case (Some(JInt(read)), Some(JInt(current))) =>
+          current - read
+        case _ =>
+          0
+      }
 
       new Room(
         roomId = RoomId(BigInt(roomId)),
@@ -111,7 +137,8 @@ object V0AsyncInitLoad
 
   def parseParticipants(json: JValue): List[Participant] = {
     for {
-      JObject(roomDat) <- json
+      JObject(doc) <- json
+      JField("room_dat", JObject(roomDat)) <- doc
       JField(roomId, JObject(room)) <- roomDat
       JField("m", JObject(member)) <- room
     } yield {
@@ -137,6 +164,10 @@ object V0AsyncInitLoad
 
     V0AsyncApi.api("init_load", Map()) map {
       json =>
+        parseLastId(json) match {
+          case Some(lastId) => setLastId(lastId, context)
+          case _ =>
+        }
         V0AsyncInitLoadContents(
           contacts = parseContacts(json),
           rooms = parseRooms(json),
