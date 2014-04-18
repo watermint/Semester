@@ -26,7 +26,7 @@ class AsyncMessageRepositoryOnV0Api
       new Message(
         messageId = new MessageId(roomId, messageId),
         accountId = new AccountId(accountId),
-        body = body,
+        body = Text(body),
         ctime = Instant.ofEpochSecond(ctime.toLong),
         mtime = None
       )

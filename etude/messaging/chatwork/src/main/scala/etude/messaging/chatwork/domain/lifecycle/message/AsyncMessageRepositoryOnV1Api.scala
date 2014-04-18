@@ -33,7 +33,7 @@ class AsyncMessageRepositoryOnV1Api
       new Message(
         messageId = MessageId(roomId, messageId),
         accountId = AccountId(accountId),
-        body = body,
+        body = Text(body),
         ctime = Instant.ofEpochSecond(ctime.toLong),
         mtime = mtime.toLong match {
           case 0 => None

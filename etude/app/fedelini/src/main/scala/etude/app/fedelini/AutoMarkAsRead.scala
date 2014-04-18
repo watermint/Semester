@@ -32,7 +32,7 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
               roomRepo.latestMessage(room.identity) map {
                 message =>
                   messageRepo.markAsRead(message)
-                  logger.info(s"Mark room ${room.name}(${room.identity.value}}) as read")
+                  logger.info(s"Mark room ${room.name}(${room.identity.value}) as read")
               }
             }
         }

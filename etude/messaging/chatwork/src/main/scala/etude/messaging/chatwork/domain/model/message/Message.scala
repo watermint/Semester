@@ -6,7 +6,7 @@ import etude.foundation.domain.model.Entity
 
 class Message(val messageId: MessageId,
               val accountId: AccountId,
-              val body: String,
+              val body: Text,
               val ctime: Instant,
               val mtime: Option[Instant])
   extends Entity[MessageId]{

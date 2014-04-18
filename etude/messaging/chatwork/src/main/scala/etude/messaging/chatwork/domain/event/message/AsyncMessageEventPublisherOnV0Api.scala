@@ -75,7 +75,6 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
     logger.debug(s"handle update: $json")
     parseUpdateInfo(json) foreach {
       ev =>
-        logger.info(ev)
         publish(ev)(context)
     }
   }
