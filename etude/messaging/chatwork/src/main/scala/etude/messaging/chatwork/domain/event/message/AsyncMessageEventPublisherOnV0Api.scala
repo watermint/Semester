@@ -27,7 +27,7 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
 
   protected val subscribers: ArrayBuffer[Subscriber] = new ArrayBuffer[Subscriber]()
 
-  val fetchMessageTimeoutMillis = 1000
+  val fetchMessageTimeoutMillis = 10000
 
   def parseMessageIds(roomId: RoomId, json: Option[JValue]): Seq[MessageId] = {
     json match {
