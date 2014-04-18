@@ -12,7 +12,7 @@ class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
   with AsyncEntityIO {
 
   val logger = Logger[this.type]
-  val updateTimeoutInMillis = 1000
+  val updateTimeoutInMillis = 10000
 
   def run(): Unit = {
     implicit val executionContext = getExecutionContext(context)
