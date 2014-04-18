@@ -14,7 +14,7 @@ trait V0AsyncEntityIO
   extends AsyncEntityIO {
 
   val contextAccessWaitInMillis = 500
-  val updateDelayInMills = 15000
+  val updateDelayInMills = 10000
 
   private def withV0Context[T](context: EntityIOContext[Future])(f: EntityIOContextOnV0Api[Future] => T): T = {
     context match {

@@ -16,14 +16,19 @@ class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
 
   def run(): Unit = {
     implicit val executionContext = getExecutionContext(context)
-    val json = Await.result(
-      V0AsyncUpdate.update(updateLastId = true)(context),
-      Duration(updateTimeoutInMillis, MILLISECONDS)
-    )
-    context.updateSubscribers.foreach {
-      s =>
-        logger.debug(s"handle on $s for $json")
-        s.handleUpdate(json)
+    try {
+      val json = Await.result(
+        V0AsyncUpdate.update(updateLastId = true)(context),
+        Duration(updateTimeoutInMillis, MILLISECONDS)
+      )
+      context.updateSubscribers.foreach {
+        s =>
+          logger.debug(s"handle on $s for $json")
+          s.handleUpdate(json)
+      }
+    } catch {
+      case t: Throwable =>
+        logger.error("Error on V0asyncUpdate.update", t)
     }
   }
 }

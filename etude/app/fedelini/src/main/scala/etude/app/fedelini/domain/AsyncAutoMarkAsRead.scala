@@ -10,7 +10,7 @@ import etude.messaging.chatwork.domain.model.room.RoomId
 import grizzled.slf4j.Logger
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
 
-class AsyncAutoMarkAsRead(targetRooms: Seq[RoomId] = Seq.empty)
+class AsyncAutoMarkAsRead(val targetRooms: Seq[RoomId] = Seq.empty)
   extends AsyncIdentityEventSubscriber[MessageId]
   with AsyncEntityIO {
 
