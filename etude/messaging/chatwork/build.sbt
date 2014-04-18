@@ -1,2 +1,1 @@
 name := "etude-messaging-chatwork"
-

@@ -14,7 +14,7 @@ trait V0AsyncEntityIO
   extends AsyncEntityIO {
 
   val contextAccessWaitInMillis = 500
-  val updateDelayInMills = 5000
+  val updateDelayInMills = 15000
 
   private def withV0Context[T](context: EntityIOContext[Future])(f: EntityIOContextOnV0Api[Future] => T): T = {
     context match {
@@ -61,7 +61,10 @@ trait V0AsyncEntityIO
 
   protected def getLastId(context: EntityIOContext[Future]): Option[String] = {
     withV0Context(context) {
-      v0 => v0.lastId.get(contextAccessWaitInMillis)
+      v0 => v0.lastId.get() match {
+        case null => None
+        case l => Some(l)
+      }
     }
   }
 
@@ -79,7 +82,8 @@ trait V0AsyncEntityIO
 
   protected def setLastId(lastId: String, context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
-      v0 => v0.lastId.put(lastId)
+      v0 =>
+        v0.lastId.set(lastId)
     }
   }
 

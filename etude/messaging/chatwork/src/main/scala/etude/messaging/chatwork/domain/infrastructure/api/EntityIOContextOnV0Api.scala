@@ -7,7 +7,7 @@ import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{SyncVar, Lock}
 import java.time.Instant
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.{AtomicReference, AtomicInteger}
 import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, ScheduledExecutorService}
 
 trait EntityIOContextOnV0Api[M[+A]]
@@ -34,7 +34,7 @@ trait EntityIOContextOnV0Api[M[+A]]
   /**
    * Update tracking id.
    */
-  val lastId: SyncVar[String] = new SyncVar[String]
+  val lastId: AtomicReference[String] = new AtomicReference[String]
 
   val updateSubscribers: ArrayBuffer[V0UpdateSubscriber] = new ArrayBuffer[V0UpdateSubscriber]
 

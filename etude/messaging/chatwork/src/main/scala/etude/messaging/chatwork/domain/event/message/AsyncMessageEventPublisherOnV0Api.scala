@@ -11,6 +11,7 @@ import etude.foundation.domain.event.mutable.IdentityEventPublisherSupport
 import etude.foundation.domain.event.{IdentityEventType, IdentityEvent}
 import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
+import grizzled.slf4j.Logger
 
 private[message]
 case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
@@ -21,6 +22,8 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
 
   addSubscriber(this, context)
   startUpdateScheduler(context)
+
+  private val logger = Logger[this.type]
 
   protected val subscribers: ArrayBuffer[Subscriber] = new ArrayBuffer[Subscriber]()
 
@@ -69,8 +72,10 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
   }
 
   def handleUpdate(json: JValue): Unit = {
+    logger.debug(s"handle update: $json")
     parseUpdateInfo(json) foreach {
       ev =>
+        logger.info(ev)
         publish(ev)(context)
     }
   }

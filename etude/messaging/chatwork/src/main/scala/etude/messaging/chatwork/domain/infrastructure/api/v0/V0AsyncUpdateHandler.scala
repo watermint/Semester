@@ -2,24 +2,28 @@ package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import scala.language.higherKinds
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
-import scala.concurrent.{future, Future}
+import scala.concurrent.{Await, Future}
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import grizzled.slf4j.Logger
+import scala.concurrent.duration._
 
 class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
   extends Runnable
   with AsyncEntityIO {
 
+  val logger = Logger[this.type]
+  val updateTimeoutInMillis = 1000
+
   def run(): Unit = {
     implicit val executionContext = getExecutionContext(context)
-    future {
-      println("update...")
-      V0AsyncUpdate.update(updateLastId = true)(context) map {
-        json =>
-          println(s"update: $json")
-          context.updateSubscribers.foreach(_.handleUpdate(json))
-      } recover {
-        case e: Throwable => println(s"error on update: $e")
-      }
+    val json = Await.result(
+      V0AsyncUpdate.update(updateLastId = true)(context),
+      Duration(updateTimeoutInMillis, MILLISECONDS)
+    )
+    context.updateSubscribers.foreach {
+      s =>
+        logger.debug(s"handle on $s for $json")
+        s.handleUpdate(json)
     }
   }
 }
