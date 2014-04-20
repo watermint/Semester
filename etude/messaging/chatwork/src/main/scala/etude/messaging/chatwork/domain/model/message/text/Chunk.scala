@@ -1,5 +1,15 @@
 package etude.messaging.chatwork.domain.model.message.text
 
-case class Chunk(fragments: Seq[Fragment]) extends Fragment {
-  def render(): String = fragments.map(_.render()).mkString
+case class Chunk(chunk: Seq[Fragment]) extends Fragment with Aggregation {
+  def render(): String = chunk.map(_.render()).mkString
+
+  def fragments(): Seq[Fragment] = {
+    chunk flatMap {
+      case c: Aggregation =>
+        c.fragments() :+ c
+      case c =>
+        Seq(c)
+    }
+  }
 }
+

@@ -1,5 +1,6 @@
 package etude.messaging.chatwork.domain.model.message
 
+import java.time.Instant
 import scala.util.parsing.combinator.RegexParsers
 import etude.foundation.domain.model.ValueObject
 import etude.messaging.chatwork.domain.model.message.text._
@@ -7,13 +8,35 @@ import etude.messaging.chatwork.domain.model.message.text.HorizontalRule
 import etude.messaging.chatwork.domain.model.message.text.Icon
 import etude.messaging.chatwork.domain.model.message.text.Chunk
 import etude.messaging.chatwork.domain.model.account.AccountId
-import java.time.Instant
 import etude.messaging.chatwork.domain.model.room.RoomId
 
 case class Text(text: String)
-  extends ValueObject
+  extends ValueObject {
+
+  lazy val chunk: Chunk = {
+    try {
+      Text.parse(text).get
+    } catch {
+      case _: Throwable =>
+        // fall back to plain text
+        Chunk(Seq(PlainText(text)))
+    }
+  }
+
+  lazy val fragments: Seq[Fragment] = chunk.fragments()
+
+  lazy val to: Seq[AccountId] = fragments.collect {
+    case f: To => f.accountId
+  }
+
+  lazy val replyTo: Seq[AccountId] = fragments.collect {
+    case f: Reply => f.accountId
+  }
+}
 
 object Text extends RegexParsers {
+  def apply(fragment: Fragment): Text = Text(fragment.render())
+
   override def skipWhitespace = false
 
   def horizontalRule: Parser[Fragment] = "[hr]" ^^ {
@@ -29,7 +52,7 @@ object Text extends RegexParsers {
   }
 
   def info: Parser[Fragment] = {
-    "[info]" ~> opt("[title]" ~> text <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
+    "[info]" ~> opt("[title]" ~> (text | bracket) <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
       c => Info(c._1.map(_.text), Chunk(c._2))
     }
   }
@@ -68,21 +91,24 @@ object Text extends RegexParsers {
     text => PlainText(text)
   }
 
-  def fragment: Parser[Fragment] = {
-    (horizontalRule |||
+  def bracket: Parser[PlainText] = "[" ^^ { text => PlainText(text) }
+
+  def tag: Parser[Fragment] = {
+    horizontalRule |||
       icon |||
       iconWithName |||
       info |||
       quote |||
       reply |||
-      to) |
-      text
+      to
   }
 
-  def chunk: Parser[Fragment] = rep(fragment) ^^ {
+  def fragment: Parser[Fragment] = tag | (text | bracket)
+
+  def chunk: Parser[Chunk] = rep(fragment) ^^ {
     fragments => Chunk(fragments)
   }
 
-  def parse(text: String) = parseAll(chunk, text)
+  def parse(text: String): ParseResult[Chunk] = parseAll(chunk, text)
 }
 
