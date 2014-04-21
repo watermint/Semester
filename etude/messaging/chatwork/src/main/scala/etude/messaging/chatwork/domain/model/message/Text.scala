@@ -4,9 +4,6 @@ import java.time.Instant
 import scala.util.parsing.combinator.RegexParsers
 import etude.foundation.domain.model.ValueObject
 import etude.messaging.chatwork.domain.model.message.text._
-import etude.messaging.chatwork.domain.model.message.text.HorizontalRule
-import etude.messaging.chatwork.domain.model.message.text.Icon
-import etude.messaging.chatwork.domain.model.message.text.Chunk
 import etude.messaging.chatwork.domain.model.account.AccountId
 import etude.messaging.chatwork.domain.model.room.RoomId
 
