@@ -102,13 +102,6 @@ object Text extends RegexParsers {
     }
 
     def apply(in: Reader[Char]): Text.ParseResult[PlainText] = {
-      if (in.atEnd) {
-        return Failure(
-          msg = "Reached end of char sequence",
-          next = in
-        )
-      }
-
       val position = snoop(in, in.offset)
 
       if (position == in.offset) {

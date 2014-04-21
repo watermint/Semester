@@ -3,6 +3,7 @@ package etude.bookmark.pocket.domain.infrastructure.auth
 import com.twitter.finatra.Controller
 import com.twitter.logging.Logger
 import scala.util.Success
+import org.jboss.netty.handler.codec.http.DefaultCookie
 
 class AuthController extends Controller {
   val logger = Logger.get(this.getClass)
@@ -11,8 +12,12 @@ class AuthController extends Controller {
     request =>
       AuthService.acquireCode() match {
         case Success(code) =>
+          val cookieForCode = new DefaultCookie("code", code)
+          cookieForCode.setSecure(true)
+          cookieForCode.setMaxAge(600) // seconds
+
           render
-            .cookie("code", code)
+            .cookie(cookieForCode)
             .html(
               """
                 |<body>
