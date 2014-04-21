@@ -12,7 +12,8 @@ Collection of small apps and libraries. This project collection is the practice 
 
 ## Libraries
 
-* [ChatWork Core](etude/messaging/chatwork) - Core APIs for [ChatWork](chatwork.com)
+* [Pocket](etude/bookmark/pocket) - [Pocket](http://getpocket.com) API
+* [ChatWork](etude/messaging/chatwork) - [ChatWork](http://chatwork.com) API
 * [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
 * [Domain](etude/foundation/domain) - Libraries for Domain Driven Development (DDD).
 * [Html](etude/foundation/html) - HTML parse wrapper API

@@ -10,7 +10,7 @@ case class EntityIOContextOnApi(consumerKey: String,
                                 executionContext: ExecutionContext)
 
 object EntityIOContextOnApi {
-  def defaultContext(): Try[EntityIOContextOnApi] = {
+  def fromDefault(): Try[EntityIOContextOnApi] = {
     val executorsPool: ExecutorService = Executors.newCachedThreadPool()
     val executors = ExecutionContext.fromExecutorService(executorsPool)
 
