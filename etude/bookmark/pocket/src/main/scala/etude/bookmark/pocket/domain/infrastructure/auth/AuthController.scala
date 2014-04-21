@@ -14,6 +14,7 @@ class AuthController extends Controller {
         case Success(code) =>
           val cookieForCode = new DefaultCookie("code", code)
           cookieForCode.setSecure(true)
+          cookieForCode.setHttpOnly(true)
           cookieForCode.setMaxAge(600) // seconds
 
           render
