@@ -6,6 +6,7 @@ import etude.foundation.domain.model.ValueObject
 import etude.messaging.chatwork.domain.model.message.text._
 import etude.messaging.chatwork.domain.model.account.AccountId
 import etude.messaging.chatwork.domain.model.room.RoomId
+import scala.util.parsing.input.Reader
 
 case class Text(text: String)
   extends ValueObject {
@@ -49,7 +50,7 @@ object Text extends RegexParsers {
   }
 
   def info: Parser[Fragment] = {
-    "[info]" ~> opt("[title]" ~> (text | bracket) <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
+    "[info]" ~> opt("[title]" ~> text <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
       c => Info(c._1.map(_.text), Chunk(c._2))
     }
   }
@@ -84,11 +85,50 @@ object Text extends RegexParsers {
     }
   }
 
-  def text: Parser[PlainText] = """[^\[]+""".r ^^ {
-    text => PlainText(text)
+  def text: Parser[PlainText] = new Parser[PlainText] {
+    def snoop(in: Reader[Char], position: Int): Int = {
+      if (in.atEnd) {
+        // terminate at the end.
+        position
+      } else {
+        if (tag.apply(in).successful || endTag.apply(in).successful) {
+          // terminate when tag or end tag found.
+          position
+        } else {
+          // proceed next
+          snoop(in.rest, position + 1)
+        }
+      }
+    }
+
+    def apply(in: Reader[Char]): Text.ParseResult[PlainText] = {
+      if (in.atEnd) {
+        return Failure(
+          msg = "Reached end of char sequence",
+          next = in
+        )
+      }
+
+      val position = snoop(in, in.offset)
+
+      if (position == in.offset) {
+        Failure(
+          msg = "No plain text found",
+          next = in
+        )
+      } else {
+        Success(
+          result = PlainText(in.source.subSequence(in.offset, position).toString),
+          next = in.drop(position - in.offset)
+        )
+      }
+    }
   }
 
-  def bracket: Parser[PlainText] = "[" ^^ { text => PlainText(text) }
+  def endTag: Parser[String] =
+    "[/info]" |||
+      "[/qt]" |||
+      "[/title]"
 
   def tag: Parser[Fragment] = {
     horizontalRule |||
@@ -100,7 +140,7 @@ object Text extends RegexParsers {
       to
   }
 
-  def fragment: Parser[Fragment] = tag | (text | bracket)
+  def fragment: Parser[Fragment] = tag | text
 
   def chunk: Parser[Chunk] = rep(fragment) ^^ {
     fragments => Chunk(fragments)
