@@ -50,7 +50,7 @@ object Text extends RegexParsers {
   }
 
   def info: Parser[Fragment] = {
-    "[info]" ~> opt("[title]" ~> text <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
+    "[info]" ~> opt("[title]" ~> (text | emptyText) <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
       c => Info(c._1.map(_.text), Chunk(c._2))
     }
   }
@@ -85,13 +85,15 @@ object Text extends RegexParsers {
     }
   }
 
+  def emptyText: Parser[PlainText] = "" ^^ { text => PlainText(text) }
+
   def text: Parser[PlainText] = new Parser[PlainText] {
     def snoop(in: Reader[Char], position: Int): Int = {
       if (in.atEnd) {
         // terminate at the end.
         position
       } else {
-        if (tag.apply(in).successful || endTag.apply(in).successful) {
+        if (endTag.apply(in).successful || tag.apply(in).successful) {
           // terminate when tag or end tag found.
           position
         } else {
