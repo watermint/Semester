@@ -4,6 +4,7 @@ import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGe
 import java.net.URI
 import scala.util.{Try, Success}
 import grizzled.slf4j.Logger
+import org.apache.http.entity.StringEntity
 
 case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
   val logger = Logger[this.type]
@@ -37,6 +38,16 @@ case class SyncClient(context: ClientContext = SyncClientContext()) extends Clie
 
     val post = new HttpPost(uri)
     entity(formData).foreach(post.setEntity)
+    headers.foreach(h => post.setHeader(h._1, h._2))
+    request(post)
+  }
+
+  def postWithString(uri: URIContainer,
+                     formData: String,
+                     headers: List[Pair[String, String]] = List()): Try[Response] = {
+
+    val post = new HttpPost(uri)
+    post.setEntity(new StringEntity(formData))
     headers.foreach(h => post.setHeader(h._1, h._2))
     request(post)
   }
