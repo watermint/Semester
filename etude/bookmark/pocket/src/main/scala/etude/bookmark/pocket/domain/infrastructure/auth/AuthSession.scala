@@ -55,8 +55,8 @@ object AuthSession {
     } yield {
       AuthSession(
         userName = userName,
-        accessToken = consumerKey,
-        consumerKey = accessToken
+        accessToken = accessToken,
+        consumerKey = consumerKey
       )
     }
 

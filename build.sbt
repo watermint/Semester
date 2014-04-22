@@ -41,6 +41,7 @@ lazy val appGare = project.in(file("etude/app/gare"))
 
 lazy val bookmarkPocket = project.in(file("etude/bookmark/pocket"))
   .dependsOn(foundationDomain)
+  .dependsOn(foundationUtility)
   .dependsOn(foundationHttp)
   .settings(buildSettings: _*)
 
