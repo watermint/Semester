@@ -37,25 +37,25 @@ object Text extends RegexParsers {
 
   override def skipWhitespace = false
 
-  def horizontalRule: Parser[Fragment] = "[hr]" ^^ {
+  val horizontalRule: Parser[Fragment] = "[hr]" ^^ {
     hr => HorizontalRule()
   }
 
-  def icon: Parser[Fragment] = "[picon:" ~> """\d+""".r <~ "]" ^^ {
+  val icon: Parser[Fragment] = "[picon:" ~> """\d+""".r <~ "]" ^^ {
     accountId => Icon(AccountId(accountId.toLong))
   }
 
-  def iconWithName: Parser[Fragment] = "[piconname:" ~> """\d+""".r <~ "]" ^^ {
+  val iconWithName: Parser[Fragment] = "[piconname:" ~> """\d+""".r <~ "]" ^^ {
     accountId => IconWithName(AccountId(accountId.toLong))
   }
 
-  def info: Parser[Fragment] = {
+  val info: Parser[Fragment] = {
     "[info]" ~> opt("[title]" ~> (text | emptyText) <~ "[/title]") ~ rep(fragment) <~ "[/info]" ^^ {
       c => Info(c._1.map(_.text), Chunk(c._2))
     }
   }
 
-  def quote: Parser[Fragment] = {
+  val quote: Parser[Fragment] = {
     "[qt][qtmeta aid=" ~> """\d+""".r ~
       opt(" time=" ~> """\d+""".r) ~ "]" ~ rep(fragment) <~ "[/qt]" ^^ {
       case aid ~ time ~ bracket ~ fragment =>
@@ -68,7 +68,7 @@ object Text extends RegexParsers {
     }
   }
 
-  def reply: Parser[Fragment] = {
+  val reply: Parser[Fragment] = {
     "[rp aid=" ~> """\d+""".r ~ " to=" ~ """\d+""".r ~ "-" ~ """\d+""".r <~ "]" ^^ {
       case aid ~ to ~ roomId ~ dash ~ messageId =>
         Reply(
@@ -78,16 +78,16 @@ object Text extends RegexParsers {
     }
   }
 
-  def to: Parser[Fragment] = {
+  val to: Parser[Fragment] = {
     "[To:" ~> """\d+""".r <~ "]" ^^ {
       aid =>
         To(AccountId(aid.toLong))
     }
   }
 
-  def emptyText: Parser[PlainText] = "" ^^ { text => PlainText(text) }
+  val emptyText: Parser[PlainText] = "" ^^ { text => PlainText(text) }
 
-  def text: Parser[PlainText] = new Parser[PlainText] {
+  val text: Parser[PlainText] = new Parser[PlainText] {
     def snoop(in: Reader[Char], position: Int): Int = {
       if (in.atEnd) {
         // terminate at the end.
@@ -120,12 +120,12 @@ object Text extends RegexParsers {
     }
   }
 
-  def endTag: Parser[String] =
+  val endTag: Parser[String] =
     "[/info]" |||
       "[/qt]" |||
       "[/title]"
 
-  def tag: Parser[Fragment] = {
+  val tag: Parser[Fragment] = {
     horizontalRule |||
       icon |||
       iconWithName |||
@@ -135,9 +135,9 @@ object Text extends RegexParsers {
       to
   }
 
-  def fragment: Parser[Fragment] = tag | text
+  val fragment: Parser[Fragment] = tag | text
 
-  def chunk: Parser[Chunk] = rep(fragment) ^^ {
+  val chunk: Parser[Chunk] = rep(fragment) ^^ {
     fragments => Chunk(fragments)
   }
 
