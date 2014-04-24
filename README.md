@@ -23,6 +23,11 @@ Collection of small apps and libraries. This project collection is the practice 
 * [Things](etude/ticket/things) - [Things](https://culturedcode.com/things/) app integration.
 * [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
 
+# Requirements
+
+* Java SE 8 or later
+* Scala 2.10.3 or later, 2.11 not yet supported.
+
 # License
 
 The MIT License (MIT) Copyright (c) 2013, 2014 Takayuki Okazaki

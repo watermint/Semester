@@ -14,15 +14,13 @@ object Normalizer {
   def html(text: String): Try[Node] = {
     // reference:
     // http://www.mwsoft.jp/programming/scala/web_scraping.html
-    try {
-      val htmlParser = new HtmlParser
-      val contentHandler = new NoBindingFactoryAdapter
+    val htmlParser = new HtmlParser
+    val contentHandler = new NoBindingFactoryAdapter
 
-      htmlParser.setNamePolicy(XmlViolationPolicy.ALLOW)
-      htmlParser.setContentHandler(contentHandler)
-      htmlParser.parse(new InputSource(new StringReader(text)))
+    htmlParser.setNamePolicy(XmlViolationPolicy.ALLOW)
+    htmlParser.setContentHandler(contentHandler)
+    htmlParser.parse(new InputSource(new StringReader(text)))
 
-      Success(contentHandler.rootElem)
-    }
+    Success(contentHandler.rootElem)
   }
 }
