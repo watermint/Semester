@@ -1,11 +1,11 @@
 package etude.app.fedelini.domain
 
 import scala.concurrent.{future, Future}
-import etude.foundation.domain.lifecycle.EntityIOContext
-import etude.foundation.domain.event.async.AsyncIdentityEventSubscriber
+import etude.domain.core.lifecycle.EntityIOContext
+import etude.domain.core.event.async.AsyncIdentityEventSubscriber
 import etude.messaging.chatwork.domain.model.message.MessageId
-import etude.foundation.domain.event.{IdentityEventType, IdentityEvent}
-import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import etude.domain.core.event.{IdentityEventType, IdentityEvent}
+import etude.domain.core.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.model.room.RoomId
 import grizzled.slf4j.Logger
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository

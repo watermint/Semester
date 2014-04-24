@@ -1,19 +1,18 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
 import scala.concurrent.Future
-import etude.foundation.domain.lifecycle.{ResultWithEntity, EntityIOContext}
+import etude.domain.core.lifecycle.{ResultWithEntity, EntityIOContext}
 import etude.messaging.chatwork.domain.model.room.{RoomId, CategoryId, Category}
-import etude.messaging.chatwork.domain.infrastructure.api.v0.V0AsyncApi
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
-import etude.foundation.domain.lifecycle.async.AsyncResultWithEntity
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOOnV0Api
+import etude.domain.core.lifecycle.async.AsyncResultWithEntity
 
 private[room]
 class AsyncCategoryRepositoryOnV0Api
   extends AsyncCategoryRepository
-  with AsyncEntityIOOnV0Api {
+  with V0AsyncEntityIO {
 
   type This <: AsyncCategoryRepositoryOnV0Api
 

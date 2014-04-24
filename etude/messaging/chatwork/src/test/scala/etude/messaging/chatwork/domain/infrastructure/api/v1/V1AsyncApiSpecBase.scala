@@ -7,7 +7,7 @@ import java.util.concurrent.{Executors, ExecutorService}
 import org.specs2.execute.Result
 import etude.test.undisclosed._
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV1Api
-import etude.foundation.domain.lifecycle.async.AsyncEntityIOContext
+import etude.domain.core.lifecycle.async.AsyncEntityIOContext
 
 trait V1AsyncApiSpecBase {
   def result[T](f: Future[T]): T = {

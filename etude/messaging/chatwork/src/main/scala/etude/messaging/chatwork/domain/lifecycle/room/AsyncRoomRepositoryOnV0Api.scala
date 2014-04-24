@@ -4,7 +4,7 @@ import etude.messaging.chatwork.domain.model.room._
 import etude.messaging.chatwork.domain.model.message.MessageId
 import org.json4s._
 import scala.concurrent._
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad}
 
 private[room]

@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
 import scala.language.higherKinds
-import etude.foundation.domain.lifecycle.EntityReader
+import etude.domain.core.lifecycle.EntityReader
 import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
 
 private[room]

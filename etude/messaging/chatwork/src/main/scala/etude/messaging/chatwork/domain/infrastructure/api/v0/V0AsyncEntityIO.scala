@@ -2,11 +2,11 @@ package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import scala.language.higherKinds
 import etude.foundation.http.SyncClient
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.TimeUnit
-import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import etude.domain.core.lifecycle.async.AsyncEntityIO
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 

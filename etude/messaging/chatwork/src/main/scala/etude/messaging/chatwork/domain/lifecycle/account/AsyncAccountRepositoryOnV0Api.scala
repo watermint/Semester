@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.account
 
 import etude.messaging.chatwork.domain.model.account.{AccountId, Account}
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.v0.V0AsyncInitLoad
 

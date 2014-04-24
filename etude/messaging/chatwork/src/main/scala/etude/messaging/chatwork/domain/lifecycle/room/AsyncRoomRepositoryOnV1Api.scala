@@ -7,7 +7,7 @@ import etude.messaging.chatwork.domain.model.room._
 import scala.Some
 import etude.messaging.chatwork.domain.model.room.RoomAttributes
 import etude.messaging.chatwork.domain.model.message.MessageId
-import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
+import etude.domain.core.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.v1.{V1ApiException, V1AsyncApi}
 import etude.messaging.chatwork.domain.infrastructure.api.v0.V0ApiQoS

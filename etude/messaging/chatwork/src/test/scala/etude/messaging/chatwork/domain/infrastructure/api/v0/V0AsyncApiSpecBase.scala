@@ -6,7 +6,7 @@ import scala.concurrent.ExecutionContext
 import org.specs2.execute.Result
 import etude.test.undisclosed._
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import etude.foundation.domain.lifecycle.async.AsyncEntityIOContext
+import etude.domain.core.lifecycle.async.AsyncEntityIOContext
 
 trait V0AsyncApiSpecBase {
   def getEntityIOContext(prop: Properties)(implicit executionContext: ExecutionContext): AsyncEntityIOContext = {

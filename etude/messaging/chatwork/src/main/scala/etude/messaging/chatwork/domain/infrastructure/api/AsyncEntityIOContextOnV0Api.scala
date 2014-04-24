@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.infrastructure.api
 
 import scala.concurrent.{ExecutionContext, Future}
-import etude.foundation.domain.lifecycle.async.AsyncEntityIOContext
+import etude.domain.core.lifecycle.async.AsyncEntityIOContext
 import etude.foundation.http.{Client, AsyncClient}
 import etude.foundation.utility.ThinConfig
 

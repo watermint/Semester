@@ -1,9 +1,9 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
 import scala.concurrent.Future
-import etude.foundation.domain.lifecycle.async.AsyncEntityReader
+import etude.domain.core.lifecycle.async.AsyncEntityReader
 import etude.messaging.chatwork.domain.model.room.{RoomIconGroup, RoomIcon, Room, RoomId}
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 
 trait AsyncRoomRepository
   extends RoomRepository[Future]

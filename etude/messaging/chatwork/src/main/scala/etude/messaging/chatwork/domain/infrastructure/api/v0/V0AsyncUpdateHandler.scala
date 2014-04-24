@@ -3,7 +3,7 @@ package etude.messaging.chatwork.domain.infrastructure.api.v0
 import scala.language.higherKinds
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 import scala.concurrent.{Await, Future}
-import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import etude.domain.core.lifecycle.async.AsyncEntityIO
 import grizzled.slf4j.Logger
 import scala.concurrent.duration._
 

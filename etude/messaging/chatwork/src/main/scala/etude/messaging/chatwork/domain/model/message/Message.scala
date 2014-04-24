@@ -2,7 +2,7 @@ package etude.messaging.chatwork.domain.model.message
 
 import java.time.Instant
 import etude.messaging.chatwork.domain.model.account.AccountId
-import etude.foundation.domain.model.Entity
+import etude.domain.core.model.Entity
 
 class Message(val messageId: MessageId,
               val accountId: AccountId,

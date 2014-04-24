@@ -5,21 +5,20 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.collection.mutable.ArrayBuffer
 import etude.messaging.chatwork.domain.model.message.MessageId
-import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
-import etude.foundation.domain.lifecycle.EntityIOContext
-import etude.foundation.domain.event.mutable.IdentityEventPublisherSupport
-import etude.foundation.domain.event.{IdentityEventType, IdentityEvent}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
+import etude.domain.core.lifecycle.EntityIOContext
+import etude.domain.core.event.mutable.IdentityEventPublisherSupport
+import etude.domain.core.event.{IdentityEventType, IdentityEvent}
 import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import grizzled.slf4j.Logger
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOOnV0Api
 
 private[message]
 case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
   extends AsyncMessageEventPublisher
   with IdentityEventPublisherSupport[MessageId, Future]
   with V0UpdateSubscriber
-  with AsyncEntityIOOnV0Api {
+  with V0AsyncEntityIO {
 
   addSubscriber(this, context)
   startUpdateScheduler(context)

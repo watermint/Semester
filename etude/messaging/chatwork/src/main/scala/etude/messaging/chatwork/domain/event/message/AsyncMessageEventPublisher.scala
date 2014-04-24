@@ -1,8 +1,8 @@
 package etude.messaging.chatwork.domain.event.message
 
-import etude.foundation.domain.event.async.{AsyncIdentityEventSubscriber, AsyncIdentityEventPublisher}
+import etude.domain.core.event.async.{AsyncIdentityEventSubscriber, AsyncIdentityEventPublisher}
 import etude.messaging.chatwork.domain.model.message.MessageId
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import scala.collection.mutable
 import scala.concurrent.{Lock, Future}
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api

@@ -15,19 +15,13 @@ Collection of small apps and libraries. This project collection is the practice 
 * [Pocket](etude/bookmark/pocket) - [Pocket](http://getpocket.com) API
 * [ChatWork](etude/messaging/chatwork) - [ChatWork](http://chatwork.com) API
 * [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
-* [Domain](etude/foundation/domain) - Libraries for Domain Driven Development (DDD).
+* [Domain](etude/domain/core) - Libraries for Domain Driven Development (DDD).
 * [Html](etude/foundation/html) - HTML parse wrapper API
 * [Http](etude/foundation/http) - HTTP Client wrapper API
 * [i18n](etude/foundation/i18n) - Internationalization (i18n) API
 * [Utility](etude/foundation/utility) - Generic utilities
 * [Things](etude/ticket/things) - [Things](https://culturedcode.com/things/) app integration.
 * [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
-
-## Archived projects
-
-* [Holiday](etude/holiday) - Holiday information API
-* [ElasticSearch Core](etude/elasticsearch/core) - API wrapper for ElasticSearch
-* [Calendar](etude/foundation/calendar) - Calendar API
 
 # License
 

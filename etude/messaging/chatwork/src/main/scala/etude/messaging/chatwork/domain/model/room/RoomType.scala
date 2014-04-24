@@ -1,6 +1,6 @@
 package etude.messaging.chatwork.domain.model.room
 
-import etude.foundation.domain.lifecycle.EntityNotFoundException
+import etude.domain.core.lifecycle.EntityNotFoundException
 
 sealed trait RoomType {
   val name: String

@@ -4,7 +4,7 @@ import java.net.URI
 import org.json4s._
 import etude.messaging.chatwork.domain.model.account._
 import scala.Some
-import etude.foundation.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
+import etude.domain.core.lifecycle.{EntityIOContext, EntityNotFoundException}
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.v1.V1AsyncApi
 import etude.messaging.chatwork.domain.infrastructure.api.v0.V0ApiQoS

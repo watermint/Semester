@@ -1,6 +1,6 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import etude.foundation.domain.lifecycle.async.AsyncRepository
+import etude.domain.core.lifecycle.async.AsyncRepository
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.model.room.{Participant, RoomId}
 

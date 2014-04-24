@@ -8,11 +8,9 @@ import org.json4s._
 import etude.foundation.http._
 import etude.foundation.http.Response
 import scala.concurrent.{future, Future}
-import etude.foundation.domain.lifecycle.EntityIOContext
-import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
 import java.time.Instant
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOOnV0Api
 
 object V0AsyncApi
   extends V0AsyncEntityIO {

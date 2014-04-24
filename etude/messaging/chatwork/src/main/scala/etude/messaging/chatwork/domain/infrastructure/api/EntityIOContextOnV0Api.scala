@@ -2,7 +2,7 @@ package etude.messaging.chatwork.domain.infrastructure.api
 
 import scala.language.higherKinds
 import etude.foundation.http.SyncClient
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{SyncVar, Lock}

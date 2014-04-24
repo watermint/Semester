@@ -4,9 +4,9 @@ import java.net.URI
 import scala.util.Failure
 import org.json4s.{JString, JArray, JValue}
 import etude.foundation.http._
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import scala.concurrent.Future
-import etude.foundation.domain.lifecycle.async.AsyncEntityIO
+import etude.domain.core.lifecycle.async.AsyncEntityIO
 
 object V1AsyncApi
   extends V1EntityIO[Future]

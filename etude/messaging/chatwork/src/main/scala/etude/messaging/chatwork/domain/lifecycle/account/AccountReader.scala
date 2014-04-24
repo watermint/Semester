@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.account
 
 import scala.language.higherKinds
-import etude.foundation.domain.lifecycle.{EntityIOContext, EntityReader}
+import etude.domain.core.lifecycle.{EntityIOContext, EntityReader}
 import etude.messaging.chatwork.domain.model.account.{Account, AccountId}
 
 private[account]

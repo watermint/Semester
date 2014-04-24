@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.message
 
 import scala.concurrent.Future
-import etude.foundation.domain.lifecycle.async.AsyncEntityReader
+import etude.domain.core.lifecycle.async.AsyncEntityReader
 import etude.messaging.chatwork.domain.model.message.{Message, MessageId}
 
 trait AsyncMessageRepository

@@ -3,10 +3,10 @@ package etude.messaging.chatwork.domain.model.room
 import java.net.URI
 import java.time.Instant
 import scala.language.higherKinds
-import etude.foundation.domain.model.Entity
+import etude.domain.core.model.Entity
 import etude.messaging.chatwork.domain.model.message.{MessageId, Text}
 import etude.messaging.chatwork.domain.lifecycle.message.MessageRepository
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 
 /**
  * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms

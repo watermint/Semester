@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import java.net.URI
-import etude.foundation.domain.lifecycle.EntityIOContext
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.messaging.chatwork.domain.model.account._
 import etude.messaging.chatwork.domain.model.room._
 import scala.concurrent.Future

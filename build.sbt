@@ -18,53 +18,32 @@ lazy val buildSettings = Seq(
   )
 )
 
-//lazy val appCulvert = project.in(file("etude/app/culvert"))
-//  .dependsOn(foundationDomain)
-//  .dependsOn(messagingChatwork)
-//  .settings(buildSettings: _*)
-//  .settings(assemblySettings: _*)
-
 lazy val appFedelini = project.in(file("etude/app/fedelini"))
   .dependsOn(messagingChatwork)
   .dependsOn(ticketThings)
   .settings(buildSettings: _*)
 
 lazy val appGare = project.in(file("etude/app/gare"))
-  .dependsOn(foundationDomain)
+  .dependsOn(domainCore)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
-//lazy val appHoliday = project.in(file("etude/app/holiday"))
-//  .settings(buildSettings: _*)
-//  .settings(assemblySettings: _*)
-//  .dependsOn(foundationCalendar)
-
 lazy val bookmarkPocket = project.in(file("etude/bookmark/pocket"))
-  .dependsOn(foundationDomain)
+  .dependsOn(domainCore)
   .dependsOn(foundationUtility)
   .dependsOn(foundationHttp)
   .settings(buildSettings: _*)
 
 lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .settings(buildSettings: _*)
-  .dependsOn(foundationDomain)
+  .dependsOn(domainCore)
   .dependsOn(foundationHttp)
   .dependsOn(foundationHtml)
   .dependsOn(foundationUtility)
   .dependsOn(testUndisclosed % "test")
 
-//lazy val elasticsearchCore = project.in(file("etude/elasticsearch/core"))
-//  .settings(buildSettings: _*)
-//  .dependsOn(foundationUtility)
-
-lazy val foundationDomain = project.in(file("etude/foundation/domain"))
+lazy val domainCore = project.in(file("etude/domain/core"))
   .settings(buildSettings: _*)
-
-//lazy val foundationCalendar = project.in(file("etude/foundation/calendar"))
-//  .settings(buildSettings: _*)
-//  .dependsOn(foundationDomain)
-//  .dependsOn(foundationHttp)
-//  .dependsOn(foundationI18n)
 
 lazy val foundationHtml = project.in(file("etude/foundation/html"))
   .settings(buildSettings: _*)
