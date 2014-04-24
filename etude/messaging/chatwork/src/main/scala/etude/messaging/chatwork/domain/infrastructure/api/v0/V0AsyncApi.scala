@@ -35,7 +35,7 @@ object V0AsyncApi
     }
   }
 
-  private[api] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
+  private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
     beginLogin(context)
     try {
       // assert login failure threshold

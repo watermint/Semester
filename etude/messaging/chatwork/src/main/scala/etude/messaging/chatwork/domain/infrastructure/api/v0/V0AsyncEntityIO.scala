@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.TimeUnit
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 import scala.concurrent.Future
-import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 
 trait V0AsyncEntityIO

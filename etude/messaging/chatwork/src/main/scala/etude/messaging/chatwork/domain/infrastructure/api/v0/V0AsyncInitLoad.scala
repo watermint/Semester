@@ -12,7 +12,7 @@ import etude.messaging.chatwork.domain.model.account.ChatWorkId
 import scala.Some
 import etude.messaging.chatwork.domain.model.account.AccountId
 import java.time.Instant
-
+import scala.collection.mutable
 
 /**
  * facade for jumbo api 'init_load'.
@@ -43,6 +43,14 @@ object V0AsyncInitLoad
       )
     )
   }
+
+  case class InitLoadContainer(content: V0AsyncInitLoadContents,
+                               loadTime: Instant)
+
+  private val cache = new mutable.HashMap[String, InitLoadContainer]()
+
+  private val cacheSeconds = 300
+
 
   def parseLastId(json: JValue): Option[String] = {
     val lastId: List[String] = for {
@@ -194,17 +202,39 @@ object V0AsyncInitLoad
   def initLoad()(implicit context: EntityIOContext[Future]): Future[V0AsyncInitLoadContents] = {
     implicit val executor = getExecutionContext(context)
 
+    getMyId(context) match {
+      case None => // nop
+      case Some(myId) =>
+        cache.get(myId) match {
+          case None => // nop
+          case Some(cached) =>
+            if (Instant.now.minusSeconds(cacheSeconds).isBefore(cached.loadTime)) {
+              return Future.successful(cached.content)
+            }
+        }
+    }
+
     V0AsyncApi.api("init_load", Map()) map {
       json =>
         parseLastId(json) match {
           case Some(lastId) => setLastId(lastId, context)
           case _ =>
         }
-        V0AsyncInitLoadContents(
+        val content = V0AsyncInitLoadContents(
           contacts = parseContacts(json),
           rooms = parseRooms(json),
           participants = parseParticipants(json)
         )
+
+        cache.put(
+          getMyId(context).get,
+          InitLoadContainer(
+            content,
+            Instant.now()
+          )
+        )
+
+        content
     }
   }
 }
