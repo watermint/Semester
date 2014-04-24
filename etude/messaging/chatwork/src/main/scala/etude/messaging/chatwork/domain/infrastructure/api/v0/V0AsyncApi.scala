@@ -12,6 +12,7 @@ import etude.foundation.domain.lifecycle.EntityIOContext
 import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
 import java.time.Instant
+import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOOnV0Api
 
 object V0AsyncApi
   extends V0AsyncEntityIO {
@@ -34,7 +35,7 @@ object V0AsyncApi
     }
   }
 
-  private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
+  private[api] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
     beginLogin(context)
     try {
       // assert login failure threshold

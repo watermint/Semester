@@ -7,6 +7,6 @@ case class RoomAttributes(sticky: Boolean,
                           mentionCount: BigInt,
                           myTaskCount: BigInt,
                           totalTaskCount: BigInt,
-                          totalMessageCount: BigInt,
+//                          totalMessageCount: BigInt, // drop due to difficulties in V0 api.
                           fileCount: BigInt)
   extends ValueObject

@@ -2,7 +2,6 @@ package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import java.net.URI
 import etude.foundation.domain.lifecycle.EntityIOContext
-import etude.foundation.domain.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.model.account._
 import etude.messaging.chatwork.domain.model.room._
 import scala.concurrent.Future
@@ -105,20 +104,54 @@ object V0AsyncInitLoad
        * c ... current chat id (internal sequence number)
        * f ... files
        * t ... tasks
+       * mt ... my tasks
+       * mn ... mention count
        * s ... sticky (only appears on the room is sticky. value is 1)
        */
-      val unreadCount = (r.get("r"), r.get("c")) match {
+      val unreadCount: Int = (r.get("r"), r.get("c")) match {
         case (Some(JInt(read)), Some(JInt(current))) =>
-          current - read
+          (current - read).toInt
         case _ =>
           0
+      }
+
+      val fileCount: Int = r.get("f") match {
+        case Some(JInt(f)) => f.toInt
+        case _ => 0
+      }
+
+      val taskCount: Int = r.get("t") match {
+        case Some(JInt(t)) => t.toInt
+        case _ => 0
+      }
+
+      val myTaskCount: Int = r.get("mt") match {
+        case Some(JInt(t)) => t.toInt
+        case _ => 0
+      }
+
+      val mentionCount: Int = r.get("mn") match {
+        case Some(JInt(m)) => m.toInt
+        case _ => 0
+      }
+
+      val sticky: Boolean = r.get("s") match {
+        case Some(JInt(s)) => true
+        case _ => false
       }
 
       new Room(
         roomId = RoomId(BigInt(roomId)),
         name = name,
         description = None,
-        attributes = None,
+        attributes = Some(RoomAttributes(
+          sticky = sticky,
+          unreadCount = unreadCount,
+          mentionCount = mentionCount,
+          myTaskCount = myTaskCount,
+          totalTaskCount = taskCount,
+          fileCount = fileCount
+        )),
         roomType = roomType.toInt match {
           case 1 => RoomTypeGroup()
           case 2 => RoomTypeDirect()

@@ -48,7 +48,7 @@ class AsyncRoomRepositoryOnV1Api
           mentionCount = mentionNum,
           myTaskCount = myTaskNum,
           totalTaskCount = taskNum,
-          totalMessageCount = messageNum,
+//          totalMessageCount = messageNum,
           fileCount = fileNum
         )),
         avatar = Some(new URI(iconPath)),
