@@ -29,6 +29,7 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
         roomList.foreach {
           room =>
             room.attributes match {
+              case None => // skip
               case Some(a) if a.unreadCount > 0 =>
                 if (targetRooms.contains(room.identity)) {
                   roomRepo.latestMessage(room.identity) map {
@@ -37,7 +38,6 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
                       logger.info(s"Mark room ${room.name}(${room.identity.value}) as read")
                   }
                 }
-              case _ =>
             }
         }
     }
