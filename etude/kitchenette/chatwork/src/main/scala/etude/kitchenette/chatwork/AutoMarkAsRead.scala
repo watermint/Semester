@@ -1,10 +1,9 @@
-package etude.app.fedelini
+package etude.kitchenette.chatwork
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
-import etude.app.fedelini.domain.AsyncAutoMarkAsRead
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import scala.concurrent.Future
 import grizzled.slf4j.Logger
@@ -29,7 +28,6 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
         roomList.foreach {
           room =>
             room.attributes match {
-              case None => // skip
               case Some(a) if a.unreadCount > 0 =>
                 if (targetRooms.contains(room.identity)) {
                   roomRepo.latestMessage(room.identity) map {

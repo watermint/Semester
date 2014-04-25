@@ -61,6 +61,10 @@ lazy val foundationUtility = project.in(file("etude/foundation/utility"))
 lazy val desktopFextile = project.in(file("etude/desktop/fextile"))
   .settings(buildSettings: _*)
 
+lazy val kitchenetteChatwork = project.in(file("etude/kitchenette/chatwork"))
+  .settings(buildSettings: _*)
+  .dependsOn(messagingChatwork)
+
 lazy val ticketThings = project.in(file("etude/ticket/things"))
   .settings(buildSettings: _*)
 

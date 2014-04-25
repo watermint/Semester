@@ -1,4 +1,4 @@
-package etude.app.fedelini.domain
+package etude.kitchenette.chatwork
 
 import scala.concurrent.{future, Future}
 import etude.domain.core.lifecycle.EntityIOContext
