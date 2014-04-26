@@ -1,7 +1,7 @@
 package etude.foundation.utility.io
 
 import java.io.{ByteArrayInputStream, InputStream}
-import scalax.io.Resource
+import scala.io.Source
 
 object Memory {
   case class InputStreamContainer(inputStream: InputStream) {
@@ -10,7 +10,7 @@ object Memory {
     }
 
     def asByteArray: Array[Byte] = {
-      Resource.fromInputStream(inputStream).byteArray
+      Source.fromInputStream(inputStream).map(_.toByte).toArray
     }
   }
 

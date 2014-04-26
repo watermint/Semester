@@ -4,10 +4,10 @@ import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGe
 import java.net.URI
 import scala.util.{Try, Success}
 import org.apache.http.entity.StringEntity
-import com.twitter.logging.Logger
+import org.slf4j.LoggerFactory
 
 case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
-  val logger = Logger.get(getClass)
+  val logger = LoggerFactory.getLogger(getClass)
 
   class HttpDelete(uri: URI) extends HttpPost(uri) {
     override def getMethod: String = "DELETE"

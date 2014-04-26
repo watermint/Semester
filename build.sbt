@@ -2,7 +2,7 @@
 lazy val buildSettings = Seq(
   version := "0.2.0",
   organization := "org.watermint",
-  scalaVersion := "2.10.4",
+  scalaVersion := "2.11.0",
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
@@ -11,9 +11,12 @@ lazy val buildSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.twitter" % "util-logging_2.10" % "6.13.2",
-    "org.specs2" %% "specs2" % "2.3.11" % "test",
-    "junit" % "junit" % "4.11" % "test"
+    "org.slf4j" % "slf4j-simple" % "latest.integration",
+    "org.slf4j" % "jcl-over-slf4j" % "latest.integration",
+    "org.slf4j" % "log4j-over-slf4j" % "latest.integration",
+    "ch.qos.logback" % "logback-classic" % "latest.integration",
+    "org.specs2" %% "specs2" % "latest.integration" % "test",
+    "junit" % "junit" % "latest.integration" % "test"
   )
 )
 

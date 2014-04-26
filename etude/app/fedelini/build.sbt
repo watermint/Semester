@@ -1,6 +1,6 @@
 name := "etude-app-fedelini"
 
 libraryDependencies ++= Seq(
-  "org.scalafx" %% "scalafx" % "8.0.0-R4",
-  "org.controlsfx" % "controlsfx" % "8.0.5"
+  "org.scalafx" %% "scalafx" % "latest.integration",
+  "org.controlsfx" % "controlsfx" % "latest.integration"
 )

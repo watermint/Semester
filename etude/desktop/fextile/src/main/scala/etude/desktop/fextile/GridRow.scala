@@ -6,14 +6,14 @@ import scalafx.scene.Node
 import scalafx.geometry.{VPos, HPos, Insets, Pos}
 import scala.collection.mutable
 import scala.Some
-import com.twitter.logging.Logger
+import org.slf4j.{LoggerFactory, Logger}
 
 class GridRow extends BorderPane {
   private val nodes: mutable.ListBuffer[Node] = mutable.ListBuffer[Node]()
   private val spans: mutable.HashMap[Node, Seq[GridSpan]] = mutable.HashMap[Node, Seq[GridSpan]]()
   private var currentCol: Int = 0
   private var currentRow: Int = 0
-  private val logger: Logger = Logger.get(getClass)
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   lazy val container = new GridPane() {
     alignment = Pos.TOP_CENTER
@@ -31,7 +31,7 @@ class GridRow extends BorderPane {
 
   protected def resizeContainer(): Unit = {
     ContainerSize.sizes.find(_.widthRange.contains(this.width.value.toInt)) match {
-      case None => logger.warning(s"Size definition not found for width: ${this.width.value}")
+      case None => logger.warn(s"Size definition not found for width: ${this.width.value}")
       case Some(sc) =>
         sc.containerWidth match {
           case Some(w: Int) =>

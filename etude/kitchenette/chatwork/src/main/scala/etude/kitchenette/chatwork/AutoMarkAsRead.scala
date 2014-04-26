@@ -7,12 +7,12 @@ import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import scala.concurrent.Future
 import etude.messaging.chatwork.domain.event.message.AsyncMessageEventPublisher
-import com.twitter.logging.Logger
+import org.slf4j.LoggerFactory
 
 case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
   implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig
 
-  val logger = Logger.get(getClass)
+  val logger = LoggerFactory.getLogger(getClass)
 
   val messageRepo = AsyncMessageRepository.ofV0Api()
 

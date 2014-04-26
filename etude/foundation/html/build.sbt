@@ -1,8 +1,8 @@
 name := "etude-foundation-html"
 
 libraryDependencies ++= Seq(
-//  "org.scala-lang.modules" %% "scala-xml" % "1.0.1", // for 2.11
-  "commons-codec" % "commons-codec" % "1.8",
-  "org.jsoup" % "jsoup" % "1.7.3",
-  "nu.validator.htmlparser" % "htmlparser" % "1.4"
+  "org.scala-lang.modules" %% "scala-xml" % "latest.integration", // for 2.11
+//  "commons-codec" % "commons-codec" % "latest.integration",
+  "org.jsoup" % "jsoup" % "latest.integration",
+  "nu.validator.htmlparser" % "htmlparser" % "latest.integration"
 )

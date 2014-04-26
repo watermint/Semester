@@ -5,13 +5,13 @@ import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 import scala.concurrent.{Await, Future}
 import etude.domain.core.lifecycle.async.AsyncEntityIO
 import scala.concurrent.duration._
-import com.twitter.logging.Logger
+import org.slf4j.LoggerFactory
 
 class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
   extends Runnable
   with AsyncEntityIO {
 
-  val logger = Logger.get(getClass)
+  val logger = LoggerFactory.getLogger(getClass)
   val updateTimeoutInMillis = 10000
 
   def run(): Unit = {
@@ -28,7 +28,7 @@ class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
       }
     } catch {
       case t: Throwable =>
-        logger.error(t, "Error on V0asyncUpdate.update")
+        logger.error("Error on V0asyncUpdate.update", t)
     }
   }
 }
