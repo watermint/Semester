@@ -3,18 +3,18 @@ package etude.foundation.http
 import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGet}
 import java.net.URI
 import scala.util.{Try, Success}
-import grizzled.slf4j.Logger
 import org.apache.http.entity.StringEntity
+import com.twitter.logging.Logger
 
 case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
-  val logger = Logger[this.type]
+  val logger = Logger.get(getClass)
 
   class HttpDelete(uri: URI) extends HttpPost(uri) {
     override def getMethod: String = "DELETE"
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
-    logger.debug(req)
+    logger.debug(req.toString)
 
     Success(
       Response(

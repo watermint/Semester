@@ -7,14 +7,14 @@ import etude.messaging.chatwork.domain.model.message.MessageId
 import etude.domain.core.event.{IdentityEventType, IdentityEvent}
 import etude.domain.core.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.model.room.RoomId
-import grizzled.slf4j.Logger
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
+import com.twitter.logging.Logger
 
 class AsyncAutoMarkAsRead(val targetRooms: Seq[RoomId] = Seq.empty)
   extends AsyncIdentityEventSubscriber[MessageId]
   with AsyncEntityIO {
 
-  val logger = Logger[this.type]
+  val logger = Logger.get(getClass)
 
   def handleEvent(event: IdentityEvent[MessageId])(implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executionContext = getExecutionContext(context)

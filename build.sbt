@@ -11,8 +11,7 @@ lazy val buildSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "org.clapper" % "grizzled-slf4j_2.10" % "1.0.1",
-    "org.slf4j" % "slf4j-simple" % "1.7.6",
+    "com.twitter" % "util-logging_2.10" % "6.13.2",
     "org.specs2" %% "specs2" % "2.3.11" % "test",
     "junit" % "junit" % "4.11" % "test"
   )
@@ -44,6 +43,10 @@ lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
 
 lazy val domainCore = project.in(file("etude/domain/core"))
   .settings(buildSettings: _*)
+
+lazy val domainElasticsearch = project.in(file("etude/domain/elasticsearch"))
+  .settings(buildSettings: _*)
+  .dependsOn(domainCore)
 
 lazy val foundationHtml = project.in(file("etude/foundation/html"))
   .settings(buildSettings: _*)

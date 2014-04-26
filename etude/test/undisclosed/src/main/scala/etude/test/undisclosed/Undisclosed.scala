@@ -4,10 +4,10 @@ import java.io.{FileInputStream, File}
 import org.specs2.execute.Result
 import java.nio.file.Files
 import java.util.Properties
-import grizzled.slf4j.Logger
+import com.twitter.logging.Logger
 
 case class Undisclosed(clazzName: String) {
-  lazy val logger: Logger = Logger[this.type]
+  lazy val logger: Logger = Logger.get(getClass)
 
   val pathPrefix: String = ".etude-test/undisclosed"
 
@@ -23,7 +23,7 @@ case class Undisclosed(clazzName: String) {
         Some(p)
       } catch {
         case e: Throwable =>
-          logger.warn(s"Failed to load file: $file for test $clazzName", e)
+          logger.warning(e, s"Failed to load file: $file for test $clazzName")
           None
       }
     } else {
@@ -37,7 +37,7 @@ case class Undisclosed(clazzName: String) {
         logger.info(s"Testing: $clazzName")
         f(c)
       case _ =>
-        logger.warn(s"Skipping test: $clazzName, place file at $file")
+        logger.warning(s"Skipping test: $clazzName, place file at $file")
         Result.unit()
     }
   }

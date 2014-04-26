@@ -11,7 +11,7 @@ import etude.domain.core.event.mutable.IdentityEventPublisherSupport
 import etude.domain.core.event.{IdentityEventType, IdentityEvent}
 import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
-import grizzled.slf4j.Logger
+import com.twitter.logging.Logger
 
 private[message]
 case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
@@ -23,7 +23,7 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
   addSubscriber(this, context)
   startUpdateScheduler(context)
 
-  private val logger = Logger[this.type]
+  private val logger = Logger.get(getClass)
 
   protected val subscribers: ArrayBuffer[Subscriber] = new ArrayBuffer[Subscriber]()
 

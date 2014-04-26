@@ -6,13 +6,13 @@ import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOn
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import scala.concurrent.Future
-import grizzled.slf4j.Logger
 import etude.messaging.chatwork.domain.event.message.AsyncMessageEventPublisher
+import com.twitter.logging.Logger
 
 case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
   implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig
 
-  val logger = Logger[this.type]
+  val logger = Logger.get(getClass)
 
   val messageRepo = AsyncMessageRepository.ofV0Api()
 
@@ -27,8 +27,8 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
       roomList =>
         roomList.foreach {
           room =>
-            room.attributes match {
-              case Some(a) if a.unreadCount > 0 =>
+//            room.attributes match {
+//              case Some(a) if a.unreadCount > 0 =>
                 if (targetRooms.contains(room.identity)) {
                   roomRepo.latestMessage(room.identity) map {
                     message =>
@@ -36,7 +36,7 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
                       logger.info(s"Mark room ${room.name}(${room.identity.value}) as read")
                   }
                 }
-            }
+//            }
         }
     }
 
