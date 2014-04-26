@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.3.0",
+  version := "0.3.1",
   organization := "org.watermint",
   scalaVersion := "2.11.0",
   resolvers ++= Seq(
@@ -11,8 +11,9 @@ lazy val buildSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "org.slf4j" % "slf4j-simple" % "latest.integration",
+    "org.slf4j" % "slf4j-api" % "latest.integration",
     "org.slf4j" % "jcl-over-slf4j" % "latest.integration",
+    "org.slf4j" % "jul-to-slf4j" % "latest.integration",
     "org.slf4j" % "log4j-over-slf4j" % "latest.integration",
     "ch.qos.logback" % "logback-classic" % "latest.integration",
     "org.specs2" %% "specs2" % "latest.integration" % "test",
