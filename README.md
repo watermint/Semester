@@ -9,10 +9,12 @@ Collection of small apps and libraries. This project collection is the practice 
 ## Application
 
 * [Gare](etude/gare) - Application dispatcher
+    * Note: Broken on scala 2.11 due to twitter libs are not prepared for scala 2.11
 
 ## Libraries
 
 * [Pocket](etude/bookmark/pocket) - [Pocket](http://getpocket.com) API
+    * Note: Authentication callbacks are broken on scala 2.11 due to twitter libs are not prepared for scala 2.11
 * [ChatWork](etude/messaging/chatwork) - [ChatWork](http://chatwork.com) API
 * [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
 * [Domain](etude/domain/core) - Libraries for Domain Driven Development (DDD).
@@ -26,7 +28,7 @@ Collection of small apps and libraries. This project collection is the practice 
 # Requirements
 
 * Java SE 8 or later
-* Scala 2.10.3 or later, 2.11 not yet supported.
+* 2.11.0 or later
 
 # License
 
