@@ -5,10 +5,10 @@ trait GridSpan extends DeviceSize {
   val gridOffset: Option[Int]
 
   if (!(1 to 12).contains(gridSpan)) {
-    throw new IllegalArgumentException(s"span should be in range 1 to 12. given span is ${gridSpan}")
+    throw new IllegalArgumentException(s"span should be in range 1 to 12. given span is $gridSpan")
   }
   if (!(1 to 12).contains(gridOffset.getOrElse(1))) {
-    throw new IllegalArgumentException(s"offset should be in range 1 to 12: given offset is ${gridOffset}")
+    throw new IllegalArgumentException(s"offset should be in range 1 to 12: given offset is $gridOffset")
   }
 
   def offset(offset: Int): GridSpan

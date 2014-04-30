@@ -1,6 +1,6 @@
 package etude.foundation.http
 
-import scala.concurrent.{Future, future}
+import scala.concurrent.Future
 import etude.foundation.utility.Converter
 
 case class AsyncClient(context: AsyncClientContext) extends Client[Future] {

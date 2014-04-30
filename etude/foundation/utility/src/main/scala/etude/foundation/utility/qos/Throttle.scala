@@ -13,14 +13,13 @@ case class Throttle(maxQueryPerSecond: Double, randomWaitRangeSeconds: Double) {
 
   def execute[T](f: => T): T = {
     lastExecutedOn match {
-      case Some(l) => {
+      case Some(l) =>
         val duration = Duration.between(l, Instant.now())
         val durationMillis = duration.getSeconds * 1000 + duration.getNano / 10000000
-          + (Math.random() * randomWaitRangeSeconds * 1000)
+        + (Math.random() * randomWaitRangeSeconds * 1000)
         if (durationMillis < minimumWaitMillis) {
           Thread.sleep(minimumWaitMillis - durationMillis)
         }
-      }
       case _ =>
     }
 

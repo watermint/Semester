@@ -1,5 +1,5 @@
 package etude.foundation.logging
 
 object LoggerFactory {
-  def getLogger(clazz: Class[_]): Logger = ???
+  def getLogger(clazz: Class[_]): Logger = Logger(clazz)
 }

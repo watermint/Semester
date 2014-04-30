@@ -7,7 +7,7 @@ import scala.util.{Success, Failure, Try}
 import org.json4s._
 import etude.foundation.http._
 import etude.foundation.http.Response
-import scala.concurrent.{future, Future}
+import scala.concurrent.Future
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
 import java.time.Instant
@@ -145,7 +145,7 @@ object V0AsyncApi
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
 
-    future {
+    Future {
       syncApi(command, params, data, retries)
     }
   }
