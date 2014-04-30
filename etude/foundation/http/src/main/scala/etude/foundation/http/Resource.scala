@@ -5,5 +5,5 @@ import scala.util.Try
 case class Resource(uri: URIContainer) {
   def get: Try[Response] = SyncClient().get(uri)
 
-  def post(formData: List[Pair[String, String]] = List()): Try[Response] = SyncClient().post(uri, formData)
+  def post(formData: Map[String, String] = Map.empty): Try[Response] = SyncClient().post(uri, formData)
 }

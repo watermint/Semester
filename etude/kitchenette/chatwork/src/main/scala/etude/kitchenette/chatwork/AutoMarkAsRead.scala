@@ -1,15 +1,21 @@
 package etude.kitchenette.chatwork
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import etude.messaging.chatwork.domain.event.message.AsyncMessageEventPublisher
 import org.slf4j.LoggerFactory
+import java.nio.file.{Files, Paths}
+import scala.io.Source
+import java.util.concurrent.{TimeUnit, Executors, ExecutorService}
 
 case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
+  val executorsPool: ExecutorService = Executors.newFixedThreadPool(10)
+
+  implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
+
   implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig
 
   val logger = LoggerFactory.getLogger(getClass)
@@ -43,6 +49,26 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
     rooms.onSuccess {
       case r =>
         AsyncMessageEventPublisher.subscribe(handler)
+    }
+  }
+}
+
+object AutoMarkAsRead {
+  def main (args: Array[String]) {
+    val markAsReadList = Paths.get(System.getProperty("user.home"), ".etude-chatwork/markasread")
+    if (Files.exists(markAsReadList)) {
+      val list: Seq[RoomId] = Source.fromFile(markAsReadList.toFile).getLines().map {
+        line =>
+          RoomId(line.toInt)
+      }.toSeq
+
+      val auto = AutoMarkAsRead(list)
+
+      auto.start()
+      auto.executorsPool.awaitTermination(1, TimeUnit.MINUTES)
+
+    } else {
+      println(s"List file not found: $markAsReadList")
     }
   }
 }

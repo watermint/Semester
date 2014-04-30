@@ -75,7 +75,7 @@ object V0AsyncApi
       case (Some(myId), Some(token)) =>
         baseUri.withPath("/gateway.php")
           .withQuery("cmd", command)
-          .withQuery(params.toList)
+          .withQuery(params)
           .withQuery("myid", myId)
           .withQuery("_v", "1.80a")
           .withQuery("_av", "4")
@@ -121,7 +121,7 @@ object V0AsyncApi
       val client = getClient(context)
       val response = data.size match {
         case 0 => client.get(gatewayUri).get
-        case _ => client.post(gatewayUri, data.toList).get
+        case _ => client.post(gatewayUri, data).get
       }
 
       apiResponseParser(command, response) match {

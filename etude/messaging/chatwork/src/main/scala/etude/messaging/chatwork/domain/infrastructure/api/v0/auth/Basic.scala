@@ -15,7 +15,7 @@ class Basic extends Auth {
   private def submitLogin(context: AuthContext): Try[AuthToken] = {
     context.client.post(
       uri = context.startPageUri,
-      formData = List(
+      formData = Map(
         "email" -> context.username,
         "password" -> context.password
       )

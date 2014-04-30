@@ -9,9 +9,4 @@ trait ClientContext {
   val cookieStore: CookieStore = new BasicCookieStore()
 
   val httpClientContext: HttpClientContext = HttpClientContext.create()
-
-  val httpClient: CloseableHttpClient = HttpClients.custom()
-    .setDefaultCookieStore(cookieStore)
-    .setRedirectStrategy(new LaxRedirectStrategy)
-    .build()
 }

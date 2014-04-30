@@ -44,7 +44,7 @@ object ItemIO {
       client.postWithString(
         new URI(endPoint),
         compact(render(requestContent)),
-        List(
+        Map(
           "Content-Type" -> "application/json; charset=UTF-8",
           "X-Accept" -> "application/json"
         )

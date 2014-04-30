@@ -15,7 +15,7 @@ object V1AsyncApi
   lazy val endpoint: URI = new URI("https://api.chatwork.com/")
 
   def get(path: String,
-          params: List[Pair[String, String]] = List())
+          params: Map[String, String] = Map.empty)
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
     val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
@@ -29,8 +29,8 @@ object V1AsyncApi
   }
 
   def post(path: String,
-           params: List[Pair[String, String]] = List(),
-           data: List[Pair[String, String]] = List())
+           params: Map[String, String] = Map.empty,
+           data: Map[String, String] = Map.empty)
           (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
     val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
@@ -45,8 +45,8 @@ object V1AsyncApi
   }
 
   def put(path: String,
-          params: List[Pair[String, String]] = List(),
-          data: List[Pair[String, String]] = List())
+          params: Map[String, String] = Map.empty,
+          data: Map[String, String] = Map.empty)
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
     val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
@@ -61,8 +61,8 @@ object V1AsyncApi
   }
 
   def delete(path: String,
-             params: List[Pair[String, String]] = List(),
-             data: List[Pair[String, String]] = List())
+             params: Map[String, String] = Map.empty,
+             data: Map[String, String] = Map.empty)
             (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
     val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
@@ -76,8 +76,7 @@ object V1AsyncApi
     }
   }
 
-  protected def uriWithPathAndParams(path: String, params: List[Pair[String, String]]): URI = {
-
+  protected def uriWithPathAndParams(path: String, params: Map[String, String]): URI = {
     val endpointWithPath = endpoint.withPath(path)
     if (params.size > 0) {
       endpointWithPath.withQuery(params)
@@ -86,8 +85,8 @@ object V1AsyncApi
     }
   }
 
-  protected def authHeaders(implicit context: EntityIOContext[Future]): List[Pair[String, String]] = {
-    List(
+  protected def authHeaders(implicit context: EntityIOContext[Future]): Map[String, String] = {
+    Map(
       "X-ChatWorkToken" -> getApiToken(context)
     )
   }

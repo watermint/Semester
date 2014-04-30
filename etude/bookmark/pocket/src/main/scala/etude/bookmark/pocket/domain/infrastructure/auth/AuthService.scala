@@ -29,7 +29,7 @@ object AuthService extends FinatraServer {
     client.postWithString(
       new URI("https://getpocket.com/v3/oauth/request"),
       compact(render(requestContent)),
-      List(
+      Map(
         "Content-type" -> "application/json; charset=UTF-8",
         "X-Accept" -> "application/json"
       )
@@ -62,7 +62,7 @@ object AuthService extends FinatraServer {
     client.postWithString(
       new URI("https://getpocket.com/v3/oauth/authorize"),
       compact(render(requestContent)),
-      List(
+      Map(
         "Content-type" -> "application/json; charset=UTF-8",
         "X-Accept" -> "application/json"
       )

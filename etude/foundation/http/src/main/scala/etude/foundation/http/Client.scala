@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
 
 trait Client[M[+A]] {
 
-  def entity(formData: List[Pair[String, String]]): Option[HttpEntity] = {
+  def entity(formData: Map[String, String]): Option[HttpEntity] = {
     if (formData.size < 1) {
       None
     } else {
@@ -24,17 +24,17 @@ trait Client[M[+A]] {
   }
 
   def get(uri: URIContainer,
-          headers: List[Pair[String, String]] = List()): M[Response]
+          headers: Map[String, String] = Map.empty): M[Response]
 
   def post(uri: URIContainer,
-           formData: List[Pair[String, String]] = List(),
-           headers: List[Pair[String, String]] = List()): M[Response]
+           formData: Map[String, String] = Map.empty,
+           headers: Map[String, String] = Map.empty): M[Response]
 
   def put(uri: URIContainer,
-          formData: List[Pair[String, String]] = List(),
-          headers: List[Pair[String, String]] = List()): M[Response]
+          formData: Map[String, String] = Map.empty,
+          headers: Map[String, String] = Map.empty): M[Response]
 
   def delete(uri: URIContainer,
-             formData: List[Pair[String, String]] = List(),
-             headers: List[Pair[String, String]] = List()): M[Response]
+             formData: Map[String, String] = Map.empty,
+             headers: Map[String, String] = Map.empty): M[Response]
 }

@@ -48,7 +48,7 @@ class Exaggerated extends Auth {
 
     context.client.post(
       uri,
-      List("SAMLResponse" -> assertion.assertion)
+      Map("SAMLResponse" -> assertion.assertion)
     ) flatMap {
       response =>
         response.contentAsString map {
@@ -66,7 +66,7 @@ class Exaggerated extends Auth {
 
     context.client.post(
       formUri,
-      form.params.toList
+      form.params.toMap
     ) flatMap {
       response =>
         parseSubmitResponse(response)
