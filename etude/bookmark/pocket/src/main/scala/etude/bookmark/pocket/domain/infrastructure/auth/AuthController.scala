@@ -1,12 +1,12 @@
 package etude.bookmark.pocket.domain.infrastructure.auth
 
 import com.twitter.finatra.Controller
-import com.twitter.logging.Logger
 import scala.util.Success
 import org.jboss.netty.handler.codec.http.DefaultCookie
+import etude.foundation.logging.LoggerFactory
 
 class AuthController extends Controller {
-  val logger = Logger.get(this.getClass)
+  val logger = LoggerFactory.getLogger(this.getClass)
 
   get("/") {
     request =>

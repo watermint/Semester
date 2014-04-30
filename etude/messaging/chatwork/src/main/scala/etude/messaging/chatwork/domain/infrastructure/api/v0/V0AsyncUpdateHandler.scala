@@ -5,7 +5,7 @@ import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 import scala.concurrent.{Await, Future}
 import etude.domain.core.lifecycle.async.AsyncEntityIO
 import scala.concurrent.duration._
-import org.slf4j.LoggerFactory
+import etude.foundation.logging.LoggerFactory
 
 class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
   extends Runnable

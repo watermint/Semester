@@ -5,10 +5,10 @@ import etude.foundation.http.{AsyncClientContext, AsyncClient}
 import java.net.{URL, URI}
 import etude.bookmark.pocket.domain.model.{ItemEntry, Item}
 import etude.foundation.utility.qos.Throttle
-import com.twitter.logging.Logger
+import etude.foundation.logging.LoggerFactory
 
 object ItemIO {
-  val logger = Logger.get(this.getClass)
+  val logger = LoggerFactory.getLogger(this.getClass)
 
   val throttle = Throttle(.08, 2)
 

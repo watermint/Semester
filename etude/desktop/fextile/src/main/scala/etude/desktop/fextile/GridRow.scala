@@ -6,7 +6,7 @@ import scalafx.scene.Node
 import scalafx.geometry.{VPos, HPos, Insets, Pos}
 import scala.collection.mutable
 import scala.Some
-import org.slf4j.{LoggerFactory, Logger}
+import etude.foundation.logging.{Logger, LoggerFactory}
 
 class GridRow extends BorderPane {
   private val nodes: mutable.ListBuffer[Node] = mutable.ListBuffer[Node]()

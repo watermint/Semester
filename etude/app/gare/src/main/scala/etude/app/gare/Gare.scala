@@ -4,10 +4,10 @@ import java.io.File
 import scala.io.Source
 import org.json4s.native.JsonMethods
 import org.json4s.JsonAST._
-import com.twitter.logging.Logger
+import etude.foundation.logging.LoggerFactory
 
 class Gare(configFile: File) {
-  val logger = Logger.get(getClass)
+  val logger = LoggerFactory.getLogger(getClass)
 
   def start(): Unit = {
     val json = JsonMethods.parse(Source.fromFile(configFile).getLines().mkString)

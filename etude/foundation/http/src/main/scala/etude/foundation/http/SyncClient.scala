@@ -4,8 +4,8 @@ import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGe
 import java.net.URI
 import scala.util.{Try, Success}
 import org.apache.http.entity.StringEntity
-import org.slf4j.LoggerFactory
 import org.apache.http.impl.client.{LaxRedirectStrategy, HttpClients, CloseableHttpClient}
+import etude.foundation.logging.LoggerFactory
 
 case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
   val logger = LoggerFactory.getLogger(getClass)

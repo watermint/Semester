@@ -11,7 +11,7 @@ import etude.domain.core.event.mutable.IdentityEventPublisherSupport
 import etude.domain.core.event.{IdentityEventType, IdentityEvent}
 import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
-import org.slf4j.LoggerFactory
+import etude.foundation.logging.LoggerFactory
 
 private[message]
 case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])

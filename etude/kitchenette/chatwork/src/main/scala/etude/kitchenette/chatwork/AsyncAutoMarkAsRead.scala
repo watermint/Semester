@@ -8,7 +8,7 @@ import etude.domain.core.event.{IdentityEventType, IdentityEvent}
 import etude.domain.core.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
-import org.slf4j.LoggerFactory
+import etude.foundation.logging.LoggerFactory
 
 class AsyncAutoMarkAsRead(val targetRooms: Seq[RoomId] = Seq.empty)
   extends AsyncIdentityEventSubscriber[MessageId]

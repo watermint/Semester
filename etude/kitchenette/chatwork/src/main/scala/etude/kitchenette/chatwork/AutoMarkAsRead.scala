@@ -6,10 +6,10 @@ import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import scala.concurrent.{ExecutionContext, Future}
 import etude.messaging.chatwork.domain.event.message.AsyncMessageEventPublisher
-import org.slf4j.LoggerFactory
 import java.nio.file.{Files, Paths}
 import scala.io.Source
 import java.util.concurrent.{TimeUnit, Executors, ExecutorService}
+import etude.foundation.logging.LoggerFactory
 
 case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
   val executorsPool: ExecutorService = Executors.newFixedThreadPool(10)
