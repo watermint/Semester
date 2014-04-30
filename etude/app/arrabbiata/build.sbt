@@ -1,4 +1,4 @@
-name := "etude-app-fedelini"
+name := "etude-app-arrabbiata"
 
 libraryDependencies ++= Seq(
   "org.scalafx" %% "scalafx" % "latest.integration",

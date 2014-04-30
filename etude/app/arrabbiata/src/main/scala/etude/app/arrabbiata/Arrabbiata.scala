@@ -1,4 +1,4 @@
-package etude.app.fedelini.app
+package etude.app.arrabbiata
 
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
@@ -10,7 +10,7 @@ import javafx.event.{ActionEvent, EventHandler, Event}
 import org.controlsfx.control.action.AbstractAction
 import org.controlsfx.dialog.{AbstractDialogAction, Dialog}
 
-object Fedelini extends JFXApp {
+object Arrabbiata extends JFXApp {
   def event[T <: Event](f: T => Unit): EventHandler[T] = new EventHandler[T] {
     def handle(e: T) = f(e)
   }

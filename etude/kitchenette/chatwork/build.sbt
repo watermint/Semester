@@ -1,1 +1,0 @@
-name := "etude-kitchenette-chatwork"

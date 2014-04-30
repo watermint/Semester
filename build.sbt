@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.3.2",
+  version := "0.4.0",
   organization := "org.watermint",
   scalaVersion := "2.11.0",
   crossScalaVersions := Seq("2.11.0", "2.10.4"),
@@ -17,8 +17,9 @@ lazy val buildSettings = Seq(
   )
 )
 
-lazy val appFedelini = project.in(file("etude/app/fedelini"))
+lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .dependsOn(messagingChatwork)
+  .dependsOn(kitchenetteFedelini)
   .dependsOn(ticketThings)
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
@@ -73,7 +74,7 @@ lazy val desktopFextile = project.in(file("etude/desktop/fextile"))
   .settings(buildSettings: _*)
   .dependsOn(foundationLogging)
 
-lazy val kitchenetteChatwork = project.in(file("etude/kitchenette/chatwork"))
+lazy val kitchenetteFedelini = project.in(file("etude/kitchenette/fedelini"))
   .settings(buildSettings: _*)
   .dependsOn(messagingChatwork)
 

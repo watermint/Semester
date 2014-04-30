@@ -1,4 +1,4 @@
-package etude.kitchenette.chatwork
+package etude.kitchenette.fedelini
 
 import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
