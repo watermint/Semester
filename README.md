@@ -28,7 +28,7 @@ Collection of small apps and libraries. This project collection is the practice 
 # Requirements
 
 * Java SE 8 or later
-* 2.11.0 or later
+* Scala 2.10.4, 2.11.0
 
 # License
 

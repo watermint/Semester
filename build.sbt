@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.4.0",
+  version := "0.5.0",
   organization := "org.watermint",
   scalaVersion := "2.11.0",
   crossScalaVersions := Seq("2.11.0", "2.10.4"),
@@ -63,9 +63,6 @@ lazy val foundationHttp = project.in(file("etude/foundation/http"))
   .settings(buildSettings: _*)
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
-
-lazy val foundationI18n = project.in(file("etude/foundation/i18n"))
-  .settings(buildSettings: _*)
 
 lazy val foundationUtility = project.in(file("etude/foundation/utility"))
   .settings(buildSettings: _*)
