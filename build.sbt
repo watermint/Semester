@@ -14,8 +14,15 @@ lazy val buildSettings = Seq(
   libraryDependencies ++= Seq(
     "org.specs2" %% "specs2" % "latest.integration" % "test",
     "junit" % "junit" % "latest.integration" % "test"
-  )
+  ),
+  ivyXML :=
+    <dependencies>
+      <exclude org="log4j" name="log4j" />
+      <exclude org="commons-logging" name="commons-logging" />
+      <exclude org="org.slf4j" name="slf4j-log4j12" />
+    </dependencies>
 )
+
 
 lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .dependsOn(messagingChatwork)
@@ -23,6 +30,7 @@ lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .dependsOn(ticketThings)
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
 
 lazy val appGare = project.in(file("etude/app/gare"))
   .dependsOn(domainCore)
@@ -74,6 +82,7 @@ lazy val desktopFextile = project.in(file("etude/desktop/fextile"))
 lazy val kitchenetteFedelini = project.in(file("etude/kitchenette/fedelini"))
   .settings(buildSettings: _*)
   .dependsOn(messagingChatwork)
+  .settings(assemblySettings: _*)
 
 lazy val ticketThings = project.in(file("etude/ticket/things"))
   .settings(buildSettings: _*)
