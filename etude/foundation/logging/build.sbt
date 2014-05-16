@@ -7,4 +7,3 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "log4j-over-slf4j" % "latest.integration",
   "ch.qos.logback" % "logback-classic" % "latest.integration"
 )
-

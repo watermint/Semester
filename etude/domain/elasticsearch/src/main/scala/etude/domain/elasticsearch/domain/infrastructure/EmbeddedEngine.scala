@@ -5,8 +5,9 @@ import org.elasticsearch.client.Client
 import org.elasticsearch.common.settings.ImmutableSettings
 import org.elasticsearch.node.{Node, NodeBuilder}
 
+private[infrastructure]
 case class EmbeddedEngine(clusterName: String,
-                           storagePath: Path) extends Engine {
+                          storagePath: Path) extends Engine {
 
   protected lazy val node: Node = {
     NodeBuilder
@@ -22,9 +23,7 @@ case class EmbeddedEngine(clusterName: String,
       ).node()
   }
 
-  protected def createClient: Client = {
+  def createClient: Client = {
     node.client()
   }
-
-  lazy val client: Client = createClient
 }

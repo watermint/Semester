@@ -33,7 +33,6 @@ lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .settings(assemblySettings: _*)
 
 lazy val appGare = project.in(file("etude/app/gare"))
-  .dependsOn(domainCore)
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
@@ -57,9 +56,14 @@ lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
 lazy val domainCore = project.in(file("etude/domain/core"))
   .settings(buildSettings: _*)
 
+lazy val domainJson = project.in(file("etude/domain/json"))
+  .settings(buildSettings: _*)
+  .dependsOn(domainCore)
+
 lazy val domainElasticsearch = project.in(file("etude/domain/elasticsearch"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
+  .dependsOn(domainJson)
 
 lazy val foundationLogging = project.in(file("etude/foundation/logging"))
   .settings(buildSettings: _*)
