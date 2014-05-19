@@ -17,10 +17,9 @@ class Gare(configFile: File) {
       JField("mapping", JObject(mapping)) <- data
     } {
       val portMapping = for {
-        JField("host", JString(host)) <- mapping
-        JField("port", JInt(destPort)) <- mapping
+        JField(host, JInt(port)) <- mapping
       } yield {
-        host -> destPort.toInt
+        host -> port.toInt
       }
 
       logger.info(s"Start dispatcher on port[$listenPort] with mapping $portMapping")
