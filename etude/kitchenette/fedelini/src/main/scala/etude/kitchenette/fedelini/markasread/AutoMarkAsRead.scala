@@ -20,9 +20,9 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  val messageRepo = AsyncMessageRepository.ofV0Api()
+  val messageRepo = AsyncMessageRepository.ofContext(context)
 
-  val roomRepo = AsyncRoomRepository.ofV0Api()
+  val roomRepo = AsyncRoomRepository.ofContext(context)
 
   val handler = new AsyncAutoMarkAsRead(targetRooms)
 

@@ -23,13 +23,13 @@ case class Session(username: String,
     case _ => AsyncEntityIOContextOnV0Api(username, password)
   }
 
-  implicit val accountRepository: AsyncAccountRepository = AsyncAccountRepository.ofV0Api()
+  implicit val accountRepository: AsyncAccountRepository = AsyncAccountRepository.ofContext(ioContext)
 
-  implicit val messageRepository: AsyncMessageRepository = AsyncMessageRepository.ofV0Api()
+  implicit val messageRepository: AsyncMessageRepository = AsyncMessageRepository.ofContext(ioContext)
 
-  implicit val participantRepository: AsyncParticipantRepository = AsyncParticipantRepository.ofV0Api()
+  implicit val participantRepository: AsyncParticipantRepository = AsyncParticipantRepository.ofContext(ioContext)
 
-  implicit val roomRepository: AsyncRoomRepository = AsyncRoomRepository.ofV0Api()
+  implicit val roomRepository: AsyncRoomRepository = AsyncRoomRepository.ofContext(ioContext)
 
   def myRoom(): Future[Room] = {
     roomRepository.myRoom()

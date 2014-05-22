@@ -19,7 +19,7 @@ class AsyncAutoMarkAsRead(val targetRooms: Seq[RoomId] = Seq.empty)
   def handleEvent(event: IdentityEvent[MessageId])
                  (implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executionContext = getExecutionContext(context)
-    val messageRepository = AsyncMessageRepository.ofV0Api()
+    val messageRepository = AsyncMessageRepository.ofContext(context)
 
     logger.info(s"Event: MessageId[${event.identity}], Type[${event.eventType}]")
     event.eventType match {

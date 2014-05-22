@@ -4,6 +4,7 @@ import scala.concurrent.Future
 import etude.domain.core.lifecycle.async.AsyncEntityReader
 import etude.messaging.chatwork.domain.model.room.{RoomIconGroup, RoomIcon, Room, RoomId}
 import etude.domain.core.lifecycle.EntityIOContext
+import etude.messaging.chatwork.domain.infrastructure.api.{AsyncEntityIOContextOnV1Api, AsyncEntityIOContextOnV0Api}
 
 trait AsyncRoomRepository
   extends RoomRepository[Future]
@@ -18,9 +19,17 @@ trait AsyncRoomRepository
 }
 
 object AsyncRoomRepository {
-  def ofV0Api(): AsyncRoomRepository =
+  def ofContext(context: EntityIOContext[Future]): AsyncRoomRepository = {
+    context match {
+      case c: AsyncEntityIOContextOnV0Api => ofV0Api()
+      case c: AsyncEntityIOContextOnV1Api => ofV1Api()
+      case _ => throw new IllegalArgumentException("Unsupported EntityIOContext")
+    }
+  }
+
+  private def ofV0Api(): AsyncRoomRepository =
     new AsyncRoomRepositoryOnV0Api
 
-  def ofV1Api(): AsyncRoomRepository =
+  private def ofV1Api(): AsyncRoomRepository =
     new AsyncRoomRepositoryOnV1Api
 }

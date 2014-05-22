@@ -19,8 +19,8 @@ class AsyncMessageRepositoryOnV1ApiSpec
       undisclosed(getClass.getName) {
         properties =>
           implicit val context = getEntityIOContext(properties)
-          val roomRepo = AsyncRoomRepository.ofV1Api()
-          val messageRepo = AsyncMessageRepository.ofV1Api()
+          val roomRepo = AsyncRoomRepository.ofContext(context)
+          val messageRepo = AsyncMessageRepository.ofContext(context)
 
           val myRoom: Room = result(roomRepo.myRoom())
 

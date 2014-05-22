@@ -56,7 +56,7 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
       val editedMessages: Seq[MessageId] = parseMessageIds(roomId, roomDataMap.get("ce"))
       val deletedMessages: Seq[MessageId] = parseMessageIds(roomId, roomDataMap.get("cd"))
       val latestMessage: MessageId = Await.result(
-        AsyncRoomRepository.ofV0Api().latestMessage(roomId)(context),
+        AsyncRoomRepository.ofContext(context).latestMessage(roomId)(context),
         Duration(fetchMessageTimeoutMillis, MILLISECONDS)
       )
 

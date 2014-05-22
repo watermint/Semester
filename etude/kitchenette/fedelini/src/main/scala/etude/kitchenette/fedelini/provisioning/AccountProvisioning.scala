@@ -7,8 +7,6 @@ import etude.messaging.chatwork.domain.model.room.{AccountRole, AccountRoleType,
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncParticipantRepository
 
 class AccountProvisioning extends AsyncEntityIO {
-  val participantRepository = AsyncParticipantRepository.ofV0Api()
-
   def roomRoleMapping(toRoomRoles: Seq[AccountRole], fromRoomRoles: Seq[AccountRole]): Seq[RoomRoleMapping] = {
     for {
       accountId <- toRoomRoles.map { r => r.accountId} ++ fromRoomRoles.map { r => r.accountId}
@@ -36,9 +34,10 @@ class AccountProvisioning extends AsyncEntityIO {
   def merge(toRoom: RoomId,
             fromRoom: RoomId,
             mapper: (RoomRoleMapping) => Option[AccountRoleType])
-           (implicit context: EntityIOContext[Future],
-            participantRepository: AsyncParticipantRepository): Future[Participant] = {
+           (implicit context: EntityIOContext[Future]): Future[Participant] = {
     implicit val executionContext = getExecutionContext(context)
+    val participantRepository = AsyncParticipantRepository.ofContext(context)
+
     for {
       toParticipant <- participantRepository.resolve(toRoom)
       fromParticipant <- participantRepository.resolve(fromRoom)
@@ -57,9 +56,9 @@ class AccountProvisioning extends AsyncEntityIO {
 
   def provision(toRoom: Participant,
                 roles: Seq[AccountRole])
-               (implicit context: EntityIOContext[Future],
-                participantRepository: AsyncParticipantRepository): Future[Participant] = {
+               (implicit context: EntityIOContext[Future]): Future[Participant] = {
     implicit val executionContext = getExecutionContext(context)
+    val participantRepository = AsyncParticipantRepository.ofContext(context)
     for {
       p <- participantRepository.store(toRoom.copy(roles))
     } yield {

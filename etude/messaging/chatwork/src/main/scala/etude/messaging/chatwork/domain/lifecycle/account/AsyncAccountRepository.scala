@@ -3,6 +3,8 @@ package etude.messaging.chatwork.domain.lifecycle.account
 import scala.concurrent.Future
 import etude.domain.core.lifecycle.async.AsyncEntityReader
 import etude.messaging.chatwork.domain.model.account.{Account, AccountId}
+import etude.domain.core.lifecycle.EntityIOContext
+import etude.messaging.chatwork.domain.infrastructure.api.{AsyncEntityIOContextOnV1Api, AsyncEntityIOContextOnV0Api}
 
 trait AsyncAccountRepository
   extends AccountRepository[Future]
@@ -12,9 +14,17 @@ trait AsyncAccountRepository
 }
 
 object AsyncAccountRepository {
-  def ofV0Api(): AsyncAccountRepository =
+  def ofContext(context: EntityIOContext[Future]): AsyncAccountRepository = {
+    context match {
+      case c: AsyncEntityIOContextOnV0Api => ofV0Api()
+      case c: AsyncEntityIOContextOnV1Api => ofV1Api()
+      case _ => throw new IllegalArgumentException("Unsupported EntityIOContext")
+    }
+  }
+
+  private def ofV0Api(): AsyncAccountRepository =
     new AsyncAccountRepositoryOnV0Api
 
-  def ofV1Api(): AsyncAccountRepository =
+  private def ofV1Api(): AsyncAccountRepository =
     new AsyncAccountRepositoryOnV1Api
 }
