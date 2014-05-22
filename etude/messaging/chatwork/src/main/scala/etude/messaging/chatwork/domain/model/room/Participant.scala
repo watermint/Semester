@@ -11,6 +11,21 @@ class Participant(val roomId: RoomId,
 
   val identity: RoomId = roomId
 
+  lazy val roles: Seq[AccountRole] = {
+    (admin map { a => AccountRole(a, AccountRoleType.Admin)}) ++
+      (member map { a => AccountRole(a, AccountRoleType.Member)}) ++
+      (readonly map { a => AccountRole(a, AccountRoleType.Readonly)})
+  }
+
+  def copy(roles: Seq[AccountRole]): Participant = {
+    new Participant(
+      roomId = roomId,
+      admin = roles.filter(_.role == AccountRoleType.Admin).map { r => r.accountId },
+      member = roles.filter(_.role == AccountRoleType.Member).map { r => r.accountId },
+      readonly = roles.filter(_.role == AccountRoleType.Readonly).map { r => r.accountId }
+    )
+  }
+
   def copy(admin: Seq[AccountId] = this.admin,
            member: Seq[AccountId] = this.member,
            readonly: Seq[AccountId] = this.readonly): Participant = {
@@ -22,3 +37,4 @@ class Participant(val roomId: RoomId,
     )
   }
 }
+

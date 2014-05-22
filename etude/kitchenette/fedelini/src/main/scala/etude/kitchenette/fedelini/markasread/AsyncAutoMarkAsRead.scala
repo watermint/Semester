@@ -1,4 +1,4 @@
-package etude.kitchenette.fedelini
+package etude.kitchenette.fedelini.markasread
 
 import scala.concurrent.Future
 import etude.domain.core.lifecycle.EntityIOContext
@@ -16,7 +16,8 @@ class AsyncAutoMarkAsRead(val targetRooms: Seq[RoomId] = Seq.empty)
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  def handleEvent(event: IdentityEvent[MessageId])(implicit context: EntityIOContext[Future]): Future[MessageId] = {
+  def handleEvent(event: IdentityEvent[MessageId])
+                 (implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executionContext = getExecutionContext(context)
     val messageRepository = AsyncMessageRepository.ofV0Api()
 

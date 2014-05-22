@@ -1,4 +1,4 @@
-package etude.kitchenette.fedelini
+package etude.kitchenette.fedelini.markasread
 
 import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
@@ -33,16 +33,13 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
       roomList =>
         roomList.foreach {
           room =>
-//            room.attributes match {
-//              case Some(a) if a.unreadCount > 0 =>
-                if (targetRooms.contains(room.identity)) {
-                  roomRepo.latestMessage(room.identity) map {
-                    message =>
-                      messageRepo.markAsRead(message)
-                      logger.info(s"Mark room ${room.name}(${room.identity.value}) as read")
-                  }
-                }
-//            }
+            if (targetRooms.contains(room.identity)) {
+              roomRepo.latestMessage(room.identity) map {
+                message =>
+                  messageRepo.markAsRead(message)
+                  logger.info(s"Mark room ${room.name}(${room.identity.value}) as read")
+              }
+            }
         }
     }
 
@@ -54,7 +51,7 @@ case class AutoMarkAsRead(targetRooms: Seq[RoomId]) {
 }
 
 object AutoMarkAsRead {
-  def main (args: Array[String]) {
+  def main(args: Array[String]) {
     val markAsReadList = Paths.get(System.getProperty("user.home"), ".etude-chatwork/markasread")
     if (Files.exists(markAsReadList)) {
       val list: Seq[RoomId] = Source.fromFile(markAsReadList.toFile).getLines().map {
