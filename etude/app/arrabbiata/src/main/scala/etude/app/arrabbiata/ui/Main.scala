@@ -8,6 +8,7 @@ import etude.foundation.logging.LoggerFactory
 import etude.app.arrabbiata.ui.dialog.LoginDialog
 import etude.app.arrabbiata.ui.pane.{HeaderPane, FooterPane, CenterPane, NotificationPane}
 import etude.app.arrabbiata.controller.AppActor
+import scalafx.scene.control.MenuBar
 
 object Main extends JFXApp with UI {
   val logger = LoggerFactory.getLogger(getClass)
@@ -24,6 +25,7 @@ object Main extends JFXApp with UI {
 
   lazy val notificationPaneContainer: BorderPane = {
     val borderPane = new BorderPane()
+    borderPane.setTop(menuBar)
     borderPane.setCenter(notificationPane)
     borderPane
   }
@@ -38,13 +40,16 @@ object Main extends JFXApp with UI {
     root = rootPane
   }
 
+  lazy val menuBar = MainMenu()
+
   stage = new PrimaryStage {
+    title = "Arrabbiata"
     scene = rootScene
     width = 800
     height = 600
     onCloseRequest = event {
       e =>
-        MainActor.system.shutdown()
+        UIActor.system.shutdown()
         AppActor.system.shutdown()
     }
   }

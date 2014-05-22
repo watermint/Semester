@@ -5,20 +5,20 @@ import etude.app.arrabbiata.ui.message.{UIMessage, StatusUpdate, NotificationSho
 import scalafx.application.Platform
 import etude.foundation.logging.LoggerFactory
 
-class MainActor extends Actor {
+class UIActor extends Actor {
   def receive = {
     case m: UIMessage =>
-      MainActor.logger.info(s"message: $m")
+      UIActor.logger.info(s"message: $m")
       Platform.runLater {
         m.perform()
       }
   }
 }
 
-object MainActor {
+object UIActor {
   val logger = LoggerFactory.getLogger(getClass)
 
   val system = ActorSystem("UI")
 
-  val ui = system.actorOf(Props[MainActor], name = "UI")
+  val ui = system.actorOf(Props[UIActor], name = "UI")
 }

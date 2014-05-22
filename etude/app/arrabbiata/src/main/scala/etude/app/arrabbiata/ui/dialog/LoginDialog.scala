@@ -1,7 +1,6 @@
 package etude.app.arrabbiata.ui.dialog
 
 import javafx.event.ActionEvent
-import scalafx.stage.Window
 import scalafx.scene.layout.{Priority, GridPane}
 import scalafx.scene.control.{Label, PasswordField, TextField}
 import org.controlsfx.dialog.{AbstractDialogAction, Dialog}
@@ -46,6 +45,8 @@ case class LoginDialog(parent: Object) extends Dialog(parent, "ChatWork Login") 
     }
   }
 
+  setResizable(false)
+  setIconifiable(false)
   setContent(gridPane)
   getActions.addAll(loginAction)
 }
