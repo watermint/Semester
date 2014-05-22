@@ -2,8 +2,8 @@ package etude.app.arrabbiata.ui.message
 
 import etude.app.arrabbiata.ui.Main
 
-case class NotificationHide() extends UIMessage {
+case class LoginShow() extends UIMessage {
   def perform(): Unit = {
-    Main.notificationPane.hide()
+    Main.loginDialog.show()
   }
 }

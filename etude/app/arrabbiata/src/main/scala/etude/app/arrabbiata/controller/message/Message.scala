@@ -1,5 +1,5 @@
 package etude.app.arrabbiata.controller.message
 
-trait Action {
+trait Message {
   def perform(): Unit
 }

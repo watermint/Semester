@@ -1,11 +1,11 @@
 package etude.app.arrabbiata.controller
 
 import akka.actor.{Props, ActorSystem, Actor}
-import etude.app.arrabbiata.controller.message.Action
+import etude.app.arrabbiata.controller.message.Message
 
 class AppActor extends Actor {
   def receive = {
-    case e: Action => e.perform()
+    case e: Message => e.perform()
   }
 }
 
