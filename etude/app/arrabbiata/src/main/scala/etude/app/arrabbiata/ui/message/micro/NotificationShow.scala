@@ -1,8 +1,9 @@
-package etude.app.arrabbiata.ui.message
+package etude.app.arrabbiata.ui.message.micro
 
 import etude.app.arrabbiata.ui.Main
 
-case class NotificationShow(status: String) extends UIMessage {
+private[ui]
+case class NotificationShow(status: String) extends MicroUIMessage {
   def perform(): Unit = {
     if (!Main.notificationPane.isShowing) {
       Main.notificationPane.show(status)

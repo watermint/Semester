@@ -9,6 +9,7 @@ import etude.app.arrabbiata.ui.dialog.LoginDialog
 import etude.app.arrabbiata.ui.pane.{HeaderPane, FooterPane, CenterPane, NotificationPane}
 import etude.app.arrabbiata.controller.AppActor
 import scalafx.scene.control.MenuBar
+import etude.app.arrabbiata.controller.message.LoadSession
 
 object Main extends JFXApp with UI {
   val logger = LoggerFactory.getLogger(getClass)
@@ -53,4 +54,6 @@ object Main extends JFXApp with UI {
         AppActor.system.shutdown()
     }
   }
+
+  AppActor.app ! LoadSession()
 }

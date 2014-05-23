@@ -6,6 +6,8 @@ import scalafx.scene.control.{Label, PasswordField, TextField}
 import org.controlsfx.dialog.{AbstractDialogAction, Dialog}
 import etude.app.arrabbiata.controller.AppActor
 import etude.app.arrabbiata.controller.message.Login
+import etude.app.arrabbiata.ui.UIActor
+import etude.app.arrabbiata.ui.message.micro.LoginHide
 
 case class LoginDialog(parent: Object) extends Dialog(parent, "ChatWork Login") {
   val gridPane = new GridPane {
@@ -37,6 +39,7 @@ case class LoginDialog(parent: Object) extends Dialog(parent, "ChatWork Login") 
 
   val loginAction = new AbstractDialogAction("Login") {
     def execute(ae: ActionEvent): Unit = {
+      UIActor.ui ! LoginHide()
       AppActor.app ! Login(
         usernameField.text.value,
         passwordField.text.value,

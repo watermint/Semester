@@ -14,9 +14,7 @@ case class Session(username: String,
                    password: String,
                    orgId: Option[String] = None) {
 
-  val executorsPool: ExecutorService = Executors.newCachedThreadPool()
-
-  implicit val executionContext = ExecutionContext.fromExecutorService(executorsPool)
+  implicit val executionContext = AppActor.executionContext
 
   implicit val ioContext: AsyncEntityIOContext = orgId match {
     case Some(o) => AsyncEntityIOContextOnV0Api(o, username, password)
@@ -40,12 +38,14 @@ object Session {
   val session: AtomicReference[Session] = new AtomicReference[Session]
 
   def login(username: String, password: String, orgId: String): Future[Session] = {
+    implicit val executionContext = AppActor.executionContext
+
     val s = orgId match {
       case null => Session(username, password)
       case o if "".equals(o.trim) => Session(username, password)
       case o => Session(username, password, Some(o))
     }
-    implicit val e = s.executionContext
+
     s.myRoom() map {
       r =>
         session.set(s)
