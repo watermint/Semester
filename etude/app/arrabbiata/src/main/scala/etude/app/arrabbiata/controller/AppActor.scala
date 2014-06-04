@@ -15,10 +15,10 @@ class AppActor extends Actor {
 
   def receive = {
     case e: MessageWithoutSession =>
-      AppActor.logger.info(s"message without session: $e")
+      AppActor.logger.info(s"message without session: ${e.getClass}")
       e.perform()
     case e: MessageWithSession =>
-      AppActor.logger.info(s"message WITH session: $e")
+      AppActor.logger.info(s"message WITH session: ${e.getClass}")
       Session.session.get() match {
         case null =>
           noSession()
