@@ -38,9 +38,10 @@ object Session {
   val session: AtomicReference[Session] = new AtomicReference[Session]
 
   def fromThinConfig(): Future[Session] = {
-    implicit val executionContext = AppActor.executionContext
-
-    AsyncEntityIOContextOnV0Api.fromThinConfig()
+//    implicit val executionContext = AppActor.executionContext
+//
+//    AsyncEntityIOContextOnV0Api.fromThinConfig()
+    ???
   }
 
   def login(username: String, password: String, orgId: String): Future[Session] = {
