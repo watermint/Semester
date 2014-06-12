@@ -52,6 +52,7 @@ object Main extends JFXApp with UI {
       e =>
         UIActor.system.shutdown()
         AppActor.system.shutdown()
+        System.exit(0)
     }
   }
 
