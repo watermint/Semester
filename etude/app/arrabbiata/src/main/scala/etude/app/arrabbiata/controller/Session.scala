@@ -10,9 +10,13 @@ import etude.messaging.chatwork.domain.lifecycle.account.AsyncAccountRepository
 import java.util.concurrent.atomic.AtomicReference
 import etude.messaging.chatwork.domain.model.room.Room
 
-case class Session(username: String,
+trait Session {
+  implicit val ioContext: AsyncEntityIOContext
+}
+
+case class UserPasswordSession(username: String,
                    password: String,
-                   orgId: Option[String] = None) {
+                   orgId: Option[String] = None) extends Session {
 
   implicit val executionContext = AppActor.executionContext
 
@@ -34,23 +38,34 @@ case class Session(username: String,
   }
 }
 
+case class IOContextSession(ioContext: AsyncEntityIOContext)
+  extends Session
+
 object Session {
   val session: AtomicReference[Session] = new AtomicReference[Session]
 
   def fromThinConfig(): Future[Session] = {
-//    implicit val executionContext = AppActor.executionContext
-//
-//    AsyncEntityIOContextOnV0Api.fromThinConfig()
-    ???
+    implicit val executionContext = AppActor.executionContext
+
+    try {
+      Future.successful(
+        IOContextSession(
+          AsyncEntityIOContextOnV0Api.fromThinConfig()
+        )
+      )
+    } catch {
+      case t: Throwable =>
+        Future.failed(t)
+    }
   }
 
   def login(username: String, password: String, orgId: String): Future[Session] = {
     implicit val executionContext = AppActor.executionContext
 
     val s = orgId match {
-      case null => Session(username, password)
-      case o if "".equals(o.trim) => Session(username, password)
-      case o => Session(username, password, Some(o))
+      case null => UserPasswordSession(username, password)
+      case o if "".equals(o.trim) => UserPasswordSession(username, password)
+      case o => UserPasswordSession(username, password, Some(o))
     }
 
     s.myRoom() map {
