@@ -5,7 +5,7 @@ import etude.messaging.chatwork.domain.model.message.MessageId
 import org.json4s._
 import scala.concurrent._
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncRoom, V0AsyncApi, V0AsyncInitLoad}
 
 private[room]
 class AsyncRoomRepositoryOnV0Api
@@ -17,9 +17,12 @@ class AsyncRoomRepositoryOnV0Api
 
   def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Room] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() map {
+    V0AsyncInitLoad.initLoad() flatMap {
       p =>
-        p.rooms.find(_.roomId.equals(identity)).last
+        V0AsyncRoom.room(identity) map {
+          r =>
+            r._1
+        }
     }
   }
 
