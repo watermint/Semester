@@ -1,22 +1,24 @@
-package etude.app.arrabbiata.controller
+package etude.app.arrabbiata.state
 
+import java.util.concurrent.atomic.AtomicReference
+
+import etude.app.arrabbiata.controller.AppActor
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import java.util.concurrent.{Executors, ExecutorService}
-import scala.concurrent.{Future, ExecutionContext}
-import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
-import etude.messaging.chatwork.domain.lifecycle.room.{AsyncRoomRepository, AsyncParticipantRepository}
 import etude.messaging.chatwork.domain.lifecycle.account.AsyncAccountRepository
-import java.util.concurrent.atomic.AtomicReference
+import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
+import etude.messaging.chatwork.domain.lifecycle.room.{AsyncParticipantRepository, AsyncRoomRepository}
 import etude.messaging.chatwork.domain.model.room.Room
+
+import scala.concurrent.Future
 
 trait Session {
   implicit val ioContext: AsyncEntityIOContext
 }
 
 case class UserPasswordSession(username: String,
-                   password: String,
-                   orgId: Option[String] = None) extends Session {
+                               password: String,
+                               orgId: Option[String] = None) extends Session {
 
   implicit val executionContext = AppActor.executionContext
 
@@ -48,11 +50,9 @@ object Session {
     implicit val executionContext = AppActor.executionContext
 
     try {
-      Future.successful(
-        IOContextSession(
-          AsyncEntityIOContextOnV0Api.fromThinConfig()
-        )
-      )
+      val s = IOContextSession(AsyncEntityIOContextOnV0Api.fromThinConfig())
+      session.set(s)
+      Future.successful(s)
     } catch {
       case t: Throwable =>
         Future.failed(t)

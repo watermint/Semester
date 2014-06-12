@@ -1,10 +1,12 @@
 package etude.app.arrabbiata.controller
 
 import akka.actor.{Props, ActorSystem, Actor}
-import etude.app.arrabbiata.controller.message.{MessageWithoutSession, MessageWithSession}
+import etude.app.arrabbiata.controller.message.{CallbackMessage, Message, MessageWithoutSession, MessageWithSession}
+import etude.app.arrabbiata.state.Session
 import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.composite.NoSession
 import java.util.concurrent.{Executors, ExecutorService}
+
 import scala.concurrent.ExecutionContext
 import etude.foundation.logging.LoggerFactory
 
@@ -13,10 +15,19 @@ class AppActor extends Actor {
     UIActor.ui ! NoSession()
   }
 
+  def callback(m: Message) = {
+    m match {
+      case c: CallbackMessage =>
+        UIActor.ui ! c.uiMessage
+      case _ =>
+    }
+  }
+
   def receive = {
     case e: MessageWithoutSession =>
       AppActor.logger.info(s"message without session: ${e.getClass}")
       e.perform()
+      callback(e)
     case e: MessageWithSession =>
       AppActor.logger.info(s"message WITH session: ${e.getClass}")
       Session.session.get() match {
@@ -24,6 +35,7 @@ class AppActor extends Actor {
           noSession()
         case s =>
           e.perform(s)
+          callback(e)
       }
   }
 }

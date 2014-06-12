@@ -1,8 +1,10 @@
-package etude.app.arrabbiata.controller.message
+package etude.app.arrabbiata.controller.message.session
 
-import etude.app.arrabbiata.controller.{AppActor, Session}
+import etude.app.arrabbiata.controller.message.MessageWithoutSession
+import etude.app.arrabbiata.state.Session
 import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.composite.{LoginFailure, LoginSuccess}
+
 import scala.util.{Failure, Success}
 
 case class Login(username: String, password: String, orgId: String) extends MessageWithoutSession {
