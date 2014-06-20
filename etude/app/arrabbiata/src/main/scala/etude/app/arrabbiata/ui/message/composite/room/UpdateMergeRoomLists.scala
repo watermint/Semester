@@ -53,6 +53,9 @@ case class UpdateMergeRoomLists() extends CompositeUIMessage {
         MergeRoomPane.targetRoomItems.appendAll(search(MergeRoomPane.searchRoomTarget, rooms))
         MergeRoomPane.baseRoomItems.clear()
         MergeRoomPane.baseRoomItems.appendAll(search(MergeRoomPane.searchRoomBase, rooms))
+
+        MergeRoomPane.searchRoomTarget.disable = false
+        MergeRoomPane.searchRoomBase.disable = false
     }
   }
 }

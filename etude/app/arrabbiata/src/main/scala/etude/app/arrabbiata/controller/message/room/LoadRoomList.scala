@@ -4,6 +4,7 @@ import etude.app.arrabbiata.controller.message.{CallbackMessage, MessageWithSess
 import etude.app.arrabbiata.state.{Rooms, Session}
 import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.UIMessage
+import etude.app.arrabbiata.ui.message.composite.StatusUpdate
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 
 case class LoadRoomList(uiMessage: UIMessage)
@@ -15,9 +16,12 @@ case class LoadRoomList(uiMessage: UIMessage)
     implicit val execContext = session.ioContext.executor
     val roomRepo = AsyncRoomRepository.ofContext(ioContext)
 
+    UIActor.ui ! StatusUpdate("Loading room list ...")
+
     roomRepo.rooms() map {
       r =>
         Rooms.rooms.set(r)
+        UIActor.ui ! StatusUpdate("Finished load room list")
         UIActor.ui ! uiMessage
     }
   }

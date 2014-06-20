@@ -1,9 +1,12 @@
 package etude.app.arrabbiata.ui.pane.room
 
+import java.util.concurrent.atomic.AtomicReference
+import javafx.beans.value.{ObservableValue, ChangeListener}
+
 import etude.app.arrabbiata.controller.AppActor
 import etude.app.arrabbiata.controller.message.room.LoadRoomList
 import etude.app.arrabbiata.ui.control.RoomListView
-import etude.app.arrabbiata.ui.message.composite.room.UpdateMergeRoomLists
+import etude.app.arrabbiata.ui.message.composite.room.{SelectMergeRooms, UpdateMergeRoomLists}
 import etude.app.arrabbiata.ui.{UI, UIActor, UIUnit}
 import etude.messaging.chatwork.domain.model.account.Account
 import etude.messaging.chatwork.domain.model.room.Room
@@ -25,7 +28,12 @@ object MergeRoomPane extends HBox with UI {
   val baseRoomItems = new ObservableBuffer[Room]()
   val baseRoomList = new RoomListView {
     items = baseRoomItems
+
+    override def onSelected(room: Room): Unit = {
+      UIActor.ui ! SelectMergeRooms()
+    }
   }
+
   val searchRoomTarget = new TextField {
     promptText = "Search Target Room"
     onKeyPressed = event {
@@ -36,6 +44,9 @@ object MergeRoomPane extends HBox with UI {
   val targetRoomItems = new ObservableBuffer[Room]()
   val targetRoomList = new RoomListView {
     items = targetRoomItems
+    override def onSelected(room: Room): Unit = {
+      UIActor.ui ! SelectMergeRooms()
+    }
   }
   val diffParticipantItems = new ObservableBuffer[Account]()
   val diffParticipantList = new ListView[Account] {
@@ -49,6 +60,8 @@ object MergeRoomPane extends HBox with UI {
   AppActor.app ! LoadRoomList(UpdateMergeRoomLists())
 
   hgrow = Priority.ALWAYS
+  vgrow = Priority.ALWAYS
+
   padding = Insets(UIUnit.spacing)
   spacing = UIUnit.spacing
   content = Seq(
@@ -56,6 +69,7 @@ object MergeRoomPane extends HBox with UI {
     new VBox {
       alignment = Pos.CENTER
       hgrow = Priority.ALWAYS
+      vgrow = Priority.ALWAYS
       spacing = UIUnit.spacing
       content = Seq(
         new Label {
@@ -70,6 +84,7 @@ object MergeRoomPane extends HBox with UI {
     new VBox {
       alignment = Pos.CENTER
       hgrow = Priority.ALWAYS
+      vgrow = Priority.ALWAYS
       spacing = UIUnit.spacing
       content = Seq(
         new Label {
@@ -84,6 +99,7 @@ object MergeRoomPane extends HBox with UI {
     new VBox {
       alignment = Pos.CENTER
       hgrow = Priority.ALWAYS
+      vgrow = Priority.ALWAYS
       spacing = UIUnit.spacing
       content = Seq(
         new Label {

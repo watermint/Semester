@@ -6,11 +6,14 @@ import etude.foundation.logging.LoggerFactory
 
 import scalafx.geometry.Pos
 import scalafx.scene.control.{Tab, TabPane}
+import scalafx.scene.layout.Priority
 
 object CenterPane extends TabPane with UI {
   val logger = LoggerFactory.getLogger(getClass)
 
-  style = "-fx-background-color: yellow"
+  hgrow = Priority.ALWAYS
+  vgrow = Priority.ALWAYS
+
   tabs = Seq(
     new Tab {
       alignmentInParent = Pos.CENTER

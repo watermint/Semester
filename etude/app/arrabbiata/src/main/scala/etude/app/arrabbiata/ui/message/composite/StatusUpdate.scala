@@ -1,10 +1,10 @@
-package etude.app.arrabbiata.ui.message.micro
+package etude.app.arrabbiata.ui.message.composite
 
 import etude.app.arrabbiata.ui.Main
+import etude.app.arrabbiata.ui.message.micro.MicroUIMessage
 import etude.foundation.logging.LoggerFactory
 
-private[ui]
-case class StatusUpdate(status: String) extends MicroUIMessage {
+case class StatusUpdate(status: String) extends CompositeUIMessage {
   val logger = LoggerFactory.getLogger(getClass)
 
   def perform(): Unit = {
