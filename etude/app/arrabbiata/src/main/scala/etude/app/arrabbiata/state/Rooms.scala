@@ -1,9 +1,9 @@
 package etude.app.arrabbiata.state
 
+import java.util.concurrent.atomic.AtomicReference
+
 import etude.messaging.chatwork.domain.model.room.Room
 
-import scala.collection.mutable.ListBuffer
-
 object Rooms {
-  val rooms: ListBuffer[Room] = new ListBuffer[Room]
+  val rooms: AtomicReference[Seq[Room]] = new AtomicReference[Seq[Room]]()
 }

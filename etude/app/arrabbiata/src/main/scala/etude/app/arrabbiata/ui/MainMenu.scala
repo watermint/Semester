@@ -1,6 +1,7 @@
 package etude.app.arrabbiata.ui
 
-import etude.app.arrabbiata.ui.message.micro.{LoginShow, StatusUpdate}
+import etude.app.arrabbiata.ui.message.micro.StatusUpdate
+import etude.app.arrabbiata.ui.message.micro.session.LoginShow
 
 import scalafx.scene.control.{Menu, MenuBar, MenuItem}
 

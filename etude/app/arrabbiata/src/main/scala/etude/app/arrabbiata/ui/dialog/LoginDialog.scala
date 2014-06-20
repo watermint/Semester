@@ -4,8 +4,8 @@ import javafx.event.ActionEvent
 
 import etude.app.arrabbiata.controller.AppActor
 import etude.app.arrabbiata.controller.message.session.Login
-import etude.app.arrabbiata.ui.UIActor
-import etude.app.arrabbiata.ui.message.micro.LoginHide
+import etude.app.arrabbiata.ui.message.micro.session.LoginHide
+import etude.app.arrabbiata.ui.{UIUnit, UIActor}
 import org.controlsfx.dialog.{DefaultDialogAction, Dialog}
 
 import scalafx.scene.control.{Label, PasswordField, TextField}
@@ -13,8 +13,8 @@ import scalafx.scene.layout.{GridPane, Priority}
 
 case class LoginDialog(parent: Object) extends Dialog(parent, "ChatWork Login") {
   val gridPane = new GridPane {
-    hgap = 10
-    vgap = 10
+    hgap = UIUnit.spacing
+    vgap = UIUnit.spacing
   }
 
   val organizationField = new TextField {

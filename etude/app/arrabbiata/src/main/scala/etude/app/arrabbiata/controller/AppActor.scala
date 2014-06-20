@@ -6,7 +6,7 @@ import akka.actor.{Actor, ActorSystem, Props}
 import etude.app.arrabbiata.controller.message.{CallbackMessage, Message, MessageWithSession, MessageWithoutSession}
 import etude.app.arrabbiata.state.Session
 import etude.app.arrabbiata.ui.UIActor
-import etude.app.arrabbiata.ui.message.composite.NoSession
+import etude.app.arrabbiata.ui.message.composite.session.NoSession
 import etude.foundation.logging.LoggerFactory
 
 import scala.concurrent.ExecutionContext

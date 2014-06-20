@@ -17,8 +17,7 @@ case class LoadRoomList(uiMessage: UIMessage)
 
     roomRepo.rooms() map {
       r =>
-        Rooms.rooms.clear()
-        Rooms.rooms.appendAll(r)
+        Rooms.rooms.set(r)
         UIActor.ui ! uiMessage
     }
   }

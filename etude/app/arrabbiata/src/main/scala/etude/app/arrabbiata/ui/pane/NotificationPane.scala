@@ -1,7 +1,7 @@
 package etude.app.arrabbiata.ui.pane
 
 import etude.app.arrabbiata.ui.UIActor
-import etude.app.arrabbiata.ui.message.micro.LoginShow
+import etude.app.arrabbiata.ui.message.micro.session.LoginShow
 import org.controlsfx.control.action.{ActionMap, ActionProxy}
 import org.controlsfx.control.{NotificationPane => ControlsNotificationPane}
 
