@@ -5,7 +5,7 @@ import javafx.event.ActionEvent
 import etude.app.arrabbiata.controller.AppActor
 import etude.app.arrabbiata.controller.message.session.Login
 import etude.app.arrabbiata.ui.message.micro.session.LoginHide
-import etude.app.arrabbiata.ui.{UIUnit, UIActor}
+import etude.app.arrabbiata.ui.{UIActor, UIUnit}
 import org.controlsfx.dialog.{DefaultDialogAction, Dialog}
 
 import scalafx.scene.control.{Label, PasswordField, TextField}

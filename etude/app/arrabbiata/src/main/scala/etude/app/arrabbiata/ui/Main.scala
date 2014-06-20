@@ -12,17 +12,19 @@ import scalafx.scene.layout._
 import scalafx.scene.{Parent, Scene}
 
 object Main extends JFXApp with UI {
+  AppActor.app ! LoadSession()
+
   val logger = LoggerFactory.getLogger(getClass)
 
   lazy val loginDialog = LoginDialog(rootScene.getWindow)
 
   lazy val notificationPane = NotificationPane(headerPane)
 
-  lazy val centerPane = CenterPane()
+  lazy val centerPane = CenterPane
 
-  lazy val headerPane = HeaderPane()
+  lazy val headerPane = HeaderPane
 
-  lazy val footerPane = FooterPane()
+  lazy val footerPane = FooterPane
 
   lazy val notificationPaneContainer: BorderPane = {
     val borderPane = new BorderPane()
@@ -55,6 +57,4 @@ object Main extends JFXApp with UI {
         System.exit(0)
     }
   }
-
-  AppActor.app ! LoadSession()
 }

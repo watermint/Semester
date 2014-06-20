@@ -3,8 +3,7 @@ package etude.app.arrabbiata.controller.message.session
 import etude.app.arrabbiata.controller.message.MessageWithoutSession
 import etude.app.arrabbiata.state.Session
 import etude.app.arrabbiata.ui.UIActor
-import etude.app.arrabbiata.ui.message.composite.LoginSuccess
-import etude.app.arrabbiata.ui.message.composite.session.{LoginSuccess, LoginFailure}
+import etude.app.arrabbiata.ui.message.composite.session.{LoginFailure, LoginSuccess}
 
 import scala.util.{Failure, Success}
 

@@ -9,7 +9,7 @@ import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.composite.session.NoSession
 import etude.foundation.logging.LoggerFactory
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Lock}
 
 class AppActor extends Actor {
   def noSession(): Unit = {
@@ -26,17 +26,23 @@ class AppActor extends Actor {
 
   def receive = {
     case e: MessageWithoutSession =>
-      AppActor.logger.info(s"message without session: ${e.getClass}")
-      e.perform()
-      callback(e)
+        AppActor.logger.info(s"message without session: ${e.getClass}")
+        e.perform()
+        callback(e)
+
     case e: MessageWithSession =>
-      AppActor.logger.info(s"message WITH session: ${e.getClass}")
-      Session.session.get() match {
-        case null =>
-          noSession()
-        case s =>
-          e.perform(s)
-          callback(e)
+      AppActor.loginTryingLock.acquire()
+      try {
+        AppActor.logger.info(s"message WITH session: ${e.getClass}")
+        Session.session.get() match {
+          case null =>
+            noSession()
+          case s =>
+            e.perform(s)
+            callback(e)
+        }
+      } finally {
+        AppActor.loginTryingLock.release()
       }
   }
 }
@@ -51,4 +57,6 @@ object AppActor {
   val executorsPool: ExecutorService = Executors.newCachedThreadPool()
 
   val executionContext = ExecutionContext.fromExecutorService(executorsPool)
+
+  val loginTryingLock = new Lock
 }

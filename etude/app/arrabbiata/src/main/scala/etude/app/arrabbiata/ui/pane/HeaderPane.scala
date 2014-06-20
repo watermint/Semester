@@ -3,7 +3,7 @@ package etude.app.arrabbiata.ui.pane
 import scalafx.scene.control.{Label, ToolBar}
 import scalafx.scene.layout.{Priority, Region}
 
-case class HeaderPane() extends ToolBar {
+object HeaderPane extends ToolBar {
   items = Seq(
     Label("Arrabbiata"),
     new Region {

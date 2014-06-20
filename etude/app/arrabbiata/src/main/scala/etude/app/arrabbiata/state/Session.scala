@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 import etude.app.arrabbiata.controller.AppActor
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
+import etude.foundation.logging.LoggerFactory
 import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.messaging.chatwork.domain.lifecycle.account.AsyncAccountRepository
 import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
@@ -45,22 +46,33 @@ case class IOContextSession(ioContext: AsyncEntityIOContext)
 
 object Session {
   val session: AtomicReference[Session] = new AtomicReference[Session]
+  val logger = LoggerFactory.getLogger(getClass)
 
   def fromThinConfig(): Future[Session] = {
-    implicit val executionContext = AppActor.executionContext
-
+    AppActor.loginTryingLock.acquire()
     try {
-      val s = IOContextSession(AsyncEntityIOContextOnV0Api.fromThinConfig())
-      session.set(s)
-      Future.successful(s)
+      implicit val executionContext = AppActor.executionContext
+      implicit val s = IOContextSession(AsyncEntityIOContextOnV0Api.fromThinConfig())
+      implicit val ioContext = s.ioContext
+      val roomRepo = AsyncRoomRepository.ofContext(ioContext)
+
+      roomRepo.myRoom() map {
+        r =>
+          session.set(s)
+          logger.info("Logged in by thin config")
+          AppActor.loginTryingLock.release()
+          s
+      }
     } catch {
       case t: Throwable =>
+        AppActor.loginTryingLock.release()
         Future.failed(t)
     }
   }
 
   def login(username: String, password: String, orgId: String): Future[Session] = {
     implicit val executionContext = AppActor.executionContext
+    AppActor.loginTryingLock.acquire()
 
     val s = orgId match {
       case null => UserPasswordSession(username, password)
@@ -71,6 +83,7 @@ object Session {
     s.myRoom() map {
       r =>
         session.set(s)
+        AppActor.loginTryingLock.release()
         s
     }
   }
