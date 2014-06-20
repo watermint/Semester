@@ -1,6 +1,6 @@
 package etude.desktop.fextile
 
-import scalafx.scene.layout.{Priority, HBox, VBox}
+import scalafx.scene.layout.{HBox, Priority, VBox}
 
 trait Container
 

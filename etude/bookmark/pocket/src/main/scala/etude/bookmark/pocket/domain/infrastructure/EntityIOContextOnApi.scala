@@ -1,9 +1,11 @@
 package etude.bookmark.pocket.domain.infrastructure
 
+import java.util.concurrent.{ExecutorService, Executors}
+
+import etude.bookmark.pocket.domain.infrastructure.auth.AuthSession
+
 import scala.concurrent.ExecutionContext
 import scala.util.Try
-import java.util.concurrent.{Executors, ExecutorService}
-import etude.bookmark.pocket.domain.infrastructure.auth.AuthSession
 
 case class EntityIOContextOnApi(consumerKey: String,
                                 accessToken: String,

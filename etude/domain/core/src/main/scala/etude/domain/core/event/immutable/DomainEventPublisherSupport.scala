@@ -1,8 +1,9 @@
 package etude.domain.core.event.immutable
 
-import scala.language.higherKinds
+import etude.domain.core.event.{DomainEvent, DomainEventPublisher}
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.event.{DomainEventPublisher, DomainEvent}
+
+import scala.language.higherKinds
 
 /**
  * @tparam A type of domain event.

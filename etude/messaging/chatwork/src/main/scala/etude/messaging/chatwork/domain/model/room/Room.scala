@@ -2,11 +2,13 @@ package etude.messaging.chatwork.domain.model.room
 
 import java.net.URI
 import java.time.Instant
-import scala.language.higherKinds
-import etude.domain.core.model.Entity
-import etude.messaging.chatwork.domain.model.message.{MessageId, Text}
-import etude.messaging.chatwork.domain.lifecycle.message.MessageRepository
+
 import etude.domain.core.lifecycle.EntityIOContext
+import etude.domain.core.model.Entity
+import etude.messaging.chatwork.domain.lifecycle.message.MessageRepository
+import etude.messaging.chatwork.domain.model.message.{MessageId, Text}
+
+import scala.language.higherKinds
 
 /**
  * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms

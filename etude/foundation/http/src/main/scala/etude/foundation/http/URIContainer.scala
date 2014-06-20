@@ -1,9 +1,11 @@
 package etude.foundation.http
 
 import java.net.URI
+
+import org.apache.http.NameValuePair
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.message.BasicNameValuePair
-import org.apache.http.NameValuePair
+
 import scala.collection.JavaConverters._
 
 case class URIContainer(uri: URI) {

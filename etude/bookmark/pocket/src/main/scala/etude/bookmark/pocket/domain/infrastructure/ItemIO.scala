@@ -1,11 +1,13 @@
 package etude.bookmark.pocket.domain.infrastructure
 
-import scala.concurrent.Future
-import etude.foundation.http.{AsyncClientContext, AsyncClient}
-import java.net.{URL, URI}
-import etude.bookmark.pocket.domain.model.{ItemEntry, Item}
-import etude.foundation.utility.qos.Throttle
+import java.net.{URI, URL}
+
+import etude.bookmark.pocket.domain.model.{Item, ItemEntry}
+import etude.foundation.http.{AsyncClient, AsyncClientContext}
 import etude.foundation.logging.LoggerFactory
+import etude.foundation.utility.qos.Throttle
+
+import scala.concurrent.Future
 
 object ItemIO {
   val logger = LoggerFactory.getLogger(this.getClass)
@@ -14,8 +16,8 @@ object ItemIO {
 
   def addItem(item: ItemEntry)(implicit context: EntityIOContextOnApi): Future[Item] = {
     implicit val executionContext = context.executionContext
-    import org.json4s._
     import org.json4s.JsonDSL._
+    import org.json4s._
     import org.json4s.native.JsonMethods._
 
     val client = AsyncClient(AsyncClientContext(executionContext))

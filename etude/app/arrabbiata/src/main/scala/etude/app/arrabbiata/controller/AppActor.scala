@@ -1,14 +1,15 @@
 package etude.app.arrabbiata.controller
 
-import akka.actor.{Props, ActorSystem, Actor}
-import etude.app.arrabbiata.controller.message.{CallbackMessage, Message, MessageWithoutSession, MessageWithSession}
+import java.util.concurrent.{ExecutorService, Executors}
+
+import akka.actor.{Actor, ActorSystem, Props}
+import etude.app.arrabbiata.controller.message.{CallbackMessage, Message, MessageWithSession, MessageWithoutSession}
 import etude.app.arrabbiata.state.Session
 import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.composite.NoSession
-import java.util.concurrent.{Executors, ExecutorService}
+import etude.foundation.logging.LoggerFactory
 
 import scala.concurrent.ExecutionContext
-import etude.foundation.logging.LoggerFactory
 
 class AppActor extends Actor {
   def noSession(): Unit = {

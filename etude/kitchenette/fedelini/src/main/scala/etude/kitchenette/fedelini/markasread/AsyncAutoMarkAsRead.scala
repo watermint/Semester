@@ -1,14 +1,15 @@
 package etude.kitchenette.fedelini.markasread
 
-import scala.concurrent.Future
-import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.event.async.AsyncIdentityEventSubscriber
-import etude.messaging.chatwork.domain.model.message.MessageId
-import etude.domain.core.event.{IdentityEventType, IdentityEvent}
+import etude.domain.core.event.{IdentityEvent, IdentityEventType}
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.messaging.chatwork.domain.model.room.RoomId
-import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import etude.foundation.logging.LoggerFactory
+import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
+import etude.messaging.chatwork.domain.model.message.MessageId
+import etude.messaging.chatwork.domain.model.room.RoomId
+
+import scala.concurrent.Future
 
 class AsyncAutoMarkAsRead(val targetRooms: Seq[RoomId] = Seq.empty)
   extends AsyncIdentityEventSubscriber[MessageId]

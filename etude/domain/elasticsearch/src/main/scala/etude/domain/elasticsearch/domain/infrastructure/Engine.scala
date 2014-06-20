@@ -1,7 +1,8 @@
 package etude.domain.elasticsearch.domain.infrastructure
 
-import org.elasticsearch.client.Client
 import java.nio.file.Path
+
+import org.elasticsearch.client.Client
 
 trait Engine {
   def createClient: Client

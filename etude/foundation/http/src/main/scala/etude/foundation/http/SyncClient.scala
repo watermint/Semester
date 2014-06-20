@@ -1,11 +1,13 @@
 package etude.foundation.http
 
-import org.apache.http.client.methods.{HttpUriRequest, HttpPut, HttpPost, HttpGet}
 import java.net.URI
-import scala.util.{Try, Success}
-import org.apache.http.entity.StringEntity
-import org.apache.http.impl.client.{LaxRedirectStrategy, HttpClients, CloseableHttpClient}
+
 import etude.foundation.logging.LoggerFactory
+import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
+import org.apache.http.entity.StringEntity
+import org.apache.http.impl.client.{CloseableHttpClient, HttpClients, LaxRedirectStrategy}
+
+import scala.util.{Success, Try}
 
 case class SyncClient(context: ClientContext = SyncClientContext()) extends Client[Try] {
   val logger = LoggerFactory.getLogger(getClass)

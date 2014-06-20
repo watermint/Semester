@@ -1,14 +1,16 @@
 package etude.app.gare
 
-import scala.collection.mutable
+import java.net.{ConnectException, InetSocketAddress, Socket, URI}
+
 import com.twitter.finagle.Service
-import org.jboss.netty.handler.codec.http.{DefaultHttpResponse, HttpResponse, HttpRequest}
-import java.net.{URI, InetSocketAddress, ConnectException, Socket}
-import com.twitter.finagle.builder.{ServerBuilder, ClientBuilder}
+import com.twitter.finagle.builder.{ClientBuilder, ServerBuilder}
 import com.twitter.finagle.http.Http
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpVersion._
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
+import org.jboss.netty.handler.codec.http.HttpVersion._
+import org.jboss.netty.handler.codec.http.{DefaultHttpResponse, HttpRequest, HttpResponse}
+
+import scala.collection.mutable
 
 case class Dispatcher(dispatcherPort: Int,
                       portMapping: Map[String, Int]) {

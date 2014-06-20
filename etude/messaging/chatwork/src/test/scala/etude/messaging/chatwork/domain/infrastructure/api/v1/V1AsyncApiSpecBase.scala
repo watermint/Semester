@@ -1,13 +1,15 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v1
 
-import scala.concurrent.{ExecutionContext, Await, Future}
-import scala.concurrent.duration._
 import java.util.Properties
-import java.util.concurrent.{Executors, ExecutorService}
-import org.specs2.execute.Result
-import etude.test.undisclosed._
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV1Api
+import java.util.concurrent.{ExecutorService, Executors}
+
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
+import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV1Api
+import etude.test.undisclosed._
+import org.specs2.execute.Result
+
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 trait V1AsyncApiSpecBase {
   def result[T](f: Future[T]): T = {

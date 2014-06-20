@@ -1,6 +1,7 @@
 package etude.ticket.things
 
 import javax.script.{ScriptEngine, ScriptEngineManager}
+
 import scala.util.Try
 
 /**

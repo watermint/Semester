@@ -1,6 +1,7 @@
 package etude.foundation.utility.io
 
 import java.io.{ByteArrayInputStream, InputStream}
+
 import scala.io.Source
 
 object Memory {

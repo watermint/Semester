@@ -1,13 +1,13 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import scala.concurrent.Future
-import etude.messaging.chatwork.domain.model.room.{RoomType, Room}
-import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.messaging.chatwork.domain.infrastructure.api.v1.V1AsyncApiSpecBase
-import org.specs2.mutable.Specification
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
+import etude.messaging.chatwork.domain.model.room.{Room, RoomId, RoomType}
 import etude.test.undisclosed._
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+
+import scala.concurrent.Future
 
 @RunWith(classOf[JUnitRunner])
 class AsyncRoomRepositoryOnV1ApiSpec

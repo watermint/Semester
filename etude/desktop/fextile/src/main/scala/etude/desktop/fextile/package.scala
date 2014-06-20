@@ -1,6 +1,6 @@
 package etude.desktop
 
-import javafx.event.{EventHandler, Event}
+import javafx.event.{Event, EventHandler}
 
 package object fextile {
   def event[T <: Event](f: T => Unit): EventHandler[T] = new EventHandler[T] {

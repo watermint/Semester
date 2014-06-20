@@ -1,12 +1,13 @@
 package etude.desktop.fextile
 
 import javafx.scene.layout.{GridPane => FxGridPane}
-import scalafx.scene.layout._
-import scalafx.scene.Node
-import scalafx.geometry.{VPos, HPos, Insets, Pos}
-import scala.collection.mutable
-import scala.Some
+
 import etude.foundation.logging.{Logger, LoggerFactory}
+
+import scala.collection.mutable
+import scalafx.geometry.{HPos, Insets, Pos, VPos}
+import scalafx.scene.Node
+import scalafx.scene.layout._
 
 class GridRow extends BorderPane {
   private val nodes: mutable.ListBuffer[Node] = mutable.ListBuffer[Node]()

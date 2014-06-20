@@ -1,8 +1,9 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
+import etude.domain.core.lifecycle.{EntityIOContext, Repository, ResultWithEntity}
+import etude.messaging.chatwork.domain.model.room.{Category, CategoryId, RoomId}
+
 import scala.language.higherKinds
-import etude.domain.core.lifecycle.{ResultWithEntity, EntityIOContext, Repository}
-import etude.messaging.chatwork.domain.model.room.{RoomId, Category, CategoryId}
 
 trait CategoryRepository[M[+A]]
   extends Repository[CategoryId, Category, M] {

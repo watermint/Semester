@@ -1,8 +1,9 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
-import scala.concurrent.Future
 import etude.domain.core.lifecycle.EntityIOContext
 import org.json4s._
+
+import scala.concurrent.Future
 
 object V0AsyncUpdate
   extends V0AsyncEntityIO {

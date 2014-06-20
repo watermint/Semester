@@ -1,7 +1,6 @@
 package etude.app.arrabbiata.ui
 
-import javafx.event.{EventHandler, Event}
-import scalafx.application.Platform
+import javafx.event.{Event, EventHandler}
 
 trait UI {
   def event[T <: Event](f: T => Unit): EventHandler[T] = new EventHandler[T] {

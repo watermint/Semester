@@ -1,7 +1,8 @@
 package etude.domain.core.event
 
-import scala.language.higherKinds
 import etude.domain.core.lifecycle.EntityIOContext
+
+import scala.language.higherKinds
 
 /**
  * @tparam E type of domain event.

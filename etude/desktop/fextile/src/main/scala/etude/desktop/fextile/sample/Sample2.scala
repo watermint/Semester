@@ -1,8 +1,9 @@
 package etude.desktop.fextile.sample
 
 import etude.desktop.fextile._
-import scalafx.scene.control.Label
+
 import scalafx.application.JFXApp
+import scalafx.scene.control.Label
 
 object Sample2 extends JFXApp {
   lazy val sample2 = new GridRow {

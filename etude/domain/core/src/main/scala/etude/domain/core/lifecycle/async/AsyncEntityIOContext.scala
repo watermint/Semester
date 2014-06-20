@@ -1,6 +1,7 @@
 package etude.domain.core.lifecycle.async
 
 import etude.domain.core.lifecycle.EntityIOContext
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait AsyncEntityIOContext

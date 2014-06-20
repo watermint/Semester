@@ -1,16 +1,15 @@
 package etude.app.arrabbiata.ui
 
-import etude.app.arrabbiata.controller.message.session.LoadSession
-
-import scalafx.scene.{Parent, Scene}
-import scalafx.scene.layout._
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.application.JFXApp
-import etude.foundation.logging.LoggerFactory
-import etude.app.arrabbiata.ui.dialog.LoginDialog
-import etude.app.arrabbiata.ui.pane.{HeaderPane, FooterPane, CenterPane, NotificationPane}
 import etude.app.arrabbiata.controller.AppActor
-import scalafx.scene.control.MenuBar
+import etude.app.arrabbiata.controller.message.session.LoadSession
+import etude.app.arrabbiata.ui.dialog.LoginDialog
+import etude.app.arrabbiata.ui.pane.{CenterPane, FooterPane, HeaderPane, NotificationPane}
+import etude.foundation.logging.LoggerFactory
+
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
+import scalafx.scene.layout._
+import scalafx.scene.{Parent, Scene}
 
 object Main extends JFXApp with UI {
   val logger = LoggerFactory.getLogger(getClass)

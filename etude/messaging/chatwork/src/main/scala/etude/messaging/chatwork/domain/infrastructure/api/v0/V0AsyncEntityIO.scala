@@ -1,14 +1,16 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
-import scala.language.higherKinds
-import etude.foundation.http.SyncClient
-import etude.domain.core.lifecycle.EntityIOContext
 import java.time.Instant
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import scala.concurrent.Future
+import etude.foundation.http.SyncClient
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
+
+import scala.concurrent.Future
+import scala.language.higherKinds
 
 trait V0AsyncEntityIO
   extends AsyncEntityIO {

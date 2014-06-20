@@ -1,7 +1,7 @@
 package etude.desktop.fextile
 
-import scalafx.scene.control.Label
 import scalafx.geometry.Insets
+import scalafx.scene.control.Label
 
 class Alert extends Label {
   margin = Insets(0, 0, 20, 0)

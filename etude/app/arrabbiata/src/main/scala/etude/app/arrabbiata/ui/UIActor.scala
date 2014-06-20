@@ -1,9 +1,10 @@
 package etude.app.arrabbiata.ui
 
-import akka.actor.{Props, ActorSystem, Actor}
+import akka.actor.{Actor, ActorSystem, Props}
 import etude.app.arrabbiata.ui.message.UIMessage
-import scalafx.application.Platform
 import etude.foundation.logging.LoggerFactory
+
+import scalafx.application.Platform
 
 class UIActor extends Actor {
   def receive = {

@@ -1,9 +1,9 @@
 package etude.messaging.chatwork.domain.infrastructure.api
 
-import scala.concurrent.{ExecutionContext, Future}
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
-import etude.foundation.http.{Client, AsyncClient}
 import etude.foundation.utility.ThinConfig
+
+import scala.concurrent.{ExecutionContext, Future}
 
 trait AsyncEntityIOContextOnV0Api
   extends EntityIOContextOnV0Api[Future]

@@ -1,14 +1,16 @@
 package etude.messaging.chatwork.domain.infrastructure.api
 
-import scala.language.higherKinds
-import etude.foundation.http.SyncClient
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
-import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.{SyncVar, Lock}
 import java.time.Instant
-import java.util.concurrent.atomic.{AtomicReference, AtomicInteger}
-import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, ScheduledExecutorService}
+import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
+import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor}
+
+import etude.domain.core.lifecycle.EntityIOContext
+import etude.foundation.http.SyncClient
+import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
+
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.{Lock, SyncVar}
+import scala.language.higherKinds
 
 trait EntityIOContextOnV0Api[M[+A]]
   extends EntityIOContext[M] {

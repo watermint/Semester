@@ -1,6 +1,6 @@
 package etude.app.arrabbiata.ui.pane
 
-import scalafx.scene.control.{ToolBar, Label}
+import scalafx.scene.control.{Label, ToolBar}
 import scalafx.scene.layout.{Priority, Region}
 
 case class HeaderPane() extends ToolBar {

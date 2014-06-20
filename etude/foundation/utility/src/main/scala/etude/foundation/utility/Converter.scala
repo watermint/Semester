@@ -1,9 +1,10 @@
 package etude.foundation.utility
 
-import scala.concurrent.Future
-import scala.collection.JavaConverters._
-import scala.util.{Try, Success, Failure}
 import java.util.Properties
+
+import scala.collection.JavaConverters._
+import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 object Converter {
   /**

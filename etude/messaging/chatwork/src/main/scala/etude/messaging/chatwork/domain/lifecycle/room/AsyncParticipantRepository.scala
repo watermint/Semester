@@ -1,10 +1,11 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.async.AsyncRepository
-import scala.concurrent.Future
-import etude.messaging.chatwork.domain.model.room.{Participant, RoomId}
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.messaging.chatwork.domain.infrastructure.api.{AsyncEntityIOContextOnV1Api, AsyncEntityIOContextOnV0Api}
+import etude.domain.core.lifecycle.async.AsyncRepository
+import etude.messaging.chatwork.domain.infrastructure.api.{AsyncEntityIOContextOnV0Api, AsyncEntityIOContextOnV1Api}
+import etude.messaging.chatwork.domain.model.room.{Participant, RoomId}
+
+import scala.concurrent.Future
 
 trait AsyncParticipantRepository
   extends ParticipantRepository[Future]

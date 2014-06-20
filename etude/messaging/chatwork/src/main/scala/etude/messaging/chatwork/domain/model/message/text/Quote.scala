@@ -1,7 +1,8 @@
 package etude.messaging.chatwork.domain.model.message.text
 
-import etude.messaging.chatwork.domain.model.account.AccountId
 import java.time.Instant
+
+import etude.messaging.chatwork.domain.model.account.AccountId
 
 case class Quote(accountId: AccountId,
                  time: Option[Instant],

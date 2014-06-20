@@ -1,11 +1,12 @@
 package etude.messaging.chatwork.domain.event.message
 
-import etude.domain.core.event.async.{AsyncIdentityEventSubscriber, AsyncIdentityEventPublisher}
-import etude.messaging.chatwork.domain.model.message.MessageId
+import etude.domain.core.event.async.{AsyncIdentityEventPublisher, AsyncIdentityEventSubscriber}
 import etude.domain.core.lifecycle.EntityIOContext
-import scala.collection.mutable
-import scala.concurrent.{Lock, Future}
 import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
+import etude.messaging.chatwork.domain.model.message.MessageId
+
+import scala.collection.mutable
+import scala.concurrent.{Future, Lock}
 
 trait AsyncMessageEventPublisher
   extends AsyncIdentityEventPublisher[MessageId] {

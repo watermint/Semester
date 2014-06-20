@@ -1,10 +1,12 @@
 package etude.app.gare
 
 import java.io.File
-import scala.io.Source
-import org.json4s.native.JsonMethods
-import org.json4s.JsonAST._
+
 import etude.foundation.logging.LoggerFactory
+import org.json4s.JsonAST._
+import org.json4s.native.JsonMethods
+
+import scala.io.Source
 
 class Gare(configFile: File) {
   val logger = LoggerFactory.getLogger(getClass)

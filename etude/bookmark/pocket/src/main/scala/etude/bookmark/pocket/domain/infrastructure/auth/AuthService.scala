@@ -1,12 +1,14 @@
 package etude.bookmark.pocket.domain.infrastructure.auth
 
+import java.net.{URI, URLEncoder}
+
 import com.twitter.finatra.FinatraServer
 import etude.foundation.http.SyncClient
-import java.net.{URLEncoder, URI}
-import scala.util.Try
-import org.json4s._
 import org.json4s.JsonDSL._
+import org.json4s._
 import org.json4s.native.JsonMethods._
+
+import scala.util.Try
 
 object AuthService extends FinatraServer {
 

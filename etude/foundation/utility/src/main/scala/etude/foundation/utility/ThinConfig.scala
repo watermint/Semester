@@ -1,8 +1,8 @@
 package etude.foundation.utility
 
-import java.io.{FileInputStream, File}
-import java.util.Properties
+import java.io.{File, FileInputStream}
 import java.nio.file.Files
+import java.util.Properties
 
 object ThinConfig {
   def ofName(name: String, pathPrefix: String = ".etude/properties"): Option[Map[String, String]] = {

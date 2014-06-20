@@ -1,13 +1,13 @@
 package etude.messaging.chatwork.domain.lifecycle.message
 
-import etude.messaging.chatwork.domain.model.room.Room
+import etude.messaging.chatwork.domain.infrastructure.api.v1.V1AsyncApiSpecBase
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.messaging.chatwork.domain.model.message.Text
-import etude.messaging.chatwork.domain.infrastructure.api.v1.V1AsyncApiSpecBase
-import org.specs2.mutable.Specification
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
+import etude.messaging.chatwork.domain.model.room.Room
 import etude.test.undisclosed._
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class AsyncMessageRepositoryOnV1ApiSpec

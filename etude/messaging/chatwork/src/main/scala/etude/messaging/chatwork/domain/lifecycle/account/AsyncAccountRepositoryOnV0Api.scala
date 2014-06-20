@@ -1,9 +1,10 @@
 package etude.messaging.chatwork.domain.lifecycle.account
 
-import etude.messaging.chatwork.domain.model.account.{AccountId, Account}
 import etude.domain.core.lifecycle.EntityIOContext
-import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.v0.V0AsyncInitLoad
+import etude.messaging.chatwork.domain.model.account.{Account, AccountId}
+
+import scala.concurrent.Future
 
 class AsyncAccountRepositoryOnV0Api extends AsyncAccountRepository {
   type This <: AsyncAccountRepositoryOnV0Api

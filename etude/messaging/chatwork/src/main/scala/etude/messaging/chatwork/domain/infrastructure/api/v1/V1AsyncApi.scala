@@ -1,12 +1,13 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v1
 
 import java.net.URI
-import scala.util.Failure
-import org.json4s.{JString, JArray, JValue}
-import etude.foundation.http._
+
 import etude.domain.core.lifecycle.EntityIOContext
-import scala.concurrent.Future
 import etude.domain.core.lifecycle.async.AsyncEntityIO
+import etude.foundation.http._
+import org.json4s.{JArray, JString, JValue}
+
+import scala.concurrent.Future
 
 object V1AsyncApi
   extends V1EntityIO[Future]

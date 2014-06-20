@@ -1,10 +1,10 @@
 package etude.desktop.fextile
 
 import scala.collection.mutable
+import scalafx.animation.TranslateTransition
+import scalafx.beans.property.DoubleProperty
 import scalafx.scene.Node
 import scalafx.scene.layout._
-import scalafx.beans.property.DoubleProperty
-import scalafx.animation.TranslateTransition
 
 /**
  * UINavigationController like push/pop view.

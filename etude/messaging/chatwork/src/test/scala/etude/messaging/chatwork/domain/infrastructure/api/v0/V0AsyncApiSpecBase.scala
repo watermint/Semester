@@ -1,12 +1,14 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import java.util.Properties
-import java.util.concurrent.{Executors, ExecutorService}
-import scala.concurrent.ExecutionContext
-import org.specs2.execute.Result
-import etude.test.undisclosed._
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
+import java.util.concurrent.{ExecutorService, Executors}
+
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
+import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
+import etude.test.undisclosed._
+import org.specs2.execute.Result
+
+import scala.concurrent.ExecutionContext
 
 trait V0AsyncApiSpecBase {
   def getEntityIOContext(prop: Properties)(implicit executionContext: ExecutionContext): AsyncEntityIOContext = {

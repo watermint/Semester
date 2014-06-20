@@ -1,7 +1,8 @@
 package etude.domain.core.lifecycle.async
 
-import etude.domain.core.model.{Entity, Identity}
 import etude.domain.core.lifecycle.EntityReader
+import etude.domain.core.model.{Entity, Identity}
+
 import scala.concurrent.Future
 
 trait AsyncEntityReader[ID <: Identity[_], E <: Entity[ID]]

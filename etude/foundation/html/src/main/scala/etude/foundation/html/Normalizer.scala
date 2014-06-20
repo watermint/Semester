@@ -1,11 +1,13 @@
 package etude.foundation.html
 
 import java.io.StringReader
+
+import nu.validator.htmlparser.common.XmlViolationPolicy
+import nu.validator.htmlparser.sax.HtmlParser
+
+import scala.util.{Success, Try}
 import scala.xml.parsing.NoBindingFactoryAdapter
 import scala.xml.{InputSource, Node}
-import nu.validator.htmlparser.sax.HtmlParser
-import nu.validator.htmlparser.common.XmlViolationPolicy
-import scala.util.{Success, Try}
 
 /**
  * Normalize HTML as XML.

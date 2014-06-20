@@ -1,7 +1,8 @@
 package etude.domain.core.lifecycle.sync
 
-import etude.domain.core.model.{Identity, Entity}
 import etude.domain.core.lifecycle.EntityReader
+import etude.domain.core.model.{Entity, Identity}
+
 import scala.util.Try
 
 trait SyncEntityReader[ID <: Identity[_], E <: Entity[ID]]

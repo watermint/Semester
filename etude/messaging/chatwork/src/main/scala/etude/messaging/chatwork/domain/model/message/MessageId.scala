@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.model.message
 
-import etude.messaging.chatwork.domain.model.room.RoomId
 import etude.domain.core.model.Identity
+import etude.messaging.chatwork.domain.model.room.RoomId
 
 case class MessageId(roomId: RoomId,
                      messageId: BigInt)

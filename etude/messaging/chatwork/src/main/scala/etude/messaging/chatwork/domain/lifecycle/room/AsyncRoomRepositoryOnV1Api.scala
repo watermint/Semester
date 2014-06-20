@@ -1,16 +1,15 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import java.time.Instant
 import java.net.URI
-import org.json4s._
-import etude.messaging.chatwork.domain.model.room._
-import scala.Some
-import etude.messaging.chatwork.domain.model.room.RoomAttributes
-import etude.messaging.chatwork.domain.model.message.MessageId
+import java.time.Instant
+
 import etude.domain.core.lifecycle.{EntityIOContext, EntityNotFoundException}
-import scala.concurrent.Future
 import etude.messaging.chatwork.domain.infrastructure.api.v1.{V1ApiException, V1AsyncApi}
-import etude.messaging.chatwork.domain.infrastructure.api.v0.V0ApiQoS
+import etude.messaging.chatwork.domain.model.message.MessageId
+import etude.messaging.chatwork.domain.model.room.{RoomAttributes, _}
+import org.json4s._
+
+import scala.concurrent.Future
 
 private[room]
 class AsyncRoomRepositoryOnV1Api

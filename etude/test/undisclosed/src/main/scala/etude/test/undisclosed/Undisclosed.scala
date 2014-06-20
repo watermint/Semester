@@ -1,10 +1,11 @@
 package etude.test.undisclosed
 
-import java.io.{FileInputStream, File}
-import org.specs2.execute.Result
+import java.io.{File, FileInputStream}
 import java.nio.file.Files
 import java.util.Properties
-import etude.foundation.logging.{LoggerFactory, Logger}
+
+import etude.foundation.logging.{Logger, LoggerFactory}
+import org.specs2.execute.Result
 
 case class Undisclosed(clazzName: String) {
   lazy val logger: Logger = LoggerFactory.getLogger(getClass)

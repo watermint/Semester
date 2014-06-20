@@ -1,11 +1,13 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 
-import scala.util.Try
-import scala.concurrent.Future
 import java.net.URI
-import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UnknownChatworkProtocolException, V0AsyncApi}
-import etude.foundation.http._
+
 import etude.domain.core.lifecycle.EntityIOContext
+import etude.foundation.http._
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0UnknownChatworkProtocolException}
+
+import scala.concurrent.Future
+import scala.util.Try
 
 trait Auth {
   def acceptable(context: AuthContext): Boolean

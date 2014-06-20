@@ -1,9 +1,10 @@
 package etude.foundation.http
 
-import scala.language.higherKinds
 import org.apache.http.client.CookieStore
-import org.apache.http.impl.client.{LaxRedirectStrategy, HttpClients, CloseableHttpClient, BasicCookieStore}
 import org.apache.http.client.protocol.HttpClientContext
+import org.apache.http.impl.client.BasicCookieStore
+
+import scala.language.higherKinds
 
 trait ClientContext {
   val cookieStore: CookieStore = new BasicCookieStore()

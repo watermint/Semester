@@ -1,14 +1,16 @@
 package etude.bookmark.pocket.domain.infrastructure.auth
 
-import java.nio.file.{Files, Paths}
-import java.nio.file.attribute.{PosixFilePermission, PosixFilePermissions}
 import java.nio.charset.StandardCharsets
-import scala.util.{Success, Try}
-import scala.collection.JavaConverters._
-import org.json4s._
+import java.nio.file.attribute.{PosixFilePermission, PosixFilePermissions}
+import java.nio.file.{Files, Paths}
+
 import org.json4s.JsonDSL._
+import org.json4s._
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
+
+import scala.collection.JavaConverters._
+import scala.util.{Success, Try}
 
 case class AuthSession(userName: String,
                        accessToken: String,

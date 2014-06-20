@@ -1,15 +1,16 @@
 package etude.foundation.http
 
+import java.net.URI
+import java.nio.charset.StandardCharsets
+
+import etude.foundation.utility.io.Memory._
+import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.{Header, HttpResponse}
 import org.json4s.JValue
 import org.json4s.native.JsonMethods
-import etude.foundation.utility.io.Memory._
-import scala.Some
-import org.apache.http.client.protocol.HttpClientContext
-import java.net.URI
+
 import scala.collection.JavaConverters._
 import scala.util.Try
-import java.nio.charset.StandardCharsets
 
 case class Response(statusCode: StatusCode,
                     headers: Map[String, String],

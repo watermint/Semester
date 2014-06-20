@@ -1,11 +1,12 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
-import scala.language.higherKinds
-import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
-import scala.concurrent.{Await, Future}
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import scala.concurrent.duration._
 import etude.foundation.logging.LoggerFactory
+import etude.messaging.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
+
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
+import scala.language.higherKinds
 
 class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
   extends Runnable

@@ -1,16 +1,16 @@
 package etude.messaging.chatwork.domain.infrastructure.api.v0
 
 import java.net.URI
-import scala.Some
-import scala.language.higherKinds
-import scala.util.{Success, Failure, Try}
-import org.json4s._
-import etude.foundation.http._
-import etude.foundation.http.Response
-import scala.concurrent.Future
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
 import java.time.Instant
+
+import etude.domain.core.lifecycle.EntityIOContext
+import etude.foundation.http.{Response, _}
+import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
+import org.json4s._
+
+import scala.concurrent.Future
+import scala.language.higherKinds
+import scala.util.{Failure, Success, Try}
 
 object V0AsyncApi
   extends V0AsyncEntityIO {

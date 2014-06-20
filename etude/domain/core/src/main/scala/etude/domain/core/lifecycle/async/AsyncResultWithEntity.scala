@@ -1,7 +1,8 @@
 package etude.domain.core.lifecycle.async
 
-import etude.domain.core.model.{Entity, Identity}
 import etude.domain.core.lifecycle.ResultWithEntity
+import etude.domain.core.model.{Entity, Identity}
+
 import scala.concurrent.Future
 
 trait AsyncResultWithEntity[+R <: AsyncEntityWriter[ID, E], ID <: Identity[_], E <: Entity[ID]]

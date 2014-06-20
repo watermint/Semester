@@ -1,6 +1,6 @@
 package etude.app.arrabbiata.state
 
-import etude.messaging.chatwork.domain.model.room.{Participant, Room}
+import etude.messaging.chatwork.domain.model.room.Room
 
 import scala.collection.mutable.ListBuffer
 

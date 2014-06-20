@@ -1,7 +1,8 @@
 package etude.app.arrabbiata.ui
 
-import scalafx.scene.control.{MenuItem, Menu, MenuBar}
 import etude.app.arrabbiata.ui.message.micro.{LoginShow, StatusUpdate}
+
+import scalafx.scene.control.{Menu, MenuBar, MenuItem}
 
 case class MainMenu() extends MenuBar with UI {
   val sessionMenu = new Menu("Session") {

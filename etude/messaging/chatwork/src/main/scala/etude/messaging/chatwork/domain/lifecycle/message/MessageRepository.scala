@@ -1,9 +1,10 @@
 package etude.messaging.chatwork.domain.lifecycle.message
 
-import scala.language.higherKinds
 import etude.domain.core.lifecycle.EntityIOContext
+import etude.messaging.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
-import etude.messaging.chatwork.domain.model.message.{Text, Message, MessageId}
+
+import scala.language.higherKinds
 
 trait MessageRepository[M[+A]]
   extends MessageReader[M] {

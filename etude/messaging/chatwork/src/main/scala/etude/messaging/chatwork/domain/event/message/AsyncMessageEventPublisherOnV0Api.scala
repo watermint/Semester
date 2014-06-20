@@ -1,17 +1,18 @@
 package etude.messaging.chatwork.domain.event.message
 
-import org.json4s._
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
-import scala.collection.mutable.ArrayBuffer
-import etude.messaging.chatwork.domain.model.message.MessageId
-import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
-import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.event.mutable.IdentityEventPublisherSupport
-import etude.domain.core.event.{IdentityEventType, IdentityEvent}
-import etude.messaging.chatwork.domain.model.room.RoomId
-import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
+import etude.domain.core.event.{IdentityEvent, IdentityEventType}
+import etude.domain.core.lifecycle.EntityIOContext
 import etude.foundation.logging.LoggerFactory
+import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
+import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
+import etude.messaging.chatwork.domain.model.message.MessageId
+import etude.messaging.chatwork.domain.model.room.RoomId
+import org.json4s._
+
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 private[message]
 case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])

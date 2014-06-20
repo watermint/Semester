@@ -1,8 +1,9 @@
 package etude.domain.core.event.mutable
 
-import etude.domain.core.event.{DomainEventPublisher, DomainEvent}
-import scala.collection.mutable.ArrayBuffer
+import etude.domain.core.event.{DomainEvent, DomainEventPublisher}
 import etude.domain.core.lifecycle.EntityIOContext
+
+import scala.collection.mutable.ArrayBuffer
 
 trait DomainEventPublisherSupport[A <: DomainEvent[_], M[+B], MR]
   extends DomainEventPublisher[A, M, MR] {

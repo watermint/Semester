@@ -1,7 +1,8 @@
 package etude.messaging.chatwork.domain.model.room
 
-import scala.language.higherKinds
 import etude.domain.core.lifecycle.{EntityIOContext, Factory}
+
+import scala.language.higherKinds
 
 trait RoomFactory[M[+A]]
   extends Factory {

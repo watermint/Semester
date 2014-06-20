@@ -1,10 +1,11 @@
 package etude.app.arrabbiata.ui.pane
 
-import org.controlsfx.control.{NotificationPane => ControlsNotificationPane}
-import scalafx.scene.Parent
-import org.controlsfx.control.action.{ActionMap, ActionProxy}
 import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.micro.LoginShow
+import org.controlsfx.control.action.{ActionMap, ActionProxy}
+import org.controlsfx.control.{NotificationPane => ControlsNotificationPane}
+
+import scalafx.scene.Parent
 
 case class NotificationPane(parent: Parent) extends ControlsNotificationPane(parent) {
   ActionMap.register(this)

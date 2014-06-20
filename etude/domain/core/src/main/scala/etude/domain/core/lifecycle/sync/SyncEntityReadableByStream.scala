@@ -1,7 +1,8 @@
 package etude.domain.core.lifecycle.sync
 
-import etude.domain.core.model.{Entity, Identity}
 import etude.domain.core.lifecycle.EntityReadableByStream
+import etude.domain.core.model.{Entity, Identity}
+
 import scala.util.Try
 
 trait SyncEntityReadableByStream[ID <: Identity[_], E <: Entity[ID]]

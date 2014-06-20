@@ -1,6 +1,6 @@
 package etude.foundation
 
-import java.net.{URL, URI}
+import java.net.{URI, URL}
 
 package object http {
   implicit def uriToResource(uri: URI): Resource = Resource(uri)

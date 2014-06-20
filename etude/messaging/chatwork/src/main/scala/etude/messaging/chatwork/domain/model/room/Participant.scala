@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.model.room
 
-import etude.messaging.chatwork.domain.model.account.AccountId
 import etude.domain.core.model.Entity
+import etude.messaging.chatwork.domain.model.account.AccountId
 
 class Participant(val roomId: RoomId,
                   val admin: Seq[AccountId],

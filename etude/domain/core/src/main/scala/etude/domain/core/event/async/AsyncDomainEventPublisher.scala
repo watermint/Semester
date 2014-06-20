@@ -1,6 +1,7 @@
 package etude.domain.core.event.async
 
-import etude.domain.core.event.{DomainEventPublisher, DomainEvent}
+import etude.domain.core.event.{DomainEvent, DomainEventPublisher}
+
 import scala.concurrent.Future
 
 /**
