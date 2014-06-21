@@ -2,7 +2,7 @@ package etude.app.arrabbiata.ui.pane.room
 
 import etude.app.arrabbiata.controller.AppActor
 import etude.app.arrabbiata.controller.message.room.{DoMergeRoom, LoadRoomList}
-import etude.app.arrabbiata.ui.control.RoomListView
+import etude.app.arrabbiata.ui.control.{AccountListView, RoomListView}
 import etude.app.arrabbiata.ui.message.composite.room.{MergeRoom, SelectMergeRooms, UpdateMergeRoomLists}
 import etude.app.arrabbiata.ui.{UI, UIActor, UIUnit}
 import etude.messaging.chatwork.domain.model.account.Account
@@ -46,7 +46,7 @@ object MergeRoomPane extends HBox with UI {
     }
   }
   val diffParticipantItems = new ObservableBuffer[Account]()
-  val diffParticipantList = new ListView[Account] {
+  val diffParticipantList = new AccountListView {
     items = diffParticipantItems
   }
   val mergeButton = new Button {
@@ -104,7 +104,7 @@ object MergeRoomPane extends HBox with UI {
       spacing = UIUnit.spacing
       content = Seq(
         new Label {
-          text = "Account(s) Diff"
+          text = "Account(s)"
         },
         diffParticipantList,
         mergeButton

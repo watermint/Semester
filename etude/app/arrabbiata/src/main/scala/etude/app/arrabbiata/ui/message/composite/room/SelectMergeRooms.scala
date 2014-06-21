@@ -1,5 +1,7 @@
 package etude.app.arrabbiata.ui.message.composite.room
 
+import etude.app.arrabbiata.controller.AppActor
+import etude.app.arrabbiata.controller.message.room.MergeDiffList
 import etude.app.arrabbiata.ui.message.composite.CompositeUIMessage
 import etude.app.arrabbiata.ui.pane.room.MergeRoomPane
 
@@ -13,6 +15,7 @@ case class SelectMergeRooms() extends CompositeUIMessage {
         MergeRoomPane.mergeButton.disable = true
       case (base, target) =>
         MergeRoomPane.mergeButton.disable = false
+        AppActor.app ! MergeDiffList(base, target)
     }
   }
 }
