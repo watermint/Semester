@@ -4,8 +4,8 @@ import java.net.URI
 import java.time.Instant
 
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.messaging.chatwork.domain.model.account.{AccountId, ChatWorkId, OrganizationId, _}
-import etude.messaging.chatwork.domain.model.room.{RoomId, _}
+import etude.messaging.chatwork.domain.model.account._
+import etude.messaging.chatwork.domain.model.room._
 import org.json4s._
 
 import scala.collection.mutable

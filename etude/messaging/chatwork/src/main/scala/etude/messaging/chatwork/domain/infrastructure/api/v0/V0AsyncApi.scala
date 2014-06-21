@@ -4,7 +4,7 @@ import java.net.URI
 import java.time.Instant
 
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.foundation.http.{Response, _}
+import etude.foundation.http._
 import etude.messaging.chatwork.domain.infrastructure.api.v0.auth.Auth
 import org.json4s._
 

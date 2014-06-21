@@ -1,7 +1,7 @@
 package etude.app.arrabbiata.ui.pane.room
 
 import etude.app.arrabbiata.controller.AppActor
-import etude.app.arrabbiata.controller.message.room.{DoMergeRoom, LoadRoomList}
+import etude.app.arrabbiata.controller.message.room.LoadRoomList
 import etude.app.arrabbiata.ui.control.{AccountListView, RoomListView}
 import etude.app.arrabbiata.ui.message.composite.room.{MergeRoom, SelectMergeRooms, UpdateMergeRoomLists}
 import etude.app.arrabbiata.ui.{UI, UIActor, UIUnit}
@@ -10,7 +10,7 @@ import etude.messaging.chatwork.domain.model.room.Room
 
 import scalafx.collections.ObservableBuffer
 import scalafx.geometry.{Insets, Pos}
-import scalafx.scene.control.{Button, Label, ListView, TextField}
+import scalafx.scene.control.{Button, Label, TextField}
 import scalafx.scene.layout.{HBox, Priority, VBox}
 
 object MergeRoomPane extends HBox with UI {
