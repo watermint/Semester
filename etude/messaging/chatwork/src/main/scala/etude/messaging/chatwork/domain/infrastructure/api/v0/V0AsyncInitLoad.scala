@@ -4,6 +4,7 @@ import java.net.URI
 import java.time.Instant
 
 import etude.domain.core.lifecycle.EntityIOContext
+import etude.foundation.logging.LoggerFactory
 import etude.messaging.chatwork.domain.model.account._
 import etude.messaging.chatwork.domain.model.room._
 import org.json4s._
@@ -16,6 +17,8 @@ import scala.concurrent.Future
  */
 object V0AsyncInitLoad
   extends V0AsyncEntityIO {
+
+  val logger = LoggerFactory.getLogger(getClass)
 
   private def asOptionString(value: String): Option[String] = {
     if (value == null || "".equals(value)) {
@@ -206,6 +209,7 @@ object V0AsyncInitLoad
           case None => // nop
           case Some(cached) =>
             if (Instant.now.minusSeconds(cacheSeconds).isBefore(cached.loadTime)) {
+              logger.debug("init load from cache")
               return Future.successful(cached.content)
             }
         }
@@ -230,6 +234,7 @@ object V0AsyncInitLoad
             Instant.now()
           )
         )
+        logger.debug("init load finished")
 
         content
     }
