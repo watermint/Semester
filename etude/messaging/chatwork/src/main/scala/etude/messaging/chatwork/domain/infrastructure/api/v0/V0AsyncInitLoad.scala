@@ -64,10 +64,8 @@ object V0AsyncInitLoad
     lastId.lastOption
   }
 
-  def parseContacts(json: JValue): List[Account] = {
+  def parseContact(contactDat: List[(String, JValue)]): List[Account] = {
     for {
-      JObject(doc) <- json
-      JField("contact_dat", JObject(contactDat)) <- doc
       JField(accountId, JObject(contact)) <- contactDat
       JField("av", JString(avatarImage)) <- contact
       JField("cwid", JString(chatWorkId)) <- contact
@@ -84,6 +82,16 @@ object V0AsyncInitLoad
         department = asOptionString(department),
         avatarImage = asOptionURI(accountIconUrlBase, avatarImage)
       )
+    }
+  }
+
+  def parseContacts(json: JValue): List[Account] = {
+    for {
+      JObject(doc) <- json
+      JField("contact_dat", JObject(contactDat)) <- doc
+      account <- parseContact(contactDat)
+    } yield {
+      account
     }
   }
 
