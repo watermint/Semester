@@ -19,6 +19,7 @@ object CenterPane extends TabPane with UI {
       alignmentInParent = Pos.CENTER
       text = "Merge Room"
       content = MergeRoomPane
+      closable = false
     }
   )
 }

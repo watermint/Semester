@@ -5,7 +5,7 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 
 import scalafx.scene.control.ListView
 
-class DomainListView[T] extends ListView[T] {
+trait DomainListView[T] extends ListView[T] {
   val selected = new AtomicReference[T]()
 
   selectionModel().selectedItemProperty().addListener(

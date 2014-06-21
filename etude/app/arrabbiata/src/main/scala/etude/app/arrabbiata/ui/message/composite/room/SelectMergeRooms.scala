@@ -7,6 +7,7 @@ import etude.app.arrabbiata.ui.pane.room.MergeRoomPane
 
 case class SelectMergeRooms() extends CompositeUIMessage {
   override def perform(): Unit = {
+    MergeRoomPane.diffParticipantItems.clear()
     (MergeRoomPane.baseRoomList.delegate.getSelectionModel.getSelectedItem,
       MergeRoomPane.targetRoomList.delegate.getSelectionModel.getSelectedItem) match {
       case (null, _) =>

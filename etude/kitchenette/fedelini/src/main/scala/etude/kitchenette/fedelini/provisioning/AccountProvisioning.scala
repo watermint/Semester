@@ -3,6 +3,7 @@ package etude.kitchenette.fedelini.provisioning
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
 import etude.messaging.chatwork.domain.lifecycle.room.AsyncParticipantRepository
+import etude.messaging.chatwork.domain.model.account.AccountId
 import etude.messaging.chatwork.domain.model.room.{AccountRole, AccountRoleType, Participant, RoomId}
 
 import scala.concurrent.Future
@@ -35,7 +36,7 @@ class AccountProvisioning extends AsyncEntityIO {
   def diff(toRoom: RoomId,
            fromRoom: RoomId,
            mapper: (RoomRoleMapping) => Option[AccountRoleType])
-          (implicit context: EntityIOContext[Future]): Future[Seq[AccountRole]] = {
+          (implicit context: EntityIOContext[Future]): Future[Seq[AccountId]] = {
     implicit val executionContext = getExecutionContext(context)
     val participantRepository = AsyncParticipantRepository.ofContext(context)
 
@@ -47,9 +48,9 @@ class AccountProvisioning extends AsyncEntityIO {
         toParticipant,
         fromParticipant,
         mapper
-      )
+      ) map (_.accountId)
 
-      merged.diff(toParticipant.roles).distinct
+      merged.distinct.diff(toParticipant.roles.map(_.accountId).distinct).distinct
     }
   }
 

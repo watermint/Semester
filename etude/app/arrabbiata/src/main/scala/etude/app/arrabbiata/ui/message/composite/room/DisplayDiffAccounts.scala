@@ -7,6 +7,6 @@ import etude.messaging.chatwork.domain.model.account.Account
 case class DisplayDiffAccounts(diff: Seq[Account]) extends CompositeUIMessage {
   def perform(): Unit = {
     MergeRoomPane.diffParticipantItems.clear()
-    MergeRoomPane.diffParticipantItems.appendAll(diff.sortBy(_.name))
+    MergeRoomPane.diffParticipantItems.appendAll(diff.distinct.sortBy(_.name))
   }
 }

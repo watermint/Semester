@@ -10,11 +10,11 @@ import etude.domain.core.model.Entity
  * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms
  */
 class Account(val accountId: AccountId,
-              val name: Option[String],
+              val name: Option[String] = None,
               val chatWorkId: Option[ChatWorkId] = None,
               val organization: Option[Organization] = None,
               val department: Option[String] = None,
-              val avatarImage: Option[URI])
+              val avatarImage: Option[URI] = None)
   extends Entity[AccountId] {
 
   val identity: AccountId = accountId

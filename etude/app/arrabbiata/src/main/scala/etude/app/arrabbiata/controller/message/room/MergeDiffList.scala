@@ -25,8 +25,18 @@ case class MergeDiffList(base: Room, target: Room)
       ProvisioningPolicy.toRoleThenFromRole) map {
       diff =>
         val accounts = diff.map {
-          role =>
-            accountRepo.resolve(role.accountId)
+          accountId =>
+            accountRepo.resolve(accountId) map {
+              account =>
+                account
+            } fallbackTo {
+              Future.successful(
+                new Account(
+                  accountId = accountId,
+                  name = Some("id: " + accountId.value)
+                )
+              )
+            }
         }
         Future.sequence(accounts).onSuccess {
           case diff: Seq[Account] =>

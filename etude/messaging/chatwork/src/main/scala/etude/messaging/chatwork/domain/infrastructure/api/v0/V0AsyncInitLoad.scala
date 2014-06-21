@@ -31,7 +31,7 @@ object V0AsyncInitLoad
   private def asOptionURI(base: String, part: String): Option[URI] = {
     asOptionString(part) map {
       v =>
-        new URI(v)
+        new URI(base + v)
     }
   }
 
@@ -51,6 +51,8 @@ object V0AsyncInitLoad
 
   private val cacheSeconds = 300
 
+  val roomIconUrlBase = "https://tky-chat-work-appdata.s3.amazonaws.com/icon/"
+  val accountIconUrlBase = "https://tky-chat-work-appdata.s3.amazonaws.com/avatar/"
 
   def parseLastId(json: JValue): Option[String] = {
     val lastId: List[String] = for {
@@ -80,7 +82,7 @@ object V0AsyncInitLoad
         chatWorkId = asOptionString(chatWorkId).map(ChatWorkId),
         organization = asOptionOrganization(organizationId, organization),
         department = asOptionString(department),
-        avatarImage = asOptionURI("", avatarImage)
+        avatarImage = asOptionURI(accountIconUrlBase, avatarImage)
       )
     }
   }
@@ -99,7 +101,7 @@ object V0AsyncInitLoad
         case _ => ""
       }
       val avatar = asOptionURI(
-        "",
+        roomIconUrlBase,
         r.getOrElse("ic", None) match {
           case JString(a) => a
           case _ => null
