@@ -3,6 +3,7 @@ package etude.app.arrabbiata.controller.message.room
 import etude.app.arrabbiata.controller.message.MessageWithSession
 import etude.app.arrabbiata.state.Session
 import etude.app.arrabbiata.ui.UIActor
+import etude.app.arrabbiata.ui.message.composite.StatusUpdate
 import etude.app.arrabbiata.ui.message.composite.room.DisplayDiffAccounts
 import etude.kitchenette.fedelini.provisioning.{AccountProvisioning, ProvisioningPolicy}
 import etude.messaging.chatwork.domain.lifecycle.account.AsyncAccountRepository
@@ -19,6 +20,8 @@ case class MergeDiffList(base: Room, target: Room)
     implicit val execContext = session.ioContext.executor
     implicit val ioContext = session.ioContext
     val accountRepo = AsyncAccountRepository.ofContext(session.ioContext)
+
+    UIActor.ui ! StatusUpdate("Loading account(s)")
 
     provisioning.diff(target.roomId,
       base.roomId,
@@ -41,6 +44,7 @@ case class MergeDiffList(base: Room, target: Room)
         Future.sequence(accounts).onSuccess {
           case diff: Seq[Account] =>
             UIActor.ui ! DisplayDiffAccounts(diff)
+            UIActor.ui ! StatusUpdate("")
         }
     }
   }

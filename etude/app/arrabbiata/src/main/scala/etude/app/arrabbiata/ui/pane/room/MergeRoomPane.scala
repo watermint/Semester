@@ -25,7 +25,8 @@ object MergeRoomPane extends HBox with UI {
   val baseRoomItems = new ObservableBuffer[Room]()
   val baseRoomList = new RoomListView {
     items = baseRoomItems
-
+    hgrow = Priority.ALWAYS
+    vgrow = Priority.ALWAYS
     override def onSelected(room: Room): Unit = {
       UIActor.ui ! SelectMergeRooms()
     }
@@ -41,6 +42,8 @@ object MergeRoomPane extends HBox with UI {
   val targetRoomItems = new ObservableBuffer[Room]()
   val targetRoomList = new RoomListView {
     items = targetRoomItems
+    hgrow = Priority.ALWAYS
+    vgrow = Priority.ALWAYS
     override def onSelected(room: Room): Unit = {
       UIActor.ui ! SelectMergeRooms()
     }
@@ -48,6 +51,8 @@ object MergeRoomPane extends HBox with UI {
   val diffParticipantItems = new ObservableBuffer[Account]()
   val diffParticipantList = new AccountListView {
     items = diffParticipantItems
+    hgrow = Priority.ALWAYS
+    vgrow = Priority.ALWAYS
   }
   val mergeButton = new Button {
     text = "Merge"
