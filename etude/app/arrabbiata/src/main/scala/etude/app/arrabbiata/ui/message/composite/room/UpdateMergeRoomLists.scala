@@ -30,7 +30,7 @@ case class UpdateMergeRoomLists() extends CompositeUIMessage {
     text match {
       case null => displayRooms(rooms)
       case s if text.trim.isEmpty => displayRooms(rooms)
-      case s => displayRooms(rooms.filter(_.name.contains(text)))
+      case s => displayRooms(rooms.filter(_.name.toLowerCase.contains(text.toLowerCase)))
     }
   }
 
