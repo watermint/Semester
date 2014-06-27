@@ -2,7 +2,7 @@
 lazy val buildSettings = Seq(
   version := "0.6.3",
   organization := "org.watermint",
-  scalaVersion := "2.10.4",
+  scalaVersion := "2.11.1",
   crossScalaVersions := Seq("2.11.1", "2.10.4"),
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
@@ -28,6 +28,11 @@ lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .dependsOn(messagingChatwork)
   .dependsOn(kitchenetteFedelini)
   .dependsOn(ticketThings)
+  .dependsOn(foundationLogging)
+  .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
+
+lazy val appBolognese = project.in(file("etude/app/bolognese"))
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
