@@ -11,8 +11,6 @@ Collection of small apps and libraries. This project collection is the practice 
 * [Arrabbiata](etude/app/arrabbiata) - ChatWork utility UI
     * Requires JDK8 Update 20 (tested on JDK 8 update 19, 20)
 * [Bolognese](etude/app/bolognese) - Practicing [spray](http://spray.io)
-* [Gare](etude/app/gare) - Application dispatcher
-    * Note: Broken on scala 2.11 due to twitter libs are not prepared for scala 2.11
 
 ## Libraries
 

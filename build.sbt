@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.6.4",
+  version := "0.7.0",
   organization := "org.watermint",
   scalaVersion := "2.11.1",
   crossScalaVersions := Seq("2.11.1", "2.10.4"),
@@ -33,11 +33,6 @@ lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .settings(assemblySettings: _*)
 
 lazy val appBolognese = project.in(file("etude/app/bolognese"))
-  .dependsOn(foundationLogging)
-  .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
-
-lazy val appGare = project.in(file("etude/app/gare"))
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
