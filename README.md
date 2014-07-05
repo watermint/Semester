@@ -9,7 +9,7 @@ Collection of small apps and libraries. This project collection is the practice 
 ## Application
 
 * [Arrabbiata](etude/app/arrabbiata) - ChatWork utility UI
-    * Requires JDK8 Update 20 (tested on JDK 8 update 19, 20)
+    * Requires JDK8 Update 20 (tested on JDK 8 update 20 build 19, 20)
 * [Bolognese](etude/app/bolognese) - Practicing [spray](http://spray.io)
 
 ## Libraries
