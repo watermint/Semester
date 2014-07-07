@@ -1,28 +1,107 @@
 package etude.bookmark.pocket.domain.infrastructure.auth
 
 import java.net.{URI, URLEncoder}
+import java.util.concurrent.{ExecutorService, Executors}
 
-import com.twitter.finatra.FinatraServer
-import etude.foundation.http.SyncClient
+import akka.actor.ActorSystem
+import etude.foundation.http.{AsyncClient, AsyncClientContext}
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.native.JsonMethods._
+import spray.http.{HttpCookie, StatusCodes}
+import spray.routing.{Route, SimpleRoutingApp}
 
-import scala.util.Try
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
-object AuthService extends FinatraServer {
+object AuthService
+  extends App
+  with SimpleRoutingApp
+  with SecureConfiguration {
 
-  System.setProperty("com.twitter.finatra.config.certificatePath", "etude/bookmark/pocket/src/cert/server.crt")
-  System.setProperty("com.twitter.finatra.config.keyPath", "etude/bookmark/pocket/src/cert/server.key")
-
-  val defaultRedirectUri = "https://localhost:7443/auth/callback"
+  val serverInterface = "localhost"
+  val serverPort = 7443
+  val defaultRedirectUri = s"https://$serverInterface:$serverPort/auth/callback"
   val defaultConsumerKey = "26663-4732e33333464d2f63b63ed3"
   val consumerKey = System.getProperty("etude.bookmark.pocket.consumerKey", defaultConsumerKey)
 
-  register(new AuthController())
+  def keyStoreResource: String = "/pocket.jks"
 
-  def acquireCode(): Try[String] = {
-    val client = SyncClient()
+  def keyStorePassword: String = "pocket"
+
+  val executorsPool: ExecutorService = Executors.newCachedThreadPool()
+  implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
+
+  implicit val system = ActorSystem("Pocket")
+
+  startServer(interface = serverInterface, port = serverPort) {
+    routeTop() ~ routeAuthRequest() ~ routeAuthCallback()
+  }
+
+  def routeTop(): Route = {
+    path("") {
+      onComplete(acquireCode()) {
+        case Success(code) =>
+          setCookie(new HttpCookie(
+            name = "code",
+            content = code,
+            secure = true,
+            httpOnly = true,
+            maxAge = Some(600)
+          )) {
+            complete {
+              <body>
+                <h1>Issue New Token</h1>
+                <a href="/auth/request">Connect with Pocket</a>
+              </body>
+            }
+          }
+        case Failure(f) =>
+          complete(StatusCodes.ServiceUnavailable, <body>Failed to start authorization process with error:
+            {f}
+          </body>)
+      }
+    }
+  }
+
+  def routeAuthRequest(): Route = {
+    path("auth" / "request") {
+      get {
+        optionalCookie("code") {
+          case Some(code) =>
+            redirect(redirectUri(code.content).toString, StatusCodes.Found)
+          case None =>
+            redirect("/", StatusCodes.Found)
+        }
+      }
+    }
+  }
+
+  def routeAuthCallback(): Route = {
+    path("auth" / "callback") {
+      get {
+        optionalCookie("code") {
+          case Some(code) =>
+            onComplete(authorize(code.content)) {
+              case Success(session) =>
+                AuthSession.storeSession(session)
+                complete {
+                  <body>Authorization succeed. Session stored on your home directory.</body>
+                }
+              case Failure(f) =>
+                complete {
+                  <body>Failed authorization with Pocket.</body>
+                }
+            }
+          case None =>
+            redirect("/", StatusCodes.Found)
+        }
+      }
+    }
+  }
+
+  def acquireCode(): Future[String] = {
+    val client = AsyncClient(AsyncClientContext(executionContext = executors))
     val requestContent = Map(
       "consumer_key" -> consumerKey,
       "redirect_uri" -> defaultRedirectUri
@@ -54,8 +133,8 @@ object AuthService extends FinatraServer {
     )
   }
 
-  def authorize(code: String): Try[AuthSession] = {
-    val client = SyncClient()
+  def authorize(code: String): Future[AuthSession] = {
+    val client = AsyncClient(AsyncClientContext(executionContext = executors))
     val requestContent = Map(
       "consumer_key" -> consumerKey,
       "code" -> code
