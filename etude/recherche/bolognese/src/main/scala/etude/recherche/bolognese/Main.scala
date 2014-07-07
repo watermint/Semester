@@ -1,4 +1,4 @@
-package etude.app.bolognese
+package etude.recherche.bolognese
 
 import java.util.concurrent.{Executors, ExecutorService}
 

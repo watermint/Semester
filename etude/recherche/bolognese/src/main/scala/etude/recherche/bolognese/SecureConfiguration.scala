@@ -1,4 +1,4 @@
-package etude.app.bolognese
+package etude.recherche.bolognese
 
 import java.security.{SecureRandom, KeyStore}
 import javax.net.ssl.{TrustManagerFactory, KeyManagerFactory, SSLContext}

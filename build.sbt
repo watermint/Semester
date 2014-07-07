@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.7.0",
+  version := "0.7.1",
   organization := "org.watermint",
   scalaVersion := "2.11.1",
   crossScalaVersions := Seq("2.11.1", "2.10.4"),
@@ -28,11 +28,6 @@ lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .dependsOn(messagingChatwork)
   .dependsOn(kitchenetteFedelini)
   .dependsOn(ticketThings)
-  .dependsOn(foundationLogging)
-  .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
-
-lazy val appBolognese = project.in(file("etude/app/bolognese"))
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
@@ -94,4 +89,9 @@ lazy val ticketThings = project.in(file("etude/ticket/things"))
 lazy val testUndisclosed = project.in(file("etude/test/undisclosed"))
   .settings(buildSettings: _*)
   .dependsOn(foundationLogging)
+
+lazy val rechercheBolognese = project.in(file("etude/recherche/bolognese"))
+  .dependsOn(foundationLogging)
+  .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
 
