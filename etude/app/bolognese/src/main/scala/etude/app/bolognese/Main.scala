@@ -1,31 +1,46 @@
 package etude.app.bolognese
 
-import akka.actor.{Actor, ActorSystem, Props}
-import akka.io.IO
-import etude.foundation.logging.LoggerFactory
-import spray.can.Http
-import spray.http.{HttpMethods, HttpRequest, HttpResponse, Uri}
+import akka.actor.ActorSystem
+import spray.http.HttpCookie
+import spray.routing.SimpleRoutingApp
 
-class Main extends Actor {
-  val logger = LoggerFactory.getLogger(getClass)
+object Main
+  extends App
+  with SimpleRoutingApp
+  with SecureConfiguration {
 
-  def receive: Receive = {
-    case _: Http.Connected => sender ! Http.Register(self)
-
-    case HttpRequest(HttpMethods.GET, Uri.Path(path), _, _, _) =>
-      sender ! HttpResponse(entity = s"Pong $path")
-
-    case e =>
-      logger.info(e.toString)
-  }
-}
-
-object Main {
   implicit val system = ActorSystem("Bolognese")
 
-  val bolognese = system.actorOf(Props[Main], name = "Bolognese")
-
-  def main(args: Array[String]): Unit = {
-    IO(Http) ! Http.Bind(bolognese, interface = "127.0.0.1", port = 7000)
+  def hello(name: String) = {
+    get {
+      cookie("hello") {
+        c =>
+          complete {
+            <h1>Hello
+              {name}{c.content}
+            </h1>
+          }
+      } ~ complete {
+        "no cookie"
+      }
+    }
   }
+
+  def hello2() = {
+    post {
+      setCookie(new HttpCookie("hello", "world")) {
+        complete {
+          <h1>POSTing</h1>
+        }
+      }
+    }
+  }
+
+  startServer(interface = "localhost", port = 7000) {
+    path("hello" / """[a-z]{2,4}""".r) {
+      a =>
+        hello(a) ~ hello2()
+    }
+  }
+
 }
