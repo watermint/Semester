@@ -56,11 +56,6 @@ lazy val domainJson = project.in(file("etude/domain/json"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
 
-lazy val domainElasticsearch = project.in(file("etude/domain/elasticsearch"))
-  .settings(buildSettings: _*)
-  .dependsOn(domainCore)
-  .dependsOn(domainJson)
-
 lazy val foundationLogging = project.in(file("etude/foundation/logging"))
   .settings(buildSettings: _*)
 
@@ -89,6 +84,15 @@ lazy val kitchenetteHighlight = project.in(file("etude/kitchenette/highlight"))
 
 lazy val kitchenetteSpray = project.in(file("etude/kitchenette/spray"))
   .settings(buildSettings: _*)
+
+lazy val kitchenetteElasticSearch = project.in(file("etude/kitchenette/elasticsearch"))
+  .settings(buildSettings: _*)
+
+lazy val kitchenetteCode = project.in(file("etude/kitchenette/code"))
+  .settings(buildSettings: _*)
+  .dependsOn(kitchenetteTika)
+  .dependsOn(kitchenetteHighlight)
+  .dependsOn(kitchenetteElasticSearch)
 
 lazy val kitchenetteTika = project.in(file("etude/kitchenette/tika"))
   .settings(buildSettings: _*)

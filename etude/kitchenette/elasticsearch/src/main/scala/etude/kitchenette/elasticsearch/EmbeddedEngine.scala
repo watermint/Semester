@@ -1,4 +1,4 @@
-package etude.domain.elasticsearch.domain.infrastructure
+package etude.kitchenette.elasticsearch
 
 import java.nio.file.Path
 
@@ -6,7 +6,6 @@ import org.elasticsearch.client.Client
 import org.elasticsearch.common.settings.ImmutableSettings
 import org.elasticsearch.node.{Node, NodeBuilder}
 
-private[infrastructure]
 case class EmbeddedEngine(clusterName: String,
                           storagePath: Path) extends Engine {
 

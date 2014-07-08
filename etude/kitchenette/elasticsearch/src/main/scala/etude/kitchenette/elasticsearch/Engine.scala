@@ -1,4 +1,4 @@
-package etude.domain.elasticsearch.domain.infrastructure
+package etude.kitchenette.elasticsearch
 
 import java.nio.file.Path
 
