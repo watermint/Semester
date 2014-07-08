@@ -89,7 +89,9 @@ lazy val kitchenetteHighlight = project.in(file("etude/kitchenette/highlight"))
 
 lazy val kitchenetteSpray = project.in(file("etude/kitchenette/spray"))
   .settings(buildSettings: _*)
-  .dependsOn(messagingChatwork)
+
+lazy val kitchenetteTika = project.in(file("etude/kitchenette/tika"))
+  .settings(buildSettings: _*)
 
 lazy val ticketThings = project.in(file("etude/ticket/things"))
   .settings(buildSettings: _*)
