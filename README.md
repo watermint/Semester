@@ -11,18 +11,37 @@ Collection of small apps and libraries. This project collection is the practice 
 * [Arrabbiata](etude/app/arrabbiata) - ChatWork utility UI
     * Requires JDK8 Update 20 (tested on JDK 8 update 20 build 19, 20)
 
-## Libraries
+## Intermediate Libraries
+
+Business logics, library/framework integration, etc.
+
+* [Fedelini](etude/kitchenette/fedelini) - ChatWork Business Logics
+* [Highlight](etude/kitchenette/highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
+* [Spray](etude/kitchenette/spray) - [Spray](http://spray.io) configuration base
+
+## Adapters
 
 * [Pocket](etude/bookmark/pocket) - [Pocket](http://getpocket.com) API
-    * Note: Authentication callbacks are broken on scala 2.11 due to twitter libs are not prepared for scala 2.11
 * [ChatWork](etude/messaging/chatwork) - [ChatWork](http://chatwork.com) API
-* [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
+* [Things](etude/ticket/things) - [Things](https://culturedcode.com/things/) app integration.
+
+## Domain
+
 * [Domain](etude/domain/core) - Libraries for Domain Driven Development (DDD).
+
+## UI
+
+* [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
+
+## Utility
+
 * [Html](etude/foundation/html) - HTML parse wrapper API
 * [Http](etude/foundation/http) - HTTP Client wrapper API
-* [i18n](etude/foundation/i18n) - Internationalization (i18n) API
 * [Utility](etude/foundation/utility) - Generic utilities
-* [Things](etude/ticket/things) - [Things](https://culturedcode.com/things/) app integration.
+* [Logging](etude/foundation/logging) - Logging API
+
+## Tests
+
 * [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
 
 ## Practice

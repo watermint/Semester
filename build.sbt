@@ -84,6 +84,9 @@ lazy val kitchenetteFedelini = project.in(file("etude/kitchenette/fedelini"))
   .dependsOn(messagingChatwork)
   .settings(assemblySettings: _*)
 
+lazy val kitchenetteHighlight = project.in(file("etude/kitchenette/highlight"))
+  .settings(buildSettings: _*)
+
 lazy val kitchenetteSpray = project.in(file("etude/kitchenette/spray"))
   .settings(buildSettings: _*)
   .dependsOn(messagingChatwork)
