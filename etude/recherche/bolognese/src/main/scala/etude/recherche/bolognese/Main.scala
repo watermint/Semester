@@ -1,8 +1,9 @@
 package etude.recherche.bolognese
 
-import java.util.concurrent.{Executors, ExecutorService}
+import java.util.concurrent.{ExecutorService, Executors}
 
 import akka.actor.ActorSystem
+import etude.kitchenette.spray.SecureConfiguration
 import spray.http.HttpCookie
 import spray.routing.SimpleRoutingApp
 
@@ -13,10 +14,6 @@ object Main
   extends App
   with SimpleRoutingApp
   with SecureConfiguration {
-
-  def keyStoreResource: String = "/bolognese.jks"
-
-  def keyStorePassword: String = "semester"
 
   // for processing future operation within onComplete
   val executorsPool: ExecutorService = Executors.newCachedThreadPool()

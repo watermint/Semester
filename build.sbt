@@ -37,6 +37,7 @@ lazy val bookmarkPocket = project.in(file("etude/bookmark/pocket"))
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
   .dependsOn(foundationHttp)
+  .dependsOn(kitchenetteSpray)
   .settings(buildSettings: _*)
 
 lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
@@ -83,6 +84,10 @@ lazy val kitchenetteFedelini = project.in(file("etude/kitchenette/fedelini"))
   .dependsOn(messagingChatwork)
   .settings(assemblySettings: _*)
 
+lazy val kitchenetteSpray = project.in(file("etude/kitchenette/spray"))
+  .settings(buildSettings: _*)
+  .dependsOn(messagingChatwork)
+
 lazy val ticketThings = project.in(file("etude/ticket/things"))
   .settings(buildSettings: _*)
 
@@ -92,6 +97,7 @@ lazy val testUndisclosed = project.in(file("etude/test/undisclosed"))
 
 lazy val rechercheBolognese = project.in(file("etude/recherche/bolognese"))
   .dependsOn(foundationLogging)
+  .dependsOn(kitchenetteSpray)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 

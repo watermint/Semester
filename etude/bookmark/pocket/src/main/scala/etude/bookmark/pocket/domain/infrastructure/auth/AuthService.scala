@@ -5,6 +5,7 @@ import java.util.concurrent.{ExecutorService, Executors}
 
 import akka.actor.ActorSystem
 import etude.foundation.http.{AsyncClient, AsyncClientContext}
+import etude.kitchenette.spray.SecureConfiguration
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.native.JsonMethods._
@@ -24,10 +25,6 @@ object AuthService
   val defaultRedirectUri = s"https://$serverInterface:$serverPort/auth/callback"
   val defaultConsumerKey = "26663-4732e33333464d2f63b63ed3"
   val consumerKey = System.getProperty("etude.bookmark.pocket.consumerKey", defaultConsumerKey)
-
-  def keyStoreResource: String = "/pocket.jks"
-
-  def keyStorePassword: String = "pocket"
 
   val executorsPool: ExecutorService = Executors.newCachedThreadPool()
   implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
@@ -57,9 +54,12 @@ object AuthService
             }
           }
         case Failure(f) =>
-          complete(StatusCodes.ServiceUnavailable, <body>Failed to start authorization process with error:
-            {f}
-          </body>)
+          complete(
+            StatusCodes.ServiceUnavailable,
+            <body>Failed to start authorization process with error:
+              {f}
+            </body>
+          )
       }
     }
   }
