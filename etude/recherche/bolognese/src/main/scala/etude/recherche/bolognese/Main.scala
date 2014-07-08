@@ -6,7 +6,9 @@ import akka.actor.ActorSystem
 import etude.kitchenette.spray.SecureConfiguration
 import spray.http.HttpCookie
 import spray.routing.SimpleRoutingApp
+import spray.routing.directives.CachingDirectives._
 
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -72,6 +74,9 @@ object Main
     path("hello" / """[a-z]{2,4}""".r) {
       a =>
         hello(a) ~ hello2()
+    } ~
+    pathPrefix("bootstrap") {
+      getFromResourceDirectory("bootstrap")
     }
   }
 
