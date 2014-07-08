@@ -11,7 +11,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class Description(path: Path,
                        contentType: String,
-                       contentEncoding: String)
+                       contentEncoding: String) {
+
+  val isText: Boolean = contentType.startsWith("text")
+
+  val isImage: Boolean = contentType.startsWith("image")
+}
 
 object Description {
   def ofPath(path: Path)(implicit ctx: ExecutionContext): Future[Description] = Future {

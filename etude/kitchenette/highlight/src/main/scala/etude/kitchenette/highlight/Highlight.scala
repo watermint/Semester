@@ -11,7 +11,7 @@ class Highlight {
   private lazy val engine: ScriptEngine = {
     val n = new ScriptEngineManager().getEngineByName("nashorn")
 
-    n.eval(new InputStreamReader(getClass.getResourceAsStream("/highlight.pack.js")))
+    n.eval(new InputStreamReader(getClass.getResourceAsStream("highlight.pack.js")))
     n
   }
 
