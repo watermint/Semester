@@ -1,35 +1,43 @@
 package etude.kitchenette.tika
 
 import java.nio.file.Paths
-import java.util.concurrent.{Executors, ExecutorService}
 
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 
-import scala.concurrent.{Await, ExecutionContext, duration}
-import scala.concurrent.duration.Duration
-
-/**
- *
- */
 @RunWith(classOf[JUnitRunner])
 class DescriptionSpec
   extends Specification {
 
-  val timeout: Duration = Duration(10, duration.SECONDS)
-  val executorsPool: ExecutorService = Executors.newCachedThreadPool()
-  implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
-
   "Description" should {
-    "detect file type" in {
-      val d = Await.result(Description.ofPath(Paths.get("build.sbt")), timeout)
+    "detect plain text" in {
+      val d = Description.ofPath(Paths.get("build.sbt"))
 
       d.contentType must equalTo("text/plain; charset=ISO-8859-1")
-      d.contentEncoding must equalTo("ISO-8859-1")
+      d.contentEncoding must equalTo(Some("ISO-8859-1"))
       d.isText must beTrue
       d.isImage must beFalse
+    }
 
+    for {
+      (ext, mime) <- Map(
+        "bmp" -> "image/x-ms-bmp",
+        "gif" -> "image/gif",
+        "jpg" -> "image/jpeg",
+        "png" -> "image/png",
+        "psd" -> "image/vnd.adobe.photoshop",
+        "tif" -> "image/tiff"
+      )
+    } {
+      s"detect $ext image as $mime" in {
+        val d = Description.ofInputStream(getClass.getResourceAsStream(s"/test.$ext"))
+
+        d.contentType must equalTo(mime)
+        d.contentEncoding must beNone
+        d.isText must beFalse
+        d.isImage must beTrue
+      }
     }
   }
 }

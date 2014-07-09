@@ -13,10 +13,6 @@ import scala.concurrent.{Await, ExecutionContext, duration}
 class HighlightSpec
   extends Specification {
 
-  val timeout: Duration = Duration(10, duration.SECONDS)
-  val executorsPool: ExecutorService = Executors.newCachedThreadPool()
-  implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
-
   "auto detect highlight" should {
     "highlight ruby code" in {
       val code = """
@@ -29,12 +25,12 @@ class HighlightSpec
 
       val h = new Highlight
 
-      val autoDetect = Await.result(h.highlight(code), timeout)
+      val autoDetect = h.highlight(code)
 
       autoDetect.detectedLanguage must equalTo("ruby")
       autoDetect.originalCode must equalTo(code)
 
-      val specified = Await.result(h.highlight(code, "ruby"), timeout)
+      val specified = h.highlight(code, "ruby")
 
       specified.detectedLanguage must equalTo("ruby")
       specified.originalCode must equalTo(code)

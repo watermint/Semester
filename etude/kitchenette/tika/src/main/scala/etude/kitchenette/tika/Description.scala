@@ -1,6 +1,6 @@
 package etude.kitchenette.tika
 
-import java.io.{BufferedInputStream, FileInputStream, StringWriter}
+import java.io.{InputStream, BufferedInputStream, FileInputStream, StringWriter}
 import java.nio.file.Path
 
 import org.apache.tika.metadata.{HttpHeaders, Metadata}
@@ -9,9 +9,8 @@ import org.apache.tika.sax.BodyContentHandler
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class Description(path: Path,
-                       contentType: String,
-                       contentEncoding: String) {
+case class Description(contentType: String,
+                       contentEncoding: Option[String]) {
 
   val isText: Boolean = contentType.startsWith("text")
 
@@ -19,24 +18,29 @@ case class Description(path: Path,
 }
 
 object Description {
-  def ofPath(path: Path)(implicit ctx: ExecutionContext): Future[Description] = Future {
+  def ofInputStream(inputStream: InputStream): Description = {
     val parser = new AutoDetectParser
     val metadata = new Metadata
     val writer = new StringWriter()
     val contentHandler = new BodyContentHandler(writer)
-    val fis = new FileInputStream(path.toFile)
-    val bis = new BufferedInputStream(fis)
+    val bis = new BufferedInputStream(inputStream)
 
     try {
       parser.parse(bis, contentHandler, metadata)
     } finally {
-      fis.close()
+      inputStream.close()
     }
 
     Description(
-      path = path,
       contentType = metadata.get(HttpHeaders.CONTENT_TYPE),
-      contentEncoding = metadata.get(HttpHeaders.CONTENT_ENCODING)
+      contentEncoding = metadata.get(HttpHeaders.CONTENT_ENCODING) match {
+        case null => None
+        case mime => Some(mime)
+      }
     )
+  }
+
+  def ofPath(path: Path): Description = {
+    ofInputStream(new FileInputStream(path.toFile))
   }
 }

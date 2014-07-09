@@ -32,8 +32,7 @@ class Highlight {
       .replaceAll("\n", "\\\\n")
   }
 
-  private def evaluate(origCode: String, jsCode: String)
-                      (implicit ctx: ExecutionContext): Future[HighlightedCode] = Future {
+  private def evaluate(origCode: String, jsCode: String): HighlightedCode = {
     engineLock.acquire()
     try {
       convertResult(
@@ -45,13 +44,11 @@ class Highlight {
     }
   }
 
-  def highlight(code: String)
-               (implicit ctx: ExecutionContext): Future[HighlightedCode] = {
+  def highlight(code: String): HighlightedCode = {
     evaluate(code, s"hljs.highlightAuto('${escapeCode(code)}')")
   }
 
-  def highlight(code: String, lang: String)
-               (implicit ctx: ExecutionContext): Future[HighlightedCode] = {
+  def highlight(code: String, lang: String): HighlightedCode = {
     evaluate(code, s"hljs.highlight('${escapeCode(lang)}', '${escapeCode(code)}')")
   }
 }
