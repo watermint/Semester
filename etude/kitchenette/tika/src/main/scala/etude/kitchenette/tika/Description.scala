@@ -12,6 +12,15 @@ import scala.concurrent.{ExecutionContext, Future}
 case class Description(contentType: String,
                        contentEncoding: Option[String]) {
 
+  lazy val contentTypeWithoutParam: String = contentType.replaceAll(";.*", "")
+
+  /**
+   * @see http://tools.ietf.org/html/rfc2045#section-5
+   */
+  lazy val `type`: String = contentTypeWithoutParam.split("/")(0)
+
+  lazy val subType: String = contentTypeWithoutParam.split("/")(1)
+
   val isText: Boolean = contentType.startsWith("text")
 
   val isImage: Boolean = contentType.startsWith("image")
