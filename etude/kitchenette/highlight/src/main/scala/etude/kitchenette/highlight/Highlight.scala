@@ -11,11 +11,20 @@ class Highlight {
   private lazy val engine: ScriptEngine = {
     val n = new ScriptEngineManager().getEngineByName("nashorn")
 
-    n.eval(new InputStreamReader(getClass.getResourceAsStream("highlight.pack.js")))
+    n.eval(new InputStreamReader(getClass.getResourceAsStream("/highlight.pack.js")))
     n
   }
 
   private lazy val engineLock: Lock = new Lock
+
+  private def evalOnEngine(js: String): JSObject = {
+    engineLock.acquire()
+    try {
+      engine.eval(js).asInstanceOf[JSObject]
+    } finally {
+      engineLock.release()
+    }
+  }
 
   private def convertResult(code: String, result: JSObject): HighlightedCode = {
     HighlightedCode(
@@ -33,21 +42,28 @@ class Highlight {
   }
 
   private def evaluate(origCode: String, jsCode: String): HighlightedCode = {
-    engineLock.acquire()
-    try {
-      convertResult(
-        origCode,
-        engine.eval(jsCode).asInstanceOf[JSObject]
-      )
-    } finally {
-      engineLock.release()
-    }
+    convertResult(
+      origCode,
+      evalOnEngine(jsCode)
+    )
   }
 
+  /**
+   * Highlight source code.
+   * @param code source code.
+   * @return highlighted source code.
+   */
   def highlight(code: String): HighlightedCode = {
     evaluate(code, s"hljs.highlightAuto('${escapeCode(code)}')")
   }
 
+  /**
+   * Highlight source code.
+   *
+   * @param code source code.
+   * @param lang language name. throws exception if the language is not supported.
+   * @return highlighted source code.
+   */
   def highlight(code: String, lang: String): HighlightedCode = {
     evaluate(code, s"hljs.highlight('${escapeCode(lang)}', '${escapeCode(code)}')")
   }

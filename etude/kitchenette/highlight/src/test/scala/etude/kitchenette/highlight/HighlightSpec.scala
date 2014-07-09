@@ -1,6 +1,7 @@
 package etude.kitchenette.highlight
 
 import java.util.concurrent.{ExecutorService, Executors}
+import javax.script.ScriptException
 
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
@@ -30,11 +31,15 @@ class HighlightSpec
       autoDetect.detectedLanguage must equalTo("ruby")
       autoDetect.originalCode must equalTo(code)
 
+      h.highlight(code, "invalid") should throwA[ScriptException]
+
       val specified = h.highlight(code, "ruby")
 
       specified.detectedLanguage must equalTo("ruby")
       specified.originalCode must equalTo(code)
       specified.highlighted must equalTo(autoDetect.highlighted)
+
+
     }
   }
 }
