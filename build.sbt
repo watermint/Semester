@@ -90,6 +90,7 @@ lazy val kitchenetteElasticSearch = project.in(file("etude/kitchenette/elasticse
 
 lazy val kitchenetteCode = project.in(file("etude/kitchenette/code"))
   .settings(buildSettings: _*)
+  .dependsOn(domainCore)
   .dependsOn(kitchenetteTika)
   .dependsOn(kitchenetteHighlight)
   .dependsOn(kitchenetteElasticSearch)
