@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.async.AsyncResultWithEntity
-import etude.domain.core.lifecycle.{EntityIOContext, ResultWithEntity}
+import etude.domain.core.lifecycle.async.AsyncResultWithIdentity
+import etude.domain.core.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.messaging.chatwork.domain.model.room.{Category, CategoryId, RoomId}
 import org.json4s.JsonDSL._
@@ -65,7 +65,7 @@ class AsyncCategoryRepositoryOnV0Api
     }
   }
 
-  def create(name: String, rooms: List[RoomId])(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[This, CategoryId, Category, Future]] = {
+  def create(name: String, rooms: List[RoomId])(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, CategoryId, Category, Future]] = {
     implicit val executor = getExecutionContext(context)
 
     val pdata = ("name" -> name) ~
@@ -79,11 +79,11 @@ class AsyncCategoryRepositoryOnV0Api
       )
     ) map {
       json =>
-        AsyncResultWithEntity(this.asInstanceOf[This], parseCategory(json).last)
+        AsyncResultWithIdentity(this.asInstanceOf[This], parseCategory(json).last.identity)
     }
   }
 
-  def deleteByIdentity(identity: CategoryId)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[This, CategoryId, Category, Future]] = {
+  def deleteByIdentity(identity: CategoryId)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, CategoryId, Category, Future]] = {
     implicit val executor = getExecutionContext(context)
 
     resolve(identity) flatMap {
@@ -98,12 +98,12 @@ class AsyncCategoryRepositoryOnV0Api
           )
         ) map {
           json =>
-            AsyncResultWithEntity(this.asInstanceOf[This], e)
+            AsyncResultWithIdentity(this.asInstanceOf[This], identity)
         }
     }
   }
 
-  def store(entity: Category)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[This, CategoryId, Category, Future]] = {
+  def store(entity: Category)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, CategoryId, Category, Future]] = {
     implicit val executor = getExecutionContext(context)
 
     val pdata = ("name" -> entity.name) ~
@@ -118,7 +118,7 @@ class AsyncCategoryRepositoryOnV0Api
       )
     ) map {
       json =>
-        AsyncResultWithEntity(this.asInstanceOf[This], entity)
+        AsyncResultWithIdentity(this.asInstanceOf[This], entity.identity)
     }
   }
 }

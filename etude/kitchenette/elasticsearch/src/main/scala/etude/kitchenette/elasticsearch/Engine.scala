@@ -3,9 +3,10 @@ package etude.kitchenette.elasticsearch
 import java.nio.file.Path
 
 import org.elasticsearch.client.Client
+import org.elasticsearch.node.Node
 
 trait Engine {
-  def createClient: Client
+  val client: Client
 }
 
 object Engine {

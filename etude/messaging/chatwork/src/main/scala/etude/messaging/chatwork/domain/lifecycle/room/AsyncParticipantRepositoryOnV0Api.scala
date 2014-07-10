@@ -1,7 +1,7 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.async.AsyncResultWithEntity
-import etude.domain.core.lifecycle.{EntityIOContext, ResultWithEntity}
+import etude.domain.core.lifecycle.async.AsyncResultWithIdentity
+import etude.domain.core.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.messaging.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0AsyncInitLoad, V0AsyncRoom}
 import etude.messaging.chatwork.domain.model.room.{Participant, RoomId}
 
@@ -33,7 +33,7 @@ class AsyncParticipantRepositoryOnV0Api
     }
   }
 
-  def store(entity: Participant)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
+  def store(entity: Participant)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, RoomId, Participant, Future]] = {
     import org.json4s.JsonDSL._
     import org.json4s.native.JsonMethods._
 
@@ -54,11 +54,11 @@ class AsyncParticipantRepositoryOnV0Api
       )
     ) map {
       p =>
-        AsyncResultWithEntity(this.asInstanceOf[This], entity)
+        AsyncResultWithIdentity(this.asInstanceOf[This], entity.identity)
     }
   }
 
-  def deleteByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
+  def deleteByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, RoomId, Participant, Future]] = {
     Future.failed(new UnsupportedOperationException("delete operation is not supported"))
   }
 }

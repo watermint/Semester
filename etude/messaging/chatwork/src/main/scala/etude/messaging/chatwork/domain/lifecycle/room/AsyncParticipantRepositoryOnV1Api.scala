@@ -1,6 +1,6 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.{EntityIOContext, ResultWithEntity}
+import etude.domain.core.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.messaging.chatwork.domain.model.room.{Participant, RoomId}
 
 import scala.concurrent.Future
@@ -124,13 +124,13 @@ class AsyncParticipantRepositoryOnV1Api
 
   def deleteByIdentity(identity: RoomId)
                       (implicit context: EntityIOContext[Future]):
-      Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
+      Future[ResultWithIdentity[This, RoomId, Participant, Future]] = {
     ???
   }
 
   def store(entity: Participant)
            (implicit context: EntityIOContext[Future]):
-      Future[ResultWithEntity[This, RoomId, Participant, Future]] = {
+      Future[ResultWithIdentity[This, RoomId, Participant, Future]] = {
     ???
   }
 }

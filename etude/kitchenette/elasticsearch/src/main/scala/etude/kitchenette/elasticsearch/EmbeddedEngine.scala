@@ -9,7 +9,7 @@ import org.elasticsearch.node.{Node, NodeBuilder}
 case class EmbeddedEngine(clusterName: String,
                           storagePath: Path) extends Engine {
 
-  protected lazy val node: Node = {
+  lazy val node: Node = {
     NodeBuilder
       .nodeBuilder()
       .clusterName(clusterName)
@@ -23,7 +23,9 @@ case class EmbeddedEngine(clusterName: String,
       ).node()
   }
 
-  def createClient: Client = {
+  protected def createClient: Client = {
     node.client()
   }
+
+  lazy val client: Client = createClient
 }

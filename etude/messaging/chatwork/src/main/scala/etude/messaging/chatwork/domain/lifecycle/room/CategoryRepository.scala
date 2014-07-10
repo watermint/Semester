@@ -1,6 +1,6 @@
 package etude.messaging.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.{EntityIOContext, Repository, ResultWithEntity}
+import etude.domain.core.lifecycle.{EntityIOContext, Repository, ResultWithIdentity}
 import etude.messaging.chatwork.domain.model.room.{Category, CategoryId, RoomId}
 
 import scala.language.higherKinds
@@ -12,5 +12,5 @@ trait CategoryRepository[M[+A]]
 
   def categories()(implicit context: EntityIOContext[M]): M[List[Category]]
 
-  def create(name: String, rooms: List[RoomId])(implicit context: EntityIOContext[M]): M[ResultWithEntity[This, CategoryId, Category, M]]
+  def create(name: String, rooms: List[RoomId])(implicit context: EntityIOContext[M]): M[ResultWithIdentity[This, CategoryId, Category, M]]
 }
