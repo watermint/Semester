@@ -10,7 +10,9 @@ import scala.concurrent.Future
 trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends AsyncRepository[ID, E] {
   val engine: Engine
 
-  def indexValue(entity: E): String
+  def indexValue(identity: ID): String
+
+  def indexValues(): Seq[String]
 
   val typeValue: String
 
@@ -20,6 +22,24 @@ trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends
 
   def unmarshal(json: String): E
 
+  def prepare()(implicit context: EntityIOContext[Future]): Future[Boolean] = {
+    implicit val executionContext = getExecutionContext(context)
+
+    Future {
+      indexValues().foreach {
+        index =>
+          engine
+            .client
+            .admin()
+            .indices()
+            .prepareCreate(index)
+            .setIndex(index)
+            .execute()
+      }
+      true
+    }
+  }
+
   def store(entity: E)
            (implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, ID, E, Future]] = {
     implicit val executionContext = getExecutionContext(context)
@@ -28,7 +48,9 @@ trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends
       engine
         .client
         .prepareIndex()
+        .setIndex(indexValue(entity.identity))
         .setId(idValue(entity.identity))
+        .setType(typeValue)
         .setSource(marshal(entity))
         .execute()
         .get()
@@ -45,6 +67,8 @@ trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends
       engine
         .client
         .prepareDelete()
+        .setIndex(indexValue(identity))
+        .setType(typeValue)
         .setId(idValue(identity))
         .execute()
         .get()
@@ -60,6 +84,8 @@ trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends
       val response = engine
         .client
         .prepareGet()
+        .setIndex(indexValue(identity))
+        .setType(typeValue)
         .setId(idValue(identity))
         .execute()
         .get()
@@ -75,6 +101,8 @@ trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends
       val response = engine
         .client
         .prepareGet()
+        .setIndex(indexValue(identity))
+        .setType(typeValue)
         .setId(idValue(identity))
         .execute()
         .get()
