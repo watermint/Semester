@@ -17,7 +17,9 @@ class AsyncFileRepositoryOnElasticSearch(val engine: Engine)
 
   val typeValue: String = "file"
 
-  def indexValue(entity: File): String = "file"
+  def indexValue(identity: FileId): String = "file"
+
+  def indexValues(): Seq[String] = Seq("file")
 
   def idValue(identity: FileId): String = identity.path
 
@@ -31,8 +33,9 @@ class AsyncFileRepositoryOnElasticSearch(val engine: Engine)
   }
 
   def unmarshal(json: String): File = {
-    for {
-      j <- parse(json)
+    val p = parse(json)
+    val results: Seq[File] = for {
+      JObject(j) <- p
       JField("path", JString(path)) <- j
       JField("contentType", JString(contentType)) <- j
     } yield {
@@ -41,5 +44,6 @@ class AsyncFileRepositoryOnElasticSearch(val engine: Engine)
         contentType = contentType
       )
     }
+    results.last
   }
 }

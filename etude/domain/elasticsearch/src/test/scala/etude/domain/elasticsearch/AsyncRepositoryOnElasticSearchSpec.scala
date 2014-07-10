@@ -35,8 +35,6 @@ class AsyncRepositoryOnElasticSearchSpec
       val repo = new AsyncRecipeRepositoryOnElasticSearch(engine)
       val recipe = new Recipe(RecipeId("Grilled corn"), "Place the corn on the hot grill")
 
-      println(buildPath)
-
       val prepare = Await.result(repo.prepare(), timeout)
 
       prepare must beTrue
@@ -92,7 +90,7 @@ class AsyncRecipeRepositoryOnElasticSearch(val engine: Engine)
 
   def unmarshal(json: String): Recipe = {
     val p = JsonMethods.parse(json)
-    val results = for {
+    val results: Seq[Recipe] = for {
       JObject(j) <- p
       JField("name", JString(name)) <- j
       JField("recipe", JString(recipe)) <- j

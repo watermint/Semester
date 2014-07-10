@@ -82,13 +82,11 @@ class AccountProvisioning extends AsyncEntityIO {
                (implicit context: EntityIOContext[Future]): Future[Participant] = {
     implicit val executionContext = getExecutionContext(context)
     val participantRepository = AsyncParticipantRepository.ofContext(context)
+    val r = toRoom.copy(roles)
     for {
-      p <- participantRepository.store(toRoom.copy(roles))
+      p <- participantRepository.store(r)
     } yield {
-      p.entity
+      r
     }
   }
 }
-
-
-

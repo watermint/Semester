@@ -56,6 +56,7 @@ lazy val domainElasticSearch = project.in(file("etude/domain/elasticsearch"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(kitchenetteElasticSearch)
+  .dependsOn(foundationLogging)
 
 lazy val domainJson = project.in(file("etude/domain/json"))
   .settings(buildSettings: _*)
