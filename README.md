@@ -31,6 +31,7 @@ Business logics, library/framework integration, etc.
 ## Domain
 
 * [Domain](etude/domain/core) - Libraries for Domain Driven Development (DDD).
+* [ElasticSearch](etude/domain/elasticsearch) - Repository on [elasticsearch](http://www.elasticsearch.org)
 
 ## UI
 
