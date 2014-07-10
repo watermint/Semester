@@ -54,8 +54,8 @@ Business logics, library/framework integration, etc.
 
 # Requirements
 
-* Java SE 8 or later
-* Scala 2.10.4, 2.11.1
+* JDK8u20 or later
+* Scala 2.11.1 or later
 
 # License
 
