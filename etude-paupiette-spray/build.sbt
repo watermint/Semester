@@ -1,4 +1,4 @@
-name := "etude-kitchenette-spray"
+name := "etude-paupiette-spray"
 
 libraryDependencies ++= Seq(
   "io.spray" %% "spray-routing" % "latest.integration",

@@ -1,4 +1,4 @@
-name := "etude-kitchenette-elasticsearch"
+name := "etude-paupiette-elasticsearch"
 
 libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-native" % "latest.integration",

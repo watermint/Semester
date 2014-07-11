@@ -13,14 +13,18 @@ Collection of small apps and libraries. This project collection is the practice 
 
 ## Intermediate Libraries
 
-Business logics, library/framework integration, etc.
+Business logics
 
 * [Fedelini](etude-kitchenette-fedelini) - ChatWork Business Logics
-* [Highlight](etude-kitchenette-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
-* [Spray](etude-kitchenette-spray) - [Spray](http://spray.io) configuration base
-* [Tika](etude-kitchenette-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
-* [ElasticSearch](etude-kitchenette-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
 * [Code](etude-kitchenette-code) - Source code search engine base logics.
+
+## Library wrappers
+
+* [Highlight](etude-paupiette-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
+* [Spray](etude-paupiette-spray) - [Spray](http://spray.io) configuration base
+* [Tika](etude-paupiette-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
+* [ElasticSearch](etude-paupiette-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
+* [Html](etude-paupiette-html) - HTML parse wrapper API
 
 ## Adapters
 
@@ -39,7 +43,6 @@ Business logics, library/framework integration, etc.
 
 ## Utility
 
-* [Html](etude-foundation-html) - HTML parse wrapper API
 * [Http](etude-foundation-http) - HTTP Client wrapper API
 * [Utility](etude-foundation-utility) - Generic utilities
 * [Logging](etude-foundation-logging) - Logging API

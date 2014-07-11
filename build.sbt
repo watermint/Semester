@@ -40,7 +40,7 @@ lazy val adapterPocket = project.in(file("etude-adapter-pocket"))
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
   .dependsOn(foundationHttp)
-  .dependsOn(kitchenetteSpray)
+  .dependsOn(paupietteSpray)
   .settings(buildSettings: _*)
 
 lazy val adapterThings = project.in(file("etude-adapter-things"))
@@ -49,7 +49,7 @@ lazy val adapterThings = project.in(file("etude-adapter-things"))
 lazy val adapterChatwork = project.in(file("etude-adapter-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
-  .dependsOn(kitchenetteHtml)
+  .dependsOn(paupietteHtml)
   .dependsOn(foundationHttp)
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
@@ -63,7 +63,7 @@ lazy val domainCore = project.in(file("etude-domain-core"))
 lazy val domainElasticSearch = project.in(file("etude-domain-elasticsearch"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
-  .dependsOn(kitchenetteElasticSearch)
+  .dependsOn(paupietteElasticSearch)
   .dependsOn(foundationLogging)
 
 
@@ -92,29 +92,30 @@ lazy val kitchenetteFedelini = project.in(file("etude-kitchenette-fedelini"))
   .dependsOn(adapterChatwork)
   .settings(assemblySettings: _*)
 
-lazy val kitchenetteHtml = project.in(file("etude-kitchenette-html"))
-  .settings(buildSettings: _*)
-
-lazy val kitchenetteHighlight = project.in(file("etude-kitchenette-highlight"))
-  .settings(buildSettings: _*)
-
-lazy val kitchenetteSpray = project.in(file("etude-kitchenette-spray"))
-  .settings(buildSettings: _*)
-
-lazy val kitchenetteElasticSearch = project.in(file("etude-kitchenette-elasticsearch"))
-  .settings(buildSettings: _*)
-
 lazy val kitchenetteCode = project.in(file("etude-kitchenette-code"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(domainElasticSearch)
-  .dependsOn(kitchenetteTika)
-  .dependsOn(kitchenetteHighlight)
-  .dependsOn(kitchenetteElasticSearch)
+  .dependsOn(paupietteTika)
+  .dependsOn(paupietteHighlight)
+  .dependsOn(paupietteElasticSearch)
 
-lazy val kitchenetteTika = project.in(file("etude-kitchenette-tika"))
+// ---- paupiette
+
+lazy val paupietteHtml = project.in(file("etude-paupiette-html"))
   .settings(buildSettings: _*)
 
+lazy val paupietteHighlight = project.in(file("etude-paupiette-highlight"))
+  .settings(buildSettings: _*)
+
+lazy val paupietteSpray = project.in(file("etude-paupiette-spray"))
+  .settings(buildSettings: _*)
+
+lazy val paupietteElasticSearch = project.in(file("etude-paupiette-elasticsearch"))
+  .settings(buildSettings: _*)
+
+lazy val paupietteTika = project.in(file("etude-paupiette-tika"))
+  .settings(buildSettings: _*)
 
 // ---- test
 lazy val testUndisclosed = project.in(file("etude-test-undisclosed"))
@@ -125,7 +126,7 @@ lazy val testUndisclosed = project.in(file("etude-test-undisclosed"))
 // ---- recherche
 lazy val rechercheBolognese = project.in(file("etude-recherche-bolognese"))
   .dependsOn(foundationLogging)
-  .dependsOn(kitchenetteSpray)
+  .dependsOn(paupietteSpray)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
