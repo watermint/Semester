@@ -1,4 +1,4 @@
-package etude.foundation.html
+package etude.kitchenette.html
 
 import java.io.StringReader
 

@@ -1,4 +1,4 @@
-name := "etude-foundation-html"
+name := "etude-kitchenette-html"
 
 libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "latest.integration",

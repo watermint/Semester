@@ -2,7 +2,7 @@ package etude.messaging.chatwork.domain.infrastructure.api.v0.auth
 
 import java.net.URI
 
-import etude.foundation.html.Normalizer
+import etude.kitchenette.html.Normalizer
 import etude.foundation.http._
 import etude.messaging.chatwork.domain.infrastructure.api.v0.V0UnknownChatworkProtocolException
 
