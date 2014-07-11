@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle
 import javafx.util.Callback
 
 import etude.app.arrabbiata.ui.UIUnit
-import etude.messaging.chatwork.domain.model.room.Room
+import etude.adapter.chatwork.domain.model.room.Room
 
 class RoomListView extends DomainListView[Room] {
   class RoomListCell extends JListCell[Room] {

@@ -24,9 +24,9 @@ Business logics, library/framework integration, etc.
 
 ## Adapters
 
-* [Pocket](etude-bookmark-pocket) - [Pocket](http://getpocket.com) API
-* [ChatWork](etude-messaging-chatwork) - [ChatWork](http://chatwork.com) API
-* [Things](etude-ticket-things) - [Things](https://culturedcode.com/things/) app integration.
+* [Pocket](etude-adapter-pocket) - [Pocket](http://getpocket.com) API
+* [ChatWork](etude-adapter-chatwork) - [ChatWork](http://chatwork.com) API
+* [Things](etude-adapter-things) - [Things](https://culturedcode.com/things/) app integration.
 
 ## Domain Driven Design
 

@@ -6,9 +6,9 @@ import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.composite.StatusUpdate
 import etude.app.arrabbiata.ui.message.composite.room.DisplayDiffAccounts
 import etude.kitchenette.fedelini.provisioning.{AccountProvisioning, ProvisioningPolicy}
-import etude.messaging.chatwork.domain.lifecycle.account.AsyncAccountRepository
-import etude.messaging.chatwork.domain.model.account.Account
-import etude.messaging.chatwork.domain.model.room.Room
+import etude.adapter.chatwork.domain.lifecycle.account.AsyncAccountRepository
+import etude.adapter.chatwork.domain.model.account.Account
+import etude.adapter.chatwork.domain.model.room.Room
 
 import scala.concurrent.Future
 

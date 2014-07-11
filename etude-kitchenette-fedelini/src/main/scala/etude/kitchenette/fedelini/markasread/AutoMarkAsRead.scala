@@ -4,11 +4,11 @@ import java.nio.file.{Files, Paths}
 import java.util.concurrent.{ExecutorService, Executors, TimeUnit}
 
 import etude.foundation.logging.LoggerFactory
-import etude.messaging.chatwork.domain.event.message.AsyncMessageEventPublisher
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
-import etude.messaging.chatwork.domain.lifecycle.room.AsyncRoomRepository
-import etude.messaging.chatwork.domain.model.room.{Room, RoomId}
+import etude.adapter.chatwork.domain.event.message.AsyncMessageEventPublisher
+import etude.adapter.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
+import etude.adapter.chatwork.domain.lifecycle.message.AsyncMessageRepository
+import etude.adapter.chatwork.domain.lifecycle.room.AsyncRoomRepository
+import etude.adapter.chatwork.domain.model.room.{Room, RoomId}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source

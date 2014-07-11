@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicReference
 import etude.app.arrabbiata.controller.AppActor
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
 import etude.foundation.logging.LoggerFactory
-import etude.messaging.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import etude.messaging.chatwork.domain.lifecycle.account.AsyncAccountRepository
-import etude.messaging.chatwork.domain.lifecycle.message.AsyncMessageRepository
-import etude.messaging.chatwork.domain.lifecycle.room.{AsyncParticipantRepository, AsyncRoomRepository}
-import etude.messaging.chatwork.domain.model.room.Room
+import etude.adapter.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
+import etude.adapter.chatwork.domain.lifecycle.account.AsyncAccountRepository
+import etude.adapter.chatwork.domain.lifecycle.message.AsyncMessageRepository
+import etude.adapter.chatwork.domain.lifecycle.room.{AsyncParticipantRepository, AsyncRoomRepository}
+import etude.adapter.chatwork.domain.model.room.Room
 
 import scala.concurrent.Future
 

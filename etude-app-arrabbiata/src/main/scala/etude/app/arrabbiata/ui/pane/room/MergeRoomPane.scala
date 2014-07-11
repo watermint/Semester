@@ -5,8 +5,8 @@ import etude.app.arrabbiata.controller.message.room.LoadRoomList
 import etude.app.arrabbiata.ui.control.{AccountListView, RoomListView}
 import etude.app.arrabbiata.ui.message.composite.room.{MergeRoom, SelectMergeRooms, UpdateMergeRoomLists}
 import etude.app.arrabbiata.ui.{UI, UIActor, UIUnit}
-import etude.messaging.chatwork.domain.model.account.Account
-import etude.messaging.chatwork.domain.model.room.Room
+import etude.adapter.chatwork.domain.model.account.Account
+import etude.adapter.chatwork.domain.model.room.Room
 
 import scalafx.collections.ObservableBuffer
 import scalafx.geometry.{Insets, Pos}

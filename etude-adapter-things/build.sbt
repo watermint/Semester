@@ -1,0 +1,1 @@
+name := "etude-adapter-things"

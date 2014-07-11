@@ -2,9 +2,9 @@ package etude.kitchenette.fedelini.provisioning
 
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.messaging.chatwork.domain.lifecycle.room.AsyncParticipantRepository
-import etude.messaging.chatwork.domain.model.account.AccountId
-import etude.messaging.chatwork.domain.model.room.{AccountRole, AccountRoleType, Participant, RoomId}
+import etude.adapter.chatwork.domain.lifecycle.room.AsyncParticipantRepository
+import etude.adapter.chatwork.domain.model.account.AccountId
+import etude.adapter.chatwork.domain.model.room.{AccountRole, AccountRoleType, Participant, RoomId}
 
 import scala.concurrent.Future
 
