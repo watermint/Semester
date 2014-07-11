@@ -1,6 +1,6 @@
 package etude.kitchenette.highlight
 
-import java.io.InputStreamReader
+import java.io.{BufferedReader, InputStreamReader}
 import javax.script.{ScriptEngine, ScriptEngineManager}
 
 import jdk.nashorn.api.scripting.JSObject
@@ -9,10 +9,32 @@ import scala.concurrent.{Lock, ExecutionContext, Future}
 
 class Highlight {
   private lazy val engine: ScriptEngine = {
-    val n = new ScriptEngineManager().getEngineByName("nashorn")
+    val em = new ScriptEngineManager()
+    val jsEngine = em.getEngineByName("nashorn")
 
-    n.eval(new InputStreamReader(getClass.getResourceAsStream("/highlight.pack.js")))
-    n
+    if (jsEngine == null) {
+      import scala.collection.JavaConverters._
+
+      throw new IllegalStateException(
+        s"""
+           |Nashorn engine not found:
+           |  java.version: ${System.getProperty("java.version")}
+           |  java.vm.version: ${System.getProperty("java.vm.version")}
+           |  java.vendor: ${System.getProperty("java.vendor")}
+           |  available engine(s): ${em.getEngineFactories.asScala.map(_.getEngineName).mkString(", ")}
+         """.stripMargin)
+    }
+
+    val sourceName = "/highlight.pack.js"
+    val source = getClass.getResourceAsStream(sourceName)
+    val sourceReader = new BufferedReader(new InputStreamReader(source))
+
+    if (sourceReader == null) {
+      throw new IllegalStateException(s"required resource [$sourceName] not found")
+    }
+
+    jsEngine.eval(sourceReader)
+    jsEngine
   }
 
   private lazy val engineLock: Lock = new Lock
