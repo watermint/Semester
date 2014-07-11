@@ -15,42 +15,42 @@ Collection of small apps and libraries. This project collection is the practice 
 
 Business logics, library/framework integration, etc.
 
-* [Fedelini](etude/kitchenette/fedelini) - ChatWork Business Logics
-* [Highlight](etude/kitchenette/highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
-* [Spray](etude/kitchenette/spray) - [Spray](http://spray.io) configuration base
-* [Tika](etude/kitchenette/tika) - File description detector by [Apache Tika](http://tika.apache.org) 
-* [ElasticSearch](etude/kitchenette/elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
-* [Code](etude/kitchenette/code) - Source code search engine base logics.
+* [Fedelini](etude-kitchenette-fedelini) - ChatWork Business Logics
+* [Highlight](etude-kitchenette-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
+* [Spray](etude-kitchenette-spray) - [Spray](http://spray.io) configuration base
+* [Tika](etude-kitchenette-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
+* [ElasticSearch](etude-kitchenette-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
+* [Code](etude-kitchenette-code) - Source code search engine base logics.
 
 ## Adapters
 
-* [Pocket](etude/bookmark/pocket) - [Pocket](http://getpocket.com) API
-* [ChatWork](etude/messaging/chatwork) - [ChatWork](http://chatwork.com) API
-* [Things](etude/ticket/things) - [Things](https://culturedcode.com/things/) app integration.
+* [Pocket](etude-bookmark-pocket) - [Pocket](http://getpocket.com) API
+* [ChatWork](etude-messaging-chatwork) - [ChatWork](http://chatwork.com) API
+* [Things](etude-ticket-things) - [Things](https://culturedcode.com/things/) app integration.
 
-## Domain
+## Domain Driven Design
 
-* [Domain](etude/domain/core) - Libraries for Domain Driven Development (DDD).
-* [ElasticSearch](etude/domain/elasticsearch) - Repository on [elasticsearch](http://www.elasticsearch.org)
+* [Domain](etude-domain-core) - Core Libraries for Domain Driven Design (DDD).
+* [ElasticSearch](etude-domain-elasticsearch) - Repository on [elasticsearch](http://www.elasticsearch.org)
 
 ## UI
 
-* [Fextile](etude/desktop/fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
+* [Fextile](etude-desktop-fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
 
 ## Utility
 
-* [Html](etude/foundation/html) - HTML parse wrapper API
-* [Http](etude/foundation/http) - HTTP Client wrapper API
-* [Utility](etude/foundation/utility) - Generic utilities
-* [Logging](etude/foundation/logging) - Logging API
+* [Html](etude-foundation-html) - HTML parse wrapper API
+* [Http](etude-foundation-http) - HTTP Client wrapper API
+* [Utility](etude-foundation-utility) - Generic utilities
+* [Logging](etude-foundation-logging) - Logging API
 
 ## Tests
 
-* [Undisclosed tests](etude/test/undisclosed) - Test wrapper. Separate secret keys for specific tests.
+* [Undisclosed tests](etude-test-undisclosed) - Test wrapper. Separate secret keys for specific tests.
 
 ## Practice
 
-* [Bolognese](etude/recherche/bolognese) - Practicing [spray](http://spray.io)
+* [Bolognese](etude-recherche-bolognese) - Practicing [spray](http://spray.io)
 
 # Requirements
 

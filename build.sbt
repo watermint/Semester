@@ -24,7 +24,7 @@ lazy val buildSettings = Seq(
 )
 
 
-lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
+lazy val appArrabbiata = project.in(file("etude-app-arrabbiata"))
   .dependsOn(messagingChatwork)
   .dependsOn(kitchenetteFedelini)
   .dependsOn(ticketThings)
@@ -32,7 +32,7 @@ lazy val appArrabbiata = project.in(file("etude/app/arrabbiata"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
-lazy val bookmarkPocket = project.in(file("etude/bookmark/pocket"))
+lazy val bookmarkPocket = project.in(file("etude-bookmark-pocket"))
   .dependsOn(domainCore)
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
@@ -40,7 +40,7 @@ lazy val bookmarkPocket = project.in(file("etude/bookmark/pocket"))
   .dependsOn(kitchenetteSpray)
   .settings(buildSettings: _*)
 
-lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
+lazy val messagingChatwork = project.in(file("etude-messaging-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(foundationHttp)
@@ -49,52 +49,48 @@ lazy val messagingChatwork = project.in(file("etude/messaging/chatwork"))
   .dependsOn(foundationLogging)
   .dependsOn(testUndisclosed % "test")
 
-lazy val domainCore = project.in(file("etude/domain/core"))
+lazy val domainCore = project.in(file("etude-domain-core"))
   .settings(buildSettings: _*)
 
-lazy val domainElasticSearch = project.in(file("etude/domain/elasticsearch"))
+lazy val domainElasticSearch = project.in(file("etude-domain-elasticsearch"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(kitchenetteElasticSearch)
   .dependsOn(foundationLogging)
 
-lazy val domainJson = project.in(file("etude/domain/json"))
-  .settings(buildSettings: _*)
-  .dependsOn(domainCore)
-
-lazy val foundationLogging = project.in(file("etude/foundation/logging"))
+lazy val foundationLogging = project.in(file("etude-foundation-logging"))
   .settings(buildSettings: _*)
 
-lazy val foundationHtml = project.in(file("etude/foundation/html"))
+lazy val foundationHtml = project.in(file("etude-foundation-html"))
   .settings(buildSettings: _*)
 
-lazy val foundationHttp = project.in(file("etude/foundation/http"))
+lazy val foundationHttp = project.in(file("etude-foundation-http"))
   .settings(buildSettings: _*)
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
 
-lazy val foundationUtility = project.in(file("etude/foundation/utility"))
+lazy val foundationUtility = project.in(file("etude-foundation-utility"))
   .settings(buildSettings: _*)
 
-lazy val desktopFextile = project.in(file("etude/desktop/fextile"))
+lazy val desktopFextile = project.in(file("etude-desktop-fextile"))
   .settings(buildSettings: _*)
   .dependsOn(foundationLogging)
 
-lazy val kitchenetteFedelini = project.in(file("etude/kitchenette/fedelini"))
+lazy val kitchenetteFedelini = project.in(file("etude-kitchenette-fedelini"))
   .settings(buildSettings: _*)
   .dependsOn(messagingChatwork)
   .settings(assemblySettings: _*)
 
-lazy val kitchenetteHighlight = project.in(file("etude/kitchenette/highlight"))
+lazy val kitchenetteHighlight = project.in(file("etude-kitchenette-highlight"))
   .settings(buildSettings: _*)
 
-lazy val kitchenetteSpray = project.in(file("etude/kitchenette/spray"))
+lazy val kitchenetteSpray = project.in(file("etude-kitchenette-spray"))
   .settings(buildSettings: _*)
 
-lazy val kitchenetteElasticSearch = project.in(file("etude/kitchenette/elasticsearch"))
+lazy val kitchenetteElasticSearch = project.in(file("etude-kitchenette-elasticsearch"))
   .settings(buildSettings: _*)
 
-lazy val kitchenetteCode = project.in(file("etude/kitchenette/code"))
+lazy val kitchenetteCode = project.in(file("etude-kitchenette-code"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(domainElasticSearch)
@@ -102,17 +98,17 @@ lazy val kitchenetteCode = project.in(file("etude/kitchenette/code"))
   .dependsOn(kitchenetteHighlight)
   .dependsOn(kitchenetteElasticSearch)
 
-lazy val kitchenetteTika = project.in(file("etude/kitchenette/tika"))
+lazy val kitchenetteTika = project.in(file("etude-kitchenette-tika"))
   .settings(buildSettings: _*)
 
-lazy val ticketThings = project.in(file("etude/ticket/things"))
+lazy val ticketThings = project.in(file("etude-ticket-things"))
   .settings(buildSettings: _*)
 
-lazy val testUndisclosed = project.in(file("etude/test/undisclosed"))
+lazy val testUndisclosed = project.in(file("etude-test-undisclosed"))
   .settings(buildSettings: _*)
   .dependsOn(foundationLogging)
 
-lazy val rechercheBolognese = project.in(file("etude/recherche/bolognese"))
+lazy val rechercheBolognese = project.in(file("etude-recherche-bolognese"))
   .dependsOn(foundationLogging)
   .dependsOn(kitchenetteSpray)
   .settings(buildSettings: _*)
