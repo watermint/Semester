@@ -5,7 +5,7 @@ import etude.app.arrabbiata.state.{Rooms, Session}
 import etude.app.arrabbiata.ui.UIActor
 import etude.app.arrabbiata.ui.message.UIMessage
 import etude.app.arrabbiata.ui.message.composite.StatusUpdate
-import etude.adapter.chatwork.domain.lifecycle.room.AsyncRoomRepository
+import etude.pintxos.chatwork.domain.lifecycle.room.AsyncRoomRepository
 
 case class LoadRoomList(uiMessage: UIMessage)
   extends MessageWithSession

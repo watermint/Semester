@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle
 import javafx.util.Callback
 
 import etude.app.arrabbiata.ui.UIUnit
-import etude.adapter.chatwork.domain.model.account.Account
+import etude.pintxos.chatwork.domain.model.account.Account
 
 class AccountListView extends DomainListView[Account] {
   class AccountListCell extends JListCell[Account] {

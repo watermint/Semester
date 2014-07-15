@@ -1,0 +1,1 @@
+name := "etude-pintxos-chatwork"

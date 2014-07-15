@@ -3,7 +3,7 @@ package etude.app.arrabbiata.ui.message.composite.room
 import etude.app.arrabbiata.state.Rooms
 import etude.app.arrabbiata.ui.message.composite.CompositeUIMessage
 import etude.app.arrabbiata.ui.pane.room.MergeRoomPane
-import etude.adapter.chatwork.domain.model.room.{Room, RoomTypeGroup}
+import etude.pintxos.chatwork.domain.model.room.{Room, RoomTypeGroup}
 
 import scalafx.scene.control.TextField
 

@@ -5,9 +5,9 @@ import etude.domain.core.event.{IdentityEvent, IdentityEventType}
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
 import etude.foundation.logging.LoggerFactory
-import etude.adapter.chatwork.domain.lifecycle.message.AsyncMessageRepository
-import etude.adapter.chatwork.domain.model.message.MessageId
-import etude.adapter.chatwork.domain.model.room.RoomId
+import etude.pintxos.chatwork.domain.lifecycle.message.AsyncMessageRepository
+import etude.pintxos.chatwork.domain.model.message.MessageId
+import etude.pintxos.chatwork.domain.model.room.RoomId
 
 import scala.concurrent.Future
 

@@ -1,6 +1,6 @@
 package etude.kitchenette.fedelini.provisioning
 
-import etude.adapter.chatwork.domain.model.room.AccountRoleType
+import etude.pintxos.chatwork.domain.model.room.AccountRoleType
 
 object ProvisioningPolicy {
 

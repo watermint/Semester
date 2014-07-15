@@ -26,16 +26,16 @@ lazy val buildSettings = Seq(
 // ---- apps
 
 lazy val appArrabbiata = project.in(file("etude-app-arrabbiata"))
-  .dependsOn(adapterChatwork)
-  .dependsOn(adapterThings)
+  .dependsOn(pintxosChatwork)
+  .dependsOn(pintxosThings)
   .dependsOn(kitchenetteFedelini)
   .dependsOn(foundationLogging)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
 
-// ---- adapter
-lazy val adapterPocket = project.in(file("etude-adapter-pocket"))
+// ---- pintxos
+lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
   .dependsOn(domainCore)
   .dependsOn(foundationUtility)
   .dependsOn(foundationLogging)
@@ -43,10 +43,10 @@ lazy val adapterPocket = project.in(file("etude-adapter-pocket"))
   .dependsOn(paupietteSpray)
   .settings(buildSettings: _*)
 
-lazy val adapterThings = project.in(file("etude-adapter-things"))
+lazy val pintxosThings = project.in(file("etude-pintxos-things"))
   .settings(buildSettings: _*)
 
-lazy val adapterChatwork = project.in(file("etude-adapter-chatwork"))
+lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(paupietteHtml)
@@ -89,7 +89,7 @@ lazy val desktopFextile = project.in(file("etude-desktop-fextile"))
 // ---- kitchenette
 lazy val kitchenetteFedelini = project.in(file("etude-kitchenette-fedelini"))
   .settings(buildSettings: _*)
-  .dependsOn(adapterChatwork)
+  .dependsOn(pintxosChatwork)
   .settings(assemblySettings: _*)
 
 lazy val kitchenetteCode = project.in(file("etude-kitchenette-code"))
