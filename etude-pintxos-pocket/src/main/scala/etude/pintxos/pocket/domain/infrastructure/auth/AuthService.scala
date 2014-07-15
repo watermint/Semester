@@ -4,8 +4,8 @@ import java.net.{URI, URLEncoder}
 import java.util.concurrent.{ExecutorService, Executors}
 
 import akka.actor.ActorSystem
-import etude.foundation.http.{AsyncClient, AsyncClientContext}
-import etude.kitchenette.spray.SecureConfiguration
+import etude.gazpacho.http.{AsyncClient, AsyncClientContext}
+import etude.gazpacho.spray.SecureConfiguration
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.native.JsonMethods._

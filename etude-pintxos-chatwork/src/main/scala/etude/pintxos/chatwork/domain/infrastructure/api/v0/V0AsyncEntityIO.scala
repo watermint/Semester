@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.foundation.http.SyncClient
+import etude.gazpacho.http.SyncClient
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 
 import scala.concurrent.Future

@@ -5,7 +5,7 @@ import java.util.concurrent.{Executors, ExecutorService}
 
 import etude.domain.core.lifecycle.async.{AsyncEntityIOContext, AsyncRepository}
 import etude.domain.core.model.{Entity, Identity}
-import etude.kitchenette.elasticsearch.Engine
+import etude.gazpacho.elasticsearch.Engine
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods

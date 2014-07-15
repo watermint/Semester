@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.event.message
 import etude.domain.core.event.mutable.IdentityEventPublisherSupport
 import etude.domain.core.event.{IdentityEvent, IdentityEventType}
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.foundation.logging.LoggerFactory
+import etude.gazpacho.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.pintxos.chatwork.domain.model.message.MessageId

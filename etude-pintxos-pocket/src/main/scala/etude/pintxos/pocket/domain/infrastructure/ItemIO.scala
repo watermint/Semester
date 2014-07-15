@@ -3,9 +3,9 @@ package etude.pintxos.pocket.domain.infrastructure
 import java.net.{URI, URL}
 
 import etude.pintxos.pocket.domain.model.{Item, ItemEntry}
-import etude.foundation.http.{AsyncClient, AsyncClientContext}
-import etude.foundation.logging.LoggerFactory
-import etude.foundation.utility.qos.Throttle
+import etude.gazpacho.http.{AsyncClient, AsyncClientContext}
+import etude.gazpacho.logging.LoggerFactory
+import etude.gazpacho.utility.qos.Throttle
 
 import scala.concurrent.Future
 

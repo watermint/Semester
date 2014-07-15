@@ -2,8 +2,8 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.auth
 
 import java.net.URI
 
-import etude.kitchenette.html.Normalizer
-import etude.foundation.http._
+import etude.gazpacho.html.Normalizer
+import etude.gazpacho.http._
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0UnknownChatworkProtocolException
 
 import scala.util.Try

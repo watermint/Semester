@@ -4,7 +4,7 @@ import java.net.URI
 
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.foundation.http._
+import etude.gazpacho.http._
 import org.json4s.{JArray, JString, JValue}
 
 import scala.concurrent.Future

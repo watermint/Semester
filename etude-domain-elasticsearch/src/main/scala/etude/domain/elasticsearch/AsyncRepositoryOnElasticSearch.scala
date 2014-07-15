@@ -3,7 +3,7 @@ package etude.domain.elasticsearch
 import etude.domain.core.lifecycle.async.{AsyncRepository, AsyncResultWithIdentity}
 import etude.domain.core.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.domain.core.model.{Entity, Identity}
-import etude.kitchenette.elasticsearch.Engine
+import etude.gazpacho.elasticsearch.Engine
 
 import scala.concurrent.Future
 

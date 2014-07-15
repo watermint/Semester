@@ -4,7 +4,7 @@ import java.net.URI
 import java.time.Instant
 
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.foundation.logging.LoggerFactory
+import etude.gazpacho.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.account._
 import etude.pintxos.chatwork.domain.model.room._
 import org.json4s._
