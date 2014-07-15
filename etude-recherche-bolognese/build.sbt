@@ -1,2 +1,0 @@
-name := "etude-recherche-bolognese"
-

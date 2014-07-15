@@ -112,7 +112,7 @@ class AsyncRecipeRepositoryOnElasticSearch(val engine: Engine)
     s"recipe-${identity.name.hashCode % 4}"
   }
 
-  def indexValues(): Seq[String] = {
+  override def indexValues(): Seq[String] = {
     Seq("recipe-0", "recipe-1", "recipe-2", "recipe-3")
   }
 

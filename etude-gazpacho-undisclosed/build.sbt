@@ -1,4 +1,4 @@
-name := "etude-test-undisclosed"
+name := "etude-gazpacho-undisclosed"
 
 libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "latest.integration",

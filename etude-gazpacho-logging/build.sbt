@@ -1,4 +1,4 @@
-name := "etude-foundation-logging"
+name := "etude-gazpacho-logging"
 
 libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "latest.integration",

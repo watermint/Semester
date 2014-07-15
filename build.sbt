@@ -23,13 +23,19 @@ lazy val buildSettings = Seq(
     </dependencies>
 )
 
-// ---- apps
+// ---- table
 
-lazy val appArrabbiata = project.in(file("etude-app-arrabbiata"))
+lazy val tableArrabbiata = project.in(file("etude-table-arrabbiata"))
   .dependsOn(pintxosChatwork)
   .dependsOn(pintxosThings)
-  .dependsOn(kitchenetteFedelini)
-  .dependsOn(foundationLogging)
+  .dependsOn(gazpachoLogging)
+  .dependsOn(vinoChatwork)
+  .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
+
+lazy val tableBolognese = project.in(file("etude-table-bolognese"))
+  .dependsOn(gazpachoLogging)
+  .dependsOn(paupietteSpray)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
@@ -37,9 +43,9 @@ lazy val appArrabbiata = project.in(file("etude-app-arrabbiata"))
 // ---- pintxos
 lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
   .dependsOn(domainCore)
-  .dependsOn(foundationUtility)
-  .dependsOn(foundationLogging)
-  .dependsOn(foundationHttp)
+  .dependsOn(gazpachoUtility)
+  .dependsOn(gazpachoLogging)
+  .dependsOn(gazpachoHttp)
   .dependsOn(paupietteSpray)
   .settings(buildSettings: _*)
 
@@ -50,9 +56,9 @@ lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(paupietteHtml)
-  .dependsOn(foundationHttp)
-  .dependsOn(foundationUtility)
-  .dependsOn(foundationLogging)
+  .dependsOn(gazpachoHttp)
+  .dependsOn(gazpachoUtility)
+  .dependsOn(gazpachoLogging)
   .dependsOn(testUndisclosed % "test")
 
 
@@ -64,35 +70,35 @@ lazy val domainElasticSearch = project.in(file("etude-domain-elasticsearch"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(paupietteElasticSearch)
-  .dependsOn(foundationLogging)
+  .dependsOn(gazpachoLogging)
 
 
-// ---- foundation
-lazy val foundationLogging = project.in(file("etude-foundation-logging"))
+// ---- gazpacho
+lazy val gazpachoLogging = project.in(file("etude-gazpacho-logging"))
   .settings(buildSettings: _*)
 
-lazy val foundationHttp = project.in(file("etude-foundation-http"))
+lazy val gazpachoHttp = project.in(file("etude-gazpacho-http"))
   .settings(buildSettings: _*)
-  .dependsOn(foundationUtility)
-  .dependsOn(foundationLogging)
+  .dependsOn(gazpachoUtility)
+  .dependsOn(gazpachoLogging)
 
-lazy val foundationUtility = project.in(file("etude-foundation-utility"))
+lazy val gazpachoUtility = project.in(file("etude-gazpacho-utility"))
   .settings(buildSettings: _*)
 
 
 // ---- desktop
 lazy val desktopFextile = project.in(file("etude-desktop-fextile"))
   .settings(buildSettings: _*)
-  .dependsOn(foundationLogging)
+  .dependsOn(gazpachoLogging)
 
 
 // ---- kitchenette
-lazy val kitchenetteFedelini = project.in(file("etude-kitchenette-fedelini"))
+lazy val vinoChatwork = project.in(file("etude-vino-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(pintxosChatwork)
   .settings(assemblySettings: _*)
 
-lazy val kitchenetteCode = project.in(file("etude-kitchenette-code"))
+lazy val vinoCode = project.in(file("etude-vino-code"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(domainElasticSearch)
@@ -120,13 +126,5 @@ lazy val paupietteTika = project.in(file("etude-paupiette-tika"))
 // ---- test
 lazy val testUndisclosed = project.in(file("etude-test-undisclosed"))
   .settings(buildSettings: _*)
-  .dependsOn(foundationLogging)
-
-
-// ---- recherche
-lazy val rechercheBolognese = project.in(file("etude-recherche-bolognese"))
-  .dependsOn(foundationLogging)
-  .dependsOn(paupietteSpray)
-  .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
+  .dependsOn(gazpachoLogging)
 

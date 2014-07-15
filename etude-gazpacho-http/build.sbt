@@ -1,4 +1,4 @@
-name := "etude-foundation-http"
+name := "etude-gazpacho-http"
 
 libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-native" % "latest.integration",
