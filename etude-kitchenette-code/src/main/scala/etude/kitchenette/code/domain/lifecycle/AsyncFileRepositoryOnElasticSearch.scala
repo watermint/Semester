@@ -8,6 +8,7 @@ import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 
+private[lifecycle]
 class AsyncFileRepositoryOnElasticSearch(val engine: Engine)
   extends AsyncFileRepository
   with AsyncRepositoryOnElasticSearch[FileId, File]
@@ -18,8 +19,6 @@ class AsyncFileRepositoryOnElasticSearch(val engine: Engine)
   val typeValue: String = "file"
 
   def indexValue(identity: FileId): String = "file"
-
-  def indexValues(): Seq[String] = Seq("file")
 
   def idValue(identity: FileId): String = identity.path
 

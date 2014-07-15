@@ -12,7 +12,7 @@ trait AsyncRepositoryOnElasticSearch[ID <: Identity[_], E <: Entity[ID]] extends
 
   def indexValue(identity: ID): String
 
-  def indexValues(): Seq[String]
+  def indexValues(): Seq[String] = Seq()
 
   val typeValue: String
 
