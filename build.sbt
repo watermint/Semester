@@ -35,7 +35,7 @@ lazy val tableArrabbiata = project.in(file("etude-table-arrabbiata"))
 
 lazy val tableBolognese = project.in(file("etude-table-bolognese"))
   .dependsOn(gazpachoLogging)
-  .dependsOn(paupietteSpray)
+  .dependsOn(gazpachoSpray)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
@@ -46,7 +46,7 @@ lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
   .dependsOn(gazpachoUtility)
   .dependsOn(gazpachoLogging)
   .dependsOn(gazpachoHttp)
-  .dependsOn(paupietteSpray)
+  .dependsOn(gazpachoSpray)
   .settings(buildSettings: _*)
 
 lazy val pintxosThings = project.in(file("etude-pintxos-things"))
@@ -55,11 +55,11 @@ lazy val pintxosThings = project.in(file("etude-pintxos-things"))
 lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
-  .dependsOn(paupietteHtml)
+  .dependsOn(gazpachoHtml)
   .dependsOn(gazpachoHttp)
   .dependsOn(gazpachoUtility)
   .dependsOn(gazpachoLogging)
-  .dependsOn(testUndisclosed % "test")
+  .dependsOn(gazpachoUndisclosed % "test")
 
 
 // ---- DDD
@@ -69,11 +69,14 @@ lazy val domainCore = project.in(file("etude-domain-core"))
 lazy val domainElasticSearch = project.in(file("etude-domain-elasticsearch"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
-  .dependsOn(paupietteElasticSearch)
+  .dependsOn(gazpachoElasticSearch)
   .dependsOn(gazpachoLogging)
 
 
 // ---- gazpacho
+lazy val gazpachoHtml = project.in(file("etude-gazpacho-html"))
+  .settings(buildSettings: _*)
+
 lazy val gazpachoLogging = project.in(file("etude-gazpacho-logging"))
   .settings(buildSettings: _*)
 
@@ -85,9 +88,23 @@ lazy val gazpachoHttp = project.in(file("etude-gazpacho-http"))
 lazy val gazpachoUtility = project.in(file("etude-gazpacho-utility"))
   .settings(buildSettings: _*)
 
+lazy val gazpachoFextile = project.in(file("etude-gazpacho-fextile"))
+  .settings(buildSettings: _*)
+  .dependsOn(gazpachoLogging)
 
-// ---- desktop
-lazy val desktopFextile = project.in(file("etude-desktop-fextile"))
+lazy val gazpachoHighlight = project.in(file("etude-gazpacho-highlight"))
+  .settings(buildSettings: _*)
+
+lazy val gazpachoSpray = project.in(file("etude-gazpacho-spray"))
+  .settings(buildSettings: _*)
+
+lazy val gazpachoElasticSearch = project.in(file("etude-gazpacho-elasticsearch"))
+  .settings(buildSettings: _*)
+
+lazy val gazpachoTika = project.in(file("etude-gazpacho-tika"))
+  .settings(buildSettings: _*)
+
+lazy val gazpachoUndisclosed = project.in(file("etude-gazpacho-undisclosed"))
   .settings(buildSettings: _*)
   .dependsOn(gazpachoLogging)
 
@@ -102,29 +119,7 @@ lazy val vinoCode = project.in(file("etude-vino-code"))
   .settings(buildSettings: _*)
   .dependsOn(domainCore)
   .dependsOn(domainElasticSearch)
-  .dependsOn(paupietteTika)
-  .dependsOn(paupietteHighlight)
-  .dependsOn(paupietteElasticSearch)
-
-// ---- paupiette
-
-lazy val paupietteHtml = project.in(file("etude-paupiette-html"))
-  .settings(buildSettings: _*)
-
-lazy val paupietteHighlight = project.in(file("etude-paupiette-highlight"))
-  .settings(buildSettings: _*)
-
-lazy val paupietteSpray = project.in(file("etude-paupiette-spray"))
-  .settings(buildSettings: _*)
-
-lazy val paupietteElasticSearch = project.in(file("etude-paupiette-elasticsearch"))
-  .settings(buildSettings: _*)
-
-lazy val paupietteTika = project.in(file("etude-paupiette-tika"))
-  .settings(buildSettings: _*)
-
-// ---- test
-lazy val testUndisclosed = project.in(file("etude-test-undisclosed"))
-  .settings(buildSettings: _*)
-  .dependsOn(gazpachoLogging)
+  .dependsOn(gazpachoTika)
+  .dependsOn(gazpachoHighlight)
+  .dependsOn(gazpachoElasticSearch)
 
