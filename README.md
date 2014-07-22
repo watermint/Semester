@@ -43,7 +43,7 @@ Project names are categorized like below.
 
 ## etude-vino
 
-* [Fedelini](etude-vino-fedelini) - ChatWork Business Logics
+* [ChatWork](etude-vino-chatwork) - ChatWork Business Logics
 * [Code](etude-vino-code) - Source code search engine base logics.
 
 ## etude-table
