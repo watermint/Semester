@@ -5,7 +5,7 @@ import java.util.concurrent.{ExecutorService, Executors}
 
 import etude.domain.core.lifecycle.async.AsyncEntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV1Api
-import etude.gazpacho.undisclosed._
+import etude.epice.undisclosed._
 import org.specs2.execute.Result
 
 import scala.concurrent.duration._

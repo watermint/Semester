@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0
 
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 
 import scala.concurrent.duration._

@@ -2,7 +2,7 @@ package etude.table.arrabbiata.ui
 
 import akka.actor.{Actor, ActorSystem, Props}
 import etude.table.arrabbiata.ui.message.UIMessage
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 
 import scalafx.application.Platform
 

@@ -1,7 +1,7 @@
 package etude.table.arrabbiata.ui.message.composite
 
 import etude.table.arrabbiata.ui.Main
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 
 case class StatusUpdate(status: String) extends CompositeUIMessage {
   val logger = LoggerFactory.getLogger(getClass)

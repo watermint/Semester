@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.auth
 import java.net.URI
 
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.gazpacho.http._
+import etude.epice.http._
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0UnknownChatworkProtocolException}
 
 import scala.concurrent.Future

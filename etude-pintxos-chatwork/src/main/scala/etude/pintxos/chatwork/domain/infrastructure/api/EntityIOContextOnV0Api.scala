@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
 import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor}
 
 import etude.domain.core.lifecycle.EntityIOContext
-import etude.gazpacho.http.SyncClient
+import etude.epice.http.SyncClient
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
 
 import scala.collection.mutable.ArrayBuffer

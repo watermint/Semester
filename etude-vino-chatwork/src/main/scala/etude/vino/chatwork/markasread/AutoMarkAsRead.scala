@@ -3,7 +3,7 @@ package etude.vino.chatwork.markasread
 import java.nio.file.{Files, Paths}
 import java.util.concurrent.{ExecutorService, Executors, TimeUnit}
 
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.event.message.AsyncMessageEventPublisher
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.lifecycle.message.AsyncMessageRepository

@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.pintxos.chatwork.domain.infrastructure.api.v1.V1AsyncApiSpecBase
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
-import etude.gazpacho.undisclosed._
+import etude.epice.undisclosed._
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner

@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.auth
 
 import java.net.URI
 
-import etude.gazpacho.http.SyncClient
+import etude.epice.http.SyncClient
 
 case class AuthContext(client: SyncClient,
                        username: String,

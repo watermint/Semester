@@ -7,7 +7,7 @@ import etude.table.arrabbiata.controller.message.{CallbackMessage, Message, Mess
 import etude.table.arrabbiata.state.Session
 import etude.table.arrabbiata.ui.UIActor
 import etude.table.arrabbiata.ui.message.composite.session.NoSession
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 
 import scala.concurrent.{ExecutionContext, Lock}
 

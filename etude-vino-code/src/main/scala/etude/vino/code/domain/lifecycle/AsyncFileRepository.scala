@@ -2,7 +2,7 @@ package etude.vino.code.domain.lifecycle
 
 import etude.domain.core.lifecycle.{ResultWithIdentity, EntityIOContext}
 import etude.vino.code.domain.model.{File, FileId}
-import etude.gazpacho.elasticsearch.Engine
+import etude.epice.elasticsearch.Engine
 
 import scala.concurrent.Future
 

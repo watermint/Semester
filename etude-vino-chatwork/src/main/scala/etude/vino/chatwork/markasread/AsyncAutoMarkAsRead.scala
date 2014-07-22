@@ -4,7 +4,7 @@ import etude.domain.core.event.async.AsyncIdentityEventSubscriber
 import etude.domain.core.event.{IdentityEvent, IdentityEventType}
 import etude.domain.core.lifecycle.EntityIOContext
 import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.RoomId

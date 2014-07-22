@@ -2,7 +2,7 @@ package etude.gazpacho.fextile
 
 import javafx.scene.layout.{GridPane => FxGridPane}
 
-import etude.gazpacho.logging.{Logger, LoggerFactory}
+import etude.epice.logging.{Logger, LoggerFactory}
 
 import scala.collection.mutable
 import scalafx.geometry.{HPos, Insets, Pos, VPos}

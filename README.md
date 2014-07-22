@@ -6,54 +6,50 @@ Collection of small apps and libraries. This project collection is the practice 
 
 # Projects
 
-## Application
+Project names are categorized like below.
 
-* [Arrabbiata](etude/app/arrabbiata) - ChatWork utility UI
-    * Requires JDK8 Update 20 (tested on JDK 8 update 20 build 19, 20)
+* etude-epice ... Utility, wrapper for external libraries.
+* etude-gazpacho ... Frontend framework, or wrapper for frontend framework.
+* etude-manieres ... Design convention, or rules.
+* etude-pintxos ... Wrapper for external services.
+* etude-vino ... Business logic.
+* etude-table ... Application, or assembled logics.
 
-## Intermediate Libraries
+## etude-epice
 
-Business logics
+* [ElasticSearch](etude-epice-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
+* [Highlight](etude-epice-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
+* [Html](etude-epice-html) - HTML parse wrapper API
+* [Http](etude-epice-http) - HTTP Client wrapper API
+* [Logging](etude-epice-logging) - Logging API
+* [Tika](etude-epice-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
+* [Undisclosed tests](etude-epice-undisclosed) - Test wrapper. Separate secret keys for specific tests.
+* [Utility](etude-epice-utility) - Generic utilities
 
-* [Fedelini](etude-kitchenette-fedelini) - ChatWork Business Logics
-* [Code](etude-kitchenette-code) - Source code search engine base logics.
+## etude-gazpacho
 
-## Library wrappers
+* [Fextile](etude-gazpacho-fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
+* [Spray](etude-gazpacho-spray) - [Spray](http://spray.io) configuration base
 
-* [Highlight](etude-paupiette-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
-* [Spray](etude-paupiette-spray) - [Spray](http://spray.io) configuration base
-* [Tika](etude-paupiette-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
-* [ElasticSearch](etude-paupiette-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
-* [Html](etude-paupiette-html) - HTML parse wrapper API
+## epice-manieres
 
-## Adapters
+* [Domain](etude-manieres-domain) - Core Libraries for Domain Driven Design (DDD).
 
-* [Pocket](etude-pintxos-pocket) - [Pocket](http://getpocket.com) API
+## etude-pintxos
+
 * [ChatWork](etude-pintxos-chatwork) - [ChatWork](http://chatwork.com) API
+* [Pocket](etude-pintxos-pocket) - [Pocket](http://getpocket.com) API
 * [Things](etude-pintxos-things) - [Things](https://culturedcode.com/things/) app integration.
 
-## Domain Driven Design
+## etude-vino
 
-* [Domain](etude-domain-core) - Core Libraries for Domain Driven Design (DDD).
-* [ElasticSearch](etude-domain-elasticsearch) - Repository on [elasticsearch](http://www.elasticsearch.org)
+* [Fedelini](etude-vino-fedelini) - ChatWork Business Logics
+* [Code](etude-vino-code) - Source code search engine base logics.
 
-## UI
+## etude-table
 
-* [Fextile](etude-desktop-fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
-
-## Utility
-
-* [Http](etude-foundation-http) - HTTP Client wrapper API
-* [Utility](etude-foundation-utility) - Generic utilities
-* [Logging](etude-foundation-logging) - Logging API
-
-## Tests
-
-* [Undisclosed tests](etude-test-undisclosed) - Test wrapper. Separate secret keys for specific tests.
-
-## Practice
-
-* [Bolognese](etude-recherche-bolognese) - Practicing [spray](http://spray.io)
+* [Arrabbiata](etude-table-arrabbiata) - ChatWork utility UI
+* [Bolognese](etude-table-bolognese) - Practicing [spray](http://spray.io)
 
 # Requirements
 

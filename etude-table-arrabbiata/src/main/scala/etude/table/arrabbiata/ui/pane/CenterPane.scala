@@ -2,7 +2,7 @@ package etude.table.arrabbiata.ui.pane
 
 import etude.table.arrabbiata.ui.UI
 import etude.table.arrabbiata.ui.pane.room.MergeRoomPane
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 
 import scalafx.geometry.Pos
 import scalafx.scene.control.{Tab, TabPane}

@@ -4,7 +4,7 @@ import etude.table.arrabbiata.controller.AppActor
 import etude.table.arrabbiata.controller.message.session.LoadSession
 import etude.table.arrabbiata.ui.dialog.LoginDialog
 import etude.table.arrabbiata.ui.pane.{CenterPane, FooterPane, HeaderPane, NotificationPane}
-import etude.gazpacho.logging.LoggerFactory
+import etude.epice.logging.LoggerFactory
 
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage

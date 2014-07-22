@@ -1,6 +1,6 @@
 package etude.vino.code.domain.lifecycle
 
-import etude.gazpacho.elasticsearch.Engine
+import etude.epice.elasticsearch.Engine
 
 import scala.concurrent.Future
 

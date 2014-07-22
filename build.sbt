@@ -28,13 +28,13 @@ lazy val buildSettings = Seq(
 lazy val tableArrabbiata = project.in(file("etude-table-arrabbiata"))
   .dependsOn(pintxosChatwork)
   .dependsOn(pintxosThings)
-  .dependsOn(gazpachoLogging)
+  .dependsOn(epiceLogging)
   .dependsOn(vinoChatwork)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
 lazy val tableBolognese = project.in(file("etude-table-bolognese"))
-  .dependsOn(gazpachoLogging)
+  .dependsOn(epiceLogging)
   .dependsOn(gazpachoSpray)
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
@@ -42,10 +42,10 @@ lazy val tableBolognese = project.in(file("etude-table-bolognese"))
 
 // ---- pintxos
 lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
-  .dependsOn(domainCore)
-  .dependsOn(gazpachoUtility)
-  .dependsOn(gazpachoLogging)
-  .dependsOn(gazpachoHttp)
+  .dependsOn(manieresDomain)
+  .dependsOn(epiceUtility)
+  .dependsOn(epiceLogging)
+  .dependsOn(epiceHttp)
   .dependsOn(gazpachoSpray)
   .settings(buildSettings: _*)
 
@@ -54,59 +54,56 @@ lazy val pintxosThings = project.in(file("etude-pintxos-things"))
 
 lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .settings(buildSettings: _*)
-  .dependsOn(domainCore)
-  .dependsOn(gazpachoHtml)
-  .dependsOn(gazpachoHttp)
-  .dependsOn(gazpachoUtility)
-  .dependsOn(gazpachoLogging)
-  .dependsOn(gazpachoUndisclosed % "test")
+  .dependsOn(manieresDomain)
+  .dependsOn(epiceHtml)
+  .dependsOn(epiceHttp)
+  .dependsOn(epiceUtility)
+  .dependsOn(epiceLogging)
+  .dependsOn(epiceUndisclosed % "test")
 
 
-// ---- DDD
-lazy val domainCore = project.in(file("etude-domain-core"))
+// ---- manieres
+lazy val manieresDomain = project.in(file("etude-manieres-domain"))
   .settings(buildSettings: _*)
-
-lazy val domainElasticSearch = project.in(file("etude-domain-elasticsearch"))
-  .settings(buildSettings: _*)
-  .dependsOn(domainCore)
-  .dependsOn(gazpachoElasticSearch)
-  .dependsOn(gazpachoLogging)
 
 
 // ---- gazpacho
-lazy val gazpachoHtml = project.in(file("etude-gazpacho-html"))
-  .settings(buildSettings: _*)
-
-lazy val gazpachoLogging = project.in(file("etude-gazpacho-logging"))
-  .settings(buildSettings: _*)
-
-lazy val gazpachoHttp = project.in(file("etude-gazpacho-http"))
-  .settings(buildSettings: _*)
-  .dependsOn(gazpachoUtility)
-  .dependsOn(gazpachoLogging)
-
-lazy val gazpachoUtility = project.in(file("etude-gazpacho-utility"))
-  .settings(buildSettings: _*)
-
 lazy val gazpachoFextile = project.in(file("etude-gazpacho-fextile"))
   .settings(buildSettings: _*)
-  .dependsOn(gazpachoLogging)
-
-lazy val gazpachoHighlight = project.in(file("etude-gazpacho-highlight"))
-  .settings(buildSettings: _*)
+  .dependsOn(epiceLogging)
 
 lazy val gazpachoSpray = project.in(file("etude-gazpacho-spray"))
   .settings(buildSettings: _*)
 
-lazy val gazpachoElasticSearch = project.in(file("etude-gazpacho-elasticsearch"))
+// ---- epice
+lazy val epiceHtml = project.in(file("etude-epice-html"))
   .settings(buildSettings: _*)
 
-lazy val gazpachoTika = project.in(file("etude-gazpacho-tika"))
+lazy val epiceLogging = project.in(file("etude-epice-logging"))
   .settings(buildSettings: _*)
 
-lazy val gazpachoUndisclosed = project.in(file("etude-gazpacho-undisclosed"))
+lazy val epiceHttp = project.in(file("etude-epice-http"))
   .settings(buildSettings: _*)
-  .dependsOn(gazpachoLogging)
+  .dependsOn(epiceUtility)
+  .dependsOn(epiceLogging)
+
+lazy val epiceUtility = project.in(file("etude-epice-utility"))
+  .settings(buildSettings: _*)
+
+lazy val epiceHighlight = project.in(file("etude-epice-highlight"))
+  .settings(buildSettings: _*)
+
+lazy val epiceElasticsearch = project.in(file("etude-epice-elasticsearch"))
+  .settings(buildSettings: _*)
+  .dependsOn(manieresDomain)
+  .dependsOn(epiceLogging)
+
+lazy val epiceTika = project.in(file("etude-epice-tika"))
+  .settings(buildSettings: _*)
+
+lazy val epiceUndisclosed = project.in(file("etude-epice-undisclosed"))
+  .settings(buildSettings: _*)
+  .dependsOn(epiceLogging)
 
 
 // ---- kitchenette
@@ -117,9 +114,8 @@ lazy val vinoChatwork = project.in(file("etude-vino-chatwork"))
 
 lazy val vinoCode = project.in(file("etude-vino-code"))
   .settings(buildSettings: _*)
-  .dependsOn(domainCore)
-  .dependsOn(domainElasticSearch)
-  .dependsOn(gazpachoTika)
-  .dependsOn(gazpachoHighlight)
-  .dependsOn(gazpachoElasticSearch)
+  .dependsOn(manieresDomain)
+  .dependsOn(epiceTika)
+  .dependsOn(epiceHighlight)
+  .dependsOn(epiceElasticsearch)
 
