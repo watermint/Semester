@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.lifecycle.account
 
 import java.net.URI
 
-import etude.domain.core.lifecycle.{EntityIOContext, EntityNotFoundException}
+import etude.manieres.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import etude.pintxos.chatwork.domain.infrastructure.api.v1.V1AsyncApi
 import etude.pintxos.chatwork.domain.model.account._
 import org.json4s._

@@ -3,8 +3,8 @@ package etude.pintxos.chatwork.domain.model.room
 import java.net.URI
 import java.time.Instant
 
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.model.Entity
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.manieres.domain.model.Entity
 import etude.pintxos.chatwork.domain.lifecycle.message.MessageRepository
 import etude.pintxos.chatwork.domain.model.message.{MessageId, Text}
 

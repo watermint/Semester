@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad, V0AsyncRoom}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._

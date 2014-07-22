@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.lifecycle.account
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncAccount, V0AsyncInitLoad}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 

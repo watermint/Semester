@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.event.message
 
-import etude.domain.core.event.async.{AsyncIdentityEventPublisher, AsyncIdentityEventSubscriber}
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.event.async.{AsyncIdentityEventPublisher, AsyncIdentityEventSubscriber}
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.model.message.MessageId
 

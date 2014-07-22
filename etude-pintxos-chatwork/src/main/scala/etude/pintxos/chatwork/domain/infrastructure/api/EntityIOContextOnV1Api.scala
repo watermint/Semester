@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.infrastructure.api
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 
 import scala.language.higherKinds
 

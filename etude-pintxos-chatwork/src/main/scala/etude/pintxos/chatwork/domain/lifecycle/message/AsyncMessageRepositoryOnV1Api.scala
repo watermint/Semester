@@ -2,8 +2,8 @@ package etude.pintxos.chatwork.domain.lifecycle.message
 
 import java.time.Instant
 
-import etude.domain.core.lifecycle.async.AsyncEntityIO
-import etude.domain.core.lifecycle.{EntityIOContext, EntityNotFoundException}
+import etude.manieres.domain.lifecycle.async.AsyncEntityIO
+import etude.manieres.domain.lifecycle.{EntityIOContext, EntityNotFoundException}
 import etude.pintxos.chatwork.domain.infrastructure.api.v1.{V1ApiException, V1AsyncApi}
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}

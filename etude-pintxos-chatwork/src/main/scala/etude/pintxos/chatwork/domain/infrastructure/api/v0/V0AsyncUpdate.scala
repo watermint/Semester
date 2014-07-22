@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import org.json4s._
 
 import scala.concurrent.Future

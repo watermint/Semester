@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.lifecycle.account
 
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.lifecycle.async.AsyncEntityReader
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncEntityReader
 import etude.pintxos.chatwork.domain.infrastructure.api.{AsyncEntityIOContextOnV0Api, AsyncEntityIOContextOnV1Api}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 

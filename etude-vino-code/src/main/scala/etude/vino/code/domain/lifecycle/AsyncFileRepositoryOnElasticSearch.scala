@@ -1,6 +1,6 @@
 package etude.vino.code.domain.lifecycle
 
-import etude.domain.core.lifecycle.async.AsyncEntityIO
+import etude.manieres.domain.lifecycle.async.AsyncEntityIO
 import etude.epice.elasticsearch.domain.lifecycle.AsyncRepositoryOnElasticSearch
 import etude.vino.code.domain.model.{File, FileId}
 import etude.epice.elasticsearch.Engine

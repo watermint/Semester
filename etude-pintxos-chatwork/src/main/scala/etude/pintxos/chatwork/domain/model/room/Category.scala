@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.domain.core.model.Entity
+import etude.manieres.domain.model.Entity
 
 class Category(val categoryId: CategoryId,
                val name: String,

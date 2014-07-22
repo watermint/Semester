@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v1
 
-import etude.domain.core.lifecycle.{EntityIO, EntityIOContext}
+import etude.manieres.domain.lifecycle.{EntityIO, EntityIOContext}
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV1Api
 
 trait V1EntityIO[M[+A]]

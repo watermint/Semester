@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.account
 
-import etude.domain.core.model.Entity
+import etude.manieres.domain.model.Entity
 
 class Organization(val organizationId: OrganizationId,
                    val name: String)

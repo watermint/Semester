@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.domain.core.lifecycle.EntityNotFoundException
+import etude.manieres.domain.lifecycle.EntityNotFoundException
 
 sealed trait RoomType {
   val name: String

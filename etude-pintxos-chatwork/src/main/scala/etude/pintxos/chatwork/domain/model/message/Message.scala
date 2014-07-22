@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.model.message
 
 import java.time.Instant
 
-import etude.domain.core.model.Entity
+import etude.manieres.domain.model.Entity
 import etude.pintxos.chatwork.domain.model.account.AccountId
 
 class Message(val messageId: MessageId,

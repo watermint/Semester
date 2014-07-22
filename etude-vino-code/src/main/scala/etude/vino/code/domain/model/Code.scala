@@ -1,6 +1,6 @@
 package etude.vino.code.domain.model
 
-import etude.domain.core.model.Entity
+import etude.manieres.domain.model.Entity
 
 class Code(val fileId: FileId,
            val code: String,

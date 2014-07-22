@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.lifecycle.async.AsyncRepository
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncRepository
 import etude.pintxos.chatwork.domain.infrastructure.api.{AsyncEntityIOContextOnV0Api, AsyncEntityIOContextOnV1Api}
 import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 

@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0
 import java.net.URI
 import java.time.Instant
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.account._
 import etude.pintxos.chatwork.domain.model.room._

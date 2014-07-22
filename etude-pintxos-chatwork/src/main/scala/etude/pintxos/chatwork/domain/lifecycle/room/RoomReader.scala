@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.EntityReader
+import etude.manieres.domain.lifecycle.EntityReader
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 
 import scala.language.higherKinds

@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.model.message
 
 import java.time.Instant
 
-import etude.domain.core.model.ValueObject
+import etude.manieres.domain.model.ValueObject
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.text._
 import etude.pintxos.chatwork.domain.model.room.RoomId

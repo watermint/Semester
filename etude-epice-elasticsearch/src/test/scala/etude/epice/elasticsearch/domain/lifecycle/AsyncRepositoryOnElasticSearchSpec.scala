@@ -3,8 +3,8 @@ package etude.epice.elasticsearch.domain.lifecycle
 import java.nio.file.{Files, Path}
 import java.util.concurrent.{ExecutorService, Executors}
 
-import etude.domain.core.lifecycle.async.{AsyncRepository, AsyncEntityIOContext}
-import etude.domain.core.model.{Entity, Identity}
+import etude.manieres.domain.lifecycle.async.{AsyncRepository, AsyncEntityIOContext}
+import etude.manieres.domain.model.{Entity, Identity}
 import etude.epice.elasticsearch.Engine
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._

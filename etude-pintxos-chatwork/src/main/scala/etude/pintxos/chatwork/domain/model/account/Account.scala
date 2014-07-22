@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.model.account
 
 import java.net.URI
 
-import etude.domain.core.model.Entity
+import etude.manieres.domain.model.Entity
 
 /**
  * Account in ChatWork.

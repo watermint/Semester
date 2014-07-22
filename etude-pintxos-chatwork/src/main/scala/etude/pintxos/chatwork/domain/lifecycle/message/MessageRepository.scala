@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.lifecycle.message
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 

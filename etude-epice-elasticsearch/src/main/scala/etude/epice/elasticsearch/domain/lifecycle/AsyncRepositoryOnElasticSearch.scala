@@ -1,8 +1,8 @@
 package etude.epice.elasticsearch.domain.lifecycle
 
-import etude.domain.core.lifecycle.{ResultWithIdentity, EntityIOContext}
-import etude.domain.core.lifecycle.async.{AsyncResultWithIdentity, AsyncRepository}
-import etude.domain.core.model.{Identity, Entity}
+import etude.manieres.domain.lifecycle.{ResultWithIdentity, EntityIOContext}
+import etude.manieres.domain.lifecycle.async.{AsyncResultWithIdentity, AsyncRepository}
+import etude.manieres.domain.model.{Identity, Entity}
 import etude.epice.elasticsearch.Engine
 
 import scala.concurrent.Future

@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.domain.core.model.ValueObject
+import etude.manieres.domain.model.ValueObject
 
 case class RoomAttributes(sticky: Boolean,
                           unreadCount: BigInt,

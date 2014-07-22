@@ -2,8 +2,8 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v1
 
 import java.net.URI
 
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.lifecycle.async.AsyncEntityIO
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncEntityIO
 import etude.epice.http._
 import org.json4s.{JArray, JString, JValue}
 

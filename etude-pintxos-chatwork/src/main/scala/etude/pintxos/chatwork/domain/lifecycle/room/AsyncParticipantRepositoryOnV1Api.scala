@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.{EntityIOContext, ResultWithIdentity}
+import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 
 import scala.concurrent.Future

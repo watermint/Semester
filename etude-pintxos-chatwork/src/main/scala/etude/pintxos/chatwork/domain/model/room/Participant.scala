@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.domain.core.model.Entity
+import etude.manieres.domain.model.Entity
 import etude.pintxos.chatwork.domain.model.account.AccountId
 
 class Participant(val roomId: RoomId,

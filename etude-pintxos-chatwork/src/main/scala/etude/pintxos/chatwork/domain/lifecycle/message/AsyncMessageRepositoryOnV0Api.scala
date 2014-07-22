@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.lifecycle.message
 
 import java.time.Instant
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message._

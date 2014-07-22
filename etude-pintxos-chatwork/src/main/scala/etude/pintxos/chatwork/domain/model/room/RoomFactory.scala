@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.domain.core.lifecycle.{EntityIOContext, Factory}
+import etude.manieres.domain.lifecycle.{EntityIOContext, Factory}
 
 import scala.language.higherKinds
 

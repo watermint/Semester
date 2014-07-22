@@ -3,7 +3,7 @@ package etude.vino.code.service
 import java.nio.charset.UnsupportedCharsetException
 import java.nio.file.Path
 
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.vino.code.domain.lifecycle.{AsyncCodeRepository, AsyncFileRepository}
 import etude.vino.code.domain.model.{Code, File, FileId}
 import etude.epice.elasticsearch.Engine

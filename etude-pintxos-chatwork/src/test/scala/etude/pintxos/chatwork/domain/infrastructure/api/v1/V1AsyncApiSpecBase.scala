@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v1
 import java.util.Properties
 import java.util.concurrent.{ExecutorService, Executors}
 
-import etude.domain.core.lifecycle.async.AsyncEntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncEntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV1Api
 import etude.epice.undisclosed._
 import org.specs2.execute.Result

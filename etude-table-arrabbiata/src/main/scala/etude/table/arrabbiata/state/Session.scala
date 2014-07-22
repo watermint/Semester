@@ -3,7 +3,7 @@ package etude.table.arrabbiata.state
 import java.util.concurrent.atomic.AtomicReference
 
 import etude.table.arrabbiata.controller.AppActor
-import etude.domain.core.lifecycle.async.AsyncEntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncEntityIOContext
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.lifecycle.account.AsyncAccountRepository

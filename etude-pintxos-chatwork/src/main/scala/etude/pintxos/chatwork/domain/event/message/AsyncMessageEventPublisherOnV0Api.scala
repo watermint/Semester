@@ -1,8 +1,8 @@
 package etude.pintxos.chatwork.domain.event.message
 
-import etude.domain.core.event.mutable.IdentityEventPublisherSupport
-import etude.domain.core.event.{IdentityEvent, IdentityEventType}
-import etude.domain.core.lifecycle.EntityIOContext
+import etude.manieres.domain.event.mutable.IdentityEventPublisherSupport
+import etude.manieres.domain.event.{IdentityEvent, IdentityEventType}
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.lifecycle.room.AsyncRoomRepository

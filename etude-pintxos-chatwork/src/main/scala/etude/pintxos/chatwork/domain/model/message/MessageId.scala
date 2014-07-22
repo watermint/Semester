@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.model.message
 
-import etude.domain.core.model.Identity
+import etude.manieres.domain.model.Identity
 import etude.pintxos.chatwork.domain.model.room.RoomId
 
 case class MessageId(roomId: RoomId,

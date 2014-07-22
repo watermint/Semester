@@ -1,6 +1,6 @@
 package etude.pintxos.chatwork.domain.lifecycle.account
 
-import etude.domain.core.lifecycle.{EntityIOContext, EntityReader}
+import etude.manieres.domain.lifecycle.{EntityIOContext, EntityReader}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 
 import scala.language.higherKinds

@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
-import etude.domain.core.lifecycle.async.AsyncResultWithIdentity
-import etude.domain.core.lifecycle.{EntityIOContext, ResultWithIdentity}
+import etude.manieres.domain.lifecycle.async.AsyncResultWithIdentity
+import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.room.{Category, CategoryId, RoomId}
 import org.json4s.JsonDSL._

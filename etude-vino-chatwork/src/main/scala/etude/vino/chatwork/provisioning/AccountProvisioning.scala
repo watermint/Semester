@@ -1,7 +1,7 @@
 package etude.vino.chatwork.provisioning
 
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.lifecycle.async.AsyncEntityIO
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncEntityIO
 import etude.pintxos.chatwork.domain.lifecycle.room.AsyncParticipantRepository
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.room.{AccountRole, AccountRoleType, Participant, RoomId}

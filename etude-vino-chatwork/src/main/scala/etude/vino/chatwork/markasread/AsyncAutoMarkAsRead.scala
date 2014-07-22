@@ -1,9 +1,9 @@
 package etude.vino.chatwork.markasread
 
-import etude.domain.core.event.async.AsyncIdentityEventSubscriber
-import etude.domain.core.event.{IdentityEvent, IdentityEventType}
-import etude.domain.core.lifecycle.EntityIOContext
-import etude.domain.core.lifecycle.async.AsyncEntityIO
+import etude.manieres.domain.event.async.AsyncIdentityEventSubscriber
+import etude.manieres.domain.event.{IdentityEvent, IdentityEventType}
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.manieres.domain.lifecycle.async.AsyncEntityIO
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.lifecycle.message.AsyncMessageRepository
 import etude.pintxos.chatwork.domain.model.message.MessageId
