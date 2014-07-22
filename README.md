@@ -31,7 +31,7 @@ Project names are categorized like below.
 * [Fextile](etude-gazpacho-fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
 * [Spray](etude-gazpacho-spray) - [Spray](http://spray.io) configuration base
 
-## epice-manieres
+## etude-manieres
 
 * [Domain](etude-manieres-domain) - Core Libraries for Domain Driven Design (DDD).
 
