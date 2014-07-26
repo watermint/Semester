@@ -2,8 +2,8 @@
 lazy val buildSettings = Seq(
   version := "0.7.12",
   organization := "org.watermint",
-  scalaVersion := "2.11.1",
-  crossScalaVersions := Seq("2.11.1"),
+  scalaVersion := "2.11.2",
+  crossScalaVersions := Seq("2.11.2"),
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
