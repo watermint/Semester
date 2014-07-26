@@ -43,13 +43,18 @@ lazy val tableBolognese = project.in(file("etude-table-bolognese"))
 // ---- pintxos
 lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
   .dependsOn(manieresDomain)
-  .dependsOn(epiceUtility)
   .dependsOn(epiceLogging)
   .dependsOn(epiceHttp)
   .dependsOn(gazpachoSpray)
   .settings(buildSettings: _*)
 
 lazy val pintxosThings = project.in(file("etude-pintxos-things"))
+  .settings(buildSettings: _*)
+
+lazy val pintxosFlickr = project.in(file("etude-pintxos-flickr"))
+  .dependsOn(manieresDomain)
+  .dependsOn(epiceHttp)
+  .dependsOn(epiceLogging)
   .settings(buildSettings: _*)
 
 lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))

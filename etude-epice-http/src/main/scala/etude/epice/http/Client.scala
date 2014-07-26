@@ -1,5 +1,6 @@
 package etude.epice.http
 
+import java.io.InputStream
 import java.net.URI
 
 import etude.epice.logging.LoggerFactory
@@ -7,6 +8,7 @@ import org.apache.http.HttpEntity
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
 import org.apache.http.entity.StringEntity
+import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.impl.client.{CloseableHttpClient, HttpClients, LaxRedirectStrategy}
 import org.apache.http.message.BasicNameValuePair
 
@@ -15,6 +17,7 @@ import scala.language.higherKinds
 import scala.util.{Success, Try}
 
 case class Client(context: ClientContext = ClientContext()) {
+  val logger = LoggerFactory.getLogger(getClass)
 
   def entity(formData: Map[String, String]): Option[HttpEntity] = {
     if (formData.size < 1) {
@@ -27,8 +30,6 @@ case class Client(context: ClientContext = ClientContext()) {
       Some(new UrlEncodedFormEntity(formNvp.asJava))
     }
   }
-
-  val logger = LoggerFactory.getLogger(getClass)
 
   class HttpDelete(uri: URI) extends HttpPost(uri) {
     override def getMethod: String = "DELETE"
@@ -78,6 +79,23 @@ case class Client(context: ClientContext = ClientContext()) {
 
     val post = new HttpPost(uri)
     post.setEntity(new StringEntity(formData))
+    headers.foreach(h => post.setHeader(h._1, h._2))
+    request(post)
+  }
+
+  def postWithInputStream(uri: URIContainer,
+                          formData: Map[String, String] = Map.empty,
+                          binaries: Map[String, InputStream] = Map.empty,
+                          headers: Map[String, String] = Map.empty): Try[Response] = {
+
+    val post = new HttpPost(uri)
+    val builder = MultipartEntityBuilder.create()
+
+    formData.foreach(e => builder.addTextBody(e._1, e._2))
+    binaries.foreach(e => builder.addBinaryBody(e._1, e._2))
+
+    post.setEntity(builder.build())
+
     headers.foreach(h => post.setHeader(h._1, h._2))
     request(post)
   }
