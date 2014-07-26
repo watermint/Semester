@@ -2,10 +2,10 @@ package etude.pintxos.pocket.domain.infrastructure
 
 import java.net.{URI, URL}
 
-import etude.pintxos.pocket.domain.model.{Item, ItemEntry}
-import etude.epice.http.{AsyncClient, AsyncClientContext}
+import etude.epice.http.{Client, Response}
 import etude.epice.logging.LoggerFactory
 import etude.epice.utility.qos.Throttle
+import etude.pintxos.pocket.domain.model.{Item, ItemEntry}
 
 import scala.concurrent.Future
 
@@ -20,7 +20,7 @@ object ItemIO {
     import org.json4s._
     import org.json4s.native.JsonMethods._
 
-    val client = AsyncClient(AsyncClientContext(executionContext))
+    val client = Client()
     val endPoint = "https://getpocket.com/v3/add"
     val requestContent: Map[String, String] = (
       Seq(
@@ -43,34 +43,35 @@ object ItemIO {
       ).toMap
 
     throttle.execute {
-      client.postWithString(
-        new URI(endPoint),
-        compact(render(requestContent)),
-        Map(
-          "Content-Type" -> "application/json; charset=UTF-8",
-          "X-Accept" -> "application/json"
-        )
-      ) map {
-        response =>
-          val json = response.contentAsJson.get
-          val result: Seq[Item] = for {
-            JObject(r) <- json
-            JField("item", JObject(item)) <- r
-            JField("item_id", JString(itemId)) <- item
-            JField("normal_url", JString(normalUrl)) <- item
-            JField("resolved_id", JString(resolvedId)) <- item
-            JField("resolved_url", JString(resolvedUrl)) <- item
-            JField("mime_type", JString(mimeType)) <- item
-          } yield {
-            Item(
-              itemId = itemId,
-              normalUrl = new URL(normalUrl),
-              resolvedId = resolvedId,
-              resolvedUrl = new URL(resolvedId),
-              mimeType = mimeType
-            )
-          }
-          result.last
+      Future {
+        val response: Response = client.postWithString(
+          new URI(endPoint),
+          compact(render(requestContent)),
+          Map(
+            "Content-Type" -> "application/json; charset=UTF-8",
+            "X-Accept" -> "application/json"
+          )
+        ).get
+
+        val json = response.contentAsJson.get
+        val result: Seq[Item] = for {
+          JObject(r) <- json
+          JField("item", JObject(item)) <- r
+          JField("item_id", JString(itemId)) <- item
+          JField("normal_url", JString(normalUrl)) <- item
+          JField("resolved_id", JString(resolvedId)) <- item
+          JField("resolved_url", JString(resolvedUrl)) <- item
+          JField("mime_type", JString(mimeType)) <- item
+        } yield {
+          Item(
+            itemId = itemId,
+            normalUrl = new URL(normalUrl),
+            resolvedId = resolvedId,
+            resolvedUrl = new URL(resolvedId),
+            mimeType = mimeType
+          )
+        }
+        result.last
       }
     }
   }

@@ -3,7 +3,8 @@ package etude.epice.http
 import java.net.URI
 import java.nio.charset.StandardCharsets
 
-import etude.epice.utility.io.Memory._
+import etude.epice.utility.helpers.InputStreamHelper
+import InputStreamHelper._
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.{Header, HttpResponse}
 import org.json4s.JValue

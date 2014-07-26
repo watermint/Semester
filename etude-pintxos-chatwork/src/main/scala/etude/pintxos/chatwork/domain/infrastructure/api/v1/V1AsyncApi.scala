@@ -19,13 +19,16 @@ object V1AsyncApi
           params: Map[String, String] = Map.empty)
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+    val client: Client = Client()
 
-    V1ApiQoS.throttle.execute {
-      client.get(
-        uri = uriWithPathAndParams(path, params),
-        headers = authHeaders
-      ).map(parseResponse)
+    Future {
+      V1ApiQoS.throttle.execute {
+        val response: Response = client.get(
+          uri = uriWithPathAndParams(path, params),
+          headers = authHeaders
+        ).get
+        parseResponse(response)
+      }
     }
   }
 
@@ -34,14 +37,17 @@ object V1AsyncApi
            data: Map[String, String] = Map.empty)
           (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+    val client: Client = Client()
 
-    V1ApiQoS.throttle.execute {
-      client.post(
-        uri = uriWithPathAndParams(path, params),
-        formData = data,
-        headers = authHeaders
-      ).map(parseResponse)
+    Future {
+      V1ApiQoS.throttle.execute {
+        val response: Response = client.post(
+          uri = uriWithPathAndParams(path, params),
+          formData = data,
+          headers = authHeaders
+        ).get
+        parseResponse(response)
+      }
     }
   }
 
@@ -50,14 +56,17 @@ object V1AsyncApi
           data: Map[String, String] = Map.empty)
          (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+    val client: Client = Client()
 
-    V1ApiQoS.throttle.execute {
-      client.put(
-        uri = uriWithPathAndParams(path, params),
-        formData = data,
-        headers = authHeaders
-      ).map(parseResponse)
+    Future {
+      V1ApiQoS.throttle.execute {
+        val response = client.put(
+          uri = uriWithPathAndParams(path, params),
+          formData = data,
+          headers = authHeaders
+        ).get
+        parseResponse(response)
+      }
     }
   }
 
@@ -66,14 +75,17 @@ object V1AsyncApi
              data: Map[String, String] = Map.empty)
             (implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
-    val client: Client[Future] = AsyncClient(AsyncClientContext(executor))
+    val client: Client = Client()
 
-    V1ApiQoS.throttle.execute {
-      client.delete(
-        uri = uriWithPathAndParams(path, params),
-        formData = data,
-        headers = authHeaders
-      ).map(parseResponse)
+    Future {
+      V1ApiQoS.throttle.execute {
+        val response = client.delete(
+          uri = uriWithPathAndParams(path, params),
+          formData = data,
+          headers = authHeaders
+        ).get
+        parseResponse(response)
+      }
     }
   }
 

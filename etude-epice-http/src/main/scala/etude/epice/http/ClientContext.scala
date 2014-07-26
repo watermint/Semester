@@ -6,8 +6,6 @@ import org.apache.http.impl.client.BasicCookieStore
 
 import scala.language.higherKinds
 
-trait ClientContext {
-  val cookieStore: CookieStore = new BasicCookieStore()
+case class ClientContext(cookieStore: CookieStore = new BasicCookieStore(),
+                         httpClientContext: HttpClientContext = HttpClientContext.create())
 
-  val httpClientContext: HttpClientContext = HttpClientContext.create()
-}

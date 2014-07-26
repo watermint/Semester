@@ -1,8 +1,10 @@
-package etude.epice.utility
+package etude.epice.utility.config
 
 import java.io.{File, FileInputStream}
 import java.nio.file.Files
 import java.util.Properties
+
+import etude.epice.utility.helpers.PropertiesHelper
 
 object ThinConfig {
   def ofName(name: String, pathPrefix: String = ".etude/properties"): Option[Map[String, String]] = {
@@ -12,7 +14,7 @@ object ThinConfig {
       try {
         val p = new Properties()
         p.load(new FileInputStream(file))
-        Some(Converter.propertiesToMap(p))
+        Some(PropertiesHelper.propertiesToMap(p))
       } catch {
         case e: Throwable =>
           None

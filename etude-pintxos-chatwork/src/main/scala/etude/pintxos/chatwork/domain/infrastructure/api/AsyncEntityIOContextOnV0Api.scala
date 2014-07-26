@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.infrastructure.api
 
+import etude.epice.utility.config.ThinConfig
 import etude.manieres.domain.lifecycle.async.AsyncEntityIOContext
-import etude.epice.utility.ThinConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 

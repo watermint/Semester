@@ -4,8 +4,8 @@ import java.time.Instant
 import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
 import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor}
 
+import etude.epice.http.Client
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.epice.http.SyncClient
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
 
 import scala.collection.mutable.ArrayBuffer
@@ -21,7 +21,7 @@ trait EntityIOContextOnV0Api[M[+A]]
 
   val password: String
 
-  val client: SyncClient = SyncClient()
+  val client: Client = Client()
 
   val accessToken: SyncVar[String] = new SyncVar[String]
 

@@ -4,7 +4,7 @@ import java.net.{URI, URLEncoder}
 import java.util.concurrent.{ExecutorService, Executors}
 
 import akka.actor.ActorSystem
-import etude.epice.http.{AsyncClient, AsyncClientContext}
+import etude.epice.http.{Client, Response}
 import etude.gazpacho.spray.SecureConfiguration
 import org.json4s.JsonDSL._
 import org.json4s._
@@ -100,30 +100,28 @@ object AuthService
     }
   }
 
-  def acquireCode(): Future[String] = {
-    val client = AsyncClient(AsyncClientContext(executionContext = executors))
+  def acquireCode(): Future[String] = Future {
+    val client = Client()
     val requestContent = Map(
       "consumer_key" -> consumerKey,
       "redirect_uri" -> defaultRedirectUri
     )
 
-    client.postWithString(
+    val response: Response = client.postWithString(
       new URI("https://getpocket.com/v3/oauth/request"),
       compact(render(requestContent)),
       Map(
         "Content-type" -> "application/json; charset=UTF-8",
         "X-Accept" -> "application/json"
       )
-    ) map {
-      response =>
-        val r: Seq[String] = for {
-          JObject(result) <- response.contentAsJson.get
-          JField("code", JString(code)) <- result
-        } yield {
-          code
-        }
-        r.last
+    ).get
+    val r: Seq[String] = for {
+      JObject(result) <- response.contentAsJson.get
+      JField("code", JString(code)) <- result
+    } yield {
+      code
     }
+    r.last
   }
 
   def redirectUri(code: String, redirectUri: URI = new URI(defaultRedirectUri)): URI = {
@@ -133,35 +131,34 @@ object AuthService
     )
   }
 
-  def authorize(code: String): Future[AuthSession] = {
-    val client = AsyncClient(AsyncClientContext(executionContext = executors))
+  def authorize(code: String): Future[AuthSession] = Future {
+    val client = Client()
     val requestContent = Map(
       "consumer_key" -> consumerKey,
       "code" -> code
     )
 
-    client.postWithString(
+    val response: Response = client.postWithString(
       new URI("https://getpocket.com/v3/oauth/authorize"),
       compact(render(requestContent)),
       Map(
         "Content-type" -> "application/json; charset=UTF-8",
         "X-Accept" -> "application/json"
       )
-    ) map {
-      response =>
-        val r: Seq[AuthSession] = for {
-          JObject(result) <- response.contentAsJson.get
-          JField("access_token", JString(accessToken)) <- result
-          JField("username", JString(username)) <- result
-        } yield {
-          AuthSession(
-            userName = username,
-            accessToken = accessToken,
-            consumerKey = consumerKey
-          )
-        }
-        r.last
+    ).get
+
+    val r: Seq[AuthSession] = for {
+      JObject(result) <- response.contentAsJson.get
+      JField("access_token", JString(accessToken)) <- result
+      JField("username", JString(username)) <- result
+    } yield {
+      AuthSession(
+        userName = username,
+        accessToken = accessToken,
+        consumerKey = consumerKey
+      )
     }
+    r.last
   }
 
 }

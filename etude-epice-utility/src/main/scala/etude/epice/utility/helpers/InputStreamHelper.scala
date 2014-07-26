@@ -1,10 +1,10 @@
-package etude.epice.utility.io
+package etude.epice.utility.helpers
 
 import java.io.{ByteArrayInputStream, InputStream}
 
 import scala.io.Source
 
-object Memory {
+object InputStreamHelper {
   case class InputStreamContainer(inputStream: InputStream) {
     def onMemory: ByteArrayInputStream = {
       new ByteArrayInputStream(asByteArray)

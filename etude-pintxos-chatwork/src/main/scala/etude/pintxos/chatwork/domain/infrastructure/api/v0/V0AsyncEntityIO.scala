@@ -4,9 +4,9 @@ import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
+import etude.epice.http.Client
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.manieres.domain.lifecycle.async.AsyncEntityIO
-import etude.epice.http.SyncClient
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 
 import scala.concurrent.Future
@@ -43,7 +43,7 @@ trait V0AsyncEntityIO
     }
   }
 
-  protected def getClient(context: EntityIOContext[Future]): SyncClient = {
+  protected def getClient(context: EntityIOContext[Future]): Client = {
     withV0Context(context) {
       v0 => v0.client
     }
