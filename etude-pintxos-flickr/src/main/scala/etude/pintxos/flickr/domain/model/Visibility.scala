@@ -1,6 +1,6 @@
 package etude.pintxos.flickr.domain.model
 
-trait Permission {
+trait Visibility {
   val isPublic: Boolean
   val isFriend: Boolean
   val isFamily: Boolean
@@ -20,31 +20,31 @@ trait Permission {
   )
 }
 
-case class PermissionPublic() extends Permission {
+case class VisibilityPublic() extends Visibility {
   val isPublic: Boolean = true
   val isFamily: Boolean = false
   val isFriend: Boolean = false
 }
 
-case class PermissionFriendOnly() extends Permission {
+case class VisibilityFriendOnly() extends Visibility {
   val isPublic: Boolean = false
   val isFamily: Boolean = false
   val isFriend: Boolean = true
 }
 
-case class PermissionFamilyOnly() extends Permission {
+case class VisibilityFamilyOnly() extends Visibility {
   val isPublic: Boolean = false
   val isFamily: Boolean = true
   val isFriend: Boolean = false
 }
 
-case class PermissionFriendAndFamily() extends Permission {
+case class VisibilityFriendAndFamily() extends Visibility {
   val isPublic: Boolean = false
   val isFamily: Boolean = true
   val isFriend: Boolean = true
 }
 
-case class PermissionPrivate() extends Permission {
+case class VisibilityPrivate() extends Visibility {
   val isPublic: Boolean = false
   val isFamily: Boolean = false
   val isFriend: Boolean = false

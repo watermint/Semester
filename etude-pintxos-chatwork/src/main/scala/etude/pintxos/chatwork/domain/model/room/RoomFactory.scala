@@ -1,11 +1,10 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.manieres.domain.lifecycle.{EntityIOContext, Factory}
+import etude.manieres.domain.lifecycle.EntityIOContext
 
 import scala.language.higherKinds
 
-trait RoomFactory[M[+A]]
-  extends Factory {
+trait RoomFactory[M[+A]] {
 
   def create(name: String,
              description: String = "",

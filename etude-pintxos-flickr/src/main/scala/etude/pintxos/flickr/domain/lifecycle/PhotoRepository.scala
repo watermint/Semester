@@ -14,7 +14,7 @@ trait PhotoRepository[M[+A]] extends Repository[PhotoId, Photo, M] {
   def create(title: String,
              description: Option[String] = None,
              tags: Seq[String] = Seq(),
-             permission: Permission = PermissionPrivate(),
+             permission: Visibility = VisibilityPrivate(),
              safety: Safety = SafetySafe(),
              contentType: ContentType = ContentTypePhoto(),
              photo: InputStream)(implicit context: EntityIOContext[M]): M[ResultWithIdentity[This, PhotoId, Photo, M]]

@@ -53,7 +53,7 @@ lazy val pintxosThings = project.in(file("etude-pintxos-things"))
 
 lazy val pintxosFlickr = project.in(file("etude-pintxos-flickr"))
   .dependsOn(manieresDomain)
-  .dependsOn(epiceHttp)
+  .dependsOn(epiceUtility)
   .dependsOn(epiceLogging)
   .settings(buildSettings: _*)
 
