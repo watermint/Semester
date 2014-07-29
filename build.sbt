@@ -87,6 +87,10 @@ lazy val epiceHtml = project.in(file("etude-epice-html"))
 lazy val epiceLogging = project.in(file("etude-epice-logging"))
   .settings(buildSettings: _*)
 
+lazy val epiceSel = project.in(file("etude-epice-sel"))
+  .settings(buildSettings: _*)
+  .dependsOn(epiceLogging)
+
 lazy val epiceHttp = project.in(file("etude-epice-http"))
   .settings(buildSettings: _*)
   .dependsOn(epiceUtility)

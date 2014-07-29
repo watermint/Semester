@@ -21,6 +21,7 @@ Project names are categorized like below.
 * [Highlight](etude-epice-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
 * [Html](etude-epice-html) - HTML parse wrapper API
 * [Http](etude-epice-http) - HTTP Client wrapper API
+* [Sel](etude-epice-sel) - HTTP/REST Client API
 * [Logging](etude-epice-logging) - Logging API
 * [Tika](etude-epice-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
 * [Undisclosed tests](etude-epice-undisclosed) - Test wrapper. Separate secret keys for specific tests.
