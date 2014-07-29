@@ -6,9 +6,9 @@ import java.nio.file.Path
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.vino.code.domain.lifecycle.{AsyncCodeRepository, AsyncFileRepository}
 import etude.vino.code.domain.model.{Code, File, FileId}
-import etude.epice.elasticsearch.Engine
-import etude.epice.highlight.{Highlight, HighlightedCode}
-import etude.epice.tika.Description
+import etude.pain.elasticsearch.Engine
+import etude.pain.highlight.{Highlight, HighlightedCode}
+import etude.pain.tika.Description
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Source}

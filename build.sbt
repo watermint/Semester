@@ -60,7 +60,7 @@ lazy val pintxosFlickr = project.in(file("etude-pintxos-flickr"))
 lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(manieresDomain)
-  .dependsOn(epiceHtml)
+  .dependsOn(painRangement)
   .dependsOn(epiceHttp)
   .dependsOn(epiceUtility)
   .dependsOn(epiceLogging)
@@ -80,10 +80,22 @@ lazy val gazpachoFextile = project.in(file("etude-gazpacho-fextile"))
 lazy val gazpachoSpray = project.in(file("etude-gazpacho-spray"))
   .settings(buildSettings: _*)
 
-// ---- epice
-lazy val epiceHtml = project.in(file("etude-epice-html"))
+// ---- pain
+lazy val painRangement = project.in(file("etude-pain-rangement"))
   .settings(buildSettings: _*)
 
+lazy val painHighlight = project.in(file("etude-pain-highlight"))
+  .settings(buildSettings: _*)
+
+lazy val painElasticsearch = project.in(file("etude-pain-elasticsearch"))
+  .settings(buildSettings: _*)
+  .dependsOn(manieresDomain)
+  .dependsOn(epiceLogging)
+
+lazy val painTika = project.in(file("etude-pain-tika"))
+  .settings(buildSettings: _*)
+
+// ---- epice
 lazy val epiceLogging = project.in(file("etude-epice-logging"))
   .settings(buildSettings: _*)
 
@@ -97,17 +109,6 @@ lazy val epiceHttp = project.in(file("etude-epice-http"))
   .dependsOn(epiceLogging)
 
 lazy val epiceUtility = project.in(file("etude-epice-utility"))
-  .settings(buildSettings: _*)
-
-lazy val epiceHighlight = project.in(file("etude-epice-highlight"))
-  .settings(buildSettings: _*)
-
-lazy val epiceElasticsearch = project.in(file("etude-epice-elasticsearch"))
-  .settings(buildSettings: _*)
-  .dependsOn(manieresDomain)
-  .dependsOn(epiceLogging)
-
-lazy val epiceTika = project.in(file("etude-epice-tika"))
   .settings(buildSettings: _*)
 
 lazy val epiceUndisclosed = project.in(file("etude-epice-undisclosed"))
@@ -124,7 +125,7 @@ lazy val vinoChatwork = project.in(file("etude-vino-chatwork"))
 lazy val vinoCode = project.in(file("etude-vino-code"))
   .settings(buildSettings: _*)
   .dependsOn(manieresDomain)
-  .dependsOn(epiceTika)
-  .dependsOn(epiceHighlight)
-  .dependsOn(epiceElasticsearch)
+  .dependsOn(painTika)
+  .dependsOn(painHighlight)
+  .dependsOn(painElasticsearch)
 

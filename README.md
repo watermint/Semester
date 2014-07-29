@@ -8,7 +8,8 @@ Collection of small apps and libraries. This project collection is the practice 
 
 Project names are categorized like below.
 
-* etude-epice ... Utility, wrapper for external libraries.
+* etude-epice ... Basic utilities
+* etude-pain ... Wrapper for external libraries.
 * etude-gazpacho ... Frontend framework, or wrapper for frontend framework.
 * etude-manieres ... Design convention, or rules.
 * etude-pintxos ... Wrapper for external services.
@@ -17,15 +18,18 @@ Project names are categorized like below.
 
 ## etude-epice
 
-* [ElasticSearch](etude-epice-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
-* [Highlight](etude-epice-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
-* [Html](etude-epice-html) - HTML parse wrapper API
 * [Http](etude-epice-http) - HTTP Client wrapper API
 * [Sel](etude-epice-sel) - HTTP/REST Client API
 * [Logging](etude-epice-logging) - Logging API
-* [Tika](etude-epice-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
 * [Undisclosed tests](etude-epice-undisclosed) - Test wrapper. Separate secret keys for specific tests.
 * [Utility](etude-epice-utility) - Generic utilities
+
+## etude-pain
+
+* [ElasticSearch](etude-pain-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
+* [Highlight](etude-pain-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
+* [Rangement](etude-pain-rangement) - HTML normalizer wrapper API
+* [Tika](etude-pain-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
 
 ## etude-gazpacho
 

@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.auth
 
 import java.net.URI
 
-import etude.epice.html.Normalizer
+import etude.pain.rangement.html.Normalizer
 import etude.epice.http._
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0UnknownChatworkProtocolException
 
