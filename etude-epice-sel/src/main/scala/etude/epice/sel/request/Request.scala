@@ -19,6 +19,4 @@ trait Request {
   def withHeader(header: Header): Request = withHeaders(Seq(header))
 
   def withHeaders(headers: Seq[Header]): Request = ???
-
-  def execute(): Try[Response]
 }
