@@ -81,6 +81,10 @@ lazy val gazpachoSpray = project.in(file("etude-gazpacho-spray"))
   .settings(buildSettings: _*)
 
 // ---- pain
+lazy val painFoundation = project.in(file("etude-pain-foundation"))
+  .settings(buildSettings: _*)
+  .dependsOn(epiceLogging)
+
 lazy val painRangement = project.in(file("etude-pain-rangement"))
   .settings(buildSettings: _*)
 
