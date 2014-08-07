@@ -30,6 +30,7 @@ Project names are categorized like below.
 * [Highlight](etude-pain-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
 * [Rangement](etude-pain-rangement) - HTML normalizer wrapper API
 * [Tika](etude-pain-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
+* [Foundation](etude-pain-foundation) - Foundation Kit integration API on Mac OS X
 
 ## etude-gazpacho
 
@@ -45,6 +46,7 @@ Project names are categorized like below.
 * [ChatWork](etude-pintxos-chatwork) - [ChatWork](http://chatwork.com) API
 * [Pocket](etude-pintxos-pocket) - [Pocket](http://getpocket.com) API
 * [Things](etude-pintxos-things) - [Things](https://culturedcode.com/things/) app integration.
+* [NSUserNotification](etude-pintxos-nsunc) - Notification Center of Mac OS X integration.
 
 ## etude-vino
 
