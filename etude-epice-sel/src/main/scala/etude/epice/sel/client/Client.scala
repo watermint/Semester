@@ -1,15 +1,18 @@
 package etude.epice.sel.client
 
-import etude.epice.sel.recipe.Recipe
-import etude.epice.sel.request.{Verb, Request}
-import etude.epice.sel.signature.Signer
+import etude.epice.sel.request.Request
+import etude.epice.sel.response.Response
 
 trait Client {
   val context: Context
-
-  def currentSession(): Session = ???
 }
 
 object Client {
-  def of(recipe: Recipe): Client = ???
+  def apply(): Client = ???
+
+  def ofContext(context: Context): Client = ???
+
+  def ifAuthorized(request: Request): Response = ???
+
+  def execute(request: Request): Response = ???
 }
