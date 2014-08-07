@@ -48,6 +48,10 @@ lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
   .dependsOn(gazpachoSpray)
   .settings(buildSettings: _*)
 
+lazy val pintxosNsunc = project.in(file("etude-pintxos-nsunc"))
+  .dependsOn(painFoundation)
+  .settings(buildSettings: _*)
+
 lazy val pintxosThings = project.in(file("etude-pintxos-things"))
   .settings(buildSettings: _*)
 
