@@ -15,7 +15,7 @@ object Notification {
   /**
    * @param title title.
    * @param description description.
-   * @see @see https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSUserNotification_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40012259
+   * @see https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSUserNotification_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40012259
    */
   def notify(title: String, description: String): Unit = {
     val notification: ID = Foundation.invoke(Foundation.getObjcClass("NSUserNotification"), "new")
