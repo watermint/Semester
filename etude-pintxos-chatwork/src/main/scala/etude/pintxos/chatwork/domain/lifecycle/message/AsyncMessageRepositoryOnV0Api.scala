@@ -1,13 +1,10 @@
 package etude.pintxos.chatwork.domain.lifecycle.message
 
-import java.time.Instant
-
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
-import etude.pintxos.chatwork.domain.model.account.AccountId
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.model.message._
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
-import org.json4s._
 
 import scala.concurrent._
 
@@ -17,23 +14,6 @@ class AsyncMessageRepositoryOnV0Api
 
   type This <: AsyncMessageRepositoryOnV0Api
 
-  protected def parseMessage(roomId: RoomId, json: JValue): List[Message] = {
-    for {
-      JObject(data) <- json
-      JField("aid", JInt(accountId)) <- data
-      JField("id", JInt(messageId)) <- data
-      JField("msg", JString(body)) <- data
-      JField("tm", JInt(ctime)) <- data
-    } yield {
-      new Message(
-        messageId = new MessageId(roomId, messageId),
-        accountId = new AccountId(accountId),
-        body = Text(body),
-        ctime = Instant.ofEpochSecond(ctime.toLong),
-        mtime = None
-      )
-    }
-  }
 
   def say(text: Text)(room: Room)(implicit context: EntityIOContext[Future]): Future[Option[MessageId]] = {
     import org.json4s.JsonDSL._
@@ -69,7 +49,7 @@ class AsyncMessageRepositoryOnV0Api
       )
     ) map {
       json =>
-        parseMessage(from.roomId, json).take(count)
+        MessageParser.parseMessage(from.roomId, json).take(count)
     }
   }
 

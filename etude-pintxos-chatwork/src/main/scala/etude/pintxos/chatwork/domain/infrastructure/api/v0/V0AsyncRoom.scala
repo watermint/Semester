@@ -1,6 +1,7 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ParticipantParser, RoomParser}
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room, RoomId}
 
 import scala.concurrent.Future
@@ -39,8 +40,8 @@ object V0AsyncRoom
       )
     ) map {
       json =>
-        (V0AsyncInitLoad.parseRooms(json).last,
-          V0AsyncInitLoad.parseParticipants(json).last)
+        (RoomParser.parseRooms(json).last,
+          ParticipantParser.parseParticipants(json).last)
     }
   }
 }
