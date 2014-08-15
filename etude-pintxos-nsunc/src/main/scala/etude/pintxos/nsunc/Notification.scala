@@ -2,8 +2,14 @@ package etude.pintxos.nsunc
 
 import etude.pain.foundation.{Foundation, ID}
 
+case class Notification(title: String,
+                        subTitle: Option[String] = None,
+                        description: Option[String] = None,
+                        soundName: Option[String] = None)
+
 object Notification {
-  val center: ID = Foundation.invoke(Foundation.getObjcClass("NSUserNotificationCenter"),
+  val center: ID = Foundation.invoke(
+    Foundation.getObjcClass("NSUserNotificationCenter"),
     "defaultUserNotificationCenter")
 
   private def escapeText(text: String): String = {
@@ -13,15 +19,19 @@ object Notification {
   }
 
   /**
-   * @param title title.
-   * @param description description.
    * @see https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSUserNotification_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40012259
    */
-  def notify(title: String, description: String): Unit = {
+  def notify(n: Notification): Unit = {
     val notification: ID = Foundation.invoke(Foundation.getObjcClass("NSUserNotification"), "new")
 
-    Foundation.invoke(notification, "setTitle:", Foundation.nsString(escapeText(title)))
-    Foundation.invoke(notification, "setInformativeText:", Foundation.nsString(escapeText(description)))
+    def addTextProperty(name: String, value: String) = {
+      Foundation.invoke(notification, name, Foundation.nsString(escapeText(value)))
+    }
+
+    addTextProperty("setTitle:", n.title)
+    n.subTitle.foreach(t => addTextProperty("setSubtitle:", t))
+    n.description.foreach(t => addTextProperty("setInformativeText:", t))
+    n.soundName.foreach(t => addTextProperty("setSoundName:", t))
 
     Foundation.invoke(center, "deliverNotification:", notification)
   }
