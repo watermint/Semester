@@ -126,6 +126,16 @@ object V0AsyncInitLoad
        * mn ... mention count
        * s ... sticky (only appears on the room is sticky. value is 1)
        */
+      val readSeq: Option[BigInt] = r.get("r") match {
+        case Some(JInt(seq)) => Some(seq)
+        case _ => None
+      }
+
+      val currentSeq: Option[BigInt] = r.get("c") match {
+        case Some(JInt(seq)) => Some(seq)
+        case _ => None
+      }
+
       val unreadCount: Int = (r.get("r"), r.get("c")) match {
         case (Some(JInt(read)), Some(JInt(current))) =>
           (current - read).toInt
@@ -168,7 +178,9 @@ object V0AsyncInitLoad
           mentionCount = mentionCount,
           myTaskCount = myTaskCount,
           totalTaskCount = taskCount,
-          fileCount = fileCount
+          fileCount = fileCount,
+          currentSequence = currentSeq,
+          readSequence = readSeq
         )),
         roomType = roomType.toInt match {
           case 1 => RoomTypeGroup()

@@ -2,7 +2,6 @@ package etude.pintxos.chatwork.domain.model.message
 
 import java.time.Instant
 
-import etude.manieres.domain.model.ValueObject
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.text._
 import etude.pintxos.chatwork.domain.model.room.RoomId
@@ -10,8 +9,7 @@ import etude.pintxos.chatwork.domain.model.room.RoomId
 import scala.util.parsing.combinator.RegexParsers
 import scala.util.parsing.input.Reader
 
-case class Text(text: String)
-  extends ValueObject {
+case class Text(text: String) {
 
   lazy val chunk: Chunk = {
     try {

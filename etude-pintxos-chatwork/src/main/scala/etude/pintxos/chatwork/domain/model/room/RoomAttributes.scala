@@ -1,12 +1,11 @@
 package etude.pintxos.chatwork.domain.model.room
 
-import etude.manieres.domain.model.ValueObject
-
 case class RoomAttributes(sticky: Boolean,
                           unreadCount: BigInt,
                           mentionCount: BigInt,
                           myTaskCount: BigInt,
                           totalTaskCount: BigInt,
-//                          totalMessageCount: BigInt, // drop due to difficulties in V0 api.
-                          fileCount: BigInt)
-  extends ValueObject
+                          fileCount: BigInt,
+                          totalMessageCount: Option[BigInt] = None,
+                          currentSequence: Option[BigInt] = None,
+                          readSequence: Option[BigInt] = None)
