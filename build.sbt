@@ -39,6 +39,9 @@ lazy val tableBolognese = project.in(file("etude-table-bolognese"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
 
+lazy val tableChitarra = project.in(file("etude-table-chitarra"))
+  .settings(buildSettings: _*)
+  .settings(assemblySettings: _*)
 
 // ---- pintxos
 lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
