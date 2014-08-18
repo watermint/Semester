@@ -72,7 +72,7 @@ case class Chitarra(source: Elem,
 
   def heading(level: Int, text: String): String = "\n" + "#" * level + " " + text + "\n"
 
-  def bullet(level: Int, text: String): String = "  " * (level - 1) + "- " + text
+  def bullet(level: Int, text: String): String = "    " * (level - 1) + "* " + text
 }
 
 object Chitarra {
@@ -108,7 +108,7 @@ object Chitarra {
         o.inputFile.foreach {
           f =>
             val c = fromFile(f)
-            println(c.title)
+            println(c.title.getOrElse(""))
             println("----")
 
             println(c.bodyMarkdown)
