@@ -1,15 +1,19 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
-import etude.pintxos.chatwork.domain.model.message.MessageId
+import etude.pintxos.chatwork.domain.model.message.{Message, MessageId}
 import etude.pintxos.chatwork.domain.model.room.RoomId
+import org.json4s._
 
 import scala.concurrent.Future
 
 object LoadChat extends V0AsyncEntityIO {
 
-  case class LoadChatResult()
+  case class LoadChatResult(chatList: Seq[Message] = Seq(),
+                            description: Option[String] = None,
+                            publicDescription: Option[String] = None)
 
   private def toChatId(message: Option[MessageId]): String = {
     message match {
@@ -49,7 +53,19 @@ object LoadChat extends V0AsyncEntityIO {
       )
     ) map {
       json =>
-        LoadChatResult()
+        val results: Seq[LoadChatResult] = for {
+          JObject(j) <- json
+          JField("chat_list", chatList) <- j
+        } yield {
+          val m = j.toMap
+
+          LoadChatResult(
+            MessageParser.parseMessage(room, chatList),
+            m.get("description") collect { case JString(d) => d },
+            m.get("public_description") collect { case JString(d) => d}
+          )
+        }
+        results.last
     }
   }
 }

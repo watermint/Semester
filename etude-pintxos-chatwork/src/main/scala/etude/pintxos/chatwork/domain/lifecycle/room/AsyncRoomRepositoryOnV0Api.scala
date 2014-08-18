@@ -1,6 +1,7 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.LoadChat
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad, V0AsyncRoom}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
@@ -55,6 +56,9 @@ class AsyncRoomRepositoryOnV0Api
 
   def latestMessage(roomId: RoomId)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executor = getExecutionContext(context)
+    LoadChat.loadChat(roomId) map {
+      r =>
+    }
     V0AsyncApi.api(
       "load_chat",
       Map(
