@@ -22,7 +22,11 @@ case class Chitarra(source: Elem,
 
   lazy val aveBodyDepth: Double = aveDepth(body)
 
-  lazy val headingDepth: Int = Seq(maxHeadingDepth, Math.ceil(aveBodyDepth).toInt + 1).min
+  lazy val headingDepth: Int = Seq(
+    maxHeadingDepth,
+    Math.ceil(aveBodyDepth).toInt + 1,
+    Seq(bodyDepth - 2, 1).max
+  ).min
 
   lazy val bodyMarkdown: String = markdown(body)
 
@@ -77,11 +81,13 @@ case class Chitarra(source: Elem,
 
 object Chitarra {
 
-  case class Operation(inputFile: Option[String] = None)
+  case class Operation(inputFile: Option[String] = None,
+                       depth: Option[Int] = None)
 
-  def fromFile(file: String): Chitarra = {
+  def fromFile(file: String, depth: Option[Int]): Chitarra = {
     Chitarra(
-      XML.loadString(Source.fromFile(file).getLines().mkString)
+      XML.loadString(Source.fromFile(file).getLines().mkString),
+      maxHeadingDepth = depth.getOrElse(6)
     )
   }
 
@@ -100,6 +106,16 @@ object Chitarra {
     } text {
       "Input file name"
     } required()
+
+    opt[Int]('d', "depth") action {
+      case (d, o) =>
+        o.copy(depth = Some(d))
+    } validate {
+      case p if p < 1 => failure(s"Depth should not be negative or zero: $p")
+      case _ => success
+    } text {
+      "Heading depth"
+    }
   }
 
   def main(args: Array[String]) {
@@ -107,7 +123,7 @@ object Chitarra {
       o =>
         o.inputFile.foreach {
           f =>
-            val c = fromFile(f)
+            val c = fromFile(f, o.depth)
             println(c.title.getOrElse(""))
             println("----")
 
