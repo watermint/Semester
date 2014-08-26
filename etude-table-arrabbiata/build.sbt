@@ -1,9 +1,9 @@
 name := "etude-table-arrabbiata"
 
 libraryDependencies ++= Seq(
-  "org.scalafx" %% "scalafx" % "latest.integration",
-  "org.controlsfx" % "controlsfx" % "latest.integration",
-  "com.typesafe.akka" %% "akka-actor" % "latest.integration"
+  "org.scalafx" %% "scalafx" % "latest.release",
+  "org.controlsfx" % "controlsfx" % "latest.release",
+  "com.typesafe.akka" %% "akka-actor" % "latest.release"
 )
 
 packageOptions in (Compile, packageBin) +=

@@ -12,8 +12,8 @@ lazy val buildSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "org.specs2" %% "specs2" % "latest.integration" % "test",
-    "junit" % "junit" % "latest.integration" % "test"
+    "org.specs2" %% "specs2" % "latest.release" % "test",
+    "junit" % "junit" % "latest.release" % "test"
   ),
   ivyXML :=
     <dependencies>
