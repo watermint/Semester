@@ -67,6 +67,7 @@ lazy val pintxosFlickr = project.in(file("etude-pintxos-flickr"))
 lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(manieresDomain)
+  .dependsOn(manieresEvent)
   .dependsOn(painRangement)
   .dependsOn(epiceHttp)
   .dependsOn(epiceUtility)
@@ -78,6 +79,9 @@ lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
 lazy val manieresDomain = project.in(file("etude-manieres-domain"))
   .settings(buildSettings: _*)
 
+lazy val manieresEvent = project.in(file("etude-manieres-event"))
+  .settings(buildSettings: _*)
+  .dependsOn(manieresDomain)
 
 // ---- gazpacho
 lazy val gazpachoFextile = project.in(file("etude-gazpacho-fextile"))

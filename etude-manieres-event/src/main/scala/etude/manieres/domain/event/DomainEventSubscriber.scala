@@ -2,8 +2,6 @@ package etude.manieres.domain.event
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 
-import scala.language.higherKinds
-
 /**
  * @tparam E type of domain event.
  * @tparam M type of monad.
