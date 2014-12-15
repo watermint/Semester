@@ -56,7 +56,6 @@ Project names are categorized like below.
 
 ## etude-table
 
-* [Arrabbiata](etude-table-arrabbiata) - ChatWork utility UI
 * [Bolognese](etude-table-bolognese) - Practicing [spray](http://spray.io)
 * [Chitarra](etude-table-chitarra) - OPML to Markdown
 
