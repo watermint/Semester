@@ -34,7 +34,6 @@ Project names are categorized like below.
 
 ## etude-gazpacho
 
-* [Fextile](etude-gazpacho-fextile) - Fextile. Twitter bootstrap like UI framework for ScalaFX.
 * [Spray](etude-gazpacho-spray) - [Spray](http://spray.io) configuration base
 
 ## etude-manieres

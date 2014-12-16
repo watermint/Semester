@@ -78,10 +78,6 @@ lazy val manieresEvent = project.in(file("etude-manieres-event"))
   .dependsOn(manieresDomain)
 
 // ---- gazpacho
-lazy val gazpachoFextile = project.in(file("etude-gazpacho-fextile"))
-  .settings(buildSettings: _*)
-  .dependsOn(epiceLogging)
-
 lazy val gazpachoSpray = project.in(file("etude-gazpacho-spray"))
   .settings(buildSettings: _*)
 
