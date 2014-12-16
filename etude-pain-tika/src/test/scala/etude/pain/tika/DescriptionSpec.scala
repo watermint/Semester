@@ -11,15 +11,6 @@ class DescriptionSpec
   extends Specification {
 
   "Description" should {
-    "detect plain text" in {
-      val d = Description.ofPath(Paths.get("build.sbt"))
-
-      d.contentType must equalTo("text/plain; charset=ISO-8859-1")
-      d.contentEncoding must equalTo(Some("ISO-8859-1"))
-      d.isText must beTrue
-      d.isImage must beFalse
-    }
-
     for {
       (ext, mime) <- Map(
         "bmp" -> "image/x-ms-bmp",
@@ -39,5 +30,15 @@ class DescriptionSpec
         d.isImage must beTrue
       }
     }
+
+    "detect plain text" in {
+      val d = Description.ofPath(Paths.get("build.sbt"))
+
+      d.contentType must equalTo("text/plain; charset=ISO-8859-1")
+      d.contentEncoding must equalTo(Some("ISO-8859-1"))
+      d.isText must beTrue
+      d.isImage must beFalse
+    }
+
   }
 }

@@ -14,6 +14,7 @@ lazy val buildSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "org.specs2" %% "specs2-core" % "latest.release" % "test",
+    "org.specs2" %% "specs2-junit" % "latest.release" % "test",
     "junit" % "junit" % "latest.release" % "test"
   ),
   ivyXML :=

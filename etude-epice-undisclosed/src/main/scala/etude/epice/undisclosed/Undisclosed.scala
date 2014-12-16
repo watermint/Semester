@@ -32,7 +32,7 @@ case class Undisclosed(clazzName: String) {
     }
   }
 
-  def undisclosed(f: Properties => Result): Result = {
+  def undisclosed[T](f: Properties => Result): Result = {
     context match {
       case Some(c) =>
         logger.info(s"Testing: $clazzName")

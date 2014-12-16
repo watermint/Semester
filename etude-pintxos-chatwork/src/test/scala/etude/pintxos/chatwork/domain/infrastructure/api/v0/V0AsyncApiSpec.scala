@@ -25,16 +25,16 @@ class V0AsyncApiSpec
       }
     }
 
-    "init_load" in {
-      withContext {
-        implicit context =>
-          V0AsyncApi.syncApi("init_load", Map())
-          context match {
-            case c: AsyncEntityIOContextOnV0Api =>
-              c.myId.isSet must beTrue
-              c.accessToken.isSet must beTrue
-          }
-      }
-    }
+//    "init_load" in {
+//      withContext {
+//        implicit context =>
+//          V0AsyncApi.syncApi("init_load", Map())
+//          context match {
+//            case c: AsyncEntityIOContextOnV0Api =>
+//              c.myId.isSet must beTrue
+//              c.accessToken.isSet must beTrue
+//          }
+//      }
+//    }
   }
 }

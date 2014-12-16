@@ -16,12 +16,14 @@ class Exaggerated extends Auth {
                              userName: String,
                              password: String,
                              viewState: String,
+                             viewStateGenerator: String,
                              eventValidation: String) {
     val params = Map(
       "ctl00$ContentPlaceHolder1$UsernameTextBox" -> userName,
       "ctl00$ContentPlaceHolder1$PasswordTextBox" -> password,
       "ctl00$ContentPlaceHolder1$SubmitButton" -> "Sign In",
       "__EVENTVALIDATION" -> eventValidation,
+      "__VIEWSTATEGENERATOR" -> viewStateGenerator,
       "__VIEWSTATE" -> viewState,
       "__db" -> "14"
     )
@@ -57,7 +59,14 @@ class Exaggerated extends Auth {
           content =>
             parsePage(content) match {
               case Some(token) => token
-              case _ => throw new V0UnknownChatworkProtocolException("Authentication failed")
+              case _ =>
+                println(uri)
+                println("----")
+                val fos = new java.io.FileOutputStream(new java.io.File("/Users/takayuki.okazaki/Desktop/t"))
+                fos.write(response.content)
+                fos.close()
+                println("----")
+                throw new V0UnknownChatworkProtocolException("Authentication failed")
             }
         }
     }
@@ -111,6 +120,7 @@ class Exaggerated extends Auth {
       userName = context.username,
       password = context.password,
       viewState = inputs.getOrElse("__VIEWSTATE", ""),
+      viewStateGenerator = inputs.getOrElse("__VIEWSTATEGENERATOR", ""),
       eventValidation = inputs.getOrElse("__EVENTVALIDATION", "")
     )
   }

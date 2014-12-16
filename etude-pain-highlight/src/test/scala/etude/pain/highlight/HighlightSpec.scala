@@ -1,14 +1,10 @@
 package etude.pain.highlight
 
-import java.util.concurrent.{ExecutorService, Executors}
 import javax.script.ScriptException
 
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
-
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, duration}
 
 @RunWith(classOf[JUnitRunner])
 class HighlightSpec
