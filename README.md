@@ -19,7 +19,6 @@ Project names are categorized like below.
 ## etude-epice
 
 * [Http](etude-epice-http) - HTTP Client wrapper API
-* [Sel](etude-epice-sel) - HTTP/REST Client API
 * [Logging](etude-epice-logging) - Logging API
 * [Undisclosed tests](etude-epice-undisclosed) - Test wrapper. Separate secret keys for specific tests.
 * [Utility](etude-epice-utility) - Generic utilities
