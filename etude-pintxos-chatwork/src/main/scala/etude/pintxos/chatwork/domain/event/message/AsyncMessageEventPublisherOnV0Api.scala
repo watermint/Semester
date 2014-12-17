@@ -4,6 +4,7 @@ import etude.manieres.domain.event.mutable.IdentityEventPublisherSupport
 import etude.manieres.domain.event.{IdentityEvent, IdentityEventType}
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.logging.LoggerFactory
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetUpdate
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.pintxos.chatwork.domain.model.message.MessageId
@@ -28,55 +29,14 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
 
   protected val subscribers: ArrayBuffer[Subscriber] = new ArrayBuffer[Subscriber]()
 
-  val fetchMessageTimeoutMillis = 10000
-
-  def parseMessageIds(roomId: RoomId, json: Option[JValue]): Seq[MessageId] = {
-    json match {
-      case Some(c) =>
-        for {
-          JObject(ce) <- c
-          JField(messageId, JInt(flag)) <- ce
-        } yield {
-          MessageId(roomId, messageId.toLong)
-        }
-      case _ => Seq()
-    }
-  }
-
-  def parseUpdateInfo(json: JValue): List[IdentityEvent[MessageId]] = {
-    implicit val executionContext = getExecutionContext(context)
-    (for {
-      JObject(update) <- json
-      JField("update_info", JObject(updateInfo)) <- update
-      JField("room", JObject(roomData)) <- updateInfo
-      JField(roomIdValue, JObject(roomUpdate)) <- roomData
-    } yield {
-      val roomDataMap = roomData.toMap
-      val roomId = new RoomId(roomIdValue.toLong)
-
-      val editedMessages: Seq[MessageId] = parseMessageIds(roomId, roomDataMap.get("ce"))
-      val deletedMessages: Seq[MessageId] = parseMessageIds(roomId, roomDataMap.get("cd"))
-      val latestMessage: MessageId = Await.result(
-        AsyncRoomRepository.ofContext(context).latestMessage(roomId)(context),
-        Duration(fetchMessageTimeoutMillis, MILLISECONDS)
-      )
-
-      editedMessages.map {
-        m =>
-          new IdentityEvent[MessageId](m, IdentityEventType.EntityStored)
-      } ++ deletedMessages.map {
-        m =>
-          new IdentityEvent[MessageId](m, IdentityEventType.EntityDeleted)
-      } :+
-        new IdentityEvent[MessageId](latestMessage, IdentityEventType.EntityStored)
-    }).flatten
-  }
-
   def handleUpdate(json: JValue): Unit = {
     logger.debug(s"handle update: $json")
-    parseUpdateInfo(json) foreach {
-      ev =>
-        publish(ev)(context)
+    GetUpdate.parseUpdateInfo(json)(context) foreach {
+      updateInfo =>
+        updateInfo.asIdentityEvent(context) foreach {
+          ev =>
+            publish(ev)(context)
+        }
     }
   }
 }
