@@ -103,7 +103,7 @@ lazy val painTika = project.in(file("etude-pain-tika"))
 // ---- epice
 lazy val epiceLogging = project.in(file("etude-epice-logging"))
   .settings(buildSettings: _*)
-e
+
 lazy val epiceHttp = project.in(file("etude-epice-http"))
   .settings(buildSettings: _*)
   .dependsOn(epiceUtility)
