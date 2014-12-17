@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.async.AsyncResultWithIdentity
 import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, GetRoomInfo}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{UpdateRoom, InitLoad, GetRoomInfo}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 
@@ -35,25 +35,7 @@ class AsyncParticipantRepositoryOnV0Api
   }
 
   def store(entity: Participant)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, RoomId, Participant, Future]] = {
-    import org.json4s.JsonDSL._
-    import org.json4s.native.JsonMethods._
-
-    implicit val executor = getExecutionContext(context)
-
-    val admin = entity.admin.map {_.value.toString() -> "admin"}
-    val member = entity.member.map {_.value.toString() -> "member"}
-    val readonly = entity.readonly.map {_.value.toString() -> "readonly"}
-
-    val pdata = ("room_id" -> entity.identity.value.toString()) ~
-      ("role" -> (admin ++ member ++ readonly).toMap)
-
-    V0AsyncApi.api(
-      "update_room",
-      Map(),
-      Map(
-        "pdata" -> compact(render(pdata))
-      )
-    ) map {
+    UpdateRoom.updateParticipants(entity) map {
       p =>
         AsyncResultWithIdentity(this.asInstanceOf[This], entity.identity)
     }
