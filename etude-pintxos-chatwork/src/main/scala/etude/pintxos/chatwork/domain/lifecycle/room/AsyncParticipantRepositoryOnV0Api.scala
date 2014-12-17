@@ -35,6 +35,7 @@ class AsyncParticipantRepositoryOnV0Api
   }
 
   def store(entity: Participant)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, RoomId, Participant, Future]] = {
+    implicit val executor = getExecutionContext(context)
     UpdateRoom.updateParticipants(entity) map {
       p =>
         AsyncResultWithIdentity(this.asInstanceOf[This], entity.identity)
