@@ -58,29 +58,7 @@ class AsyncRoomRepositoryOnV0Api
     implicit val executor = getExecutionContext(context)
     LoadChat.loadChat(roomId) map {
       r =>
-    }
-    V0AsyncApi.api(
-      "load_chat",
-      Map(
-        "room_id" -> roomId.value.toString(),
-        "first_chat_id" -> "0",
-        "last_chat_id" -> "0",
-        "jump_to_chat_id" -> "0",
-        "unread_num" -> "0",
-        "desc" -> "0",
-        "task" -> "0"
-      )
-    ) map {
-      json =>
-        val messageIds: List[BigInt] = for {
-          JObject(data) <- json
-          JField("chat_list", JArray(messages)) <- data
-          JObject(message) <- messages
-          JField("id", JInt(messageId)) <- message
-        } yield {
-          messageId
-        }
-        new MessageId(roomId, messageIds.maxBy(identity))
+        r.chatList.map(_.messageId).maxBy(_.messageId)
     }
   }
 }
