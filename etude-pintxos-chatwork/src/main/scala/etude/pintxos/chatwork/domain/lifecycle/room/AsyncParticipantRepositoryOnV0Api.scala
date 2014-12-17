@@ -2,8 +2,8 @@ package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.async.AsyncResultWithIdentity
 import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetRoomInfo
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0AsyncInitLoad}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, GetRoomInfo}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 
 import scala.concurrent.Future
@@ -17,7 +17,7 @@ class AsyncParticipantRepositoryOnV0Api
 
   def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() map {
+    InitLoad.initLoad() map {
       p =>
         p.participants.exists(_.roomId.equals(identity))
     }
@@ -25,7 +25,7 @@ class AsyncParticipantRepositoryOnV0Api
 
   def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Participant] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() flatMap {
+    InitLoad.initLoad() flatMap {
       p =>
         GetRoomInfo.room(identity) map {
           r =>

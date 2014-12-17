@@ -1,13 +1,12 @@
-package etude.pintxos.chatwork.domain.infrastructure.api.v0
+package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
-import java.net.URI
 import java.time.Instant
 
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ParticipantParser, RoomParser, ContactParser}
-import etude.pintxos.chatwork.domain.model.account._
-import etude.pintxos.chatwork.domain.model.room._
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.InitLoadResult
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ContactParser, ParticipantParser, RoomParser}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import org.json4s._
 
 import scala.collection.mutable
@@ -16,12 +15,12 @@ import scala.concurrent.Future
 /**
  * facade for jumbo api 'init_load'.
  */
-object V0AsyncInitLoad
+object InitLoad
   extends V0AsyncEntityIO {
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  case class InitLoadContainer(content: V0AsyncInitLoadContents,
+  case class InitLoadContainer(content: InitLoadResult,
                                loadTime: Instant)
 
   private val cache = new mutable.HashMap[String, InitLoadContainer]()
@@ -39,7 +38,7 @@ object V0AsyncInitLoad
   }
 
 
-  def initLoad()(implicit context: EntityIOContext[Future]): Future[V0AsyncInitLoadContents] = {
+  def initLoad()(implicit context: EntityIOContext[Future]): Future[InitLoadResult] = {
     implicit val executor = getExecutionContext(context)
 
     getMyId(context) match {
@@ -61,7 +60,7 @@ object V0AsyncInitLoad
           case Some(lastId) => setLastId(lastId, context)
           case _ =>
         }
-        val content = V0AsyncInitLoadContents(
+        val content = InitLoadResult(
           contacts = ContactParser.parseContacts(json),
           rooms = RoomParser.parseRooms(json),
           participants = ParticipantParser.parseParticipants(json)

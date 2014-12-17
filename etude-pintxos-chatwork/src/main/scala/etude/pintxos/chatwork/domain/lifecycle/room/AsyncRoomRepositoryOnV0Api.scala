@@ -1,8 +1,8 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{GetRoomInfo, LoadChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, GetRoomInfo, LoadChat}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
 import org.json4s._
@@ -19,7 +19,7 @@ class AsyncRoomRepositoryOnV0Api
 
   def resolve(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Room] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() flatMap {
+    InitLoad.initLoad() flatMap {
       p =>
         GetRoomInfo.room(identity) map {
           r =>
@@ -30,7 +30,7 @@ class AsyncRoomRepositoryOnV0Api
 
   def containsByIdentity(identity: RoomId)(implicit context: EntityIOContext[Future]): Future[Boolean] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() map {
+    InitLoad.initLoad() map {
       p =>
         p.rooms.exists(_.roomId.equals(identity))
     }
@@ -38,7 +38,7 @@ class AsyncRoomRepositoryOnV0Api
 
   def myRoom()(implicit context: EntityIOContext[Future]): Future[Room] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() map {
+    InitLoad.initLoad() map {
       p =>
         p.rooms.map { r => r -> r.roomType }.collect {
           case (r, t: RoomTypeMy) => r
@@ -48,7 +48,7 @@ class AsyncRoomRepositoryOnV0Api
 
   def rooms()(implicit context: EntityIOContext[Future]): Future[List[Room]] = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncInitLoad.initLoad() map {
+    InitLoad.initLoad() map {
       p =>
         p.rooms
     }

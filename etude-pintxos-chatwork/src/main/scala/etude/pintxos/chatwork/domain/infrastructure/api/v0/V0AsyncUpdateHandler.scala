@@ -3,6 +3,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0
 import etude.manieres.domain.lifecycle.async.AsyncEntityIO
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetUpdate
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -19,7 +20,7 @@ class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
     implicit val executionContext = getExecutionContext(context)
     try {
       val json = Await.result(
-        V0AsyncUpdate.update(updateLastId = true)(context),
+        GetUpdate.updateRaw(updateLastId = true)(context),
         Duration(updateTimeoutInMillis, MILLISECONDS)
       )
       context.updateSubscribers.foreach {
