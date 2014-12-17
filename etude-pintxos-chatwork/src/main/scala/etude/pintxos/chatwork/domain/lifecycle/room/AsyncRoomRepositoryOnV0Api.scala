@@ -1,8 +1,8 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.LoadChat
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad, V0AsyncRoom}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{GetRoomInfo, LoadChat}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncInitLoad}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
 import org.json4s._
@@ -21,7 +21,7 @@ class AsyncRoomRepositoryOnV0Api
     implicit val executor = getExecutionContext(context)
     V0AsyncInitLoad.initLoad() flatMap {
       p =>
-        V0AsyncRoom.room(identity) map {
+        GetRoomInfo.room(identity) map {
           r =>
             r._1
         }

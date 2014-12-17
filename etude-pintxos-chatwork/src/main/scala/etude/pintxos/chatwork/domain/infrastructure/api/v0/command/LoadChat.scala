@@ -1,19 +1,16 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.LoadChatResult
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId}
 import etude.pintxos.chatwork.domain.model.room.RoomId
-import org.json4s._
+import org.json4s.JsonAST.{JField, JObject, JString}
 
 import scala.concurrent.Future
 
 object LoadChat extends V0AsyncEntityIO {
-
-  case class LoadChatResult(chatList: Seq[Message] = Seq(),
-                            description: Option[String] = None,
-                            publicDescription: Option[String] = None)
 
   private def toChatId(message: Option[MessageId]): String = {
     message match {

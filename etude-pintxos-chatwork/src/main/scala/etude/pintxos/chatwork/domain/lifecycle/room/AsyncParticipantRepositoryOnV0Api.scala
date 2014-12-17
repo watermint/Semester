@@ -2,7 +2,8 @@ package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.async.AsyncResultWithIdentity
 import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0AsyncInitLoad, V0AsyncRoom}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetRoomInfo
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0AsyncInitLoad}
 import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 
 import scala.concurrent.Future
@@ -26,7 +27,7 @@ class AsyncParticipantRepositoryOnV0Api
     implicit val executor = getExecutionContext(context)
     V0AsyncInitLoad.initLoad() flatMap {
       p =>
-        V0AsyncRoom.room(identity) map {
+        GetRoomInfo.room(identity) map {
           r =>
             r._2
         }

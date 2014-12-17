@@ -31,7 +31,7 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
 
   def handleUpdate(json: JValue): Unit = {
     logger.debug(s"handle update: $json")
-    GetUpdate.parseUpdateInfo(json)(context) foreach {
+    GetUpdate.parseRoomUpdateInfo(json)(context) foreach {
       updateInfo =>
         updateInfo.asIdentityEvent(context) foreach {
           ev =>

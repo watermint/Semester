@@ -9,7 +9,7 @@ import etude.pintxos.chatwork.domain.model.room.RoomId
 import scala.concurrent.{Future, Await}
 import scala.concurrent.duration._
 
-case class UpdateInfo(roomId: RoomId,
+case class RoomUpdateInfo(roomId: RoomId,
                       editedMessages: Seq[MessageId],
                       deletedMessages: Seq[MessageId]) {
 

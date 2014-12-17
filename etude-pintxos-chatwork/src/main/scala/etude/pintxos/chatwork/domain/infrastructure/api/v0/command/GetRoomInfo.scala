@@ -1,12 +1,13 @@
-package etude.pintxos.chatwork.domain.infrastructure.api.v0
+package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ParticipantParser, RoomParser}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room, RoomId}
 
 import scala.concurrent.Future
 
-object V0AsyncRoom
+object GetRoomInfo
   extends V0AsyncEntityIO {
 
   def room(roomId: RoomId)

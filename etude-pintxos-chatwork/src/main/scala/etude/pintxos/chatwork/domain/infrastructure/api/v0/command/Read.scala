@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi._
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.ReadResult
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.RoomId
@@ -10,9 +11,6 @@ import org.json4s._
 import scala.concurrent.Future
 
 object Read extends V0AsyncEntityIO {
-
-  case class ReadResult(readNum: BigInt,
-                        mentionNum: BigInt)
 
   private def parseRead(json: JValue): ReadResult = {
     val results: List[ReadResult] = for {

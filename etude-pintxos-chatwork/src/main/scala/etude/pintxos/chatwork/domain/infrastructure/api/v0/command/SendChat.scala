@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi._
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.Storage
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.{SendChatResult, Storage}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{MessageParser, StorageParser}
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.RoomId
@@ -12,10 +12,6 @@ import org.json4s._
 import scala.concurrent.Future
 
 object SendChat extends V0AsyncEntityIO {
-
-  case class SendChatResult(storage: Storage,
-                            storageLimit: BigInt,
-                            messages: Seq[Message])
 
   def parseSendChatResult(json: JValue, room: RoomId): SendChatResult = {
     val results: List[SendChatResult] = for {

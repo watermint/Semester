@@ -1,7 +1,8 @@
 package etude.pintxos.chatwork.domain.lifecycle.account
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncAccount, V0AsyncInitLoad}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncInitLoad
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetAccountInfo
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 
 import scala.concurrent.Future
@@ -24,7 +25,7 @@ class AsyncAccountRepositoryOnV0Api extends AsyncAccountRepository {
     implicit val executor = getExecutionContext(context)
     V0AsyncInitLoad.initLoad() flatMap {
       p =>
-        V0AsyncAccount.accounts(Seq(identity)) map {
+        GetAccountInfo.accounts(Seq(identity)) map {
           a =>
             a.last
         }

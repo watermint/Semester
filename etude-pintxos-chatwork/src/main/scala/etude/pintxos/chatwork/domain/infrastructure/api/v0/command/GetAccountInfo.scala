@@ -1,7 +1,8 @@
-package etude.pintxos.chatwork.domain.infrastructure.api.v0
+package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.ContactParser
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 import org.json4s.JsonAST.{JField, JObject}
 import org.json4s.JsonDSL._
@@ -9,7 +10,7 @@ import org.json4s.native.JsonMethods._
 
 import scala.concurrent.Future
 
-object V0AsyncAccount
+object GetAccountInfo
   extends V0AsyncEntityIO {
 
   def accounts(accountIds: Seq[AccountId])
