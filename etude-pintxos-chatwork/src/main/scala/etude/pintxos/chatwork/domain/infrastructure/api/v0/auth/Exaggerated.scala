@@ -60,12 +60,6 @@ class Exaggerated extends Auth {
             parsePage(content) match {
               case Some(token) => token
               case _ =>
-                println(uri)
-                println("----")
-                val fos = new java.io.FileOutputStream(new java.io.File("/Users/takayuki.okazaki/Desktop/t"))
-                fos.write(response.content)
-                fos.close()
-                println("----")
                 throw new V0UnknownChatworkProtocolException("Authentication failed")
             }
         }
