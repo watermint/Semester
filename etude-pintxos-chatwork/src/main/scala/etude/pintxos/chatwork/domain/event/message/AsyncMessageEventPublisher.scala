@@ -1,12 +1,14 @@
 package etude.pintxos.chatwork.domain.event.message
 
+import java.util.concurrent.locks.ReentrantLock
+
 import etude.manieres.domain.event.async.{AsyncIdentityEventPublisher, AsyncIdentityEventSubscriber}
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.model.message.MessageId
 
 import scala.collection.mutable
-import scala.concurrent.{Future, Lock}
+import scala.concurrent.Future
 
 trait AsyncMessageEventPublisher
   extends AsyncIdentityEventPublisher[MessageId] {
@@ -20,11 +22,11 @@ object AsyncMessageEventPublisher {
   private val publishers: mutable.HashMap[EntityIOContext[Future], AsyncMessageEventPublisher] =
     new mutable.HashMap[EntityIOContext[Future], AsyncMessageEventPublisher]()
 
-  private val publisherMutex: Lock = new Lock
+  private val publisherMutex = new ReentrantLock
 
   private def withPublisher[T](f: AsyncMessageEventPublisher => T)
                               (implicit context: EntityIOContext[Future]): T = {
-    publisherMutex.acquire()
+    publisherMutex.lock()
     try {
       val publisher = publishers.get(context) match {
         case Some(p) => p
@@ -42,7 +44,7 @@ object AsyncMessageEventPublisher {
 
       f(publisher)
     } finally {
-      publisherMutex.release()
+      publisherMutex.unlock()
     }
   }
 

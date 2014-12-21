@@ -156,7 +156,7 @@ trait V0AsyncEntityIO
   protected def startUpdateScheduler(context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
       v0 =>
-        v0.updateSchedulerMutex.acquire()
+        v0.updateSchedulerMutex.lock()
         try {
           if (v0.updateHandler.isSet) {
             return
@@ -171,7 +171,7 @@ trait V0AsyncEntityIO
             )
           )
         } finally {
-          v0.updateSchedulerMutex.release()
+          v0.updateSchedulerMutex.unlock()
         }
     }
   }
@@ -179,14 +179,14 @@ trait V0AsyncEntityIO
   protected def shutdownUpdateScheduler(context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
       v0 =>
-        v0.updateSchedulerMutex.acquire()
+        v0.updateSchedulerMutex.lock()
         try {
           if (v0.updateHandler.isSet) {
             v0.updateHandler.get.cancel(true)
             v0.updateHandler.take(contextAccessWaitInMillis)
           }
         } finally {
-          v0.updateSchedulerMutex.release()
+          v0.updateSchedulerMutex.unlock()
         }
     }
   }

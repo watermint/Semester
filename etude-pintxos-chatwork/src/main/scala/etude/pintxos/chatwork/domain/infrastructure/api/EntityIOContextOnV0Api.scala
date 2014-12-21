@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api
 
 import java.time.Instant
 import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
+import java.util.concurrent.locks.ReentrantLock
 import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor}
 
 import etude.epice.http.Client
@@ -42,7 +43,7 @@ trait EntityIOContextOnV0Api[M[+A]]
 
   val updateHandler: SyncVar[ScheduledFuture[_]] = new SyncVar[ScheduledFuture[_]]
 
-  val updateSchedulerMutex: Lock = new Lock
+  val updateSchedulerMutex: ReentrantLock = new ReentrantLock
 
   lazy val updateScheduler: ScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1)
 }

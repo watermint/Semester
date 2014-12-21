@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.auth
 
 import java.net.URI
 
+import etude.epice.logging.LoggerFactory
 import etude.pain.rangement.html.Normalizer
 import etude.epice.http._
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0UnknownChatworkProtocolException
@@ -10,6 +11,8 @@ import scala.util.Try
 import scala.xml.Node
 
 class Exaggerated extends Auth {
+
+  val logger = LoggerFactory.getLogger(getClass)
 
   case class ExaggeratedForm(uri: URI,
                              action: String,

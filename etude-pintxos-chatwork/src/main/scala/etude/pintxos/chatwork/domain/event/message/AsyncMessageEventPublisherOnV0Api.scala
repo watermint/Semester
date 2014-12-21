@@ -1,19 +1,16 @@
 package etude.pintxos.chatwork.domain.event.message
 
-import etude.manieres.domain.event.mutable.IdentityEventPublisherSupport
-import etude.manieres.domain.event.{IdentityEvent, IdentityEventType}
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetUpdate
+import etude.manieres.domain.event.mutable.IdentityEventPublisherSupport
+import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.UpdateInfoResult
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.GetUpdateParser
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
-import etude.pintxos.chatwork.domain.lifecycle.room.AsyncRoomRepository
 import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s._
 
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 private[message]
 case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
@@ -29,11 +26,10 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
 
   protected val subscribers: ArrayBuffer[Subscriber] = new ArrayBuffer[Subscriber]()
 
-  def handleUpdate(json: JValue): Unit = {
-    logger.debug(s"handle update: $json")
-    GetUpdate.parseRoomUpdateInfo(json)(context) foreach {
-      updateInfo =>
-        updateInfo.asIdentityEvent(context) foreach {
+  def handleUpdate(updateInfo: UpdateInfoResult): Unit = {
+    updateInfo.roomUpdateInfo foreach {
+      u =>
+        u.asIdentityEvent(context) foreach {
           ev =>
             publish(ev)(context)
         }
