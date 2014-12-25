@@ -5,7 +5,7 @@ import java.util.concurrent.{ExecutorService, Executors}
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, LoadChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.UpdateInfoResponse
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.UpdateInfoResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message

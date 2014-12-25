@@ -1,4 +1,4 @@
-package etude.pintxos.chatwork.domain.infrastructure.api.v0.model
+package etude.pintxos.chatwork.domain.infrastructure.api.v0.response
 
 import etude.pintxos.chatwork.domain.model.message.Message
 

@@ -4,8 +4,8 @@ import java.time.Instant
 
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.InitLoadResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ContactParser, ParticipantParser, RoomParser}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.InitLoadResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import org.json4s._
 

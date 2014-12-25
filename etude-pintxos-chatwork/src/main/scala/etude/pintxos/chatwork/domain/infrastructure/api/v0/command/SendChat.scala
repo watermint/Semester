@@ -2,8 +2,9 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi._
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.SendChatResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.{SendChatResponse, Storage}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.Storage
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{MessageParser, StorageParser}
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.RoomId

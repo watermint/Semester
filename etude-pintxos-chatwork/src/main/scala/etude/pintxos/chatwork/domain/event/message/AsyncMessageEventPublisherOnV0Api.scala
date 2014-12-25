@@ -3,8 +3,8 @@ package etude.pintxos.chatwork.domain.event.message
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.event.mutable.IdentityEventPublisherSupport
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.UpdateInfoResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.GetUpdateParser
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.UpdateInfoResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import org.json4s._
