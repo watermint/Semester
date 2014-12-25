@@ -10,8 +10,8 @@ import scala.concurrent.{Future, Await}
 import scala.concurrent.duration._
 
 case class RoomUpdateInfo(roomId: RoomId,
-                      editedMessages: Seq[MessageId],
-                      deletedMessages: Seq[MessageId]) {
+                          editedMessages: Seq[MessageId],
+                          deletedMessages: Seq[MessageId]) {
 
   val fetchMessageTimeoutMillis = 10000
 

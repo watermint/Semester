@@ -14,4 +14,6 @@ trait ChatSubscriber {
   def update(account: Account): Unit = {}
 
   def update(participant: Participant): Unit = {}
+
+  def update(messages: Seq[Message]): Unit = {}
 }

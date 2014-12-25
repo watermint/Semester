@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.LoadChatResult
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.LoadChatResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId}
@@ -34,7 +34,7 @@ object LoadChat extends V0AsyncEntityIO {
                unreadNum: Boolean = false,
                description: Boolean = false,
                task: Boolean = false)
-              (implicit context: EntityIOContext[Future]): Future[LoadChatResult] = {
+              (implicit context: EntityIOContext[Future]): Future[LoadChatResponse] = {
     implicit val executor = getExecutionContext(context)
 
     V0AsyncApi.api(
@@ -50,13 +50,13 @@ object LoadChat extends V0AsyncEntityIO {
       )
     ) map {
       json =>
-        val results: Seq[LoadChatResult] = for {
+        val results: Seq[LoadChatResponse] = for {
           JObject(j) <- json
           JField("chat_list", chatList) <- j
         } yield {
           val m = j.toMap
 
-          LoadChatResult(
+          LoadChatResponse(
             MessageParser.parseMessage(room, chatList),
             m.get("description") collect { case JString(d) => d },
             m.get("public_description") collect { case JString(d) => d}

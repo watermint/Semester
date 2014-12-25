@@ -1,16 +1,15 @@
 package etude.vino.chatwork.stream
 
-import java.util.concurrent.{Executors, ExecutorService}
+import java.util.concurrent.{ExecutorService, Executors}
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.manieres.domain.lifecycle.async.AsyncEntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, LoadChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.UpdateInfoResult
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.UpdateInfoResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
-import etude.pintxos.chatwork.domain.model.room.{Room, Participant, RoomId}
+import etude.pintxos.chatwork.domain.model.room.{Participant, Room, RoomId}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,6 +39,8 @@ case class ChatStream(context: EntityIOContext[Future])
     override def update(account: Account): Unit = subscribers.foreach(_.update(account))
 
     override def update(participant: Participant): Unit = subscribers.foreach(_.update(participant))
+
+    override def update(messages: Seq[Message]): Unit = subscribers.foreach(_.update(messages))
   }
 
   private val subscribers = AggregatedSubscriber()
@@ -52,13 +53,14 @@ case class ChatStream(context: EntityIOContext[Future])
     subscribers.removeSubscriber(subscriber)
   }
 
-  def handleUpdate(updateInfo: UpdateInfoResult): Unit = {
+  def handleUpdate(updateInfo: UpdateInfoResponse): Unit = {
     updateInfo.roomUpdateInfo foreach {
       u =>
         implicit val executor = getExecutionContext(context)
         subscribers.update(u.roomId)
         LoadChat.loadChat(u.roomId)(context) map {
           chat =>
+            subscribers.update(chat.chatList)
             chat.chatList foreach {
               message =>
                 subscribers.update(message)

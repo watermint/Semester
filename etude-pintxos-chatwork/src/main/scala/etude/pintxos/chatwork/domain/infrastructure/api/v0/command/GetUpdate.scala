@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.{RoomUpdateInfo, UpdateInfoResult}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.{RoomUpdateInfo, UpdateInfoResponse}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.GetUpdateParser
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.message.MessageId
@@ -33,12 +33,12 @@ object GetUpdate extends V0AsyncEntityIO {
     }
   }
 
-  def update(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): Future[UpdateInfoResult] = {
+  def update(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): Future[UpdateInfoResponse] = {
     implicit val executor = getExecutionContext(context)
 
     updateRaw(updateLastId) map {
       json =>
-        UpdateInfoResult(
+        UpdateInfoResponse(
           GetUpdateParser.parseRoomUpdateInfo(json)
         )
     }

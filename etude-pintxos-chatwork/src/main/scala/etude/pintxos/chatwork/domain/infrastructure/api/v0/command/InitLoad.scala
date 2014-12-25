@@ -4,7 +4,7 @@ import java.time.Instant
 
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.InitLoadResult
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.InitLoadResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ContactParser, ParticipantParser, RoomParser}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import org.json4s._
@@ -20,7 +20,7 @@ object InitLoad
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  case class InitLoadContainer(content: InitLoadResult,
+  case class InitLoadContainer(content: InitLoadResponse,
                                loadTime: Instant)
 
   private val cache = new mutable.HashMap[String, InitLoadContainer]()
@@ -38,7 +38,7 @@ object InitLoad
   }
 
 
-  def initLoad()(implicit context: EntityIOContext[Future]): Future[InitLoadResult] = {
+  def initLoad()(implicit context: EntityIOContext[Future]): Future[InitLoadResponse] = {
     implicit val executor = getExecutionContext(context)
 
     getMyId(context) match {
@@ -60,7 +60,7 @@ object InitLoad
           case Some(lastId) => setLastId(lastId, context)
           case _ =>
         }
-        val content = InitLoadResult(
+        val content = InitLoadResponse(
           contacts = ContactParser.parseContacts(json),
           rooms = RoomParser.parseRooms(json),
           participants = ParticipantParser.parseParticipants(json)
