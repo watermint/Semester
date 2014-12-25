@@ -1,20 +1,30 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.RoomUpdateInfo
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.GetUpdateParser
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.UpdateInfoResponse
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
-import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.model.room.RoomId
-import org.json4s.JsonAST.{JField, JObject}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.GetUpdateRequest
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.GetUpdateResponse
 import org.json4s._
 
 import scala.concurrent.Future
 
-object GetUpdate extends V0AsyncEntityIO {
+object GetUpdate
+  extends ChatWorkCommand[GetUpdateRequest, GetUpdateResponse] {
 
-  def updateRaw(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): Future[JValue] = {
+
+  def execute(request: GetUpdateRequest)(implicit context: EntityIOContext[Future]): Future[GetUpdateResponse] = {
+    implicit val executor = getExecutionContext(context)
+    updateRaw(request.updateLastId) map {
+      json =>
+        GetUpdateResponse(
+          json,
+          GetUpdateParser.parseRoomUpdateInfo(json)
+        )
+    }
+  }
+
+  private def updateRaw(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): Future[JValue] = {
     implicit val executor = getExecutionContext(context)
 
     getLastId(context) match {
@@ -33,17 +43,5 @@ object GetUpdate extends V0AsyncEntityIO {
         throw new IllegalStateException("No last_id found in the context")
     }
   }
-
-  def update(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): Future[UpdateInfoResponse] = {
-    implicit val executor = getExecutionContext(context)
-
-    updateRaw(updateLastId) map {
-      json =>
-        UpdateInfoResponse(
-          GetUpdateParser.parseRoomUpdateInfo(json)
-        )
-    }
-  }
-
 
 }

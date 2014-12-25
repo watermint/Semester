@@ -1,22 +1,22 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.AddCategory._
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
-import etude.pintxos.chatwork.domain.model.room.Category
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.EditCategoryRequest
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.EditCategoryResponse
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 
 import scala.concurrent.Future
 
 object EditCategory
-  extends V0AsyncEntityIO {
+  extends ChatWorkCommand[EditCategoryRequest, EditCategoryResponse] {
 
-  def edit(category: Category)(implicit context: EntityIOContext[Future]): Future[Category] = {
+  def execute(request: EditCategoryRequest)(implicit context: EntityIOContext[Future]): Future[EditCategoryResponse] = {
     implicit val executor = getExecutionContext(context)
-    val pdata = ("name" -> category.name) ~
-      ("r" -> category.rooms.map(_.value.toString())) ~
-      ("cat_id" -> category.categoryId.value.toString())
+    val pdata = ("name" -> request.category.name) ~
+      ("r" -> request.category.rooms.map(_.value.toString())) ~
+      ("cat_id" -> request.category.categoryId.value.toString())
 
     V0AsyncApi.api(
       "edit_category",
@@ -27,8 +27,10 @@ object EditCategory
     ) map {
       json =>
         // TODO : parse json
-        category
+        EditCategoryResponse(
+          json,
+          request.category
+        )
     }
-
   }
 }

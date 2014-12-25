@@ -1,18 +1,17 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi._
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.SendChatResponse
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.model.Storage
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{MessageParser, StorageParser}
-import etude.pintxos.chatwork.domain.model.message.Message
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.SendChatRequest
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.SendChatResponse
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s._
 
 import scala.concurrent.Future
 
-object SendChat extends V0AsyncEntityIO {
+object SendChat
+  extends ChatWorkCommand[SendChatRequest, SendChatResponse] {
 
   def parseSendChatResult(json: JValue, room: RoomId): SendChatResponse = {
     val results: List[SendChatResponse] = for {
@@ -23,12 +22,14 @@ object SendChat extends V0AsyncEntityIO {
       j.toMap.get("chat_list") match {
         case Some(chatList) =>
           SendChatResponse(
+            json,
             StorageParser.parseStorage(storage),
             BigInt(storageLimit),
             MessageParser.parseMessage(room, chatList)
           )
         case _ =>
           SendChatResponse(
+            json,
             StorageParser.parseStorage(storage),
             BigInt(storageLimit),
             Seq()
@@ -38,14 +39,13 @@ object SendChat extends V0AsyncEntityIO {
     results.last
   }
 
-  def sendChat(text: String, room: RoomId)
-              (implicit context: EntityIOContext[Future]): Future[SendChatResponse] = {
+  def execute(request: SendChatRequest)(implicit context: EntityIOContext[Future]): Future[SendChatResponse] = {
     implicit val executor = getExecutionContext(context)
     import org.json4s.JsonDSL._
     import org.json4s.native.JsonMethods._
 
-    val pdata = ("text" -> text) ~
-      ("room_id" -> room.value.toString()) ~
+    val pdata = ("text" -> request.text) ~
+      ("room_id" -> request.room.value.toString()) ~
       ("edit_id" -> "0")
 
     V0AsyncApi.api(
@@ -56,7 +56,8 @@ object SendChat extends V0AsyncEntityIO {
       )
     ) map {
       json =>
-        parseSendChatResult(json, room)
+        parseSendChatResult(json, request.room)
     }
   }
+
 }

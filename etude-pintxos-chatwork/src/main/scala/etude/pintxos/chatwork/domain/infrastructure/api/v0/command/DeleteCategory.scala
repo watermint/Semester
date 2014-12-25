@@ -1,6 +1,8 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.DeleteCategoryRequest
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.DeleteCategoryResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.room.CategoryId
 import org.json4s.JsonDSL._
@@ -9,11 +11,12 @@ import org.json4s.native.JsonMethods._
 import scala.concurrent.Future
 
 object DeleteCategory
-  extends V0AsyncEntityIO {
+  extends ChatWorkCommand[DeleteCategoryRequest, DeleteCategoryResponse] {
 
-  def delete(categoryId: CategoryId)(implicit context: EntityIOContext[Future]): Future[CategoryId] = {
+
+  def execute(request: DeleteCategoryRequest)(implicit context: EntityIOContext[Future]): Future[DeleteCategoryResponse] = {
     implicit val executor = getExecutionContext(context)
-    val pdata = "cat_id" -> categoryId.value.toString()
+    val pdata = "cat_id" -> request.categoryId.value.toString()
 
     V0AsyncApi.api(
       "delete_category",
@@ -23,9 +26,10 @@ object DeleteCategory
       )
     ) map {
       json =>
-        // TODO: parse json
-        categoryId
+        DeleteCategoryResponse(
+          json,
+          request.categoryId
+        )
     }
-
   }
 }

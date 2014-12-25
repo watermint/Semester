@@ -4,7 +4,7 @@ import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.event.mutable.IdentityEventPublisherSupport
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.GetUpdateParser
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.UpdateInfoResponse
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.GetUpdateResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import org.json4s._
@@ -26,7 +26,7 @@ case class AsyncMessageEventPublisherOnV0Api(context: EntityIOContext[Future])
 
   protected val subscribers: ArrayBuffer[Subscriber] = new ArrayBuffer[Subscriber]()
 
-  def handleUpdate(updateInfo: UpdateInfoResponse): Unit = {
+  def handleUpdate(updateInfo: GetUpdateResponse): Unit = {
     updateInfo.roomUpdateInfo foreach {
       u =>
         u.asIdentityEvent(context) foreach {

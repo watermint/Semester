@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.MessageParser
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.LoadChatResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId}
@@ -10,7 +11,8 @@ import org.json4s.JsonAST.{JField, JObject, JString}
 
 import scala.concurrent.Future
 
-object LoadChat extends V0AsyncEntityIO {
+object LoadChat
+  extends ChatWorkCommand[LoadChatRequest, LoadChatResponse] {
 
   private def toChatId(message: Option[MessageId]): String = {
     message match {
@@ -27,26 +29,19 @@ object LoadChat extends V0AsyncEntityIO {
     }
   }
 
-  def loadChat(room: RoomId,
-               firstChatId: Option[MessageId] = None,
-               lastChatId: Option[MessageId] = None,
-               jumpToChatId: Option[MessageId] = None,
-               unreadNum: Boolean = false,
-               description: Boolean = false,
-               task: Boolean = false)
-              (implicit context: EntityIOContext[Future]): Future[LoadChatResponse] = {
+  def execute(request: LoadChatRequest)(implicit context: EntityIOContext[Future]): Future[LoadChatResponse] = {
     implicit val executor = getExecutionContext(context)
 
     V0AsyncApi.api(
       "load_chat",
       Map(
-        "room_id" -> room.value.toString(),
-        "first_chat_id" -> toChatId(firstChatId),
-        "last_chat_id" -> toChatId(lastChatId),
-        "jump_to_chat_id" -> toChatId(jumpToChatId),
-        "unread_num" -> fromBoolean(unreadNum),
-        "desc" -> fromBoolean(description),
-        "task" -> fromBoolean(task)
+        "room_id" -> request.room.value.toString(),
+        "first_chat_id" -> toChatId(request.firstChatId),
+        "last_chat_id" -> toChatId(request.lastChatId),
+        "jump_to_chat_id" -> toChatId(request.jumpToChatId),
+        "unread_num" -> fromBoolean(request.unreadNum),
+        "desc" -> fromBoolean(request.description),
+        "task" -> fromBoolean(request.task)
       )
     ) map {
       json =>
@@ -57,7 +52,8 @@ object LoadChat extends V0AsyncEntityIO {
           val m = j.toMap
 
           LoadChatResponse(
-            MessageParser.parseMessage(room, chatList),
+            json,
+            MessageParser.parseMessage(request.room, chatList),
             m.get("description") collect { case JString(d) => d },
             m.get("public_description") collect { case JString(d) => d}
           )

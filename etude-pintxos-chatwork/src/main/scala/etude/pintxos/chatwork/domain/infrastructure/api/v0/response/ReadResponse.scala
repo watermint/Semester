@@ -1,4 +1,8 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.response
 
-case class ReadResponse(readNum: BigInt,
+import org.json4s.JValue
+
+case class ReadResponse(rawResponse: JValue,
+                        readNum: BigInt,
                         mentionNum: BigInt)
+  extends ChatWorkResponse

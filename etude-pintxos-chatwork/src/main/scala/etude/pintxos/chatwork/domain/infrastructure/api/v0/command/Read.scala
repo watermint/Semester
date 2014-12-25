@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi._
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ReadRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ReadResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
 import etude.pintxos.chatwork.domain.model.message.MessageId
@@ -10,7 +11,8 @@ import org.json4s._
 
 import scala.concurrent.Future
 
-object Read extends V0AsyncEntityIO {
+object Read
+  extends ChatWorkCommand[ReadRequest, ReadResponse] {
 
   private def parseRead(json: JValue): ReadResponse = {
     val results: List[ReadResponse] = for {
@@ -18,24 +20,24 @@ object Read extends V0AsyncEntityIO {
       JField("read_num", JInt(readNum)) <- j
       JField("mention_Num", JInt(mentionNum)) <- j
     } yield {
-      ReadResponse(readNum, mentionNum)
+      ReadResponse(json, readNum, mentionNum)
     }
     results.last
   }
 
-  def read(roomId: RoomId, messageId: MessageId)
-          (implicit context: EntityIOContext[Future]): Future[ReadResponse] = {
+  def execute(request: ReadRequest)(implicit context: EntityIOContext[Future]): Future[ReadResponse] = {
     implicit val executor = getExecutionContext(context)
 
     V0AsyncApi.api(
       "read",
       Map(
-        "room_id" -> roomId.value.toString(),
-        "last_chat_id" -> messageId.toString
+        "room_id" -> request.roomId.value.toString(),
+        "last_chat_id" -> request.messageId.toString
       )
     ) map {
       json =>
         parseRead(json)
     }
   }
+
 }

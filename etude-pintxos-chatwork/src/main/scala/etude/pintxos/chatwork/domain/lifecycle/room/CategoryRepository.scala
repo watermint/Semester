@@ -10,7 +10,7 @@ trait CategoryRepository[M[+A]]
 
   type This <: CategoryRepository[M]
 
-  def categories()(implicit context: EntityIOContext[M]): M[List[Category]]
+  def categories()(implicit context: EntityIOContext[M]): M[Seq[Category]]
 
   def create(name: String, rooms: List[RoomId])(implicit context: EntityIOContext[M]): M[ResultWithIdentity[This, CategoryId, Category, M]]
 }

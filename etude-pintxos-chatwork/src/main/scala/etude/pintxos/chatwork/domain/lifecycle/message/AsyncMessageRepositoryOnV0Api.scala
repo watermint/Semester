@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.lifecycle.message
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{LoadOldChat, Read, SendChat}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{SendChatRequest, ReadRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.model.message._
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 
@@ -15,26 +16,26 @@ class AsyncMessageRepositoryOnV0Api
 
   def say(text: Text)(room: Room)(implicit context: EntityIOContext[Future]): Future[Option[MessageId]] = {
     implicit val executor = getExecutionContext(context)
-    SendChat.sendChat(text.text, room.roomId) map {
+    SendChat.execute(SendChatRequest(text.text, room.roomId)) map {
       s =>
         s.messages.lastOption map { s => s.messageId }
     }
   }
 
-  def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[Future]): Future[List[Message]] = {
+  def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[Future]): Future[Seq[Message]] = {
     if (!from.roomId.equals(roomId)) {
       throw new IllegalArgumentException(s"Inconsistent roomId[$roomId] / messageId[${from.roomId}]")
     }
     implicit val executor = getExecutionContext(context)
-    LoadOldChat.load(from) map {
-      messages =>
-        messages.take(count)
+    LoadOldChat.execute(LoadOldChatRequest(from)) map {
+      response =>
+        response.messages.take(count)
     }
   }
 
   def markAsRead(message: MessageId)(implicit context: EntityIOContext[Future]): Future[MessageId] = {
     implicit val executor = getExecutionContext(context)
-    Read.read(message.roomId, message) map {
+    Read.execute(ReadRequest(message.roomId, message)) map {
       m =>
         message
     }

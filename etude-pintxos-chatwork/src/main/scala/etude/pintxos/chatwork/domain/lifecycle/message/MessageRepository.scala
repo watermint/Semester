@@ -13,5 +13,5 @@ trait MessageRepository[M[+A]]
 
   def markAsRead(message: MessageId)(implicit context: EntityIOContext[M]): M[MessageId]
 
-  def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[M]): M[List[Message]]
+  def messages(roomId: RoomId, from: MessageId, count: Int)(implicit context: EntityIOContext[M]): M[Seq[Message]]
 }

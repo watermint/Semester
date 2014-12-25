@@ -10,7 +10,7 @@ import org.json4s._
 
 object MessageParser extends ParserBase {
 
-  def parseMessage(roomId: RoomId, json: JValue): List[Message] = {
+  def parseMessage(roomId: RoomId, json: JValue): Seq[Message] = {
     for {
       JObject(data) <- json
       JField("aid", JInt(accountId)) <- data

@@ -4,6 +4,7 @@ import etude.manieres.domain.lifecycle.async.AsyncResultWithIdentity
 import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{AddCategory, DeleteCategory, EditCategory, GetCategory}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetCategoryRequest, EditCategoryRequest, DeleteCategoryRequest, AddCategoryRequest}
 import etude.pintxos.chatwork.domain.model.room.{Category, CategoryId, RoomId}
 
 import scala.concurrent.Future
@@ -23,8 +24,12 @@ class AsyncCategoryRepositoryOnV0Api
     }
   }
 
-  def categories()(implicit context: EntityIOContext[Future]): Future[List[Category]] = {
-    GetCategory.categories()
+  def categories()(implicit context: EntityIOContext[Future]): Future[Seq[Category]] = {
+    implicit val executor = getExecutionContext(context)
+    GetCategory.execute(GetCategoryRequest()) map {
+      r =>
+        r.categories
+    }
   }
 
   def resolve(identity: CategoryId)(implicit context: EntityIOContext[Future]): Future[Category] = {
@@ -38,9 +43,9 @@ class AsyncCategoryRepositoryOnV0Api
   def create(name: String, rooms: List[RoomId])(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, CategoryId, Category, Future]] = {
     implicit val executor = getExecutionContext(context)
 
-    AddCategory.create(name, rooms) map {
-      category =>
-        AsyncResultWithIdentity(this.asInstanceOf[This], category.identity)
+    AddCategory.execute(AddCategoryRequest(name, rooms)) map {
+      response =>
+        AsyncResultWithIdentity(this.asInstanceOf[This], response.category.identity)
     }
   }
 
@@ -49,7 +54,7 @@ class AsyncCategoryRepositoryOnV0Api
 
     resolve(identity) flatMap {
       e =>
-        DeleteCategory.delete(identity) map {
+        DeleteCategory.execute(DeleteCategoryRequest(identity)) map {
           j =>
             AsyncResultWithIdentity(this.asInstanceOf[This], identity)
         }
@@ -59,7 +64,7 @@ class AsyncCategoryRepositoryOnV0Api
   def store(entity: Category)(implicit context: EntityIOContext[Future]): Future[ResultWithIdentity[This, CategoryId, Category, Future]] = {
     implicit val executor = getExecutionContext(context)
 
-    EditCategory.edit(entity) map {
+    EditCategory.execute(EditCategoryRequest(entity)) map {
       c =>
         AsyncResultWithIdentity(this.asInstanceOf[This], entity.identity)
     }

@@ -5,7 +5,8 @@ import java.util.concurrent.{ExecutorService, Executors}
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, LoadChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.UpdateInfoResponse
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, InitLoadRequest}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.GetUpdateResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
@@ -53,12 +54,12 @@ case class ChatStream(context: EntityIOContext[Future])
     subscribers.removeSubscriber(subscriber)
   }
 
-  def handleUpdate(updateInfo: UpdateInfoResponse): Unit = {
+  def handleUpdate(updateInfo: GetUpdateResponse): Unit = {
     updateInfo.roomUpdateInfo foreach {
       u =>
         implicit val executor = getExecutionContext(context)
         subscribers.update(u.roomId)
-        LoadChat.loadChat(u.roomId)(context) map {
+        LoadChat.execute(LoadChatRequest(u.roomId))(context) map {
           chat =>
             subscribers.update(chat.chatList)
             chat.chatList foreach {
@@ -72,7 +73,7 @@ case class ChatStream(context: EntityIOContext[Future])
   def start(): Unit = {
     implicit val executor = getExecutionContext(context)
 
-    InitLoad.initLoad()(context) map {
+    InitLoad.execute(InitLoadRequest())(context) map {
       load =>
         load.contacts.foreach { c => subscribers.update(c) }
         load.participants.foreach { p => subscribers.update(p) }

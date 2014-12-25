@@ -5,6 +5,7 @@ import java.time.Instant
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.{ContactParser, ParticipantParser, RoomParser}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.InitLoadRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.InitLoadResponse
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO}
 import org.json4s._
@@ -16,7 +17,7 @@ import scala.concurrent.Future
  * facade for jumbo api 'init_load'.
  */
 object InitLoad
-  extends V0AsyncEntityIO {
+  extends ChatWorkCommand[InitLoadRequest, InitLoadResponse] {
 
   val logger = LoggerFactory.getLogger(getClass)
 
@@ -38,7 +39,7 @@ object InitLoad
   }
 
 
-  def initLoad()(implicit context: EntityIOContext[Future]): Future[InitLoadResponse] = {
+  def execute(request: InitLoadRequest)(implicit context: EntityIOContext[Future]): Future[InitLoadResponse] = {
     implicit val executor = getExecutionContext(context)
 
     getMyId(context) match {
@@ -60,7 +61,9 @@ object InitLoad
           case Some(lastId) => setLastId(lastId, context)
           case _ =>
         }
+
         val content = InitLoadResponse(
+          json,
           contacts = ContactParser.parseContacts(json),
           rooms = RoomParser.parseRooms(json),
           participants = ParticipantParser.parseParticipants(json)

@@ -5,6 +5,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.GetUpdate
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.parser.GetUpdateParser
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.GetUpdateRequest
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -21,7 +22,7 @@ class V0AsyncUpdateHandler(context: EntityIOContextOnV0Api[Future])
     implicit val executionContext = getExecutionContext(context)
     try {
       val updateInfoResult = Await.result(
-        GetUpdate.update(updateLastId = true)(context),
+        GetUpdate.execute(GetUpdateRequest())(context),
         Duration(updateTimeoutInMillis, MILLISECONDS)
       )
 
