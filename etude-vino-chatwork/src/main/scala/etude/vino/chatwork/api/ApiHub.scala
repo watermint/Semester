@@ -8,6 +8,7 @@ import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ChatWorkResponse
 
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 
 case class ApiHub(context: EntityIOContext[Future])
@@ -27,6 +28,8 @@ case class ApiHub(context: EntityIOContext[Future])
     executor
   }
 
+  private val subscribers = ArrayBuffer[ApiSubscriber]()
+
   private val lowToNormalRatio = 5
 
   private val lowToNormalCount = new AtomicInteger()
@@ -37,13 +40,18 @@ case class ApiHub(context: EntityIOContext[Future])
 
   private val lowQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
-  trait Priority
 
-  case object PriorityRealTime extends Priority
+  def shutdown(): Unit = {
+    scheduledExecutor.shutdown()
+  }
 
-  case object PriorityNormal extends Priority
+  def addSubscriber(subscriber: ApiSubscriber): Unit = {
+    subscribers += subscriber
+  }
 
-  case object PriorityLow extends Priority
+  def removeSubscriber(subscriber: ApiSubscriber): Unit = {
+    subscribers -= subscriber
+  }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
     priority match {
@@ -56,13 +64,18 @@ case class ApiHub(context: EntityIOContext[Future])
   protected def execute(): Unit = {
     dequeue() match {
       case None => // NOP
-      case Some(r) =>
-
+      case Some(req) =>
+        implicit val executor = getExecutionContext(context)
+        req.execute(context) map {
+          res =>
+            subscribers.foreach {
+              receiver =>
+                if (receiver.receive.isDefinedAt(res)) {
+                  receiver.receive(res)
+                }
+            }
+        }
     }
-  }
-
-  protected def dispatch(request: ChatWorkRequest): Future[ChatWorkResponse] = {
-    request.execute(context)
   }
 
   protected def dequeue(): Option[ChatWorkRequest] = {

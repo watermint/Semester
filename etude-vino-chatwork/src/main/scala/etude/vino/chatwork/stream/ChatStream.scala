@@ -1,50 +1,29 @@
 package etude.vino.chatwork.stream
 
-import java.util.concurrent.{ExecutorService, Executors}
+import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, LoadChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, InitLoadRequest}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.GetUpdateResponse
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0UpdateSubscriber}
-import etude.pintxos.chatwork.domain.model.account.Account
-import etude.pintxos.chatwork.domain.model.message.Message
-import etude.pintxos.chatwork.domain.model.room.{Participant, Room, RoomId}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetUpdateRequest, InitLoadRequest, LoadChatRequest}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{ChatWorkResponse, GetUpdateResponse, InitLoadResponse, LoadChatResponse}
+import etude.vino.chatwork.api.{PriorityNormal, ApiHub, ApiSubscriber, PriorityRealTime}
 
-import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.{ExecutionContext, Future}
-
-case class ChatStream(context: EntityIOContext[Future])
-  extends V0AsyncEntityIO
-  with V0UpdateSubscriber {
-
-  case class AggregatedSubscriber() extends ChatSubscriber {
-
-    private val subscribers: ArrayBuffer[ChatSubscriber] = new ArrayBuffer[ChatSubscriber]()
-
-    def addSubscriber(subscriber: ChatSubscriber): Unit = {
-      subscribers += subscriber
-    }
-
-    def removeSubscriber(subscriber: ChatSubscriber): Unit = {
-      subscribers -= subscriber
-    }
-
-    override def update(message: Message): Unit = subscribers.foreach(_.update(message))
-
-    override def update(roomId: RoomId): Unit = subscribers.foreach(_.update(roomId))
-
-    override def update(room: Room): Unit = subscribers.foreach(_.update(room))
-
-    override def update(account: Account): Unit = subscribers.foreach(_.update(account))
-
-    override def update(participant: Participant): Unit = subscribers.foreach(_.update(participant))
-
-    override def update(messages: Seq[Message]): Unit = subscribers.foreach(_.update(messages))
-  }
+case class ChatStream(apiHub: ApiHub)
+  extends ApiSubscriber {
 
   private val subscribers = AggregatedSubscriber()
+
+  private val updateClockCycleInSeconds = 5
+
+  private val scheduledExecutor: ScheduledThreadPoolExecutor = {
+    val executor = new ScheduledThreadPoolExecutor(1)
+
+    executor.scheduleAtFixedRate(new Runnable {
+      def run(): Unit = {
+        apiHub.enqueue(GetUpdateRequest())(PriorityRealTime)
+      }
+    }, updateClockCycleInSeconds, updateClockCycleInSeconds, TimeUnit.SECONDS)
+
+    executor
+  }
 
   def addSubscriber(subscriber: ChatSubscriber): Unit = {
     subscribers.addSubscriber(subscriber)
@@ -54,50 +33,32 @@ case class ChatStream(context: EntityIOContext[Future])
     subscribers.removeSubscriber(subscriber)
   }
 
-  def handleUpdate(updateInfo: GetUpdateResponse): Unit = {
-    updateInfo.roomUpdateInfo foreach {
-      u =>
-        implicit val executor = getExecutionContext(context)
-        subscribers.update(u.roomId)
-        LoadChat.execute(LoadChatRequest(u.roomId))(context) map {
-          chat =>
-            subscribers.update(chat.chatList)
-            chat.chatList foreach {
-              message =>
-                subscribers.update(message)
-            }
-        }
-    }
-  }
-
   def start(): Unit = {
-    implicit val executor = getExecutionContext(context)
-
-    InitLoad.execute(InitLoadRequest())(context) map {
-      load =>
-        load.contacts.foreach { c => subscribers.update(c) }
-        load.participants.foreach { p => subscribers.update(p) }
-        load.rooms.foreach { r => subscribers.update(r) }
-    }
-
-    addSubscriber(this, context)
-    startUpdateScheduler(context)
+    apiHub.addSubscriber(this)
+    apiHub.enqueue(InitLoadRequest())(PriorityNormal)
   }
 
   def shutdown(): Unit = {
-    shutdownUpdateScheduler(context)
-    removeSubscriber(this, context)
+    apiHub.removeSubscriber(this)
+    scheduledExecutor.shutdown()
   }
 
-}
+  def receive: PartialFunction[ChatWorkResponse, Unit] = {
+    case r: InitLoadResponse =>
+      r.contacts.foreach { c => subscribers.update(c) }
+      r.participants.foreach { p => subscribers.update(p) }
+      r.rooms.foreach { r => subscribers.update(r) }
 
-object ChatStream {
-  def fromThinConfig(): ChatStream = {
-    val executorsPool: ExecutorService = Executors.newCachedThreadPool()
-    implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
+    case r: GetUpdateResponse =>
+      r.roomUpdateInfo foreach {
+        room =>
+          subscribers.update(room.roomId)
+          apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityNormal)
+      }
 
-    ChatStream(
-      AsyncEntityIOContextOnV0Api.fromThinConfig()
-    )
+    case r: LoadChatResponse =>
+      subscribers.update(r.chatList)
+      r.chatList.foreach(subscribers.update)
   }
+
 }
