@@ -59,9 +59,9 @@ case class ApiHub(context: EntityIOContext[Future])
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
     logger.info(s"Enqueue request: $request with priority $priority")
     priority match {
-      case PriorityRealTime => realTimeQueue.offer(request)
-      case PriorityNormal => normalQueue.offer(request)
-      case PriorityLow => lowQueue.offer(request)
+      case PriorityRealTime => realTimeQueue.add(request)
+      case PriorityNormal => normalQueue.add(request)
+      case PriorityLow => lowQueue.add(request)
     }
   }
 
@@ -83,6 +83,7 @@ case class ApiHub(context: EntityIOContext[Future])
   }
 
   protected def dequeue(): Option[ChatWorkRequest] = {
+    logger.info(s"Queue size: Realtime: ${realTimeQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}")
     realTimeQueue.peek() match {
       case r: ChatWorkRequest => Some(r)
       case null =>
