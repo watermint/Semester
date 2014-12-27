@@ -3,6 +3,7 @@ package etude.vino.chatwork.api
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ConcurrentLinkedQueue, ScheduledThreadPoolExecutor, TimeUnit}
 
+import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
@@ -14,7 +15,9 @@ import scala.concurrent.Future
 case class ApiHub(context: EntityIOContext[Future])
   extends V0AsyncEntityIO {
 
-  private val clockCycleInMillis = 500
+  private val logger = LoggerFactory.getLogger(getClass)
+
+  private val clockCycleInMillis = 5000
 
   private val scheduledExecutor: ScheduledThreadPoolExecutor = {
     val executor = new ScheduledThreadPoolExecutor(1)
@@ -54,6 +57,7 @@ case class ApiHub(context: EntityIOContext[Future])
   }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
+    logger.info(s"Enqueue request: $request with priority $priority")
     priority match {
       case PriorityRealTime => realTimeQueue.offer(request)
       case PriorityNormal => normalQueue.offer(request)

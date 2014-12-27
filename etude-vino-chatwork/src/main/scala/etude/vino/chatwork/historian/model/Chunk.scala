@@ -2,20 +2,18 @@ package etude.vino.chatwork.historian.model
 
 import java.time.Instant
 
-import etude.pintxos.chatwork.domain.model.message.Message
+import etude.pintxos.chatwork.domain.model.message.{Message, MessageId}
 import org.json4s.JsonDSL._
 import org.json4s._
 
 import scala.collection.mutable.ArrayBuffer
 
-case class Chunk(roomId: BigInt,
-                 lowTime: Instant,
+case class Chunk(lowTime: Instant,
                  highTime: Instant,
                  low: BigInt,
                  high: BigInt) extends Entity {
   def toJSON: JValue = {
-    ("roomId" -> roomId) ~
-      ("lowTime" -> lowTime.toString) ~
+    ("lowTime" -> lowTime.toString) ~
       ("highTime" -> highTime.toString) ~
       ("low" -> low) ~
       ("high" -> high)
@@ -36,7 +34,6 @@ object Chunk extends Parser[Chunk] {
     if (a.low <= b.low && b.low <= a.high) {
       Left(
         Chunk(
-          a.roomId,
           a.lowTime,
           b.highTime,
           a.low,
@@ -46,7 +43,6 @@ object Chunk extends Parser[Chunk] {
     } else if (b.low - a.high == BigInt(1)) {
       Left(
         Chunk(
-          a.roomId,
           a.lowTime,
           b.highTime,
           a.low,
@@ -87,14 +83,12 @@ object Chunk extends Parser[Chunk] {
   def ofChunks(json: JValue): Seq[Chunk] = {
     for {
       JObject(o) <- json
-      JField("roomId", JInt(roomId)) <- o
       JField("lowTime", JString(lowTime)) <- o
       JField("highTime", JString(highTime)) <- o
       JField("low", JInt(low)) <- o
       JField("high", JInt(high)) <- o
     } yield {
       Chunk(
-        roomId,
         Instant.parse(lowTime),
         Instant.parse(highTime),
         low,
@@ -107,13 +101,21 @@ object Chunk extends Parser[Chunk] {
     ofChunks(json).last
   }
 
+  def epochChunk(lastMessage: MessageId): Chunk = {
+    Chunk(
+      Instant.EPOCH,
+      Instant.EPOCH,
+      -1,
+      lastMessage.messageId
+    )
+  }
+
   def fromMessages(messages: Seq[Message]): Chunk = {
     val m = messages.sortBy(_.messageId.messageId)
     val first = m(0)
     val last = m.last
 
     Chunk(
-      first.messageId.roomId.value,
       first.ctime,
       last.ctime,
       first.messageId.messageId,

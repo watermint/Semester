@@ -75,7 +75,8 @@ object Storage {
           case _: IndexMissingException =>
             None
           case _ =>
-            throw e
+//            throw e
+            None
         }
     }
   }

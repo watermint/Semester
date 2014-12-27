@@ -11,7 +11,7 @@ case class ChatStream(apiHub: ApiHub)
 
   private val subscribers = AggregatedSubscriber()
 
-  private val updateClockCycleInSeconds = 5
+  private val updateClockCycleInSeconds = 600
 
   private val scheduledExecutor: ScheduledThreadPoolExecutor = {
     val executor = new ScheduledThreadPoolExecutor(1)

@@ -25,6 +25,7 @@ object LoadOldChat
       json =>
         LoadOldChatResponse(
           json,
+        request.lastMessage,
           MessageParser.parseMessage(request.lastMessage.roomId, json)
         )
     }

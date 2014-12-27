@@ -6,6 +6,7 @@ import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0
 import etude.vino.chatwork.api.ApiHub
 import etude.vino.chatwork.historian.Historian
 import etude.vino.chatwork.recorder.Recorder
+import etude.vino.chatwork.storage.Storage
 import etude.vino.chatwork.stream.ChatStream
 
 import scala.concurrent.ExecutionContext
@@ -16,12 +17,21 @@ object Main {
     implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
     implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig()
 
+    try {
+      Storage.client.admin().indices().prepareExists().setIndices("cw-vino-settings").execute().get()
+    } catch {
+      case _: Exception =>
+        // ignore
+    }
+
     val apiHub = ApiHub(context)
+    val historian = Historian(apiHub)
     val chatStream = ChatStream(apiHub)
     val recorder = Recorder()
-    val historian = Historian(apiHub)
 
     chatStream.addSubscriber(recorder)
     chatStream.start()
+
   }
+
 }
