@@ -1,17 +1,27 @@
 package etude.vino.chatwork.historian
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.model.account.Account
-import etude.pintxos.chatwork.domain.model.message.Message
-import etude.pintxos.chatwork.domain.model.room.{RoomId, Room, Participant}
-import etude.vino.chatwork.stream.ChatSubscriber
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{ChatWorkResponse, InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
+import etude.pintxos.chatwork.domain.model.room.Room
+import etude.vino.chatwork.api.{ApiHub, ApiSubscriber}
 
-import scala.concurrent.Future
+import scala.util.Random
 
-case class Historian(context: EntityIOContext[Future])
-  extends ChatSubscriber {
+case class Historian(apiHub: ApiHub)
+  extends ApiSubscriber {
 
-  override def update(messages: Seq[Message]): Unit = {
+  apiHub.addSubscriber(this)
+
+  def receive: PartialFunction[ChatWorkResponse, Unit] = {
+    case r: InitLoadResponse =>
+      Random.shuffle(r.rooms).foreach(traverse)
+
+    case r: LoadChatResponse =>
+
+    case r: LoadOldChatResponse =>
+
+  }
+
+  def traverse(room: Room): Unit = {
 
   }
 }

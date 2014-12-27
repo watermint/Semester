@@ -4,8 +4,10 @@ import java.nio.file.Paths
 
 import org.elasticsearch.client.Client
 import org.elasticsearch.common.settings.ImmutableSettings
+import org.elasticsearch.indices.IndexMissingException
 import org.elasticsearch.node.{Node, NodeBuilder}
 import org.json4s.JsonAST.JValue
+import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
 object Storage {
@@ -39,7 +41,7 @@ object Storage {
             idName: String,
             source: JValue): Long = {
 
-    val response = Storage.client.prepareIndex()
+    val response = client.prepareIndex()
       .setIndex(indexName)
       .setType(typeName)
       .setId(idName)
@@ -48,5 +50,33 @@ object Storage {
       .get()
 
     response.getVersion
+  }
+
+  def load(indexName: String,
+           typeName: String,
+           idName: String): Option[JValue] = {
+
+    try {
+      val response = client.prepareGet()
+        .setIndex(indexName)
+        .setType(typeName)
+        .setId(idName)
+        .execute()
+        .get()
+
+      if (response.isExists) {
+        Some(JsonMethods.parse(response.getSourceAsString))
+      } else {
+        None
+      }
+    } catch {
+      case e: Exception =>
+        e.getCause match {
+          case _: IndexMissingException =>
+            None
+          case _ =>
+            throw e
+        }
+    }
   }
 }
