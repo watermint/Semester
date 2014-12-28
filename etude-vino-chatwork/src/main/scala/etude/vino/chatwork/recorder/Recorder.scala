@@ -2,17 +2,50 @@ package etude.vino.chatwork.recorder
 
 import java.net.URI
 import java.time.ZoneOffset
+import java.util.concurrent.{TimeUnit, ScheduledThreadPoolExecutor}
 
+import akka.actor.{Props, Actor}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetUpdateRequest, InitLoadRequest, LoadChatRequest}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
+import etude.vino.chatwork.api.{PriorityRealTime, ApiHub, PriorityNormal}
 import etude.vino.chatwork.storage.Storage
-import etude.vino.chatwork.stream.ChatSubscriber
 import org.json4s.JsonDSL._
 
-case class Recorder() extends ChatSubscriber {
+case class Recorder(apiHub: ApiHub, updateClockCycleInSeconds: Int) extends Actor {
+  apiHub.enqueue(InitLoadRequest())(PriorityNormal)
 
-  override def update(message: Message): Unit = {
+  private val scheduledExecutor: ScheduledThreadPoolExecutor = {
+    val executor = new ScheduledThreadPoolExecutor(1)
+
+    executor.scheduleAtFixedRate(new Runnable {
+      def run(): Unit = {
+        apiHub.enqueue(GetUpdateRequest())(PriorityRealTime)
+      }
+    }, updateClockCycleInSeconds, updateClockCycleInSeconds, TimeUnit.SECONDS)
+
+    executor
+  }
+
+  def receive: Receive = {
+    case r: InitLoadResponse =>
+      r.contacts.foreach { c => update(c)}
+      r.participants.foreach { p => update(p)}
+      r.rooms.foreach { r => update(r)}
+
+    case r: GetUpdateResponse =>
+      r.roomUpdateInfo foreach {
+        room =>
+          apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityNormal)
+      }
+
+    case r: LoadChatResponse =>
+      r.chatList.foreach(update)
+  }
+
+  def update(message: Message): Unit = {
     val toAccount = message.body.to.map(_.value)
     val replies = message.body.replyTo.map(_.value)
 
@@ -35,7 +68,7 @@ case class Recorder() extends ChatSubscriber {
     )
   }
 
-  override def update(room: Room): Unit = {
+  def update(room: Room): Unit = {
     val json =
       ("roomId" -> room.roomId.value) ~
         ("roomType" -> room.roomType.name) ~
@@ -51,7 +84,7 @@ case class Recorder() extends ChatSubscriber {
     )
   }
 
-  override def update(account: Account): Unit = {
+  def update(account: Account): Unit = {
     val json =
       ("accountId" -> account.accountId.value) ~
         ("name" -> account.name.getOrElse("")) ~
@@ -66,7 +99,7 @@ case class Recorder() extends ChatSubscriber {
     )
   }
 
-  override def update(participant: Participant): Unit = {
+  def update(participant: Participant): Unit = {
     val json =
       ("roomId" -> participant.roomId.value) ~
         ("admin" -> participant.admin.map(_.value)) ~
@@ -80,4 +113,8 @@ case class Recorder() extends ChatSubscriber {
       source = json
     )
   }
+}
+
+object Recorder {
+  def props(apiHub: ApiHub, updateClockCycleInSeconds: Int): Props = Props(Recorder(apiHub, updateClockCycleInSeconds))
 }

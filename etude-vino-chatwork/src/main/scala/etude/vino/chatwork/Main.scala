@@ -3,11 +3,11 @@ package etude.vino.chatwork
 import java.util.concurrent.{ExecutorService, Executors}
 
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ChatWorkResponse
 import etude.vino.chatwork.api.ApiHub
 import etude.vino.chatwork.historian.Historian
 import etude.vino.chatwork.recorder.Recorder
 import etude.vino.chatwork.storage.Storage
-import etude.vino.chatwork.stream.ChatStream
 
 import scala.concurrent.ExecutionContext
 
@@ -25,12 +25,10 @@ object Main {
     }
 
     val apiHub = ApiHub(context)
-    val historian = Historian(apiHub)
-    val chatStream = ChatStream(apiHub)
-    val recorder = Recorder()
 
-    chatStream.addSubscriber(recorder)
-    chatStream.start()
+    apiHub.system.eventStream.subscribe(apiHub.system.actorOf(Historian.props(apiHub)), classOf[ChatWorkResponse])
+    apiHub.system.eventStream.subscribe(apiHub.system.actorOf(Recorder.props(apiHub, 600)), classOf[ChatWorkResponse])
+
 
   }
 

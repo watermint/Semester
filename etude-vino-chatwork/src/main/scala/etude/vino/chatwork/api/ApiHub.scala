@@ -3,6 +3,7 @@ package etude.vino.chatwork.api
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ConcurrentLinkedQueue, ScheduledThreadPoolExecutor, TimeUnit}
 
+import akka.actor.ActorSystem
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
@@ -31,8 +32,6 @@ case class ApiHub(context: EntityIOContext[Future])
     executor
   }
 
-  private val subscribers = ArrayBuffer[ApiSubscriber]()
-
   private val lowToNormalRatio = 5
 
   private val lowToNormalCount = new AtomicInteger()
@@ -43,17 +42,10 @@ case class ApiHub(context: EntityIOContext[Future])
 
   private val lowQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
+  val system = ActorSystem("cw-apihub")
 
   def shutdown(): Unit = {
     scheduledExecutor.shutdown()
-  }
-
-  def addSubscriber(subscriber: ApiSubscriber): Unit = {
-    subscribers += subscriber
-  }
-
-  def removeSubscriber(subscriber: ApiSubscriber): Unit = {
-    subscribers -= subscriber
   }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
@@ -72,12 +64,7 @@ case class ApiHub(context: EntityIOContext[Future])
         implicit val executor = getExecutionContext(context)
         req.execute(context) map {
           res =>
-            subscribers.foreach {
-              receiver =>
-                if (receiver.receive.isDefinedAt(res)) {
-                  receiver.receive(res)
-                }
-            }
+            system.eventStream.publish(res)
         }
     }
   }
@@ -109,3 +96,4 @@ case class ApiHub(context: EntityIOContext[Future])
     }
   }
 }
+

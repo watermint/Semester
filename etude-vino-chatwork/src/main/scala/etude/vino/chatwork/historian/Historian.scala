@@ -1,33 +1,31 @@
 package etude.vino.chatwork.historian
 
-import java.time.{Duration, Instant}
-
+import akka.actor.{Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, LoadOldChatRequest}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{ChatWorkResponse, InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
-import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
-import etude.vino.chatwork.api.{ApiHub, ApiSubscriber, PriorityLow}
-import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRequest
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
+import etude.pintxos.chatwork.domain.model.room.RoomId
+import etude.vino.chatwork.api.{ApiHub, PriorityLow}
+import etude.vino.chatwork.historian.model.{RoomChunk, Chunk}
+import etude.vino.chatwork.historian.operation.Traverse
 import etude.vino.chatwork.storage.Storage
+import org.json4s.JValue
 
 import scala.util.Random
 
 case class Historian(apiHub: ApiHub)
-  extends ApiSubscriber {
-
-  apiHub.addSubscriber(this)
+  extends Actor {
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  val indexName = "cw-historian-room"
-  val typeName = "room-chunk"
+  val assistant = Historian.system.actorOf(Assistant.props(apiHub))
 
-  val latestTimeGapInSeconds = 86400
-
-  def receive: PartialFunction[ChatWorkResponse, Unit] = {
+  def receive: Receive = {
     case r: InitLoadResponse =>
-      Random.shuffle(r.rooms).foreach(traverse)
+      Random.shuffle(r.rooms).foreach {
+        r =>
+          assistant ! Traverse(r)
+      }
 
     case r: LoadChatResponse =>
       updateChunk(
@@ -45,13 +43,13 @@ case class Historian(apiHub: ApiHub)
   }
 
   def updateChunk(roomId: RoomId, chunk: Chunk): Unit = {
-    Storage.load(indexName, typeName, roomId.value.toString()) match {
+    Historian.load(roomId) match {
       case None =>
         val roomChunk = RoomChunk(
           roomId.value,
           Seq(chunk)
         )
-        Storage.store(indexName, typeName, roomId.value.toString(), roomChunk.toJSON)
+        Historian.store(roomId, roomChunk.toJSON)
 
       case Some(json) =>
         val roomChunk = RoomChunk.fromJSON(json)
@@ -59,32 +57,27 @@ case class Historian(apiHub: ApiHub)
           roomId.value,
           Chunk.compaction(roomChunk.chunks :+ chunk)
         )
-        Storage.store(indexName, typeName, roomId.value.toString(), updatedRoomChunk.toJSON)
+        Historian.store(roomId, updatedRoomChunk.toJSON)
     }
   }
 
-  def traverse(room: Room): Unit = {
-    logger.info(s"traverse: ${room.roomId} - ${room.description}")
-    Storage.load(indexName, typeName, room.roomId.value.toString()) match {
-      case None =>
-        apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityLow)
-      case Some(json) =>
-        traverse(RoomChunk.fromJSON(json))
-    }
+}
+
+object Historian {
+
+  def load(roomId: RoomId): Option[JValue] = {
+    Storage.load(indexName, typeName, roomId.value.toString())
   }
 
-  def traverse(roomChunk: RoomChunk): Unit = {
-    val roomId = RoomId(roomChunk.roomId)
-    if (roomChunk.chunks.maxBy(_.highTime).highTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
-      apiHub.enqueue(LoadChatRequest(roomId))(PriorityLow)
-    } else {
-      Chunk.nextChunkMessageId(roomChunk.chunks, Instant.now.minus(Duration.ofDays(30))) match {
-        case None =>
-        // NOP
-        case Some(msgId) =>
-          apiHub.enqueue(LoadOldChatRequest(MessageId(roomId, msgId)))(PriorityLow)
-      }
-    }
+  def store(roomId: RoomId, value: JValue): Long = {
+    Storage.store(indexName, typeName, roomId.value.toString(), value)
   }
 
+  val indexName = "cw-historian-room"
+
+  val typeName = "room-chunk"
+
+  def props(apiHub: ApiHub): Props = Props(Historian(apiHub))
+
+  val system = ActorSystem("cw-historian")
 }
