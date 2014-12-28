@@ -6,10 +6,9 @@ import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRe
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.api.{ApiHub, PriorityLow}
-import etude.vino.chatwork.historian.model.{RoomChunk, Chunk}
-import etude.vino.chatwork.historian.operation.Traverse
+import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
+import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 import etude.vino.chatwork.storage.Storage
-import org.json4s.JValue
 
 import scala.util.Random
 
@@ -32,6 +31,7 @@ case class Historian(apiHub: ApiHub)
         r.chatList.last.messageId.roomId,
         Chunk.fromMessages(r.chatList)
       )
+      assistant ! NextChunk(r.chatList.seq.minBy(_.messageId.messageId).messageId)
 
     case r: LoadOldChatResponse =>
       if (r.messages.size == 0) {
@@ -49,15 +49,14 @@ case class Historian(apiHub: ApiHub)
           roomId.value,
           Seq(chunk)
         )
-        Historian.store(roomId, roomChunk.toJSON)
+        Historian.store(roomId, roomChunk)
 
-      case Some(json) =>
-        val roomChunk = RoomChunk.fromJSON(json)
+      case Some(roomChunk) =>
         val updatedRoomChunk = RoomChunk(
           roomId.value,
           Chunk.compaction(roomChunk.chunks :+ chunk)
         )
-        Historian.store(roomId, updatedRoomChunk.toJSON)
+        Historian.store(roomId, updatedRoomChunk)
     }
   }
 
@@ -65,12 +64,20 @@ case class Historian(apiHub: ApiHub)
 
 object Historian {
 
-  def load(roomId: RoomId): Option[JValue] = {
-    Storage.load(indexName, typeName, roomId.value.toString())
+  def load(roomId: RoomId): Option[RoomChunk] = {
+    Storage.load(indexName, typeName, roomId.value.toString()) match {
+      case None => None
+      case Some(json) =>
+        try {
+          Some(RoomChunk.fromJSON(json))
+        } catch {
+          case _: NoSuchElementException => None
+        }
+    }
   }
 
-  def store(roomId: RoomId, value: JValue): Long = {
-    Storage.store(indexName, typeName, roomId.value.toString(), value)
+  def store(roomId: RoomId, chunk: RoomChunk): Long = {
+    Storage.store(indexName, typeName, roomId.value.toString(), chunk.toJSON)
   }
 
   val indexName = "cw-historian-room"

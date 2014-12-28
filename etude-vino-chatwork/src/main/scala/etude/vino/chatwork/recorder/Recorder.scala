@@ -2,31 +2,28 @@ package etude.vino.chatwork.recorder
 
 import java.net.URI
 import java.time.ZoneOffset
-import java.util.concurrent.{TimeUnit, ScheduledThreadPoolExecutor}
+import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
 
-import akka.actor.{Props, Actor}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetUpdateRequest, InitLoadRequest, LoadChatRequest}
+import akka.actor.{Actor, Props}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetUpdateRequest, LoadChatRequest}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
-import etude.vino.chatwork.api.{PriorityRealTime, ApiHub, PriorityNormal}
+import etude.vino.chatwork.api.{ApiHub, PriorityNormal, PriorityRealTime}
 import etude.vino.chatwork.storage.Storage
 import org.json4s.JsonDSL._
 
-case class Recorder(apiHub: ApiHub, updateClockCycleInSeconds: Int) extends Actor {
-  apiHub.enqueue(InitLoadRequest())(PriorityNormal)
+case class Recorder(apiHub: ApiHub, updateClockCycleInSeconds: Long) extends Actor {
 
-  private val scheduledExecutor: ScheduledThreadPoolExecutor = {
-    val executor = new ScheduledThreadPoolExecutor(1)
+  private val scheduledExecutor: ScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1)
 
-    executor.scheduleAtFixedRate(new Runnable {
+  def scheduleUpdate(): Unit = {
+    scheduledExecutor.schedule(new Runnable {
       def run(): Unit = {
         apiHub.enqueue(GetUpdateRequest())(PriorityRealTime)
       }
-    }, updateClockCycleInSeconds, updateClockCycleInSeconds, TimeUnit.SECONDS)
-
-    executor
+    }, updateClockCycleInSeconds, TimeUnit.SECONDS)
   }
 
   def receive: Receive = {
@@ -34,12 +31,14 @@ case class Recorder(apiHub: ApiHub, updateClockCycleInSeconds: Int) extends Acto
       r.contacts.foreach { c => update(c)}
       r.participants.foreach { p => update(p)}
       r.rooms.foreach { r => update(r)}
+      scheduleUpdate()
 
     case r: GetUpdateResponse =>
       r.roomUpdateInfo foreach {
         room =>
           apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityNormal)
       }
+      scheduleUpdate()
 
     case r: LoadChatResponse =>
       r.chatList.foreach(update)

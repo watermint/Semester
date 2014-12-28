@@ -9,39 +9,57 @@ import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 import etude.vino.chatwork.api.{ApiHub, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
-import etude.vino.chatwork.historian.operation.Traverse
+import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 
 case class Assistant(apiHub: ApiHub) extends Actor {
   def receive: Receive = {
     case t: Traverse =>
-      traverse(t.room)
+      traverse(t)
+
+    case n: NextChunk =>
+      nextChunk(n)
   }
 
   val logger = LoggerFactory.getLogger(getClass)
 
   val latestTimeGapInSeconds = 86400
 
-  def traverse(room: Room): Unit = {
+  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365))
+
+  def traverse(traverse: Traverse): Unit = {
+    val room = traverse.room
     logger.info(s"traverse: ${room.roomId} - ${room.description}")
     Historian.load(room.roomId) match {
       case None =>
         apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityLow)
-      case Some(json) =>
-        traverse(RoomChunk.fromJSON(json))
+      case Some(chunk) =>
+        traverseChunk(chunk)
     }
   }
 
-  def traverse(roomChunk: RoomChunk): Unit = {
+  def traverseChunk(roomChunk: RoomChunk): Unit = {
     val roomId = RoomId(roomChunk.roomId)
     if (roomChunk.chunks.maxBy(_.highTime).highTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
       apiHub.enqueue(LoadChatRequest(roomId))(PriorityLow)
     } else {
-      Chunk.nextChunkMessageId(roomChunk.chunks, Instant.now.minus(Duration.ofDays(30))) match {
-        case None =>
-        // NOP
+      Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
+        case None => // NOP
         case Some(msgId) =>
           apiHub.enqueue(LoadOldChatRequest(MessageId(roomId, msgId)))(PriorityLow)
       }
+    }
+  }
+
+  def nextChunk(nextChunk: NextChunk): Unit = {
+    val lastMessageId = nextChunk.lastMessageId
+    Historian.load(lastMessageId.roomId) match {
+      case None => // NOP
+      case Some(chunk) =>
+        Chunk.nextChunkMessageId(chunk.chunks, nextChunkTerm) match {
+          case None => // NOP
+          case Some(msgId) =>
+            apiHub.enqueue(LoadOldChatRequest(MessageId(lastMessageId.roomId, msgId)))(PriorityLow)
+        }
     }
   }
 }
