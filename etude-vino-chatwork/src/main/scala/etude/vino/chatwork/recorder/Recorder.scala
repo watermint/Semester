@@ -4,41 +4,41 @@ import java.net.URI
 import java.time.ZoneOffset
 import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
 
-import akka.actor.{Actor, Props}
+import akka.actor.{ActorRef, Actor, Props}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetUpdateRequest, LoadChatRequest}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
-import etude.vino.chatwork.api.{ApiHub, PriorityNormal, PriorityRealTime}
+import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityNormal, PriorityRealTime}
 import etude.vino.chatwork.storage.Storage
 import org.json4s.JsonDSL._
 
-case class Recorder(apiHub: ApiHub, updateClockCycleInSeconds: Long) extends Actor {
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.Duration
 
-  private val scheduledExecutor: ScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1)
+case class Recorder(apiHub: ActorRef, updateClockCycleInSeconds: Long) extends Actor {
 
-  def scheduleUpdate(): Unit = {
-    scheduledExecutor.schedule(new Runnable {
-      def run(): Unit = {
-        apiHub.enqueue(GetUpdateRequest())(PriorityRealTime)
-      }
-    }, updateClockCycleInSeconds, TimeUnit.SECONDS)
-  }
+  implicit val executionContext: ExecutionContext = ApiHub.system.dispatcher
+
+  case class ScheduledUpdate()
 
   def receive: Receive = {
+    case u: ScheduledUpdate =>
+      apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityRealTime)
+
     case r: InitLoadResponse =>
       r.contacts.foreach { c => update(c)}
       r.participants.foreach { p => update(p)}
       r.rooms.foreach { r => update(r)}
-      scheduleUpdate()
+      ApiHub.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
 
     case r: GetUpdateResponse =>
       r.roomUpdateInfo foreach {
         room =>
-          apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityNormal)
+          apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityNormal)
       }
-      scheduleUpdate()
+      ApiHub.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
 
     case r: LoadChatResponse =>
       r.chatList.foreach(update)
@@ -115,5 +115,5 @@ case class Recorder(apiHub: ApiHub, updateClockCycleInSeconds: Long) extends Act
 }
 
 object Recorder {
-  def props(apiHub: ApiHub, updateClockCycleInSeconds: Int): Props = Props(Recorder(apiHub, updateClockCycleInSeconds))
+  def props(apiHub: ActorRef, updateClockCycleInSeconds: Int): Props = Props(Recorder(apiHub, updateClockCycleInSeconds))
 }

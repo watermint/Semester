@@ -2,16 +2,16 @@ package etude.vino.chatwork.historian
 
 import java.time.{Duration, Instant}
 
-import akka.actor.{Actor, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
-import etude.vino.chatwork.api.{ApiHub, PriorityLow}
+import etude.pintxos.chatwork.domain.model.room.RoomId
+import etude.vino.chatwork.api.{ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 
-case class Assistant(apiHub: ApiHub) extends Actor {
+case class Assistant(apiHub: ActorRef) extends Actor {
   def receive: Receive = {
     case t: Traverse =>
       traverse(t)
@@ -31,7 +31,7 @@ case class Assistant(apiHub: ApiHub) extends Actor {
     logger.info(s"traverse: ${room.roomId} - ${room.description}")
     Historian.load(room.roomId) match {
       case None =>
-        apiHub.enqueue(LoadChatRequest(room.roomId))(PriorityLow)
+        apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityLow)
       case Some(chunk) =>
         traverseChunk(chunk)
     }
@@ -40,12 +40,12 @@ case class Assistant(apiHub: ApiHub) extends Actor {
   def traverseChunk(roomChunk: RoomChunk): Unit = {
     val roomId = RoomId(roomChunk.roomId)
     if (roomChunk.chunks.maxBy(_.highTime).highTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
-      apiHub.enqueue(LoadChatRequest(roomId))(PriorityLow)
+      apiHub ! ApiEnqueue(LoadChatRequest(roomId), PriorityLow)
     } else {
       Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
         case None => // NOP
         case Some(msgId) =>
-          apiHub.enqueue(LoadOldChatRequest(MessageId(roomId, msgId)))(PriorityLow)
+          apiHub ! ApiEnqueue(LoadOldChatRequest(MessageId(roomId, msgId)), PriorityLow)
       }
     }
   }
@@ -58,12 +58,12 @@ case class Assistant(apiHub: ApiHub) extends Actor {
         Chunk.nextChunkMessageId(chunk.chunks, nextChunkTerm) match {
           case None => // NOP
           case Some(msgId) =>
-            apiHub.enqueue(LoadOldChatRequest(MessageId(lastMessageId.roomId, msgId)))(PriorityLow)
+            apiHub ! ApiEnqueue(LoadOldChatRequest(MessageId(lastMessageId.roomId, msgId)), PriorityLow)
         }
     }
   }
 }
 
 object Assistant {
-  def props(apiHub: ApiHub): Props = Props(Assistant(apiHub))
+  def props(apiHub: ActorRef): Props = Props(Assistant(apiHub))
 }

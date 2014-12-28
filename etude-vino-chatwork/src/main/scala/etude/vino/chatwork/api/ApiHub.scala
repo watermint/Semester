@@ -1,36 +1,23 @@
 package etude.vino.chatwork.api
 
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.{ConcurrentLinkedQueue, ScheduledThreadPoolExecutor, TimeUnit}
+import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
 
-import akka.actor.ActorSystem
+import akka.actor.{Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ChatWorkResponse
 
-import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
 
-case class ApiHub(context: EntityIOContext[Future])
-  extends V0AsyncEntityIO {
+case class ApiHub(entityIOContext: EntityIOContext[Future])
+  extends V0AsyncEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
   private val clockCycleInMillis = 5000
-
-  private val scheduledExecutor: ScheduledThreadPoolExecutor = {
-    val executor = new ScheduledThreadPoolExecutor(1)
-
-    executor.scheduleAtFixedRate(new Runnable {
-      def run(): Unit = {
-        execute()
-      }
-    }, clockCycleInMillis, clockCycleInMillis, TimeUnit.MILLISECONDS)
-
-    executor
-  }
 
   private val lowToNormalRatio = 5
 
@@ -42,10 +29,23 @@ case class ApiHub(context: EntityIOContext[Future])
 
   private val lowQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
-  val system = ActorSystem("cw-apihub")
+  case class ApiTick()
 
-  def shutdown(): Unit = {
-    scheduledExecutor.shutdown()
+  implicit val executionContext: ExecutionContext = ApiHub.system.dispatcher
+
+  ApiHub.system.scheduler.schedule(
+    Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
+    Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
+    self,
+    ApiTick()
+  )
+
+  def receive: Receive = {
+    case r: ApiTick =>
+      execute()
+
+    case r: ApiEnqueue =>
+      enqueue(r.request)(r.priority)
   }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
@@ -61,10 +61,9 @@ case class ApiHub(context: EntityIOContext[Future])
     dequeue() match {
       case None => // NOP
       case Some(req) =>
-        implicit val executor = getExecutionContext(context)
-        req.execute(context) map {
+        req.execute(entityIOContext) map {
           res =>
-            system.eventStream.publish(res)
+            ApiHub.system.eventStream.publish(res)
         }
     }
   }
@@ -96,4 +95,12 @@ case class ApiHub(context: EntityIOContext[Future])
     }
   }
 }
+
+object ApiHub {
+  val system = ActorSystem("cw-apihub")
+
+  def props(context: EntityIOContext[Future]): Props = Props(ApiHub(context))
+}
+
+
 

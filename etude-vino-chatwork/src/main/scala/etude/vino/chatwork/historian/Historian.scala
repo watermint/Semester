@@ -1,18 +1,18 @@
 package etude.vino.chatwork.historian
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{ActorRef, Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room.RoomId
-import etude.vino.chatwork.api.{ApiHub, PriorityLow}
+import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 import etude.vino.chatwork.storage.Storage
 
 import scala.util.Random
 
-case class Historian(apiHub: ApiHub)
+case class Historian(apiHub: ActorRef)
   extends Actor {
 
   val logger = LoggerFactory.getLogger(getClass)
@@ -38,7 +38,7 @@ case class Historian(apiHub: ApiHub)
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
       } else {
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))
-        apiHub.enqueue(LoadOldChatRequest(r.messages.minBy(_.messageId.messageId).messageId))(PriorityLow)
+        apiHub ! ApiEnqueue(LoadOldChatRequest(r.messages.minBy(_.messageId.messageId).messageId), PriorityLow)
       }
   }
 
@@ -84,7 +84,7 @@ object Historian {
 
   val typeName = "room-chunk"
 
-  def props(apiHub: ApiHub): Props = Props(Historian(apiHub))
+  def props(apiHub: ActorRef): Props = Props(Historian(apiHub))
 
   val system = ActorSystem("cw-historian")
 }
