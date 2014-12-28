@@ -1,7 +1,7 @@
 package etude.vino.chatwork.historian.model
 
-import org.json4s._
 import org.json4s.JsonDSL._
+import org.json4s._
 
 case class RoomChunk(roomId: BigInt,
                      chunks: Seq[Chunk])

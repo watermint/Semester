@@ -9,8 +9,8 @@ import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{ExecutionContext, Future}
 
 case class ApiHub(entityIOContext: EntityIOContext[Future])
   extends V0AsyncEntityIO with Actor {
