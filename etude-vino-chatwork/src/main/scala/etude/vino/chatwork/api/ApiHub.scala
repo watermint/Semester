@@ -61,6 +61,7 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
     dequeue() match {
       case None => // NOP
       case Some(req) =>
+        logger.info(s"Execute: $req")
         req.execute(entityIOContext) map {
           res =>
             ApiHub.system.eventStream.publish(res)
@@ -70,7 +71,7 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
 
   protected def dequeue(): Option[ChatWorkRequest] = {
     logger.info(s"Queue size: Realtime: ${realTimeQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}")
-    realTimeQueue.peek() match {
+    realTimeQueue.poll() match {
       case r: ChatWorkRequest => Some(r)
       case null =>
         (normalQueue.size(), lowQueue.size()) match {
