@@ -12,8 +12,6 @@ import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 import etude.vino.chatwork.storage.Storage
 
-import scala.util.Random
-
 case class Historian(apiHub: ActorRef)
   extends Actor {
 

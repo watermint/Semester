@@ -2,43 +2,33 @@ package etude.vino.chatwork.recorder
 
 import java.net.URI
 import java.time.ZoneOffset
-import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, ActorRef, Props}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetUpdateRequest, LoadChatRequest}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
-import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityNormal, PriorityRealTime}
+import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityNormal}
 import etude.vino.chatwork.storage.Storage
 import org.json4s.JsonDSL._
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration.Duration
 
-case class Recorder(apiHub: ActorRef, updateClockCycleInSeconds: Long) extends Actor {
-
-  implicit val executionContext: ExecutionContext = ApiHub.system.dispatcher
-
-  case class ScheduledUpdate()
+case class Recorder(apiHub: ActorRef) extends Actor {
 
   def receive: Receive = {
-    case u: ScheduledUpdate =>
-      apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityRealTime)
 
     case r: InitLoadResponse =>
       r.contacts.foreach { c => update(c)}
       r.participants.foreach { p => update(p)}
       r.rooms.foreach { r => update(r)}
-      ApiHub.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
 
     case r: GetUpdateResponse =>
       r.roomUpdateInfo foreach {
         room =>
           apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityNormal)
       }
-      ApiHub.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
 
     case r: LoadChatResponse =>
       r.chatList.foreach(update)
@@ -115,5 +105,5 @@ case class Recorder(apiHub: ActorRef, updateClockCycleInSeconds: Long) extends A
 }
 
 object Recorder {
-  def props(apiHub: ActorRef, updateClockCycleInSeconds: Int): Props = Props(Recorder(apiHub, updateClockCycleInSeconds))
+  def props(apiHub: ActorRef): Props = Props(Recorder(apiHub))
 }

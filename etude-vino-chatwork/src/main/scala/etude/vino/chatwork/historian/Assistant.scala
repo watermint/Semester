@@ -22,13 +22,12 @@ case class Assistant(apiHub: ActorRef) extends Actor {
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  val latestTimeGapInSeconds = 86400
+  val latestTimeGapInSeconds = 600
 
   val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365 * 2))
 
   def traverse(traverse: Traverse): Unit = {
     val room = traverse.room
-    logger.info(s"traverse: ${room.roomId} - ${room.description}")
     Historian.load(room.roomId) match {
       case None =>
         apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityLower)

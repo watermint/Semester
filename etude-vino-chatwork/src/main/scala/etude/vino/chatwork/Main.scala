@@ -9,6 +9,7 @@ import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityNormal}
 import etude.vino.chatwork.historian.Historian
 import etude.vino.chatwork.recorder.Recorder
 import etude.vino.chatwork.storage.Storage
+import etude.vino.chatwork.updater.Updater
 
 import scala.concurrent.ExecutionContext
 
@@ -27,8 +28,9 @@ object Main {
 
     val apiHub = ApiHub.system.actorOf(ApiHub.props(context))
 
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Recorder.props(apiHub, 60)), classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Recorder.props(apiHub)), classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Historian.props(apiHub)), classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Updater.props(apiHub, 60)), classOf[ChatWorkResponse])
 
     apiHub ! ApiEnqueue(InitLoadRequest(), PriorityNormal)
   }
