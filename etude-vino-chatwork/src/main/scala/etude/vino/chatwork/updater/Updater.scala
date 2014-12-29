@@ -2,7 +2,7 @@ package etude.vino.chatwork.updater
 
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{Props, Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse}
 import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityRealTime}

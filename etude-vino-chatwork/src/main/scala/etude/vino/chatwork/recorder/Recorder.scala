@@ -9,16 +9,13 @@ import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateRe
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
-import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityNormal}
+import etude.vino.chatwork.api.{ApiEnqueue, PriorityNormal}
 import etude.vino.chatwork.storage.Storage
 import org.json4s.JsonDSL._
-
-import scala.concurrent.ExecutionContext
 
 case class Recorder(apiHub: ActorRef) extends Actor {
 
   def receive: Receive = {
-
     case r: InitLoadResponse =>
       r.contacts.foreach { c => update(c)}
       r.participants.foreach { p => update(p)}

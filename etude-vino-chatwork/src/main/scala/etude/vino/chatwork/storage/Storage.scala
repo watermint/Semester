@@ -74,10 +74,21 @@ object Storage {
         e.getCause match {
           case _: IndexMissingException =>
             None
-          case _ =>
-//            throw e
-            None
         }
     }
+  }
+
+  def delete(indexName: String,
+              typeName: String,
+              idName: String): Long = {
+
+    val response = client.prepareDelete()
+      .setIndex(indexName)
+      .setType(typeName)
+      .setId(idName)
+      .execute()
+      .get()
+
+    response.getVersion
   }
 }

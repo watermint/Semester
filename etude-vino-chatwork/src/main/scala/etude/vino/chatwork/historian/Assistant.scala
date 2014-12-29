@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.RoomId
-import etude.vino.chatwork.api.{PriorityLower, ApiEnqueue, PriorityLow}
+import etude.vino.chatwork.api.{ApiEnqueue, PriorityLow, PriorityLower}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 
