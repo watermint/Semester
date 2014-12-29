@@ -27,9 +27,9 @@ case class MarkAsRead(apiHub: ActorRef)
 }
 
 object MarkAsRead {
-  val indexName = "cw-mark-as-read"
+  val indexName = "cw-markasread"
 
-  val typeName = "mark-as-read"
+  val typeName = "markasread"
 
   def props(apiHub: ActorRef): Props = Props(MarkAsRead(apiHub))
 
