@@ -18,7 +18,7 @@ object RoomChunk extends Parser[RoomChunk] {
     (for {
       JObject(o) <- json
       JField("roomId", JInt(roomId)) <- o
-      JField("chunks", JObject(chunks)) <- o
+      JField("chunks", JArray(chunks)) <- o
     } yield {
       RoomChunk(
         roomId,

@@ -24,7 +24,7 @@ case class Assistant(apiHub: ActorRef) extends Actor {
 
   val latestTimeGapInSeconds = 86400
 
-  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365))
+  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365 * 2))
 
   def traverse(traverse: Traverse): Unit = {
     val room = traverse.room

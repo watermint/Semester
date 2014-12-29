@@ -27,8 +27,8 @@ object Main {
 
     val apiHub = ApiHub.system.actorOf(ApiHub.props(context))
 
+    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Recorder.props(apiHub, 60)), classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Historian.props(apiHub)), classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Recorder.props(apiHub, 300)), classOf[ChatWorkResponse])
 
     apiHub ! ApiEnqueue(InitLoadRequest(), PriorityNormal)
   }

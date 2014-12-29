@@ -35,6 +35,7 @@ case class Historian(apiHub: ActorRef)
 
     case r: LoadOldChatResponse =>
       if (r.messages.size == 0) {
+        logger.info(s"Loading chat for room ${r.lastMessage.roomId} reached EPOCH.")
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
       } else {
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))
@@ -66,13 +67,10 @@ object Historian {
 
   def load(roomId: RoomId): Option[RoomChunk] = {
     Storage.load(indexName, typeName, roomId.value.toString()) match {
-      case None => None
+      case None =>
+        None
       case Some(json) =>
-        try {
-          Some(RoomChunk.fromJSON(json))
-        } catch {
-          case _: NoSuchElementException => None
-        }
+        Some(RoomChunk.fromJSON(json))
     }
   }
 
