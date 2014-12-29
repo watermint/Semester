@@ -1,10 +1,12 @@
 package etude.vino.chatwork.historian
 
+import java.time.Instant
+
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
-import etude.pintxos.chatwork.domain.model.room.RoomId
+import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 import etude.vino.chatwork.api.{ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
@@ -21,9 +23,10 @@ case class Historian(apiHub: ActorRef)
 
   def receive: Receive = {
     case r: InitLoadResponse =>
-      Random.shuffle(r.rooms).foreach {
-        r =>
-          assistant ! Traverse(r)
+      val touches = touchTimes(r.rooms)
+      touches.sortBy(_.touchTime).foreach {
+        t =>
+          assistant ! Traverse(t.room)
       }
 
     case r: LoadChatResponse =>
@@ -41,6 +44,20 @@ case class Historian(apiHub: ActorRef)
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))
         apiHub ! ApiEnqueue(LoadOldChatRequest(r.messages.minBy(_.messageId.messageId).messageId), PriorityLow)
       }
+  }
+
+  case class TouchTime(room: Room, touchTime: Instant)
+
+  def touchTimes(rooms: Seq[Room]): Seq[TouchTime] = {
+    rooms.map {
+      room =>
+        Historian.load(room.roomId) match {
+          case Some(chunk) =>
+            TouchTime(room, chunk.chunks.maxBy(_.touchTime).touchTime)
+          case None =>
+            TouchTime(room, Instant.EPOCH)
+        }
+    }
   }
 
   def updateChunk(roomId: RoomId, chunk: Chunk): Unit = {

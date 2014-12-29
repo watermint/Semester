@@ -12,6 +12,7 @@ class ChunkSpec extends Specification {
     Chunk(
       Instant.EPOCH,
       Instant.EPOCH,
+      Instant.EPOCH,
       low,
       high
     )
@@ -69,8 +70,8 @@ class ChunkSpec extends Specification {
   "Next chunk messageId" should {
     "provide message id from last chunk" in {
       val t = Instant.now
-      val a = Chunk(t.minusSeconds(380), t.minusSeconds(300), -1, 10)
-      val b = Chunk(t.minusSeconds(280), t.minusSeconds(200), 14, 15)
+      val a = Chunk(t.minusSeconds(380), t.minusSeconds(300), t.minusSeconds(300), -1, 10)
+      val b = Chunk(t.minusSeconds(280), t.minusSeconds(200), t.minusSeconds(200), 14, 15)
 
       Chunk.nextChunkMessageId(Seq(b), t.minusSeconds(290)) must beSome(14)
       Chunk.nextChunkMessageId(Seq(a, b), t.minusSeconds(290)) must beSome(14)
@@ -78,8 +79,8 @@ class ChunkSpec extends Specification {
 
     "no message id due to old" in {
       val t = Instant.now
-      val a = Chunk(t.minusSeconds(380), t.minusSeconds(300), -1, 10)
-      val b = Chunk(t.minusSeconds(280), t.minusSeconds(200), 14, 15)
+      val a = Chunk(t.minusSeconds(380), t.minusSeconds(300), t.minusSeconds(300), -1, 10)
+      val b = Chunk(t.minusSeconds(280), t.minusSeconds(200), t.minusSeconds(200), 14, 15)
 
       Chunk.nextChunkMessageId(Seq(b), t.minusSeconds(100)) must beNone
       Chunk.nextChunkMessageId(Seq(a, b), t.minusSeconds(100)) must beNone
@@ -87,7 +88,7 @@ class ChunkSpec extends Specification {
 
     "no message id due to epoch" in {
       val t = Instant.now
-      val a = Chunk(t.minusSeconds(380), t.minusSeconds(300), -1, 10)
+      val a = Chunk(t.minusSeconds(380), t.minusSeconds(300), t.minusSeconds(300), -1, 10)
 
       Chunk.nextChunkMessageId(Seq(a), t.minusSeconds(400)) must beNone
     }

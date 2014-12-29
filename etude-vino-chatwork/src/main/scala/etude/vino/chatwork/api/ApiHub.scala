@@ -29,6 +29,8 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
 
   private val lowQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
+  private val lowerQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
+
   case class ApiTick()
 
   implicit val executionContext: ExecutionContext = ApiHub.system.dispatcher
@@ -54,6 +56,7 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
       case PriorityRealTime => realTimeQueue.add(request)
       case PriorityNormal => normalQueue.add(request)
       case PriorityLow => lowQueue.add(request)
+      case PriorityLower => lowerQueue.add(request)
     }
   }
 
@@ -70,29 +73,40 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
   }
 
   protected def dequeue(): Option[ChatWorkRequest] = {
-    logger.info(s"Queue size: Realtime: ${realTimeQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}")
+    logger.info(s"Queue size: Realtime: ${realTimeQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}, Lower: ${lowerQueue.size()}")
     realTimeQueue.poll() match {
       case r: ChatWorkRequest => Some(r)
-      case null =>
-        (normalQueue.size(), lowQueue.size()) match {
-          case (0, 0) =>
-            lowToNormalCount.set(0)
-            None
-          case (0, l) =>
-            lowToNormalCount.set(0)
-            Some(lowQueue.poll())
-          case (n, 0) =>
-            lowToNormalCount.set(0)
-            Some(normalQueue.poll())
-          case (n, l) =>
-            if (lowToNormalCount.get > lowToNormalRatio) {
-              lowToNormalCount.set(0)
-              Some(lowQueue.poll())
-            } else {
-              lowToNormalCount.incrementAndGet()
-              Some(normalQueue.poll())
-            }
+      case null => dequeueNormal()
+    }
+  }
+
+  private def dequeueNormal(): Option[ChatWorkRequest] = {
+    (normalQueue.size(), lowQueue.size()) match {
+      case (0, 0) =>
+        lowToNormalCount.set(0)
+        dequeueLower()
+      case (0, l) =>
+        lowToNormalCount.set(0)
+        Some(lowQueue.poll())
+      case (n, 0) =>
+        lowToNormalCount.set(0)
+        Some(normalQueue.poll())
+      case (n, l) =>
+        if (lowToNormalCount.get > lowToNormalRatio) {
+          lowToNormalCount.set(0)
+          Some(lowQueue.poll())
+        } else {
+          lowToNormalCount.incrementAndGet()
+          Some(normalQueue.poll())
         }
+    }
+  }
+
+  private def dequeueLower(): Option[ChatWorkRequest] = {
+    if (lowerQueue.size() > 0) {
+      Some(lowerQueue.poll())
+    } else {
+      None
     }
   }
 }

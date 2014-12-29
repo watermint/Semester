@@ -10,11 +10,13 @@ import scala.collection.mutable.ArrayBuffer
 
 case class Chunk(lowTime: Instant,
                  highTime: Instant,
+                 touchTime: Instant,
                  low: BigInt,
                  high: BigInt) extends Entity {
   def toJSON: JValue = {
     ("lowTime" -> lowTime.toString) ~
       ("highTime" -> highTime.toString) ~
+      ("touch" -> touchTime.toString) ~
       ("low" -> low) ~
       ("high" -> high)
   }
@@ -36,6 +38,7 @@ object Chunk extends Parser[Chunk] {
         Chunk(
           a.lowTime,
           b.highTime,
+          Seq(a.touchTime, b.touchTime).max,
           a.low,
           b.high
         )
@@ -45,6 +48,7 @@ object Chunk extends Parser[Chunk] {
         Chunk(
           a.lowTime,
           b.highTime,
+          Seq(a.touchTime, b.touchTime).max,
           a.low,
           b.high
         )
@@ -85,12 +89,14 @@ object Chunk extends Parser[Chunk] {
       JObject(o) <- json
       JField("lowTime", JString(lowTime)) <- o
       JField("highTime", JString(highTime)) <- o
+      JField("touch", JString(touchTime)) <- o
       JField("low", JInt(low)) <- o
       JField("high", JInt(high)) <- o
     } yield {
       Chunk(
         Instant.parse(lowTime),
         Instant.parse(highTime),
+        Instant.parse(touchTime),
         low,
         high
       )
@@ -105,6 +111,7 @@ object Chunk extends Parser[Chunk] {
     Chunk(
       Instant.EPOCH,
       Instant.EPOCH,
+      Instant.now,
       -1,
       lastMessage.messageId
     )
@@ -118,6 +125,7 @@ object Chunk extends Parser[Chunk] {
     Chunk(
       first.ctime,
       last.ctime,
+      Instant.now,
       first.messageId.messageId,
       last.messageId.messageId
     )

@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.RoomId
-import etude.vino.chatwork.api.{ApiEnqueue, PriorityLow}
+import etude.vino.chatwork.api.{PriorityLower, ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 
@@ -31,7 +31,7 @@ case class Assistant(apiHub: ActorRef) extends Actor {
     logger.info(s"traverse: ${room.roomId} - ${room.description}")
     Historian.load(room.roomId) match {
       case None =>
-        apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityLow)
+        apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityLower)
       case Some(chunk) =>
         traverseChunk(chunk)
     }
@@ -39,7 +39,7 @@ case class Assistant(apiHub: ActorRef) extends Actor {
 
   def traverseChunk(roomChunk: RoomChunk): Unit = {
     val roomId = RoomId(roomChunk.roomId)
-    if (roomChunk.chunks.maxBy(_.highTime).highTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
+    if (roomChunk.chunks.maxBy(_.touchTime).touchTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
       apiHub ! ApiEnqueue(LoadChatRequest(roomId), PriorityLow)
     } else {
       Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
