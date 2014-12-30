@@ -17,7 +17,7 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private val clockCycleInMillis = 10000
+  private val clockCycleInMillis = 1000
 
   private val lowToNormalRatio = 5
 

@@ -9,7 +9,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.impl.client.{CloseableHttpClient, HttpClients, LaxRedirectStrategy}
+import org.apache.http.impl.client.{DefaultHttpRequestRetryHandler, CloseableHttpClient, HttpClients, LaxRedirectStrategy}
 import org.apache.http.message.BasicNameValuePair
 
 import scala.collection.JavaConverters._
@@ -41,6 +41,7 @@ case class Client(context: ClientContext = ClientContext()) {
     val httpClient: CloseableHttpClient = HttpClients.custom()
       .setDefaultCookieStore(context.cookieStore)
       .setRedirectStrategy(new LaxRedirectStrategy)
+      .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
       .build()
 
     try {

@@ -5,7 +5,7 @@ import java.time.ZoneOffset
 
 import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadChatRequest
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{LoadOldChatResponse, GetUpdateResponse, InitLoadResponse, LoadChatResponse}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
@@ -29,6 +29,9 @@ case class Recorder(apiHub: ActorRef) extends Actor {
 
     case r: LoadChatResponse =>
       r.chatList.foreach(update)
+
+    case r: LoadOldChatResponse =>
+      r.messages.foreach(update)
   }
 
   def update(message: Message): Unit = {
