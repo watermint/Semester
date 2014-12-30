@@ -1,7 +1,9 @@
 package etude.vino.chatwork
 
+import java.time.Instant
 import java.util.concurrent.{ExecutorService, Executors}
 
+import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.InitLoadRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ChatWorkResponse
@@ -15,16 +17,25 @@ import etude.vino.chatwork.updater.Updater
 import scala.concurrent.ExecutionContext
 
 object Main {
+  val logger = LoggerFactory.getLogger(getClass)
+
   def main(args: Array[String]) {
     val executorsPool: ExecutorService = Executors.newCachedThreadPool()
     implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
     implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig()
 
     try {
-      Storage.client.admin().indices().prepareExists().setIndices("cw-vino-settings").execute().get()
+      val ver = Storage.client.prepareIndex()
+        .setIndex("cw-vino")
+        .setType("main")
+        .setId("main")
+        .setSource(s"""{"@timestamp":"${Instant.now.toString}"}""")
+        .get()
+        .getVersion
+
+      logger.info(s"etude-vino-chatwork: launch data version: $ver")
     } catch {
-      case _: Exception =>
-        // ignore
+      case _: Exception => // ignore
     }
 
     val apiHub = ApiHub.system.actorOf(ApiHub.props(context))

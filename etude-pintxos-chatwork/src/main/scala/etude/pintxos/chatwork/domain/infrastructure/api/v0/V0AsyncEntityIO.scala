@@ -91,13 +91,13 @@ trait V0AsyncEntityIO
 
   protected def beginLogin(context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
-      v0 => v0.loginMutex.acquire()
+      v0 => v0.loginMutex.lock()
     }
   }
 
   protected def endLogin(context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
-      v0 => v0.loginMutex.release()
+      v0 => v0.loginMutex.unlock()
     }
   }
 
@@ -139,55 +139,11 @@ trait V0AsyncEntityIO
     }
   }
 
-  protected def addSubscriber(subscriber: V0UpdateSubscriber, context: EntityIOContext[Future]): Unit = {
+  protected def resetContextSession(context: EntityIOContext[Future]): Unit = {
+    clearToken(context)
     withV0Context(context) {
       v0 =>
-        v0.updateSubscribers += subscriber
-    }
-  }
-
-  protected def removeSubscriber(subscriber: V0UpdateSubscriber, context: EntityIOContext[Future]): Unit = {
-    withV0Context(context) {
-      v0 =>
-        v0.updateSubscribers -= subscriber
-    }
-  }
-
-  protected def startUpdateScheduler(context: EntityIOContext[Future]): Unit = {
-    withV0Context(context) {
-      v0 =>
-        v0.updateSchedulerMutex.lock()
-        try {
-          if (v0.updateHandler.isSet) {
-            return
-          }
-
-          v0.updateHandler.put(
-            v0.updateScheduler.scheduleAtFixedRate(
-              new V0AsyncUpdateHandler(v0),
-              updateDelayInMills,
-              updateDelayInMills,
-              TimeUnit.MILLISECONDS
-            )
-          )
-        } finally {
-          v0.updateSchedulerMutex.unlock()
-        }
-    }
-  }
-
-  protected def shutdownUpdateScheduler(context: EntityIOContext[Future]): Unit = {
-    withV0Context(context) {
-      v0 =>
-        v0.updateSchedulerMutex.lock()
-        try {
-          if (v0.updateHandler.isSet) {
-            v0.updateHandler.get.cancel(true)
-            v0.updateHandler.take(contextAccessWaitInMillis)
-          }
-        } finally {
-          v0.updateSchedulerMutex.unlock()
-        }
+        v0.client = Client()
     }
   }
 }

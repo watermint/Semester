@@ -7,7 +7,6 @@ import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor}
 
 import etude.epice.http.Client
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0UpdateSubscriber
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{Lock, SyncVar}
@@ -22,13 +21,13 @@ trait EntityIOContextOnV0Api[M[+A]]
 
   val password: String
 
-  val client: Client = Client()
+  var client: Client = Client()
 
   val accessToken: SyncVar[String] = new SyncVar[String]
 
   val myId: SyncVar[String] = new SyncVar[String]
 
-  val loginMutex: Lock = new Lock
+  val loginMutex: ReentrantLock = new ReentrantLock
 
   val loginTimestamp: SyncVar[Instant] = new SyncVar[Instant]
 
@@ -38,12 +37,4 @@ trait EntityIOContextOnV0Api[M[+A]]
    * Update tracking id.
    */
   val lastId: AtomicReference[String] = new AtomicReference[String]
-
-  val updateSubscribers: ArrayBuffer[V0UpdateSubscriber] = new ArrayBuffer[V0UpdateSubscriber]
-
-  val updateHandler: SyncVar[ScheduledFuture[_]] = new SyncVar[ScheduledFuture[_]]
-
-  val updateSchedulerMutex: ReentrantLock = new ReentrantLock
-
-  lazy val updateScheduler: ScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1)
 }

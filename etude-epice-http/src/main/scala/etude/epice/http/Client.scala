@@ -9,7 +9,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.impl.client.{DefaultHttpRequestRetryHandler, CloseableHttpClient, HttpClients, LaxRedirectStrategy}
+import org.apache.http.impl.client.{CloseableHttpClient, DefaultHttpRequestRetryHandler, HttpClients, LaxRedirectStrategy}
 import org.apache.http.message.BasicNameValuePair
 
 import scala.collection.JavaConverters._
@@ -18,6 +18,16 @@ import scala.util.{Success, Try}
 
 case class Client(context: ClientContext = ClientContext()) {
   val logger = LoggerFactory.getLogger(getClass)
+
+
+  private def createClient(): CloseableHttpClient = {
+    HttpClients.custom()
+      .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36")
+      .setDefaultCookieStore(context.cookieStore)
+      .setRedirectStrategy(new LaxRedirectStrategy)
+      .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
+      .build()
+  }
 
   def entity(formData: Map[String, String]): Option[HttpEntity] = {
     if (formData.size < 1) {
@@ -36,13 +46,7 @@ case class Client(context: ClientContext = ClientContext()) {
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
-    logger.debug(req.toString)
-
-    val httpClient: CloseableHttpClient = HttpClients.custom()
-      .setDefaultCookieStore(context.cookieStore)
-      .setRedirectStrategy(new LaxRedirectStrategy)
-      .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
-      .build()
+    val httpClient: CloseableHttpClient = createClient()
 
     try {
       Success(

@@ -39,7 +39,7 @@ case class Assistant(apiHub: ActorRef) extends Actor {
   def traverseChunk(roomChunk: RoomChunk): Unit = {
     val roomId = RoomId(roomChunk.roomId)
     if (roomChunk.chunks.maxBy(_.touchTime).touchTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
-      apiHub ! ApiEnqueue(LoadChatRequest(roomId), PriorityLow)
+      apiHub ! ApiEnqueue(LoadChatRequest(roomId), PriorityLower)
     } else {
       Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
         case None => // NOP

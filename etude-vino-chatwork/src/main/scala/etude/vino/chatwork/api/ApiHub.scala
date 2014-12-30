@@ -1,5 +1,6 @@
 package etude.vino.chatwork.api
 
+import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
 
@@ -7,8 +8,9 @@ import akka.actor.{Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{InitLoadRequest, ChatWorkRequest}
 
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -17,7 +19,7 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private val clockCycleInMillis = 1000
+  private val clockCycleInMillis = 10000
 
   private val lowToNormalRatio = 5
 
@@ -34,6 +36,14 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
   case class ApiTick()
 
   implicit val executionContext: ExecutionContext = ApiHub.system.dispatcher
+
+  private val errorQueue = ArrayBuffer[Exception]()
+
+  private val errorThreshold = 3
+
+  private var errorWaitLockTime = Instant.EPOCH
+
+  private val waitTimeOnErrorInSeconds = 60
 
   ApiHub.system.scheduler.schedule(
     Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
@@ -61,14 +71,30 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
   }
 
   protected def execute(): Unit = {
-    dequeue() match {
-      case None => // NOP
-      case Some(req) =>
-        logger.info(s"Execute: $req")
-        req.execute(entityIOContext) map {
-          res =>
-            ApiHub.system.eventStream.publish(res)
-        }
+    if (errorWaitLockTime.isBefore(Instant.now())) {
+      dequeue() match {
+        case None => // NOP
+        case Some(req) =>
+          logger.info(s"Execute: $req")
+          req.execute(entityIOContext) map {
+            res =>
+              errorQueue.clear()
+              ApiHub.system.eventStream.publish(res)
+          } recover {
+            case e: Exception =>
+              onExecutionErrors(req, e)
+          }
+      }
+    }
+  }
+
+  protected def onExecutionErrors(request: ChatWorkRequest, exception: Exception): Unit = {
+    errorQueue += exception
+    logger.error(s"Failed to execute request: $request", exception)
+    if (errorQueue.size > errorThreshold) {
+      resetContextSession(entityIOContext)
+      errorWaitLockTime = Instant.now().plusSeconds(waitTimeOnErrorInSeconds)
+      logger.error(s"Execution shutdown due to continuous errors until $errorWaitLockTime, All contexts are cleared")
     }
   }
 
