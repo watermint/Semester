@@ -20,6 +20,13 @@ case class Recorder(apiHub: ActorRef) extends Actor {
       r.contacts.foreach { c => update(c)}
       r.participants.foreach { p => update(p)}
       r.rooms.foreach { r => update(r)}
+      r.rooms
+        .filter(_.attributes.isDefined)
+        .filter(_.attributes.get.unreadCount > 0)
+        .foreach {
+        room =>
+          apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), PriorityNormal)
+      }
 
     case r: GetUpdateResponse =>
       r.roomUpdateInfo foreach {

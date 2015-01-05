@@ -1,12 +1,9 @@
 package etude.pintxos.chatwork.domain.infrastructure.api.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi._
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ReadRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ReadResponse
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncEntityIO, V0AsyncApi}
-import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s._
 
 import scala.concurrent.Future
@@ -18,7 +15,7 @@ object Read
     val results: List[ReadResponse] = for {
       JObject(j) <- json
       JField("read_num", JInt(readNum)) <- j
-      JField("mention_Num", JInt(mentionNum)) <- j
+      JField("mention_num", JInt(mentionNum)) <- j
     } yield {
       ReadResponse(json, readNum, mentionNum)
     }
@@ -32,7 +29,7 @@ object Read
       "read",
       Map(
         "room_id" -> request.roomId.value.toString(),
-        "last_chat_id" -> request.messageId.toString
+        "last_chat_id" -> request.messageId.messageId.toString()
       )
     ) map {
       json =>

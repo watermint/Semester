@@ -21,10 +21,6 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
 
   private val clockCycleInMillis = 10000
 
-  private val lowToNormalRatio = 5
-
-  private val lowToNormalCount = new AtomicInteger()
-
   private val realTimeQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
   private val normalQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
@@ -107,24 +103,18 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
   }
 
   private def dequeueNormal(): Option[ChatWorkRequest] = {
-    (normalQueue.size(), lowQueue.size()) match {
-      case (0, 0) =>
-        lowToNormalCount.set(0)
-        dequeueLower()
-      case (0, l) =>
-        lowToNormalCount.set(0)
-        Some(lowQueue.poll())
-      case (n, 0) =>
-        lowToNormalCount.set(0)
-        Some(normalQueue.poll())
-      case (n, l) =>
-        if (lowToNormalCount.get > lowToNormalRatio) {
-          lowToNormalCount.set(0)
-          Some(lowQueue.poll())
-        } else {
-          lowToNormalCount.incrementAndGet()
-          Some(normalQueue.poll())
-        }
+    if (normalQueue.size() > 0) {
+      Some(normalQueue.poll())
+    } else {
+      dequeueLow()
+    }
+  }
+
+  private def dequeueLow(): Option[ChatWorkRequest] = {
+    if (lowQueue.size() > 0) {
+      Some(lowQueue.poll())
+    } else {
+      dequeueLower()
     }
   }
 
