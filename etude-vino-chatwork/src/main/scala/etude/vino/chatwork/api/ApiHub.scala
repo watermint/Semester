@@ -59,7 +59,9 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
     logger.info(s"Enqueue request: $request with priority $priority")
     priority match {
-      case PriorityRealTime => realTimeQueue.add(request)
+      case PriorityRealTime =>
+        realTimeQueue.add(request)
+        self ! ApiTick()
       case PriorityNormal => normalQueue.add(request)
       case PriorityLow => lowQueue.add(request)
       case PriorityLower => lowerQueue.add(request)

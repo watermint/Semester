@@ -19,10 +19,11 @@ import scala.util.{Success, Try}
 case class Client(context: ClientContext = ClientContext()) {
   val logger = LoggerFactory.getLogger(getClass)
 
+  var currentClient = createClient()
 
   private def createClient(): CloseableHttpClient = {
     HttpClients.custom()
-      .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36")
+      .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:10.0) Gecko/20100101 Firefox/10.0")
       .setDefaultCookieStore(context.cookieStore)
       .setRedirectStrategy(new LaxRedirectStrategy)
       .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
@@ -46,17 +47,18 @@ case class Client(context: ClientContext = ClientContext()) {
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
-    val httpClient: CloseableHttpClient = createClient()
-
     try {
       Success(
         Response(
-          httpClient.execute(req, context.httpClientContext),
+          currentClient.execute(req, context.httpClientContext),
           context.httpClientContext
         )
       )
-    } finally {
-      httpClient.close()
+    } catch {
+      case e: Exception =>
+        currentClient.close()
+        currentClient = createClient()
+        throw e
     }
   }
 

@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
-import etude.vino.chatwork.api.{ApiEnqueue, PriorityLow}
+import etude.vino.chatwork.api.{PriorityLower, ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 import etude.vino.chatwork.storage.Storage
@@ -18,6 +18,8 @@ case class Historian(apiHub: ActorRef)
   val logger = LoggerFactory.getLogger(getClass)
 
   val assistant = Historian.system.actorOf(Assistant.props(apiHub))
+
+  val priorityLoadingDurationInSeconds = 86400 * 2
 
   def receive: Receive = {
     case r: InitLoadResponse =>
@@ -40,7 +42,13 @@ case class Historian(apiHub: ActorRef)
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
       } else {
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))
-        apiHub ! ApiEnqueue(LoadOldChatRequest(r.messages.minBy(_.messageId.messageId).messageId), PriorityLow)
+        val lwm = r.messages.minBy(_.messageId.messageId)
+        val priority = if (lwm.ctime.isBefore(Instant.now.minusSeconds(priorityLoadingDurationInSeconds))) {
+          PriorityLower
+        } else {
+          PriorityLow
+        }
+        apiHub ! ApiEnqueue(LoadOldChatRequest(lwm.messageId), priority)
       }
   }
 

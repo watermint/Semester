@@ -42,7 +42,7 @@ object Main {
 
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Recorder.props(apiHub)), classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Historian.props(apiHub)), classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Updater.props(apiHub, 60)), classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Updater.props(apiHub, 10)), classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(MarkAsRead.props(apiHub)), classOf[ChatWorkResponse])
 
     apiHub ! ApiEnqueue(InitLoadRequest(), PriorityNormal)

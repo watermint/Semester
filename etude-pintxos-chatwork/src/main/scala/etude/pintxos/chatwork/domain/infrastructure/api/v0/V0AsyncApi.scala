@@ -15,7 +15,7 @@ import scala.util.{Failure, Success, Try}
 object V0AsyncApi
   extends V0AsyncEntityIO {
 
-  val loginFailureThreshold = 3
+  val loginFailureThreshold = 2
   val loginDuration = 3
 
   def isKddiChatwork(implicit context: EntityIOContext[Future]): Boolean = {
@@ -57,9 +57,9 @@ object V0AsyncApi
           setMyId(token.myId, context)
           true
       } recover {
-        case _ =>
+        case e: Exception =>
           getLoginFailure(context).incrementAndGet()
-          throw new IllegalStateException("Login failed")
+          throw new IllegalStateException("Login failed", e)
       }
     } finally {
       setLoginTime(Instant.now, context)
