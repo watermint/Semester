@@ -20,7 +20,7 @@ object Main {
   val logger = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]) {
-    val executorsPool: ExecutorService = Executors.newCachedThreadPool()
+    val executorsPool: ExecutorService = Executors.newSingleThreadExecutor()
     implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
     implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig()
 

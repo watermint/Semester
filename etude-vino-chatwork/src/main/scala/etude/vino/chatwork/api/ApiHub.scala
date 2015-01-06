@@ -1,14 +1,13 @@
 package etude.vino.chatwork.api
 
 import java.time.Instant
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
 
 import akka.actor.{Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{InitLoadRequest, ChatWorkRequest}
+import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration.Duration
@@ -31,7 +30,7 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
 
   case class ApiTick()
 
-  implicit val executionContext: ExecutionContext = ApiHub.system.dispatcher
+  implicit val executionContext: ExecutionContext = getExecutionContext(entityIOContext)
 
   private val errorQueue = ArrayBuffer[Exception]()
 

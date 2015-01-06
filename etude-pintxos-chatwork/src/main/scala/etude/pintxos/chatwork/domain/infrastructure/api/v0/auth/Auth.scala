@@ -34,8 +34,7 @@ trait Auth {
 
 object Auth extends V0AsyncEntityIO {
   val providers = Seq(
-    new Basic,
-    new Exaggerated
+    new Basic
   )
 
   def loginUri(implicit context: EntityIOContext[Future]): URI = {
@@ -43,10 +42,8 @@ object Auth extends V0AsyncEntityIO {
     getOrganizationId(context) match {
       case Some(s) =>
         baseUri
-          .withPath("/login.php")
-          .withQuery("s" -> s)
+          .withPath(s"/s/$s")
           .withQuery("lang" -> "en")
-          .withQuery("package" -> "chatwork")
       case _ =>
         baseUri
           .withPath("/login.php")

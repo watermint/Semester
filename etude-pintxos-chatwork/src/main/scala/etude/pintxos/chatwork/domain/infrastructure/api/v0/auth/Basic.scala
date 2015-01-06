@@ -6,7 +6,7 @@ import scala.util.Try
 
 class Basic extends Auth {
   def acceptable(context: AuthContext): Boolean = {
-    context.redirectedUri.isEmpty
+    true
   }
 
   def acquireToken(context: AuthContext): Try[AuthToken] = {
