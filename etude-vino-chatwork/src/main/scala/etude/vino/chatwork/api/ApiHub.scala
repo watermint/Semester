@@ -10,15 +10,15 @@ import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ChatWorkRequest
 
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.duration.Duration
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 case class ApiHub(entityIOContext: EntityIOContext[Future])
   extends V0AsyncEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private val clockCycleInMillis = 10000
+  private val clockCycleInMillis = 3000
 
   private val realTimeQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
@@ -39,6 +39,8 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
   private var errorWaitLockTime = Instant.EPOCH
 
   private val waitTimeOnErrorInSeconds = 60
+
+  private val executionResultTimeout = Duration(10, SECONDS)
 
   ApiHub.system.scheduler.schedule(
     Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
@@ -73,14 +75,9 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
         case None => // NOP
         case Some(req) =>
           logger.info(s"Execute: $req")
-          req.execute(entityIOContext) map {
-            res =>
-              errorQueue.clear()
-              ApiHub.system.eventStream.publish(res)
-          } recover {
-            case e: Exception =>
-              onExecutionErrors(req, e)
-          }
+          val res = Await.result(req.execute(entityIOContext), executionResultTimeout)
+          errorQueue.clear()
+          ApiHub.system.eventStream.publish(res)
       }
     }
   }

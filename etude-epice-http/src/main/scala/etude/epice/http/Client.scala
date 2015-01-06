@@ -19,8 +19,6 @@ import scala.util.{Success, Try}
 case class Client(context: ClientContext = ClientContext()) {
   val logger = LoggerFactory.getLogger(getClass)
 
-  var currentClient = createClient()
-
   private def createClient(): CloseableHttpClient = {
     HttpClients.custom()
       .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:10.0) Gecko/20100101 Firefox/10.0")
@@ -47,18 +45,21 @@ case class Client(context: ClientContext = ClientContext()) {
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
+    val httpClient = createClient()
+
     try {
       Success(
         Response(
-          currentClient.execute(req, context.httpClientContext),
+          httpClient.execute(req, context.httpClientContext),
           context.httpClientContext
         )
       )
     } catch {
       case e: Exception =>
-        currentClient.close()
-        currentClient = createClient()
+        logger.error(s"Failed request $req with error", e)
         throw e
+    } finally {
+      httpClient.close()
     }
   }
 

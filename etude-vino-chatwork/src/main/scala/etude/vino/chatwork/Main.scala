@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.InitLoadRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.ChatWorkResponse
-import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityNormal}
+import etude.vino.chatwork.api.{PriorityRealTime, ApiEnqueue, ApiHub, PriorityNormal}
 import etude.vino.chatwork.historian.Historian
 import etude.vino.chatwork.markasread.MarkAsRead
 import etude.vino.chatwork.recorder.Recorder
@@ -20,7 +20,7 @@ object Main {
   val logger = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]) {
-    val executorsPool: ExecutorService = Executors.newSingleThreadExecutor()
+    val executorsPool: ExecutorService = Executors.newCachedThreadPool()
     implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
     implicit val context = AsyncEntityIOContextOnV0Api.fromThinConfig()
 
@@ -45,7 +45,7 @@ object Main {
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Updater.props(apiHub, 10)), classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(MarkAsRead.props(apiHub)), classOf[ChatWorkResponse])
 
-    apiHub ! ApiEnqueue(InitLoadRequest(), PriorityNormal)
+    apiHub ! ApiEnqueue(InitLoadRequest(), PriorityRealTime)
   }
 
 }

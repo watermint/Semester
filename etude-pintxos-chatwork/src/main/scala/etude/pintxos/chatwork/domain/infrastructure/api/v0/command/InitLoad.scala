@@ -21,13 +21,6 @@ object InitLoad
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  case class InitLoadContainer(content: InitLoadResponse,
-                               loadTime: Instant)
-
-  private val cache = new mutable.HashMap[String, InitLoadContainer]()
-
-  private val cacheSeconds = 300
-
   def parseLastId(json: JValue): Option[String] = {
     val lastId: List[String] = for {
       JObject(doc) <- json
@@ -42,19 +35,6 @@ object InitLoad
   def execute(request: InitLoadRequest)(implicit context: EntityIOContext[Future]): Future[InitLoadResponse] = {
     implicit val executor = getExecutionContext(context)
 
-    getMyId(context) match {
-      case None => // nop
-      case Some(myId) =>
-        cache.get(myId) match {
-          case None => // nop
-          case Some(cached) =>
-            if (Instant.now.minusSeconds(cacheSeconds).isBefore(cached.loadTime)) {
-              logger.debug("init load from cache")
-              return Future.successful(cached.content)
-            }
-        }
-    }
-
     V0AsyncApi.api("init_load", Map()) map {
       json =>
         parseLastId(json) match {
@@ -68,15 +48,6 @@ object InitLoad
           rooms = RoomParser.parseRooms(json),
           participants = ParticipantParser.parseParticipants(json)
         )
-
-        cache.put(
-          getMyId(context).get,
-          InitLoadContainer(
-            content,
-            Instant.now()
-          )
-        )
-        logger.debug("init load finished")
 
         content
     }

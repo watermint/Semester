@@ -2,8 +2,8 @@ package etude.pintxos.chatwork.domain.infrastructure.api.v0.auth
 
 import java.net.URI
 
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.http._
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.{V0AsyncApi, V0AsyncEntityIO, V0UnknownChatworkProtocolException}
 
 import scala.concurrent.Future
@@ -42,8 +42,10 @@ object Auth extends V0AsyncEntityIO {
     getOrganizationId(context) match {
       case Some(s) =>
         baseUri
-          .withPath(s"/s/$s")
+          .withPath(s"/login.php")
+          .withQuery("s" -> s)
           .withQuery("lang" -> "en")
+          .withQuery("package" -> "chatwork")
       case _ =>
         baseUri
           .withPath("/login.php")
