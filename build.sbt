@@ -8,6 +8,7 @@ lazy val buildSettings = Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
     "maven-central" at "http://repo1.maven.org/maven2",
+    "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
