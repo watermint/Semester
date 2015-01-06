@@ -92,11 +92,6 @@ lazy val painRangement = project.in(file("etude-pain-rangement"))
 lazy val painHighlight = project.in(file("etude-pain-highlight"))
   .settings(buildSettings: _*)
 
-lazy val painElasticsearch = project.in(file("etude-pain-elasticsearch"))
-  .settings(buildSettings: _*)
-  .dependsOn(manieresDomain)
-  .dependsOn(epiceLogging)
-
 lazy val painTika = project.in(file("etude-pain-tika"))
   .settings(buildSettings: _*)
 
@@ -122,11 +117,4 @@ lazy val vinoChatwork = project.in(file("etude-vino-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(pintxosChatwork)
   .settings(assemblySettings: _*)
-
-lazy val vinoCode = project.in(file("etude-vino-code"))
-  .settings(buildSettings: _*)
-  .dependsOn(manieresDomain)
-  .dependsOn(painTika)
-  .dependsOn(painHighlight)
-  .dependsOn(painElasticsearch)
 
