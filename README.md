@@ -25,7 +25,6 @@ Project names are categorized like below.
 
 ## etude-pain
 
-* [ElasticSearch](etude-pain-elasticsearch) - [ElasticSearch](http://www.elasticsearch.org) 
 * [Highlight](etude-pain-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
 * [Rangement](etude-pain-rangement) - HTML normalizer wrapper API
 * [Tika](etude-pain-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
@@ -49,18 +48,16 @@ Project names are categorized like below.
 
 ## etude-vino
 
-* [ChatWork](etude-vino-chatwork) - ChatWork Business Logics
-* [Code](etude-vino-code) - Source code search engine base logics.
+* [ChatWork](etude-vino-chatwork) - Productivity for ChatWork
 
 ## etude-table
 
-* [Bolognese](etude-table-bolognese) - Practicing [spray](http://spray.io)
 * [Chitarra](etude-table-chitarra) - OPML to Markdown
 
 # Requirements
 
-* JDK8u20 or later
-* Scala 2.11.1 or later
+* JDK 8 or later
+* Scala 2.11.4 or later
 
 # License
 

@@ -25,12 +25,6 @@ lazy val buildSettings = Seq(
 
 // ---- table
 
-lazy val tableBolognese = project.in(file("etude-table-bolognese"))
-  .dependsOn(epiceLogging)
-  .dependsOn(gazpachoSpray)
-  .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
-
 lazy val tableChitarra = project.in(file("etude-table-chitarra"))
   .settings(buildSettings: _*)
   .settings(assemblySettings: _*)
@@ -48,12 +42,6 @@ lazy val pintxosNsunc = project.in(file("etude-pintxos-nsunc"))
   .settings(buildSettings: _*)
 
 lazy val pintxosThings = project.in(file("etude-pintxos-things"))
-  .settings(buildSettings: _*)
-
-lazy val pintxosFlickr = project.in(file("etude-pintxos-flickr"))
-  .dependsOn(manieresDomain)
-  .dependsOn(epiceUtility)
-  .dependsOn(epiceLogging)
   .settings(buildSettings: _*)
 
 lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
