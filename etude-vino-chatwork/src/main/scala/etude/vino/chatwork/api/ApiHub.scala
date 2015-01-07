@@ -75,9 +75,14 @@ case class ApiHub(entityIOContext: EntityIOContext[Future])
         case None => // NOP
         case Some(req) =>
           logger.info(s"Execute: $req")
-          val res = Await.result(req.execute(entityIOContext), executionResultTimeout)
-          errorQueue.clear()
-          ApiHub.system.eventStream.publish(res)
+          try {
+            val res = Await.result(req.execute(entityIOContext), executionResultTimeout)
+            errorQueue.clear()
+            ApiHub.system.eventStream.publish(res)
+          } catch {
+            case e: Exception =>
+              logger.error(s"Error on $req", e)
+          }
       }
     }
   }

@@ -6,7 +6,7 @@ import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
-import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
+import etude.pintxos.chatwork.domain.model.room._
 import etude.vino.chatwork.api.{PriorityLower, ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
@@ -24,7 +24,17 @@ case class Historian(apiHub: ActorRef)
   def receive: Receive = {
     case r: InitLoadResponse =>
       val touches = touchTimes(r.rooms)
-      touches.sortBy(_.touchTime).foreach {
+      touches
+        .filter(_.room.roomType.equals(RoomTypeGroup()))
+        .sortBy(_.touchTime)
+        .foreach {
+        t =>
+          assistant ! Traverse(t.room)
+      }
+      touches
+        .filter(_.room.roomType.equals(RoomTypeDirect()))
+        .sortBy(_.touchTime)
+        .foreach {
         t =>
           assistant ! Traverse(t.room)
       }
