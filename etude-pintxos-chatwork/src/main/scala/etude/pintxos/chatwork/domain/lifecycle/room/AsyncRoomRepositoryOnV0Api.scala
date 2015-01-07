@@ -1,9 +1,9 @@
 package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, GetRoomInfo, LoadChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncApi
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{LoadChatRequest, InitLoadRequest, GetRoomInfoRequest}
+import etude.pintxos.chatwork.domain.service.v0.command.{InitLoad, GetRoomInfo, LoadChat}
+import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, InitLoadRequest, GetRoomInfoRequest}
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
 import org.json4s._

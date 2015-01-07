@@ -2,9 +2,9 @@ package etude.pintxos.chatwork.domain.lifecycle.room
 
 import etude.manieres.domain.lifecycle.async.AsyncResultWithIdentity
 import etude.manieres.domain.lifecycle.{EntityIOContext, ResultWithIdentity}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.V0AsyncEntityIO
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{AddCategory, DeleteCategory, EditCategory, GetCategory}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{GetCategoryRequest, EditCategoryRequest, DeleteCategoryRequest, AddCategoryRequest}
+import etude.pintxos.chatwork.domain.service.v0.V0AsyncEntityIO
+import etude.pintxos.chatwork.domain.service.v0.command.{AddCategory, DeleteCategory, EditCategory, GetCategory}
+import etude.pintxos.chatwork.domain.service.v0.request.{GetCategoryRequest, EditCategoryRequest, DeleteCategoryRequest, AddCategoryRequest}
 import etude.pintxos.chatwork.domain.model.room.{Category, CategoryId, RoomId}
 
 import scala.concurrent.Future

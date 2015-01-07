@@ -4,8 +4,8 @@ import java.time.Instant
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadOldChatRequest
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
+import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
+import etude.pintxos.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room._
 import etude.vino.chatwork.api.{PriorityLower, ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}

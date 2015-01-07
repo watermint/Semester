@@ -3,8 +3,8 @@ package etude.vino.chatwork.updater
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, ActorRef, Props}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.GetUpdateRequest
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{GetUpdateResponse, InitLoadResponse}
+import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
+import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
 import etude.vino.chatwork.api.{ApiEnqueue, ApiHub, PriorityRealTime}
 
 import scala.concurrent.ExecutionContext

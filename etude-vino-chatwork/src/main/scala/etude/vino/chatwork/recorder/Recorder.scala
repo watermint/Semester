@@ -4,8 +4,8 @@ import java.net.URI
 import java.time.ZoneOffset
 
 import akka.actor.{Actor, ActorRef, Props}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.LoadChatRequest
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.{LoadOldChatResponse, GetUpdateResponse, InitLoadResponse, LoadChatResponse}
+import etude.pintxos.chatwork.domain.service.v0.request.LoadChatRequest
+import etude.pintxos.chatwork.domain.service.v0.response.{LoadOldChatResponse, GetUpdateResponse, InitLoadResponse, LoadChatResponse}
 import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}

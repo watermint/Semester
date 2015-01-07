@@ -1,8 +1,8 @@
 package etude.pintxos.chatwork.domain.lifecycle.message
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{LoadOldChat, Read, SendChat}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{SendChatRequest, ReadRequest, LoadOldChatRequest}
+import etude.pintxos.chatwork.domain.service.v0.command.{LoadOldChat, Read, SendChat}
+import etude.pintxos.chatwork.domain.service.v0.request.{SendChatRequest, ReadRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.model.message._
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 

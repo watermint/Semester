@@ -1,8 +1,8 @@
 package etude.pintxos.chatwork.domain.lifecycle.account
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.command.{InitLoad, GetAccountInfo}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.{InitLoadRequest, GetAccountInfoRequest}
+import etude.pintxos.chatwork.domain.service.v0.command.{InitLoad, GetAccountInfo}
+import etude.pintxos.chatwork.domain.service.v0.request.{InitLoadRequest, GetAccountInfoRequest}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 
 import scala.concurrent.Future

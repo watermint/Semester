@@ -103,5 +103,6 @@ lazy val epiceUndisclosed = project.in(file("etude-epice-undisclosed"))
 lazy val vinoChatwork = project.in(file("etude-vino-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(pintxosChatwork)
+  .dependsOn(pintxosNsunc)
   .settings(assemblySettings: _*)
 

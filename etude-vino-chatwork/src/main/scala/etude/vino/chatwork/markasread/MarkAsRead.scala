@@ -1,8 +1,8 @@
 package etude.vino.chatwork.markasread
 
 import akka.actor.{Actor, ActorRef, Props}
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.request.ReadRequest
-import etude.pintxos.chatwork.domain.infrastructure.api.v0.response.LoadChatResponse
+import etude.pintxos.chatwork.domain.service.v0.request.ReadRequest
+import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.api.{ApiEnqueue, PriorityNormal}
 import etude.vino.chatwork.storage.Storage

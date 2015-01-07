@@ -2,6 +2,7 @@ package etude.epice.http
 
 import java.io.InputStream
 import java.net.URI
+import java.util.concurrent.locks.ReentrantLock
 
 import etude.epice.logging.LoggerFactory
 import org.apache.http.HttpEntity
@@ -9,7 +10,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.impl.client.{CloseableHttpClient, DefaultHttpRequestRetryHandler, HttpClients, LaxRedirectStrategy}
+import org.apache.http.impl.DefaultConnectionReuseStrategy
+import org.apache.http.impl.client._
 import org.apache.http.message.BasicNameValuePair
 
 import scala.collection.JavaConverters._
@@ -21,9 +23,10 @@ case class Client(context: ClientContext = ClientContext()) {
 
   private def createClient(): CloseableHttpClient = {
     HttpClients.custom()
-      .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:10.0) Gecko/20100101 Firefox/10.0")
       .setDefaultCookieStore(context.cookieStore)
       .setRedirectStrategy(new LaxRedirectStrategy)
+      .setConnectionReuseStrategy(new DefaultConnectionReuseStrategy())
+      .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
       .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
       .build()
   }
@@ -44,22 +47,40 @@ case class Client(context: ClientContext = ClientContext()) {
     override def getMethod: String = "DELETE"
   }
 
+  private val clientLock = new ReentrantLock
+
+  private var currentClient = createClient()
+
+  def resetClient(): Unit = {
+    clientLock.lock()
+    try {
+      currentClient.close()
+      currentClient = createClient()
+    } finally {
+      clientLock.unlock()
+    }
+  }
+
   private def request(req: HttpUriRequest): Try[Response] = {
-    val httpClient = createClient()
+    clientLock.lock()
 
     try {
+      logger.info(s"Execute request: $req")
+      val response = currentClient.execute(req, context.httpClientContext)
+      logger.info(s"Received response: $req - $response")
+
       Success(
         Response(
-          httpClient.execute(req, context.httpClientContext),
+          response,
           context.httpClientContext
         )
       )
     } catch {
       case e: Exception =>
-        logger.error(s"Failed request $req with error", e)
+        logger.error(s"Failed request $req with error.", e)
         throw e
     } finally {
-      httpClient.close()
+      clientLock.unlock()
     }
   }
 
