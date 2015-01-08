@@ -111,7 +111,7 @@ object V0AsyncApi
                           data: Map[String, String] = Map(),
                           retries: Int = 1)
                          (implicit context: EntityIOContext[Future]): JValue = {
-    V0ApiQoS.throttle.execute {
+//    V0ApiQoS.throttle.execute {
       if (!hasToken(context)) {
         if (login.isFailure) {
           throw V0CommandFailureException(command, "Login failed")
@@ -135,7 +135,7 @@ object V0AsyncApi
         case Failure(e) => throw e
         case Success(result) => result
       }
-    }
+//    }
   }
 
   def api(command: String,

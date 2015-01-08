@@ -49,37 +49,42 @@ case class Client(context: ClientContext = ClientContext()) {
 
   private val clientLock = new ReentrantLock
 
-  private var currentClient = createClient()
+  //  private val currentClient = createClient()
 
   def resetClient(): Unit = {
-    clientLock.lock()
-    try {
-      currentClient.close()
-      currentClient = createClient()
-    } finally {
-      clientLock.unlock()
-    }
+    //    clientLock.lock()
+    //    try {
+    //      currentClient.close()
+    //      currentClient = createClient()
+    //    } finally {
+    //      clientLock.unlock()
+    //    }
   }
 
   private def request(req: HttpUriRequest): Try[Response] = {
+    logger.debug(s"Execute request: $req on thread ${Thread.currentThread()}")
     clientLock.lock()
+    val currentClient = createClient()
 
     try {
-      logger.info(s"Execute request: $req")
       val response = currentClient.execute(req, context.httpClientContext)
-      logger.info(s"Received response: $req - $response")
-
-      Success(
-        Response(
-          response,
-          context.httpClientContext
+      logger.debug(s"Received response: $req - $response on thread ${Thread.currentThread()}")
+      try {
+        Success(
+          Response(
+            response,
+            context.httpClientContext
+          )
         )
-      )
+      } finally {
+        response.close()
+      }
     } catch {
       case e: Exception =>
-        logger.error(s"Failed request $req with error.", e)
+        logger.error(s"Failed request $req with error on thread ${Thread.currentThread()}", e)
         throw e
     } finally {
+      currentClient.close()
       clientLock.unlock()
     }
   }
