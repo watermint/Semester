@@ -5,7 +5,6 @@ import java.time.Instant
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.manieres.domain.model.Entity
-import etude.pintxos.chatwork.domain.lifecycle.message.MessageRepository
 import etude.pintxos.chatwork.domain.model.message.{MessageId, Text}
 
 import scala.language.higherKinds
@@ -36,9 +35,5 @@ class Room(val roomId: RoomId,
       avatar = this.avatar,
       lastUpdateTime = this.lastUpdateTime
     )
-  }
-
-  def say[M[+A]](text: Text)(implicit repository: MessageRepository[M], context: EntityIOContext[M]): M[Option[MessageId]] = {
-    repository.say(text)(this)
   }
 }

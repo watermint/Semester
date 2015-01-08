@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 case class GetCategoryRequest()
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     GetCategory.execute(this)
   }
 }

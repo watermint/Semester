@@ -22,19 +22,18 @@ object Read
     results.last
   }
 
-  def execute(request: ReadRequest)(implicit context: EntityIOContext[Future]): Future[ReadResponse] = {
+  def execute(request: ReadRequest)(implicit context: EntityIOContext[Future]): ReadResponse = {
     implicit val executor = getExecutionContext(context)
 
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "read",
       Map(
         "room_id" -> request.roomId.value.toString(),
         "last_chat_id" -> request.messageId.messageId.toString()
       )
-    ) map {
-      json =>
-        parseRead(json)
-    }
+    )
+
+    parseRead(json)
   }
 
 }

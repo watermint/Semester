@@ -12,7 +12,7 @@ object GetRoomInfo
   extends ChatWorkCommand[GetRoomInfoRequest, GetRoomInfoResponse] {
 
 
-  def execute(request: GetRoomInfoRequest)(implicit context: EntityIOContext[Future]): Future[GetRoomInfoResponse] = {
+  def execute(request: GetRoomInfoRequest)(implicit context: EntityIOContext[Future]): GetRoomInfoResponse = {
 
     implicit val executor = getExecutionContext(context)
     import org.json4s.JsonDSL._
@@ -34,20 +34,18 @@ object GetRoomInfo
           )
         )
 
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "get_room_info",
       Map(),
       Map(
         "pdata" -> compact(render(pdata))
       )
-    ) map {
-      json =>
-        GetRoomInfoResponse(
-          json,
-          RoomParser.parseRooms(json).last,
-          ParticipantParser.parseParticipants(json).last
-        )
-    }
-  }
+    )
 
+    GetRoomInfoResponse(
+      json,
+      RoomParser.parseRooms(json).last,
+      ParticipantParser.parseParticipants(json).last
+    )
+  }
 }

@@ -9,7 +9,7 @@ import scala.concurrent.Future
 
 case class GetAccountInfoRequest(accountIds: Seq[AccountId])
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     GetAccountInfo.execute(this)
   }
 }

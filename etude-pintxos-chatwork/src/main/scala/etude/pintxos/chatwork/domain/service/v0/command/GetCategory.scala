@@ -11,17 +11,16 @@ import scala.concurrent.Future
 object GetCategory
   extends ChatWorkCommand[GetCategoryRequest, GetCategoryResponse] {
 
-  def execute(request: GetCategoryRequest)(implicit context: EntityIOContext[Future]): Future[GetCategoryResponse] = {
+  def execute(request: GetCategoryRequest)(implicit context: EntityIOContext[Future]): GetCategoryResponse = {
     implicit val executor = getExecutionContext(context)
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "get_category",
       Map()
-    ) map {
-      json =>
-        GetCategoryResponse(
-          json,
-          CategoryParser.parseCategory(json)
-        )
-    }
+    )
+
+    GetCategoryResponse(
+      json,
+      CategoryParser.parseCategory(json)
+    )
   }
 }

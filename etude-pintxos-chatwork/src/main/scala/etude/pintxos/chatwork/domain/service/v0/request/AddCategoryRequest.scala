@@ -11,7 +11,7 @@ case class AddCategoryRequest(name: String,
                               rooms: List[RoomId])
   extends ChatWorkRequest {
 
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     AddCategory.execute(this)
   }
 }

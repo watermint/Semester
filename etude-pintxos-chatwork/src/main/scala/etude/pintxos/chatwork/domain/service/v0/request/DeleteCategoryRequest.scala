@@ -10,7 +10,7 @@ import scala.concurrent.Future
 case class DeleteCategoryRequest(categoryId: CategoryId)
   extends ChatWorkRequest {
 
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     DeleteCategory.execute(this)
   }
 }

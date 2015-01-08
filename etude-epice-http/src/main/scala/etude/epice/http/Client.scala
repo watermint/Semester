@@ -2,15 +2,14 @@ package etude.epice.http
 
 import java.io.InputStream
 import java.net.URI
-import java.util.concurrent.locks.ReentrantLock
 
 import etude.epice.logging.LoggerFactory
 import org.apache.http.HttpEntity
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.impl.DefaultConnectionReuseStrategy
 import org.apache.http.impl.client._
 import org.apache.http.message.BasicNameValuePair
 
@@ -25,9 +24,10 @@ case class Client(context: ClientContext = ClientContext()) {
     HttpClients.custom()
       .setDefaultCookieStore(context.cookieStore)
       .setRedirectStrategy(new LaxRedirectStrategy)
-      .setConnectionReuseStrategy(new DefaultConnectionReuseStrategy())
-      .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
+      //      .setConnectionManager(new BasicHttpClientConnectionManager)
+      //      .setConnectionReuseStrategy(new NoConnectionReuseStrategy)
       .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
+      .setSSLHostnameVerifier(new AllowAllHostnameVerifier())
       .build()
   }
 
@@ -47,45 +47,22 @@ case class Client(context: ClientContext = ClientContext()) {
     override def getMethod: String = "DELETE"
   }
 
-  private val clientLock = new ReentrantLock
-
-  //  private val currentClient = createClient()
-
-  def resetClient(): Unit = {
-    //    clientLock.lock()
-    //    try {
-    //      currentClient.close()
-    //      currentClient = createClient()
-    //    } finally {
-    //      clientLock.unlock()
-    //    }
-  }
-
   private def request(req: HttpUriRequest): Try[Response] = {
-    logger.debug(s"Execute request: $req on thread ${Thread.currentThread()}")
-    clientLock.lock()
     val currentClient = createClient()
 
     try {
-      val response = currentClient.execute(req, context.httpClientContext)
-      logger.debug(s"Received response: $req - $response on thread ${Thread.currentThread()}")
-      try {
-        Success(
-          Response(
-            response,
-            context.httpClientContext
-          )
+      Success(
+        Response(
+          currentClient.execute(req, context.httpClientContext),
+          context.httpClientContext
         )
-      } finally {
-        response.close()
-      }
+      )
     } catch {
       case e: Exception =>
         logger.error(s"Failed request $req with error on thread ${Thread.currentThread()}", e)
         throw e
     } finally {
       currentClient.close()
-      clientLock.unlock()
     }
   }
 

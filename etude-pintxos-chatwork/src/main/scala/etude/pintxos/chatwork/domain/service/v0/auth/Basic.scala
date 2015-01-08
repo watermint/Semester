@@ -17,7 +17,6 @@ class Basic extends Auth {
   }
 
   private def submitLogin(context: AuthContext): Try[AuthToken] = {
-    logger.info(s"submitLogin: ${context.redirectedUri}")
     context.client.post(
       uri = context.startPageUri,
       formData = Map(
@@ -31,8 +30,6 @@ class Basic extends Auth {
   }
 
   private def getTopPage(context: AuthContext): Try[AuthToken] = {
-    logger.info(s"getTopPage: ${context.redirectedUri}")
-    context.client.resetClient()
     context.client.get(context.startPageUri) flatMap {
       responseOfTop =>
         responseOfTop.contentAsString map {

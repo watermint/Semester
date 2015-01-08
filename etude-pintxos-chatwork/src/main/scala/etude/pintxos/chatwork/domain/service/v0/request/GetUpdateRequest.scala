@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 case class GetUpdateRequest(updateLastId: Boolean = true)
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[GetUpdateResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): GetUpdateResponse = {
     GetUpdate.execute(this)
   }
 }

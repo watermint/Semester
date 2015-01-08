@@ -1,12 +1,11 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.model.message.MessageId
+import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.service.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.service.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
-import etude.pintxos.chatwork.domain.service.v0.{V0AsyncApi, V0AsyncEntityIO}
-import etude.pintxos.chatwork.domain.model.message.{Message, MessageId}
-import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonAST.{JField, JObject, JString}
 
 import scala.concurrent.Future
@@ -29,10 +28,10 @@ object LoadChat
     }
   }
 
-  def execute(request: LoadChatRequest)(implicit context: EntityIOContext[Future]): Future[LoadChatResponse] = {
+  def execute(request: LoadChatRequest)(implicit context: EntityIOContext[Future]): LoadChatResponse = {
     implicit val executor = getExecutionContext(context)
 
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "load_chat",
       Map(
         "room_id" -> request.room.value.toString(),
@@ -43,22 +42,21 @@ object LoadChat
         "desc" -> fromBoolean(request.description),
         "task" -> fromBoolean(request.task)
       )
-    ) map {
-      json =>
-        val results: Seq[LoadChatResponse] = for {
-          JObject(j) <- json
-          JField("chat_list", chatList) <- j
-        } yield {
-          val m = j.toMap
+    )
 
-          LoadChatResponse(
-            json,
-            MessageParser.parseMessage(request.room, chatList),
-            m.get("description") collect { case JString(d) => d },
-            m.get("public_description") collect { case JString(d) => d}
-          )
-        }
-        results.last
+    val results: Seq[LoadChatResponse] = for {
+      JObject(j) <- json
+      JField("chat_list", chatList) <- j
+    } yield {
+      val m = j.toMap
+
+      LoadChatResponse(
+        json,
+        MessageParser.parseMessage(request.room, chatList),
+        m.get("description") collect { case JString(d) => d},
+        m.get("public_description") collect { case JString(d) => d}
+      )
     }
+    results.last
   }
 }

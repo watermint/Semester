@@ -89,30 +89,6 @@ trait V0AsyncEntityIO
     }
   }
 
-  protected def beginLogin(context: EntityIOContext[Future]): Unit = {
-    withV0Context(context) {
-      v0 => v0.loginMutex.lock()
-    }
-  }
-
-  protected def endLogin(context: EntityIOContext[Future]): Unit = {
-    withV0Context(context) {
-      v0 => v0.loginMutex.unlock()
-    }
-  }
-
-  protected def getLoginTime(context: EntityIOContext[Future]): Option[Instant] = {
-    withV0Context(context) {
-      v0 => v0.loginTimestamp.get(contextAccessWaitInMillis)
-    }
-  }
-
-  protected def setLoginTime(loginTime: Instant, context: EntityIOContext[Future]): Unit = {
-    withV0Context(context) {
-      v0 => v0.loginTimestamp.put(loginTime)
-    }
-  }
-
   protected def clearToken(context: EntityIOContext[Future]): Unit = {
     withV0Context(context) {
       v0 =>
@@ -129,13 +105,6 @@ trait V0AsyncEntityIO
     withV0Context(context) {
       v0 =>
         v0.accessToken.isSet
-    }
-  }
-
-  protected def getLoginFailure(context: EntityIOContext[Future]): AtomicInteger = {
-    withV0Context(context) {
-      v0 =>
-        v0.loginFailure
     }
   }
 

@@ -12,25 +12,23 @@ import scala.concurrent.Future
 object EditCategory
   extends ChatWorkCommand[EditCategoryRequest, EditCategoryResponse] {
 
-  def execute(request: EditCategoryRequest)(implicit context: EntityIOContext[Future]): Future[EditCategoryResponse] = {
+  def execute(request: EditCategoryRequest)(implicit context: EntityIOContext[Future]): EditCategoryResponse = {
     implicit val executor = getExecutionContext(context)
     val pdata = ("name" -> request.category.name) ~
       ("r" -> request.category.rooms.map(_.value.toString())) ~
       ("cat_id" -> request.category.categoryId.value.toString())
-
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "edit_category",
       Map(),
       Map(
         "pdata" -> compact(render(pdata))
       )
-    ) map {
-      json =>
-        // TODO : parse json
-        EditCategoryResponse(
-          json,
-          request.category
-        )
-    }
+    )
+
+    // TODO : parse json
+    EditCategoryResponse(
+      json,
+      request.category
+    )
   }
 }

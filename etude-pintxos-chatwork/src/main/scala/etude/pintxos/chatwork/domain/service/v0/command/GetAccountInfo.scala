@@ -15,27 +15,27 @@ object GetAccountInfo
   extends ChatWorkCommand[GetAccountInfoRequest, GetAccountInfoResponse] {
 
 
-  def execute(request: GetAccountInfoRequest)(implicit context: EntityIOContext[Future]): Future[GetAccountInfoResponse] = {
+  def execute(request: GetAccountInfoRequest)(implicit context: EntityIOContext[Future]): GetAccountInfoResponse = {
     implicit val executor = getExecutionContext(context)
 
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "get_account_info",
       Map(),
       Map(
         "pdata" -> compact(render("aid" -> request.accountIds.map(_.value)))
       )
-    ) map {
-      json =>
-        GetAccountInfoResponse(
-          json,
-          for {
-            JObject(doc) <- json
-            JField("account_dat", JObject(contactDat)) <- doc
-            account <- ContactParser.parseContact(contactDat)
-          } yield {
-            account
-          }
-        )
-    }
+    )
+
+    GetAccountInfoResponse(
+      json,
+      for {
+        JObject(doc) <- json
+        JField("account_dat", JObject(contactDat)) <- doc
+        account <- ContactParser.parseContact(contactDat)
+      } yield {
+        account
+      }
+    )
+
   }
 }

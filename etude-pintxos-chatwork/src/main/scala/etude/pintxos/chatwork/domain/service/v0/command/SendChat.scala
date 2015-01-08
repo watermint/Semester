@@ -1,11 +1,11 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.service.v0.parser.{MessageParser, StorageParser}
 import etude.pintxos.chatwork.domain.service.v0.request.SendChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.SendChatResponse
-import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s._
 
 import scala.concurrent.Future
@@ -39,7 +39,7 @@ object SendChat
     results.last
   }
 
-  def execute(request: SendChatRequest)(implicit context: EntityIOContext[Future]): Future[SendChatResponse] = {
+  def execute(request: SendChatRequest)(implicit context: EntityIOContext[Future]): SendChatResponse = {
     implicit val executor = getExecutionContext(context)
     import org.json4s.JsonDSL._
     import org.json4s.native.JsonMethods._
@@ -48,16 +48,15 @@ object SendChat
       ("room_id" -> request.room.value.toString()) ~
       ("edit_id" -> "0")
 
-    V0AsyncApi.api(
+    val json = V0AsyncApi.api(
       "send_chat",
       Map.empty,
       Map(
         "pdata" -> compact(render(pdata))
       )
-    ) map {
-      json =>
-        parseSendChatResult(json, request.room)
-    }
+    )
+    parseSendChatResult(json, request.room)
+
   }
 
 }

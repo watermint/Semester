@@ -13,32 +13,30 @@ object GetUpdate
   extends ChatWorkCommand[GetUpdateRequest, GetUpdateResponse] {
 
 
-  def execute(request: GetUpdateRequest)(implicit context: EntityIOContext[Future]): Future[GetUpdateResponse] = {
+  def execute(request: GetUpdateRequest)(implicit context: EntityIOContext[Future]): GetUpdateResponse = {
     implicit val executor = getExecutionContext(context)
-    updateRaw(request.updateLastId) map {
-      json =>
-        GetUpdateResponse(
-          json,
-          GetUpdateParser.parseRoomUpdateInfo(json)
-        )
-    }
+    val json = updateRaw(request.updateLastId)
+
+    GetUpdateResponse(
+      json,
+      GetUpdateParser.parseRoomUpdateInfo(json)
+    )
   }
 
-  private def updateRaw(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): Future[JValue] = {
+  private def updateRaw(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): JValue = {
     implicit val executor = getExecutionContext(context)
 
     getLastId(context) match {
       case Some(lastId) =>
-        V0AsyncApi.api("get_update", Map("last_id" -> lastId)) map {
-          json =>
-            if (updateLastId) {
-              GetUpdateParser.parseLastId(json) match {
-                case Some(newLastId) => setLastId(newLastId, context)
-                case _ =>
-              }
-            }
-            json
+        val json = V0AsyncApi.api("get_update", Map("last_id" -> lastId))
+        if (updateLastId) {
+          GetUpdateParser.parseLastId(json) match {
+            case Some(newLastId) => setLastId(newLastId, context)
+            case _ =>
+          }
         }
+        json
+
       case _ =>
         throw new IllegalStateException("No last_id found in the context")
     }

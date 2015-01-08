@@ -10,7 +10,7 @@ import scala.concurrent.Future
 case class SendChatRequest(text: String,
                            room: RoomId)
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     SendChat.execute(this)
   }
 }

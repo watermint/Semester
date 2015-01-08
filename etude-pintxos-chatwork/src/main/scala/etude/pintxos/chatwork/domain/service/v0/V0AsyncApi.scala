@@ -1,10 +1,9 @@
 package etude.pintxos.chatwork.domain.service.v0
 
 import java.net.URI
-import java.time.Instant
 
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.epice.http._
+import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.service.v0.auth.Auth
 import org.json4s._
 
@@ -14,9 +13,6 @@ import scala.util.{Failure, Success, Try}
 
 object V0AsyncApi
   extends V0AsyncEntityIO {
-
-  val loginFailureThreshold = 2
-  val loginDuration = 3
 
   def isKddiChatwork(implicit context: EntityIOContext[Future]): Boolean = {
     getOrganizationId(context) match {
@@ -34,36 +30,14 @@ object V0AsyncApi
   }
 
   private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
-    beginLogin(context)
-    try {
-      // assert login failure threshold
-      if (getLoginFailure(context).get() >= loginFailureThreshold) {
-        return Failure(new IllegalStateException(s"Abort Login: due to failed more than $loginFailureThreshold times"))
-      }
-
-      // assert login action time span
-      getLoginTime(context) match {
-        case Some(t) if t.isBefore(Instant.now.minusSeconds(loginDuration)) =>
-          return getAccessToken(context) match {
-            case Some(_) => Success(true)
-            case _ => Failure(new IllegalStateException("Login QoS exception"))
-          }
-        case _ =>
-      }
-
-      Auth.login map {
-        token =>
-          setAccessToken(token.accessToken, context)
-          setMyId(token.myId, context)
-          true
-      } recover {
-        case e: Exception =>
-          getLoginFailure(context).incrementAndGet()
-          throw new IllegalStateException("Login failed", e)
-      }
-    } finally {
-      setLoginTime(Instant.now, context)
-      endLogin(context)
+    Auth.login map {
+      token =>
+        setAccessToken(token.accessToken, context)
+        setMyId(token.myId, context)
+        true
+    } recover {
+      case e: Exception =>
+        throw new IllegalStateException("Login failed", e)
     }
   }
 
@@ -106,47 +80,27 @@ object V0AsyncApi
     }
   }
 
-  private[v0] def syncApi(command: String,
-                          params: Map[String, String],
-                          data: Map[String, String] = Map(),
-                          retries: Int = 1)
-                         (implicit context: EntityIOContext[Future]): JValue = {
-//    V0ApiQoS.throttle.execute {
-      if (!hasToken(context)) {
-        if (login.isFailure) {
-          throw V0CommandFailureException(command, "Login failed")
-        }
-      }
-      val gatewayUri = apiUri(command, params)
-      val client = getClient(context)
-      val response = data.size match {
-        case 0 => client.get(gatewayUri).get
-        case _ => client.post(gatewayUri, data).get
-      }
-
-      apiResponseParser(command, response) match {
-        case Failure(e: V0SessionTimeoutException) =>
-          clearToken(context)
-          if (retries > 0) {
-            syncApi(command, params, data, retries - 1)
-          } else {
-            throw V0CommandFailureException(command, "Exceeds retry count")
-          }
-        case Failure(e) => throw e
-        case Success(result) => result
-      }
-//    }
-  }
-
   def api(command: String,
           params: Map[String, String],
-          data: Map[String, String] = Map(),
-          retries: Int = 2)
-         (implicit context: EntityIOContext[Future]): Future[JValue] = {
-    implicit val executor = getExecutionContext(context)
+          data: Map[String, String] = Map())
+         (implicit context: EntityIOContext[Future]): JValue = {
+    if (!hasToken(context)) {
+      if (login.isFailure) {
+        throw V0CommandFailureException(command, "Login failed")
+      }
+    }
+    val gatewayUri = apiUri(command, params)
+    val client = getClient(context)
+    val response = data.size match {
+      case 0 => client.get(gatewayUri).get
+      case _ => client.post(gatewayUri, data).get
+    }
 
-    Future {
-      syncApi(command, params, data, retries)
+    apiResponseParser(command, response) match {
+      case Failure(e) => throw e
+      case Success(result) => result
     }
   }
+
+
 }

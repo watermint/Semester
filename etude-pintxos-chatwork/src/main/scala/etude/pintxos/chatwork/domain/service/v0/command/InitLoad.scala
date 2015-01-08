@@ -1,16 +1,13 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import java.time.Instant
-
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
 import etude.pintxos.chatwork.domain.service.v0.parser.{ContactParser, ParticipantParser, RoomParser}
 import etude.pintxos.chatwork.domain.service.v0.request.InitLoadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.InitLoadResponse
-import etude.pintxos.chatwork.domain.service.v0.{V0AsyncApi, V0AsyncEntityIO}
 import org.json4s._
 
-import scala.collection.mutable
 import scala.concurrent.Future
 
 /**
@@ -32,24 +29,24 @@ object InitLoad
   }
 
 
-  def execute(request: InitLoadRequest)(implicit context: EntityIOContext[Future]): Future[InitLoadResponse] = {
+  def execute(request: InitLoadRequest)(implicit context: EntityIOContext[Future]): InitLoadResponse = {
     implicit val executor = getExecutionContext(context)
 
-    V0AsyncApi.api("init_load", Map()) map {
-      json =>
-        parseLastId(json) match {
-          case Some(lastId) => setLastId(lastId, context)
-          case _ =>
-        }
+    val json = V0AsyncApi.api("init_load", Map())
 
-        val content = InitLoadResponse(
-          json,
-          contacts = ContactParser.parseContacts(json),
-          rooms = RoomParser.parseRooms(json),
-          participants = ParticipantParser.parseParticipants(json)
-        )
-
-        content
+    parseLastId(json) match {
+      case Some(lastId) => setLastId(lastId, context)
+      case _ =>
     }
+
+    val content = InitLoadResponse(
+      json,
+      contacts = ContactParser.parseContacts(json),
+      rooms = RoomParser.parseRooms(json),
+      participants = ParticipantParser.parseParticipants(json)
+    )
+
+    content
+
   }
 }

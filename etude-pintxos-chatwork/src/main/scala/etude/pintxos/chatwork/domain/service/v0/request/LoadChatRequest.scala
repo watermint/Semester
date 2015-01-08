@@ -16,7 +16,7 @@ case class LoadChatRequest(room: RoomId,
                            description: Boolean = false,
                            task: Boolean = false)
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     LoadChat.execute(this)
   }
 }

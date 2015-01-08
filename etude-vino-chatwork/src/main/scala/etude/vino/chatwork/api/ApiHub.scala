@@ -17,7 +17,7 @@ case class ApiHub()
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private val clockCycleInMillis = 8000
+  private val clockCycleInMillis = 3000
 
   private val realTimeQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 

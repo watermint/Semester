@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 case class InitLoadRequest()
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     InitLoad.execute(this)
   }
 }

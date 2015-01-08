@@ -11,7 +11,7 @@ import scala.concurrent.Future
 case class ReadRequest(roomId: RoomId,
                        messageId: MessageId)
   extends ChatWorkRequest {
-  def execute(implicit context: EntityIOContext[Future]): Future[ChatWorkResponse] = {
+  def execute(implicit context: EntityIOContext[Future]): ChatWorkResponse = {
     Read.execute(this)
   }
 }
