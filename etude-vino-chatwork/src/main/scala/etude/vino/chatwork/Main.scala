@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.service.v0.request.InitLoadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
-import etude.vino.chatwork.api.{PriorityRealTime, ApiEnqueue, ApiHub, PriorityNormal}
+import etude.vino.chatwork.api._
 import etude.vino.chatwork.historian.Historian
 import etude.vino.chatwork.markasread.MarkAsRead
 import etude.vino.chatwork.recorder.Recorder
@@ -35,11 +35,16 @@ object Main {
     }
 
     val apiHub = ApiHub.system.actorOf(ApiHub.props())
+    val recorder = ApiHub.system.actorOf(Recorder.props(apiHub))
+    val historian = ApiHub.system.actorOf(Historian.props(apiHub))
+    val updater = ApiHub.system.actorOf(Updater.props(apiHub, 10))
+    val markasread = ApiHub.system.actorOf(MarkAsRead.props(apiHub))
 
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Recorder.props(apiHub)), classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Historian.props(apiHub)), classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(Updater.props(apiHub, 10)), classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(ApiHub.system.actorOf(MarkAsRead.props(apiHub)), classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
+    ApiHub.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
 
     apiHub ! ApiEnqueue(InitLoadRequest(), PriorityRealTime)
   }

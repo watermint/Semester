@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.CategoryParser
 import etude.pintxos.chatwork.domain.service.v0.request.AddCategoryRequest
 import etude.pintxos.chatwork.domain.service.v0.response.AddCategoryResponse
@@ -20,7 +20,7 @@ object AddCategory
     val pdata = ("name" -> request.name) ~
       ("r" -> request.rooms.map(_.value.toString()))
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "add_category",
       Map(),
       Map(

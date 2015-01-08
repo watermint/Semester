@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.request.EditCategoryRequest
 import etude.pintxos.chatwork.domain.service.v0.response.EditCategoryResponse
 import org.json4s.JsonDSL._
@@ -17,7 +17,7 @@ object EditCategory
     val pdata = ("name" -> request.category.name) ~
       ("r" -> request.category.rooms.map(_.value.toString())) ~
       ("cat_id" -> request.category.categoryId.value.toString())
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "edit_category",
       Map(),
       Map(

@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncEntityIO
+import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 

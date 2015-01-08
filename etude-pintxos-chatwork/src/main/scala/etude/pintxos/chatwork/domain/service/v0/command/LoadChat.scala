@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.service.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
@@ -31,7 +31,7 @@ object LoadChat
   def execute(request: LoadChatRequest)(implicit context: EntityIOContext[Future]): LoadChatResponse = {
     implicit val executor = getExecutionContext(context)
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "load_chat",
       Map(
         "room_id" -> request.room.value.toString(),

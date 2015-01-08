@@ -4,6 +4,7 @@ import java.net.URI
 
 import etude.epice.http._
 import etude.manieres.domain.lifecycle.EntityIOContext
+import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.service.v0.auth.Auth
 import org.json4s._
 
@@ -11,7 +12,7 @@ import scala.concurrent.Future
 import scala.language.higherKinds
 import scala.util.{Failure, Success, Try}
 
-object V0AsyncApi
+object Api
   extends V0AsyncEntityIO {
 
   def isKddiChatwork(implicit context: EntityIOContext[Future]): Boolean = {
@@ -29,7 +30,7 @@ object V0AsyncApi
     }
   }
 
-  private[v0] def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
+  def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
     Auth.login map {
       token =>
         setAccessToken(token.accessToken, context)
@@ -72,9 +73,9 @@ object V0AsyncApi
         } else {
           val JString(message) = json \ "status" \ "message"
           if (message.contains("NO LOGIN")) {
-            throw V0SessionTimeoutException(message)
+            throw SessionTimeoutException(message)
           } else {
-            throw V0CommandFailureException(command, message)
+            throw CommandFailureException(command, message)
           }
         }
     }
@@ -85,10 +86,9 @@ object V0AsyncApi
           data: Map[String, String] = Map())
          (implicit context: EntityIOContext[Future]): JValue = {
     if (!hasToken(context)) {
-      if (login.isFailure) {
-        throw V0CommandFailureException(command, "Login failed")
-      }
+      throw NoSessionAvailableException()
     }
+
     val gatewayUri = apiUri(command, params)
     val client = getClient(context)
     val response = data.size match {

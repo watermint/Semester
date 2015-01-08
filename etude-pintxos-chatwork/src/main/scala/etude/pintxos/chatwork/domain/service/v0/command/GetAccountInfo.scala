@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.ContactParser
 import etude.pintxos.chatwork.domain.service.v0.request.GetAccountInfoRequest
 import etude.pintxos.chatwork.domain.service.v0.response.GetAccountInfoResponse
@@ -18,7 +18,7 @@ object GetAccountInfo
   def execute(request: GetAccountInfoRequest)(implicit context: EntityIOContext[Future]): GetAccountInfoResponse = {
     implicit val executor = getExecutionContext(context)
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "get_account_info",
       Map(),
       Map(

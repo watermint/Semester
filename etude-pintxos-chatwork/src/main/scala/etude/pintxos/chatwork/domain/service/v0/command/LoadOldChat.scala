@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadOldChatResponse
@@ -14,7 +14,7 @@ object LoadOldChat
   def execute(request: LoadOldChatRequest)(implicit context: EntityIOContext[Future]): LoadOldChatResponse = {
     implicit val executor = getExecutionContext(context)
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "load_old_chat",
       Map(
         "room_id" -> request.lastMessage.roomId.value.toString(),

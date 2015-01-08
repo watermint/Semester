@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.auth
 
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.service.v0.V0UnknownChatworkProtocolException
+import etude.pintxos.chatwork.domain.service.v0.UnknownChatworkProtocolException
 
 import scala.util.Try
 
@@ -36,7 +36,7 @@ class Basic extends Auth {
           page =>
             parsePage(page) match {
               case Some(t) => t
-              case _ => throw new V0UnknownChatworkProtocolException("No Access Token found")
+              case _ => throw new UnknownChatworkProtocolException("No Access Token found")
             }
         }
     }

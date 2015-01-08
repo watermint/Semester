@@ -1,13 +1,8 @@
-package etude.pintxos.chatwork.domain.service.v0
-
-import java.time.Instant
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
+package etude.pintxos.chatwork.domain.infrastructure.api
 
 import etude.epice.http.Client
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.manieres.domain.lifecycle.async.AsyncEntityIO
-import etude.pintxos.chatwork.domain.infrastructure.api.EntityIOContextOnV0Api
 
 import scala.concurrent.Future
 import scala.language.higherKinds

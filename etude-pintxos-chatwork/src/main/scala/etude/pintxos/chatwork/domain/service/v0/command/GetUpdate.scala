@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.GetUpdateParser
 import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.service.v0.response.GetUpdateResponse
@@ -28,7 +28,7 @@ object GetUpdate
 
     getLastId(context) match {
       case Some(lastId) =>
-        val json = V0AsyncApi.api("get_update", Map("last_id" -> lastId))
+        val json = Api.api("get_update", Map("last_id" -> lastId))
         if (updateLastId) {
           GetUpdateParser.parseLastId(json) match {
             case Some(newLastId) => setLastId(newLastId, context)

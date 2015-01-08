@@ -4,7 +4,8 @@ import java.net.URI
 
 import etude.epice.http._
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.{V0AsyncApi, V0AsyncEntityIO, V0UnknownChatworkProtocolException}
+import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
+import etude.pintxos.chatwork.domain.service.v0.{Api, UnknownChatworkProtocolException}
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -38,7 +39,7 @@ object Auth extends V0AsyncEntityIO {
   )
 
   def loginUri(implicit context: EntityIOContext[Future]): URI = {
-    val baseUri: URIContainer = V0AsyncApi.baseUri
+    val baseUri: URIContainer = Api.baseUri
     getOrganizationId(context) match {
       case Some(s) =>
         baseUri
@@ -73,7 +74,7 @@ object Auth extends V0AsyncEntityIO {
               case Some(provider) =>
                 provider.acquireToken(ac)
               case _ =>
-                throw new V0UnknownChatworkProtocolException("Unsupported authentication method")
+                throw new UnknownChatworkProtocolException("Unsupported authentication method")
             }
         }
     }

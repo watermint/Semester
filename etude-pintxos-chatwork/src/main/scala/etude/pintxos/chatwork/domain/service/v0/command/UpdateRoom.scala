@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.request.UpdateRoomRequest
 import etude.pintxos.chatwork.domain.service.v0.response.UpdateRoomResponse
 import org.json4s.JsonDSL._
@@ -28,7 +28,7 @@ object UpdateRoom
     val pdata = ("room_id" -> request.participant.identity.value.toString()) ~
       ("role" -> (admin ++ member ++ readonly).toMap)
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "update_room",
       Map(),
       Map(

@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.{ParticipantParser, RoomParser}
 import etude.pintxos.chatwork.domain.service.v0.request.GetRoomInfoRequest
 import etude.pintxos.chatwork.domain.service.v0.response.GetRoomInfoResponse
@@ -34,7 +34,7 @@ object GetRoomInfo
           )
         )
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "get_room_info",
       Map(),
       Map(

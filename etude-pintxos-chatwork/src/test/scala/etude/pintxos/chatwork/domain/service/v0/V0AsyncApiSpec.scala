@@ -15,7 +15,7 @@ class V0AsyncApiSpec
     "Login" in {
       withContext {
         implicit context =>
-          V0AsyncApi.login.isSuccess must beTrue
+          Api.login.isSuccess must beTrue
 
           context match {
             case c: AsyncEntityIOContextOnV0Api =>

@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.V0AsyncApi
+import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.request.ReadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ReadResponse
 import org.json4s._
@@ -25,7 +25,7 @@ object Read
   def execute(request: ReadRequest)(implicit context: EntityIOContext[Future]): ReadResponse = {
     implicit val executor = getExecutionContext(context)
 
-    val json = V0AsyncApi.api(
+    val json = Api.api(
       "read",
       Map(
         "room_id" -> request.roomId.value.toString(),
