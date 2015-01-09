@@ -1,16 +1,14 @@
 package etude.vino.chatwork.api
 
-import java.util.concurrent.{Semaphore, ConcurrentLinkedQueue, TimeUnit}
+import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
 
-import akka.actor.{ActorRef, Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.service.v0.ChatWorkEntityIO
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
 
 case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   extends ChatWorkEntityIO with Actor {
@@ -27,39 +25,34 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
 
   private implicit val executionContext = ApiHub.system.dispatcher
 
-  private val queueSemaphore = new Semaphore(1)
-
   case class ApiTick()
 
-  ApiHub.system.scheduler.schedule(
-    Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
-    Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
-    self,
-    ApiTick()
-  )
+  schedule()
+
+  def schedule(): Unit = {
+    ApiHub.system.scheduler.scheduleOnce(
+      Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
+      self,
+      ApiTick()
+    )
+  }
 
   def receive: Receive = {
     case r: ApiTick =>
-      if (queueSemaphore.tryAcquire()) {
-        execute()
-      } else {
-        logger.info(s"Could not acquire semaphore.")
-      }
+      execute()
 
     case r: ApiEnqueue =>
       enqueue(r.request)(r.priority)
 
     case r: ChatWorkResponse =>
-      queueSemaphore.release()
       ApiHub.system.eventStream.publish(r)
+      schedule()
   }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
     logger.info(s"Enqueue request: $request with priority $priority")
     priority match {
-      case PriorityRealTime =>
-        realTimeQueue.add(request)
-        self ! ApiTick()
+      case PriorityRealTime => realTimeQueue.add(request)
       case PriorityNormal => normalQueue.add(request)
       case PriorityLow => lowQueue.add(request)
       case PriorityLower => lowerQueue.add(request)
