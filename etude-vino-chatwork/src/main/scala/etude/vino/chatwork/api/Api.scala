@@ -13,15 +13,18 @@ import etude.vino.chatwork.Main
 
 import scala.concurrent.Future
 
-case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
+case class Api() extends Actor {
   val logger = LoggerFactory.getLogger(getClass)
 
   implicit val executors = Api.system.dispatcher
   val chatworkLock = new ReentrantLock()
   val counter = new AtomicInteger()
+  val chatworkContext = ChatWorkIOContext.fromThinConfig()
+
+  ChatWorkApi.login(chatworkContext)
 
   override def supervisorStrategy: SupervisorStrategy = {
-    OneForOneStrategy() {
+    OneForOneStrategy(maxNrOfRetries = 1) {
       case _: NoLastIdAvailableException =>
         val response = GetUpdateRequest().execute(chatworkContext)
         self ! response
@@ -34,7 +37,7 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
         SupervisorStrategy.Restart
 
       case _: Exception =>
-        SupervisorStrategy.Stop
+        SupervisorStrategy.Restart
     }
   }
 
@@ -58,5 +61,5 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
 object Api {
   val system = ActorSystem("cw-api")
 
-  def props(chatworkContext: ChatWorkIOContext) = Props(Api(chatworkContext))
+  def props() = Props(Api())
 }

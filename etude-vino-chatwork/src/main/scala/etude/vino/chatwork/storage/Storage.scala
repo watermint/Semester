@@ -19,7 +19,7 @@ object Storage {
     NodeBuilder
       .nodeBuilder()
       .clusterName("chatwork")
-      .local(false)
+      .local(true)
       .settings(
         ImmutableSettings
           .settingsBuilder()
@@ -27,6 +27,8 @@ object Storage {
           .put("path.logs", storagePath.resolve("logs"))
           .put("index.analysis.analyzer.default.type", "custom")
           .put("index.analysis.analyzer.default.tokenizer", "kuromoji_tokenizer")
+          .put("index.number_of_replicas", 0)
+          .put("index.number_of_shards", 1)
           .put("http.enabled", true)
           .put("http.port", 9200)
           .put("http.cors.enabled", true)
@@ -52,12 +54,12 @@ object Storage {
       .get()
 
     response.getVersion
+
   }
 
   def load(indexName: String,
            typeName: String,
            idName: String): Option[JValue] = {
-
     try {
       val response = client.prepareGet()
         .setIndex(indexName)
@@ -81,8 +83,8 @@ object Storage {
   }
 
   def delete(indexName: String,
-              typeName: String,
-              idName: String): Long = {
+             typeName: String,
+             idName: String): Long = {
 
     val response = client.prepareDelete()
       .setIndex(indexName)

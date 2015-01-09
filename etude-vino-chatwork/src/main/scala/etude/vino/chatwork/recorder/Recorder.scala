@@ -53,7 +53,7 @@ case class Recorder(apiHub: ActorRef) extends Actor {
         ("to" -> toAccount.toList) ~
         ("replyTo" -> replies)
 
-    val indexDate = message.ctime.atOffset(ZoneOffset.UTC).toLocalDate.toString
+    val indexDate = message.ctime.atOffset(ZoneOffset.UTC).getYear
     val indexName = s"cw-message-$indexDate"
 
     Storage.store(

@@ -31,11 +31,8 @@ object Main {
       case _: Exception => // ignore
     }
 
-    val context = ChatWorkIOContext.fromThinConfig()
-    ChatWorkApi.login(context)
-
-    val api = Api.system.actorOf(Api.props(context))
-    val apiHub = ApiHub.system.actorOf(ApiHub.props(api, 10000))
+    val api = Api.system.actorOf(Api.props())
+    val apiHub = ApiHub.system.actorOf(ApiHub.props(api, 2000))
     val recorder = ApiHub.system.actorOf(Recorder.props(apiHub))
     val historian = ApiHub.system.actorOf(Historian.props(apiHub))
     val updater = ApiHub.system.actorOf(Updater.props(apiHub, 10))
