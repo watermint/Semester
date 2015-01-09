@@ -1,8 +1,8 @@
 package etude.vino.chatwork.api
 
-import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
+import java.util.concurrent.{Semaphore, ConcurrentLinkedQueue, TimeUnit}
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{ActorRef, Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.service.v0.ChatWorkEntityIO
@@ -12,7 +12,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ApiHub(clockCycleInMillis: Int = 3000)
+case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   extends ChatWorkEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
@@ -27,6 +27,8 @@ case class ApiHub(clockCycleInMillis: Int = 3000)
 
   private implicit val executionContext = ApiHub.system.dispatcher
 
+  private val queueSemaphore = new Semaphore(1)
+
   case class ApiTick()
 
   ApiHub.system.scheduler.schedule(
@@ -38,12 +40,17 @@ case class ApiHub(clockCycleInMillis: Int = 3000)
 
   def receive: Receive = {
     case r: ApiTick =>
-      execute()
+      if (queueSemaphore.tryAcquire()) {
+        execute()
+      } else {
+        logger.info(s"Could not acquire semaphore.")
+      }
 
     case r: ApiEnqueue =>
       enqueue(r.request)(r.priority)
 
     case r: ChatWorkResponse =>
+      queueSemaphore.release()
       ApiHub.system.eventStream.publish(r)
   }
 
@@ -63,7 +70,7 @@ case class ApiHub(clockCycleInMillis: Int = 3000)
     dequeue() match {
       case None => // NOP
       case Some(req) =>
-        Api.ref ! req
+        api ! req
     }
   }
 
@@ -103,7 +110,7 @@ case class ApiHub(clockCycleInMillis: Int = 3000)
 object ApiHub {
   val system = ActorSystem("cw-apihub")
 
-  def props(clockCycleInMillis: Int): Props = Props(ApiHub(clockCycleInMillis))
+  def props(api: ActorRef, clockCycleInMillis: Int): Props = Props(ApiHub(api, clockCycleInMillis))
 }
 
 

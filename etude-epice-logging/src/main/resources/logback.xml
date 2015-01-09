@@ -5,6 +5,9 @@
             <fileNamePattern>logs/application.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>14</maxHistory>
         </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
         <encoder>
             <charset>UTF-8</charset>
             <pattern>time:%date{ISO8601}&#x9;level:%level&#x9;logger:%logger&#x9;thread:%thread&#x9;msg:%replace(%replace(%message){'\n','\\n'}){'\t',' '}&#x9;exception:%replace(%replace(%xException{5}){'\n','\\n'}){'\t',' '}%n%nopex</pattern>
@@ -15,7 +18,6 @@
             <pattern>%gray(%date{ISO8601}) %highlight(%-5level) %cyan(%logger{15}) %message%n%xException{5}</pattern>
         </encoder>
     </appender>
-    <logger name="application" level="INFO" />
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
