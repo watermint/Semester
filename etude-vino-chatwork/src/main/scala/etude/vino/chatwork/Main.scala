@@ -30,7 +30,7 @@ object Main {
       case _: Exception => // ignore
     }
 
-    val apiHub = ApiHub.system.actorOf(ApiHub.props())
+    val apiHub = ApiHub.system.actorOf(ApiHub.props(5000))
     val recorder = ApiHub.system.actorOf(Recorder.props(apiHub))
     val historian = ApiHub.system.actorOf(Historian.props(apiHub))
     val updater = ApiHub.system.actorOf(Updater.props(apiHub, 10))

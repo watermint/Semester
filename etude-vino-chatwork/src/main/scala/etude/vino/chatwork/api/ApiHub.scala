@@ -12,12 +12,10 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ApiHub()
+case class ApiHub(clockCycleInMillis: Int = 3000)
   extends ChatWorkEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
-
-  private val clockCycleInMillis = 3000
 
   private val realTimeQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
@@ -105,7 +103,7 @@ case class ApiHub()
 object ApiHub {
   val system = ActorSystem("cw-apihub")
 
-  def props(): Props = Props(ApiHub())
+  def props(clockCycleInMillis: Int): Props = Props(ApiHub(clockCycleInMillis))
 }
 
 
