@@ -3,13 +3,15 @@ package etude.vino.chatwork.api
 import java.util.concurrent.{ExecutorService, Executors}
 
 import akka.actor._
+import akka.pattern.pipe
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import etude.pintxos.chatwork.domain.service.v0.{Api => ChatWorkApi, NoLastIdAvailableException, NoSessionAvailableException}
+import etude.pintxos.chatwork.domain.service.v0.{Api => ChatWorkApi, SessionTimeoutException, NoLastIdAvailableException, NoSessionAvailableException}
 import etude.pintxos.chatwork.domain.service.v0.request.{GetUpdateRequest, ChatWorkRequest}
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
+import etude.vino.chatwork.Main
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Future, ExecutionContext}
 
 case class Api() extends Actor {
   val logger = LoggerFactory.getLogger(getClass)
@@ -22,16 +24,19 @@ case class Api() extends Actor {
 
   override def supervisorStrategy: SupervisorStrategy = {
     OneForOneStrategy(maxNrOfRetries = 3) {
-      case _: NoSessionAvailableException =>
-        ChatWorkApi.login(entityIOContext)
-        SupervisorStrategy.Resume
-
       case _: NoLastIdAvailableException =>
         val response = GetUpdateRequest().execute(entityIOContext)
         self ! response
         SupervisorStrategy.Resume
 
+      case _: NoSessionAvailableException =>
+        SupervisorStrategy.Restart
+
+      case _: SessionTimeoutException =>
+        SupervisorStrategy.Restart
+
       case _: Exception =>
+        Main.shutdown()
         SupervisorStrategy.Stop
     }
   }
@@ -39,8 +44,9 @@ case class Api() extends Actor {
   def receive: Receive = {
     case req: ChatWorkRequest =>
       logger.info(s"Execute request: $req")
-      val response = req.execute(entityIOContext)
-      Api.system.eventStream.publish(response)
+      Future {
+        req.execute(entityIOContext)
+      } pipeTo self
 
     case res: ChatWorkResponse =>
       Api.system.eventStream.publish(res)

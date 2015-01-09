@@ -10,6 +10,7 @@ import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriReques
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.impl.NoConnectionReuseStrategy
 import org.apache.http.impl.client._
 import org.apache.http.message.BasicNameValuePair
 
@@ -24,10 +25,8 @@ case class Client(context: ClientContext = ClientContext()) {
     HttpClients.custom()
       .setDefaultCookieStore(context.cookieStore)
       .setRedirectStrategy(new LaxRedirectStrategy)
-      //      .setConnectionManager(new BasicHttpClientConnectionManager)
-      //      .setConnectionReuseStrategy(new NoConnectionReuseStrategy)
       .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
-      .setSSLHostnameVerifier(new AllowAllHostnameVerifier())
+//      .setSSLHostnameVerifier(new AllowAllHostnameVerifier())  // required for http component 4.4-beta
       .build()
   }
 

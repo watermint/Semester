@@ -49,4 +49,10 @@ object Main {
     apiHub ! ApiEnqueue(InitLoadRequest(), PriorityRealTime)
   }
 
+
+  def shutdown(): Unit = {
+    Api.system.shutdown()
+    ApiHub.system.shutdown()
+    Storage.shutdown()
+  }
 }

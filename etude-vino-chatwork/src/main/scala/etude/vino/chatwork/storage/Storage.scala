@@ -34,7 +34,9 @@ object Storage {
       ).node()
   }
 
-  lazy val client: Client = createEmbeddedNode.client()
+  lazy val node = createEmbeddedNode
+
+  lazy val client: Client = node.client()
 
   def store(indexName: String,
             typeName: String,
@@ -90,5 +92,10 @@ object Storage {
       .get()
 
     response.getVersion
+  }
+
+  def shutdown(): Unit = {
+    client.close()
+    node.stop()
   }
 }
