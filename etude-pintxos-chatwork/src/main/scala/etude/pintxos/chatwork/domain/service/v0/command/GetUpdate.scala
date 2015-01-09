@@ -1,20 +1,16 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.GetUpdateParser
 import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.service.v0.response.GetUpdateResponse
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 import org.json4s._
-
-import scala.concurrent.Future
 
 object GetUpdate
   extends ChatWorkCommand[GetUpdateRequest, GetUpdateResponse] {
 
 
-  def execute(request: GetUpdateRequest)(implicit context: EntityIOContext[Future]): GetUpdateResponse = {
-    implicit val executor = getExecutionContext(context)
+  def execute(request: GetUpdateRequest)(implicit context: ChatWorkIOContext): GetUpdateResponse = {
     val json = updateRaw(request.updateLastId)
 
     GetUpdateResponse(
@@ -23,12 +19,10 @@ object GetUpdate
     )
   }
 
-  private def updateRaw(updateLastId: Boolean = true)(implicit context: EntityIOContext[Future]): JValue = {
-    implicit val executor = getExecutionContext(context)
-
+  private def updateRaw(updateLastId: Boolean = true)(implicit context: ChatWorkIOContext): JValue = {
     getLastId(context) match {
       case Some(lastId) =>
-        val json = Api.api("get_update", Map("last_id" -> lastId))
+        val json = ChatWorkApi.api("get_update", Map("last_id" -> lastId))
         if (updateLastId) {
           GetUpdateParser.parseLastId(json) match {
             case Some(newLastId) => setLastId(newLastId, context)

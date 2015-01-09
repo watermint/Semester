@@ -1,20 +1,15 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.{ParticipantParser, RoomParser}
 import etude.pintxos.chatwork.domain.service.v0.request.GetRoomInfoRequest
 import etude.pintxos.chatwork.domain.service.v0.response.GetRoomInfoResponse
-
-import scala.concurrent.Future
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 
 object GetRoomInfo
   extends ChatWorkCommand[GetRoomInfoRequest, GetRoomInfoResponse] {
 
 
-  def execute(request: GetRoomInfoRequest)(implicit context: EntityIOContext[Future]): GetRoomInfoResponse = {
-
-    implicit val executor = getExecutionContext(context)
+  def execute(request: GetRoomInfoRequest)(implicit context: ChatWorkIOContext): GetRoomInfoResponse = {
     import org.json4s.JsonDSL._
     import org.json4s.native.JsonMethods._
 
@@ -34,7 +29,7 @@ object GetRoomInfo
           )
         )
 
-    val json = Api.api(
+    val json = ChatWorkApi.api(
       "get_room_info",
       Map(),
       Map(

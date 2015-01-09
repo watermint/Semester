@@ -1,26 +1,20 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.CategoryParser
 import etude.pintxos.chatwork.domain.service.v0.request.AddCategoryRequest
 import etude.pintxos.chatwork.domain.service.v0.response.AddCategoryResponse
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
-
-import scala.concurrent.Future
 
 object AddCategory
   extends ChatWorkCommand[AddCategoryRequest, AddCategoryResponse] {
 
-
-  def execute(request: AddCategoryRequest)(implicit context: EntityIOContext[Future]): AddCategoryResponse = {
-    implicit val executor = getExecutionContext(context)
-
+  def execute(request: AddCategoryRequest)(implicit context: ChatWorkIOContext): AddCategoryResponse = {
     val pdata = ("name" -> request.name) ~
       ("r" -> request.rooms.map(_.value.toString()))
 
-    val json = Api.api(
+    val json = ChatWorkApi.api(
       "add_category",
       Map(),
       Map(

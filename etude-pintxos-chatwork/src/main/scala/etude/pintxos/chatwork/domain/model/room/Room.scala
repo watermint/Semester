@@ -3,9 +3,7 @@ package etude.pintxos.chatwork.domain.model.room
 import java.net.URI
 import java.time.Instant
 
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.manieres.domain.model.Entity
-import etude.pintxos.chatwork.domain.model.message.{MessageId, Text}
 
 import scala.language.higherKinds
 

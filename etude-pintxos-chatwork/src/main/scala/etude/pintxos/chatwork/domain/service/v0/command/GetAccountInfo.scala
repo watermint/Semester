@@ -1,24 +1,19 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.ContactParser
 import etude.pintxos.chatwork.domain.service.v0.request.GetAccountInfoRequest
 import etude.pintxos.chatwork.domain.service.v0.response.GetAccountInfoResponse
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 import org.json4s.JsonAST.{JField, JObject}
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
-
-import scala.concurrent.Future
 
 object GetAccountInfo
   extends ChatWorkCommand[GetAccountInfoRequest, GetAccountInfoResponse] {
 
 
-  def execute(request: GetAccountInfoRequest)(implicit context: EntityIOContext[Future]): GetAccountInfoResponse = {
-    implicit val executor = getExecutionContext(context)
-
-    val json = Api.api(
+  def execute(request: GetAccountInfoRequest)(implicit context: ChatWorkIOContext): GetAccountInfoResponse = {
+    val json = ChatWorkApi.api(
       "get_account_info",
       Map(),
       Map(

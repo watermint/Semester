@@ -1,10 +1,8 @@
 package etude.vino.chatwork
 
 import java.time.Instant
-import java.util.concurrent.{ExecutorService, Executors}
 
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import etude.pintxos.chatwork.domain.service.v0.request.InitLoadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.vino.chatwork.api._
@@ -13,8 +11,6 @@ import etude.vino.chatwork.markasread.MarkAsRead
 import etude.vino.chatwork.recorder.Recorder
 import etude.vino.chatwork.storage.Storage
 import etude.vino.chatwork.updater.Updater
-
-import scala.concurrent.ExecutionContext
 
 object Main {
   val logger = LoggerFactory.getLogger(getClass)

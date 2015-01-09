@@ -1,23 +1,19 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.request.EditCategoryRequest
 import etude.pintxos.chatwork.domain.service.v0.response.EditCategoryResponse
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
-
-import scala.concurrent.Future
 
 object EditCategory
   extends ChatWorkCommand[EditCategoryRequest, EditCategoryResponse] {
 
-  def execute(request: EditCategoryRequest)(implicit context: EntityIOContext[Future]): EditCategoryResponse = {
-    implicit val executor = getExecutionContext(context)
+  def execute(request: EditCategoryRequest)(implicit context: ChatWorkIOContext): EditCategoryResponse = {
     val pdata = ("name" -> request.category.name) ~
       ("r" -> request.category.rooms.map(_.value.toString())) ~
       ("cat_id" -> request.category.categoryId.value.toString())
-    val json = Api.api(
+    val json = ChatWorkApi.api(
       "edit_category",
       Map(),
       Map(

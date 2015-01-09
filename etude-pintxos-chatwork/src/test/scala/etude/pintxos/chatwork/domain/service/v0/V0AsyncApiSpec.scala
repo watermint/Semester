@@ -1,6 +1,5 @@
 package etude.pintxos.chatwork.domain.service.v0
 
-import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
@@ -15,10 +14,10 @@ class V0AsyncApiSpec
     "Login" in {
       withContext {
         implicit context =>
-          Api.login.isSuccess must beTrue
+          ChatWorkApi.login.isSuccess must beTrue
 
           context match {
-            case c: AsyncEntityIOContextOnV0Api =>
+            case c: ChatWorkIOContext =>
               c.myId.isSet must beTrue
               c.accessToken.isSet must beTrue
           }

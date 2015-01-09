@@ -1,20 +1,15 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadOldChatResponse
-
-import scala.concurrent.Future
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 
 object LoadOldChat
   extends ChatWorkCommand[LoadOldChatRequest, LoadOldChatResponse] {
 
-  def execute(request: LoadOldChatRequest)(implicit context: EntityIOContext[Future]): LoadOldChatResponse = {
-    implicit val executor = getExecutionContext(context)
-
-    val json = Api.api(
+  def execute(request: LoadOldChatRequest)(implicit context: ChatWorkIOContext): LoadOldChatResponse = {
+    val json = ChatWorkApi.api(
       "load_old_chat",
       Map(
         "room_id" -> request.lastMessage.roomId.value.toString(),

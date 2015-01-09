@@ -1,14 +1,11 @@
 package etude.pintxos.chatwork.domain.service.v0.command
 
-import etude.manieres.domain.lifecycle.EntityIOContext
 import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.service.v0.Api
 import etude.pintxos.chatwork.domain.service.v0.parser.MessageParser
 import etude.pintxos.chatwork.domain.service.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 import org.json4s.JsonAST.{JField, JObject, JString}
-
-import scala.concurrent.Future
 
 object LoadChat
   extends ChatWorkCommand[LoadChatRequest, LoadChatResponse] {
@@ -28,10 +25,9 @@ object LoadChat
     }
   }
 
-  def execute(request: LoadChatRequest)(implicit context: EntityIOContext[Future]): LoadChatResponse = {
-    implicit val executor = getExecutionContext(context)
+  def execute(request: LoadChatRequest)(implicit context: ChatWorkIOContext): LoadChatResponse = {
 
-    val json = Api.api(
+    val json = ChatWorkApi.api(
       "load_chat",
       Map(
         "room_id" -> request.room.value.toString(),

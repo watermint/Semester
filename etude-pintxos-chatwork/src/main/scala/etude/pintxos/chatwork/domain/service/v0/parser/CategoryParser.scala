@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.parser
 
-import etude.pintxos.chatwork.domain.model.room.{CategoryId, RoomId, Category}
-import org.json4s.JsonAST.{JArray, JString, JField, JObject}
+import etude.pintxos.chatwork.domain.model.room.{Category, CategoryId, RoomId}
+import org.json4s.JsonAST.{JArray, JField, JObject, JString}
 import org.json4s._
 
 object CategoryParser {

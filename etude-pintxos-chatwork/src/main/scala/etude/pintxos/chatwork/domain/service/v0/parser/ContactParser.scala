@@ -1,7 +1,7 @@
 package etude.pintxos.chatwork.domain.service.v0.parser
 
-import etude.pintxos.chatwork.domain.model.account.{ChatWorkId, AccountId, Account}
-import org.json4s.JsonAST.{JInt, JString, JObject, JField}
+import etude.pintxos.chatwork.domain.model.account.{Account, AccountId, ChatWorkId}
+import org.json4s.JsonAST.{JField, JInt, JObject, JString}
 import org.json4s._
 
 object ContactParser extends ParserBase {

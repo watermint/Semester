@@ -3,11 +3,8 @@ package etude.pintxos.chatwork.domain.service.v0.auth
 import java.net.URI
 
 import etude.epice.http._
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
-import etude.pintxos.chatwork.domain.service.v0.{Api, UnknownChatworkProtocolException}
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkEntityIO, ChatWorkIOContext, UnknownChatworkProtocolException}
 
-import scala.concurrent.Future
 import scala.util.Try
 
 trait Auth {
@@ -33,13 +30,13 @@ trait Auth {
   }
 }
 
-object Auth extends V0AsyncEntityIO {
+object Auth extends ChatWorkEntityIO {
   val providers = Seq(
     new Basic
   )
 
-  def loginUri(implicit context: EntityIOContext[Future]): URI = {
-    val baseUri: URIContainer = Api.baseUri
+  def loginUri(implicit context: ChatWorkIOContext): URI = {
+    val baseUri: URIContainer = ChatWorkApi.baseUri
     getOrganizationId(context) match {
       case Some(s) =>
         baseUri
@@ -54,7 +51,7 @@ object Auth extends V0AsyncEntityIO {
     }
   }
 
-  def login(implicit context: EntityIOContext[Future]): Try[AuthToken] = {
+  def login(implicit context: ChatWorkIOContext): Try[AuthToken] = {
     val client = getClient(context)
 
     client.get(loginUri) flatMap {

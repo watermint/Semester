@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.service.v0.parser
 import java.time.Instant
 
 import etude.pintxos.chatwork.domain.model.room._
-import org.json4s.JsonAST.{JString, JInt, JField, JObject}
+import org.json4s.JsonAST.{JField, JInt, JObject, JString}
 import org.json4s._
 
 object RoomParser extends ParserBase {

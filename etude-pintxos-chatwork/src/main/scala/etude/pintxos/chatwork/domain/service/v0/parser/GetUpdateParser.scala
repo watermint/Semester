@@ -1,17 +1,14 @@
 package etude.pintxos.chatwork.domain.service.v0.parser
 
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
-import etude.pintxos.chatwork.domain.service.v0.model.RoomUpdateInfo
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.RoomId
+import etude.pintxos.chatwork.domain.service.v0.ChatWorkEntityIO
+import etude.pintxos.chatwork.domain.service.v0.model.RoomUpdateInfo
 import org.json4s.JsonAST.{JField, JInt, JObject, JString}
 import org.json4s._
 
-import scala.concurrent.Future
-
 object GetUpdateParser
-  extends V0AsyncEntityIO
+  extends ChatWorkEntityIO
   with ParserBase {
 
   def parseLastId(json: JValue): Option[String] = {
@@ -24,8 +21,7 @@ object GetUpdateParser
     lastId.lastOption
   }
 
-  def parseRoomUpdateInfo(json: JValue)(implicit context: EntityIOContext[Future]): Seq[RoomUpdateInfo] = {
-    implicit val executionContext = getExecutionContext(context)
+  def parseRoomUpdateInfo(json: JValue): Seq[RoomUpdateInfo] = {
     for {
       JObject(update) <- json
       JField("update_info", JObject(updateInfo)) <- update

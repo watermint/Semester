@@ -1,8 +1,8 @@
 package etude.pintxos.chatwork.domain.service.v0.parser
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
-import etude.pintxos.chatwork.domain.model.room.{RoomId, Participant}
-import org.json4s.JsonAST.{JInt, JField, JObject}
+import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
+import org.json4s.JsonAST.{JField, JInt, JObject}
 import org.json4s._
 
 object ParticipantParser extends ParserBase {

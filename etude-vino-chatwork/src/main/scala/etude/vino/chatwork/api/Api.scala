@@ -5,20 +5,19 @@ import java.util.concurrent.{ExecutorService, Executors}
 import akka.actor._
 import akka.pattern.pipe
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.infrastructure.api.AsyncEntityIOContextOnV0Api
-import etude.pintxos.chatwork.domain.service.v0.{Api => ChatWorkApi, SessionTimeoutException, NoLastIdAvailableException, NoSessionAvailableException}
-import etude.pintxos.chatwork.domain.service.v0.request.{GetUpdateRequest, ChatWorkRequest}
+import etude.pintxos.chatwork.domain.service.v0.request.{ChatWorkRequest, GetUpdateRequest}
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
+import etude.pintxos.chatwork.domain.service.v0._
 import etude.vino.chatwork.Main
 
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
 
 case class Api() extends Actor {
   val logger = LoggerFactory.getLogger(getClass)
 
   val executorsPool: ExecutorService = Executors.newSingleThreadExecutor()
   implicit val executors = ExecutionContext.fromExecutorService(executorsPool)
-  implicit val entityIOContext = AsyncEntityIOContextOnV0Api.fromThinConfig()
+  implicit val entityIOContext = ChatWorkIOContext.fromThinConfig()
 
   ChatWorkApi.login(entityIOContext)
 

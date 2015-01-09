@@ -3,26 +3,22 @@ package etude.pintxos.chatwork.domain.service.v0
 import java.net.URI
 
 import etude.epice.http._
-import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
 import etude.pintxos.chatwork.domain.service.v0.auth.Auth
 import org.json4s._
 
-import scala.concurrent.Future
-import scala.language.higherKinds
 import scala.util.{Failure, Success, Try}
 
-object Api
-  extends V0AsyncEntityIO {
+object ChatWorkApi
+  extends ChatWorkEntityIO {
 
-  def isKddiChatwork(implicit context: EntityIOContext[Future]): Boolean = {
+  def isKddiChatwork(implicit context: ChatWorkIOContext): Boolean = {
     getOrganizationId(context) match {
       case Some(o) => true
       case _ => false
     }
   }
 
-  def baseUri(implicit context: EntityIOContext[Future]): URI = {
+  def baseUri(implicit context: ChatWorkIOContext): URI = {
     if (isKddiChatwork) {
       new URI("https://kcw.kddi.ne.jp/")
     } else {
@@ -30,7 +26,7 @@ object Api
     }
   }
 
-  def login(implicit context: EntityIOContext[Future]): Try[Boolean] = {
+  def login(implicit context: ChatWorkIOContext): Try[Boolean] = {
     Auth.login map {
       token =>
         setAccessToken(token.accessToken, context)
@@ -44,7 +40,7 @@ object Api
 
   protected def apiUri(command: String,
                        params: Map[String, String])
-                      (implicit context: EntityIOContext[Future]): URI = {
+                      (implicit context: ChatWorkIOContext): URI = {
 
     (getMyId(context), getAccessToken(context)) match {
       case (Some(myId), Some(token)) =>
@@ -84,7 +80,7 @@ object Api
   def api(command: String,
           params: Map[String, String],
           data: Map[String, String] = Map())
-         (implicit context: EntityIOContext[Future]): JValue = {
+         (implicit context: ChatWorkIOContext): JValue = {
     if (!hasToken(context)) {
       throw NoSessionAvailableException()
     }

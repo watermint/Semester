@@ -2,7 +2,7 @@ package etude.pintxos.chatwork.domain.service.v0.parser
 
 import java.net.URI
 
-import etude.pintxos.chatwork.domain.model.account.{OrganizationId, Organization}
+import etude.pintxos.chatwork.domain.model.account.{Organization, OrganizationId}
 
 trait ParserBase {
   val accountIconUrlBase = "https://tky-chat-work-appdata.s3.amazonaws.com/avatar/"

@@ -5,7 +5,7 @@ import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
 import akka.actor.{Actor, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
 import etude.manieres.domain.lifecycle.EntityIOContext
-import etude.pintxos.chatwork.domain.infrastructure.api.V0AsyncEntityIO
+import etude.pintxos.chatwork.domain.service.v0.ChatWorkEntityIO
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class ApiHub()
-  extends V0AsyncEntityIO with Actor {
+  extends ChatWorkEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
 

@@ -3,9 +3,9 @@ package etude.pintxos.chatwork.domain.service.v0.parser
 import java.time.Instant
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
-import etude.pintxos.chatwork.domain.model.message.{Text, MessageId, Message}
+import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.pintxos.chatwork.domain.model.room.RoomId
-import org.json4s.JsonAST.{JString, JInt, JField, JObject}
+import org.json4s.JsonAST.{JField, JInt, JObject, JString}
 import org.json4s._
 
 object MessageParser extends ParserBase {
