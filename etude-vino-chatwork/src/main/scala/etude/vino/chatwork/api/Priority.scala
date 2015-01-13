@@ -2,7 +2,7 @@ package etude.vino.chatwork.api
 
 sealed trait Priority
 
-case object PriorityRealTime extends Priority
+case object PriorityHigh extends Priority
 
 case object PriorityNormal extends Priority
 

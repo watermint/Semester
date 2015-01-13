@@ -15,7 +15,7 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private val realTimeQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
+  private val highQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
   private val normalQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
@@ -70,7 +70,7 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
     logger.info(s"Enqueue request: $request with priority $priority")
     priority match {
-      case PriorityRealTime => realTimeQueue.add(request)
+      case PriorityHigh => highQueue.add(request)
       case PriorityNormal => normalQueue.add(request)
       case PriorityLow => lowQueue.add(request)
       case PriorityLower => lowerQueue.add(request)
@@ -86,8 +86,8 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   }
 
   protected def dequeue(): Option[ChatWorkRequest] = {
-    logger.info(s"Queue size: Realtime: ${realTimeQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}, Lower: ${lowerQueue.size()}")
-    realTimeQueue.poll() match {
+    logger.info(s"Queue size: High: ${highQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}, Lower: ${lowerQueue.size()}")
+    highQueue.poll() match {
       case r: ChatWorkRequest => Some(r)
       case null => dequeueNormal()
     }
