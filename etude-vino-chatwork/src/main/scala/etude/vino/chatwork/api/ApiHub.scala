@@ -1,6 +1,6 @@
 package etude.vino.chatwork.api
 
-import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit}
+import java.util.concurrent.{Semaphore, ConcurrentLinkedQueue, TimeUnit}
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import etude.epice.logging.LoggerFactory
@@ -23,6 +23,8 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
 
   private val lowerQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
 
+  private val semaphore = new Semaphore(1)
+
   private implicit val executionContext = ApiHub.system.dispatcher
 
   case class ApiTick()
@@ -39,12 +41,15 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
 
   def receive: Receive = {
     case r: ApiTick =>
-      execute()
+      if (semaphore.tryAcquire()) {
+        execute()
+      }
 
     case r: ApiEnqueue =>
       enqueue(r.request)(r.priority)
 
     case r: ChatWorkResponse =>
+      semaphore.release()
       ApiHub.system.eventStream.publish(r)
       schedule()
   }

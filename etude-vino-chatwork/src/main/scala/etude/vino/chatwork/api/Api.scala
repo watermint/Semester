@@ -1,57 +1,61 @@
 package etude.vino.chatwork.api
 
-import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
-import java.util.concurrent.locks.ReentrantLock
+import java.net.InetAddress
+import java.time.Instant
+import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor._
-import akka.pattern.pipe
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0._
-import etude.pintxos.chatwork.domain.service.v0.request.{ChatWorkRequest, GetUpdateRequest}
+import etude.pintxos.chatwork.domain.service.v0.request.{ChatWorkRequest, InitLoadRequest}
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
-import etude.vino.chatwork.Main
 
-import scala.concurrent.Future
-
-case class Api() extends Actor {
+case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
   val logger = LoggerFactory.getLogger(getClass)
 
   implicit val executors = Api.system.dispatcher
-  val chatworkLock = new ReentrantLock()
   val counter = new AtomicInteger()
-  val chatworkContext = ChatWorkIOContext.fromThinConfig()
+  val chatwork = InetAddress.getByName("www.chatwork.com")
 
-  ChatWorkApi.login(chatworkContext)
-
-  override def supervisorStrategy: SupervisorStrategy = {
+  override val supervisorStrategy: SupervisorStrategy = {
     OneForOneStrategy(maxNrOfRetries = 1) {
-      case _: NoLastIdAvailableException =>
-        val response = GetUpdateRequest().execute(chatworkContext)
-        self ! response
-        SupervisorStrategy.Resume
-
       case _: NoSessionAvailableException =>
-        SupervisorStrategy.Restart
+        SupervisorStrategy.Escalate
 
       case _: SessionTimeoutException =>
-        SupervisorStrategy.Restart
+        SupervisorStrategy.Escalate
 
       case _: Exception =>
         SupervisorStrategy.Restart
     }
   }
 
+  def ensureAvailable(maxWaitInMillis: Int): Boolean = {
+    val pingCount = new AtomicInteger()
+    val end = Instant.now.plusMillis(maxWaitInMillis)
+
+    while (Instant.now().isBefore(end)) {
+      try {
+        if (chatwork.isReachable(maxWaitInMillis)) {
+          return true
+        }
+        logger.info(s"${pingCount.incrementAndGet()}: Network unreachable..")
+        Thread.sleep(maxWaitInMillis / 10)
+      } catch {
+        case _: Exception =>
+          // ignore
+      }
+    }
+    false
+  }
+
+  ensureAvailable(10000)
+
   def receive: Receive = {
     case req: ChatWorkRequest =>
       logger.info(s"Execute request[${counter.incrementAndGet()}]: $req")
-      Future {
-        chatworkLock.lock()
-        try {
-          req.execute(chatworkContext)
-        } finally {
-          chatworkLock.unlock()
-        }
-      } pipeTo self
+      val res = req.execute(chatworkContext)
+      self ! res
 
     case res: ChatWorkResponse =>
       Api.system.eventStream.publish(res)
@@ -61,5 +65,5 @@ case class Api() extends Actor {
 object Api {
   val system = ActorSystem("cw-api")
 
-  def props() = Props(Api())
+  def props(chatworkContext: ChatWorkIOContext) = Props(Api(chatworkContext))
 }

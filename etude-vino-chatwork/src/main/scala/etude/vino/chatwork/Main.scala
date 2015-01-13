@@ -31,8 +31,8 @@ object Main {
       case _: Exception => // ignore
     }
 
-    val api = Api.system.actorOf(Api.props())
-    val apiHub = ApiHub.system.actorOf(ApiHub.props(api, 2000))
+    val apiSession = ApiSession.system.actorOf(ApiSession.props())
+    val apiHub = ApiHub.system.actorOf(ApiHub.props(apiSession, 2000))
     val recorder = ApiHub.system.actorOf(Recorder.props(apiHub))
     val historian = ApiHub.system.actorOf(Historian.props(apiHub))
     val updater = ApiHub.system.actorOf(Updater.props(apiHub, 10))
@@ -43,8 +43,6 @@ object Main {
     ApiHub.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
     ApiHub.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
-
-    apiHub ! ApiEnqueue(InitLoadRequest(), PriorityRealTime)
   }
 
 
