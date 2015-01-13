@@ -2,9 +2,9 @@ package etude.vino.chatwork.api
 
 import java.util.concurrent.{Semaphore, ConcurrentLinkedQueue, TimeUnit}
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor._
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.service.v0.ChatWorkEntityIO
+import etude.pintxos.chatwork.domain.service.v0.{SessionTimeoutException, NoSessionAvailableException, ChatWorkEntityIO}
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
@@ -30,6 +30,19 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   case class ApiTick()
 
   schedule()
+
+  override val supervisorStrategy: SupervisorStrategy = {
+    OneForOneStrategy(maxNrOfRetries = 1) {
+      case _: NoSessionAvailableException =>
+        SupervisorStrategy.Restart
+
+      case _: SessionTimeoutException =>
+        SupervisorStrategy.Restart
+
+      case _: Exception =>
+        SupervisorStrategy.Stop
+    }
+  }
 
   def schedule(): Unit = {
     ApiHub.system.scheduler.scheduleOnce(
