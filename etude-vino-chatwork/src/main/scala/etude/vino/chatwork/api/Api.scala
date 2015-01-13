@@ -15,10 +15,9 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
 
   implicit val executors = Api.system.dispatcher
   val counter = new AtomicInteger()
-  val chatwork = InetAddress.getByName("www.chatwork.com")
 
   override val supervisorStrategy: SupervisorStrategy = {
-    OneForOneStrategy(maxNrOfRetries = 1) {
+    AllForOneStrategy(maxNrOfRetries = 1) {
       case _: NoSessionAvailableException =>
         SupervisorStrategy.Escalate
 
@@ -30,26 +29,28 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
     }
   }
 
+
+  @throws[Exception](classOf[Exception])
+  override def preStart(): Unit = {
+    ensureAvailable(10000)
+  }
+
   def ensureAvailable(maxWaitInMillis: Int): Boolean = {
-    val pingCount = new AtomicInteger()
     val end = Instant.now.plusMillis(maxWaitInMillis)
+    val period = Math.max(1, maxWaitInMillis / 10)
 
     while (Instant.now().isBefore(end)) {
       try {
-        if (chatwork.isReachable(maxWaitInMillis)) {
-          return true
-        }
-        logger.info(s"${pingCount.incrementAndGet()}: Network unreachable..")
-        Thread.sleep(maxWaitInMillis / 10)
+        InetAddress.getByName("api.chatwork.com")
+        return true
       } catch {
         case _: Exception =>
-          // ignore
+          Thread.sleep(period)
       }
     }
+    logger.info(s"Network unreachable..")
     false
   }
-
-  ensureAvailable(10000)
 
   def receive: Receive = {
     case req: ChatWorkRequest =>

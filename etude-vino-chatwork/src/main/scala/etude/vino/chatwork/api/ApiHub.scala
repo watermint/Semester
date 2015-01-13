@@ -10,7 +10,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
 import scala.concurrent.duration._
 
-case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
+case class ApiHub(api: ActorRef, clockCycleInSeconds: Int)
   extends ChatWorkEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
@@ -32,21 +32,32 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   schedule()
 
   override val supervisorStrategy: SupervisorStrategy = {
-    OneForOneStrategy(maxNrOfRetries = 1) {
+    AllForOneStrategy(maxNrOfRetries = 1) {
       case _: NoSessionAvailableException =>
+        semaphore.release()
         SupervisorStrategy.Restart
 
       case _: SessionTimeoutException =>
+        semaphore.release()
         SupervisorStrategy.Restart
 
-      case _: Exception =>
+      case _: java.net.SocketException =>
+        semaphore.release()
+        SupervisorStrategy.Restart
+
+      case _: org.apache.http.NoHttpResponseException =>
+        semaphore.release()
+        SupervisorStrategy.Restart
+
+      case e: Exception =>
+        logger.error(s"Unexpected exception: Supervisor stops operation", e)
         SupervisorStrategy.Stop
     }
   }
 
   def schedule(): Unit = {
     ApiHub.system.scheduler.scheduleOnce(
-      Duration.create(clockCycleInMillis, TimeUnit.MILLISECONDS),
+      Duration.create(clockCycleInSeconds, TimeUnit.SECONDS),
       self,
       ApiTick()
     )
@@ -68,7 +79,7 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
-    logger.info(s"Enqueue request: $request with priority $priority")
+    logger.debug(s"Enqueue request: $request with priority $priority")
     priority match {
       case PriorityHigh => highQueue.add(request)
       case PriorityNormal => normalQueue.add(request)
@@ -86,7 +97,7 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
   }
 
   protected def dequeue(): Option[ChatWorkRequest] = {
-    logger.info(s"Queue size: High: ${highQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}, Lower: ${lowerQueue.size()}")
+    logger.debug(s"Queue size: High: ${highQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}, Lower: ${lowerQueue.size()}")
     highQueue.poll() match {
       case r: ChatWorkRequest => Some(r)
       case null => dequeueNormal()
@@ -121,7 +132,7 @@ case class ApiHub(api: ActorRef, clockCycleInMillis: Int)
 object ApiHub {
   val system = ActorSystem("cw-apihub")
 
-  def props(api: ActorRef, clockCycleInMillis: Int): Props = Props(ApiHub(api, clockCycleInMillis))
+  def props(api: ActorRef, clockCycleInSeconds: Int): Props = Props(ApiHub(api, clockCycleInSeconds))
 }
 
 

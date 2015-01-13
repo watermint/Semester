@@ -22,7 +22,7 @@ case class ApiSession() extends Actor {
         SupervisorStrategy.Restart
 
       case _: Exception =>
-        SupervisorStrategy.Restart
+        SupervisorStrategy.Escalate
     }
   }
 

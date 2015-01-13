@@ -40,15 +40,20 @@ case class Historian(apiHub: ActorRef)
       }
 
     case r: LoadChatResponse =>
-      updateChunk(
-        r.chatList.last.messageId.roomId,
-        Chunk.fromMessages(r.chatList)
-      )
-      assistant ! NextChunk(r.chatList.seq.minBy(_.messageId.messageId).messageId)
+      if (r.chatList.size < 3) {
+        logger.debug(s"Loading chat for room ${r.chatList.last.messageId.roomId} reached EPOCH.")
+        updateChunk(r.chatList.last.messageId.roomId, Chunk.epochChunk(r.chatList.last.messageId))
+      } else {
+        updateChunk(
+          r.chatList.last.messageId.roomId,
+          Chunk.fromMessages(r.chatList)
+        )
+        assistant ! NextChunk(r.chatList.seq.minBy(_.messageId.messageId).messageId)
+      }
 
     case r: LoadOldChatResponse =>
       if (r.messages.size == 0) {
-        logger.info(s"Loading chat for room ${r.lastMessage.roomId} reached EPOCH.")
+        logger.debug(s"Loading chat for room ${r.lastMessage.roomId} reached EPOCH.")
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
       } else {
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))

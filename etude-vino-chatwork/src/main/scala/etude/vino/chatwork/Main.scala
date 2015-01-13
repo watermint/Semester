@@ -32,10 +32,10 @@ object Main {
     }
 
     val apiSession = ApiSession.system.actorOf(ApiSession.props())
-    val apiHub = ApiHub.system.actorOf(ApiHub.props(apiSession, 2000))
+    val apiHub = ApiHub.system.actorOf(ApiHub.props(apiSession, 2))
     val recorder = ApiHub.system.actorOf(Recorder.props(apiHub))
     val historian = ApiHub.system.actorOf(Historian.props(apiHub))
-    val updater = ApiHub.system.actorOf(Updater.props(apiHub, 10))
+    val updater = ApiHub.system.actorOf(Updater.props(apiHub, 30))
     val markasread = ApiHub.system.actorOf(MarkAsRead.props(apiHub))
 
     Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
