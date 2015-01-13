@@ -16,7 +16,7 @@ import org.apache.http.message.BasicNameValuePair
 
 import scala.collection.JavaConverters._
 import scala.language.higherKinds
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
 
 case class Client(context: ClientContext = ClientContext()) {
   val logger = LoggerFactory.getLogger(getClass)
@@ -58,8 +58,7 @@ case class Client(context: ClientContext = ClientContext()) {
       )
     } catch {
       case e: Exception =>
-        logger.error(s"Failed request $req with error on thread ${Thread.currentThread()}", e)
-        throw e
+        Failure(e)
     } finally {
       currentClient.close()
     }

@@ -1,16 +1,17 @@
 package etude.vino.chatwork.api
 
-import java.util.concurrent.{Semaphore, ConcurrentLinkedQueue, TimeUnit}
+import java.util.concurrent.{ConcurrentLinkedQueue, Semaphore, TimeUnit}
 
 import akka.actor._
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.service.v0.{SessionTimeoutException, NoSessionAvailableException, ChatWorkEntityIO}
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, SessionTimeoutException}
+import etude.vino.chatwork.Main
 
 import scala.concurrent.duration._
 
-case class ApiHub(api: ActorRef, clockCycleInSeconds: Int)
+case class ApiHub(clockCycleInSeconds: Int)
   extends ChatWorkEntityIO with Actor {
 
   private val logger = LoggerFactory.getLogger(getClass)
@@ -25,38 +26,40 @@ case class ApiHub(api: ActorRef, clockCycleInSeconds: Int)
 
   private val semaphore = new Semaphore(1)
 
-  private implicit val executionContext = ApiHub.system.dispatcher
+  private val api = context.actorOf(ApiSession.props())
+
+  private implicit val executionContext = Api.system.dispatcher
 
   case class ApiTick()
 
   schedule()
 
-  override val supervisorStrategy: SupervisorStrategy = {
-    AllForOneStrategy(maxNrOfRetries = 1) {
-      case _: NoSessionAvailableException =>
+  override def supervisorStrategy: SupervisorStrategy = {
+    OneForOneStrategy(maxNrOfRetries = 1) {
+      case e: SessionTimeoutException =>
+        logger.warn("No session available", e)
         semaphore.release()
         SupervisorStrategy.Restart
 
-      case _: SessionTimeoutException =>
-        semaphore.release()
-        SupervisorStrategy.Restart
-
-      case _: java.net.SocketException =>
-        semaphore.release()
-        SupervisorStrategy.Restart
-
-      case _: org.apache.http.NoHttpResponseException =>
-        semaphore.release()
-        SupervisorStrategy.Restart
+      case e: java.net.SocketException | org.apache.http.NoHttpResponseException =>
+        logger.warn("Issue on network connection", e)
+        if (Api.ensureAvailable()) {
+          semaphore.release()
+          SupervisorStrategy.Resume
+        } else {
+          logger.warn("Cannot connect to network. Trying to shutdown")
+          Main.shutdown()
+          SupervisorStrategy.Stop
+        }
 
       case e: Exception =>
-        logger.error(s"Unexpected exception: Supervisor stops operation", e)
+        logger.debug(s"Unexpected exception: Supervisor stops operation", e)
         SupervisorStrategy.Stop
     }
   }
 
   def schedule(): Unit = {
-    ApiHub.system.scheduler.scheduleOnce(
+    Api.system.scheduler.scheduleOnce(
       Duration.create(clockCycleInSeconds, TimeUnit.SECONDS),
       self,
       ApiTick()
@@ -64,6 +67,10 @@ case class ApiHub(api: ActorRef, clockCycleInSeconds: Int)
   }
 
   def receive: Receive = {
+    case r: RefreshSemaphore =>
+      semaphore.release()
+      schedule()
+
     case r: ApiTick =>
       if (semaphore.tryAcquire()) {
         execute()
@@ -74,7 +81,6 @@ case class ApiHub(api: ActorRef, clockCycleInSeconds: Int)
 
     case r: ChatWorkResponse =>
       semaphore.release()
-      ApiHub.system.eventStream.publish(r)
       schedule()
   }
 
@@ -130,9 +136,7 @@ case class ApiHub(api: ActorRef, clockCycleInSeconds: Int)
 }
 
 object ApiHub {
-  val system = ActorSystem("cw-apihub")
-
-  def props(api: ActorRef, clockCycleInSeconds: Int): Props = Props(ApiHub(api, clockCycleInSeconds))
+  def props(clockCycleInSeconds: Int): Props = Props(ApiHub(clockCycleInSeconds))
 }
 
 

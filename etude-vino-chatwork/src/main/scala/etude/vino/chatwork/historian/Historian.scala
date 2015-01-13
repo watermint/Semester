@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room._
-import etude.vino.chatwork.api.{PriorityLower, ApiEnqueue, PriorityLow}
+import etude.vino.chatwork.api.{Api, PriorityLower, ApiEnqueue, PriorityLow}
 import etude.vino.chatwork.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.historian.operation.{NextChunk, Traverse}
 import etude.vino.chatwork.storage.Storage
@@ -17,7 +17,7 @@ case class Historian(apiHub: ActorRef)
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  val assistant = Historian.system.actorOf(Assistant.props(apiHub))
+  val assistant = Api.system.actorOf(Assistant.props(apiHub))
 
   val priorityLoadingDurationInSeconds = 86400 * 2
 
@@ -121,6 +121,4 @@ object Historian {
   val typeName = "room-chunk"
 
   def props(apiHub: ActorRef): Props = Props(Historian(apiHub))
-
-  val system = ActorSystem("cw-historian")
 }

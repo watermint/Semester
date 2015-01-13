@@ -31,24 +31,23 @@ object Main {
       case _: Exception => // ignore
     }
 
-    val apiSession = ApiSession.system.actorOf(ApiSession.props())
-    val apiHub = ApiHub.system.actorOf(ApiHub.props(apiSession, 2))
-    val recorder = ApiHub.system.actorOf(Recorder.props(apiHub))
-    val historian = ApiHub.system.actorOf(Historian.props(apiHub))
-    val updater = ApiHub.system.actorOf(Updater.props(apiHub, 30))
-    val markasread = ApiHub.system.actorOf(MarkAsRead.props(apiHub))
+    val apiHub = Api.system.actorOf(ApiHub.props(2))
+    val recorder = Api.system.actorOf(Recorder.props(apiHub))
+    val historian = Api.system.actorOf(Historian.props(apiHub))
+    val updater = Api.system.actorOf(Updater.props(apiHub, 30))
+    val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
 
+    Api.system.eventStream.subscribe(apiHub, classOf[RefreshSemaphore])
     Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
-    ApiHub.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
   }
 
 
   def shutdown(): Unit = {
     Api.system.shutdown()
-    ApiHub.system.shutdown()
     Storage.shutdown()
   }
 }

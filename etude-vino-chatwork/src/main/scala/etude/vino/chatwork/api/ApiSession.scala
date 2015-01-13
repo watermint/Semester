@@ -1,27 +1,38 @@
 package etude.vino.chatwork.api
 
 import akka.actor._
+import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.{ChatWorkRequest, InitLoadRequest}
-import etude.pintxos.chatwork.domain.service.v0.{SessionTimeoutException, NoSessionAvailableException, ChatWorkApi, ChatWorkIOContext}
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
+
+import scala.concurrent.duration._
 
 case class ApiSession() extends Actor {
   val chatworkContext = ChatWorkIOContext.fromThinConfig()
 
-  val api = Api.system.actorOf(Api.props(chatworkContext))
+  val api = context.actorOf(Api.props(chatworkContext))
+
+  val logger = LoggerFactory.getLogger(getClass)
 
   case class ContextInitialization()
 
   self ! ContextInitialization()
 
-  override val supervisorStrategy: SupervisorStrategy = {
-    OneForOneStrategy(maxNrOfRetries = 1) {
-      case _: NoSessionAvailableException =>
-        SupervisorStrategy.Restart
+  override def supervisorStrategy: SupervisorStrategy = {
+    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 10 minutes) {
+      case e: java.net.SocketException =>
+        logger.warn("SocketException", e)
+        Api.ensureAvailable()
+        Api.system.eventStream.publish(RefreshSemaphore())
+        SupervisorStrategy.Resume
 
-      case _: SessionTimeoutException =>
-        SupervisorStrategy.Restart
+      case e: org.apache.http.NoHttpResponseException =>
+        logger.warn("No http response", e)
+        Api.ensureAvailable()
+        Api.system.eventStream.publish(RefreshSemaphore())
+        SupervisorStrategy.Resume
 
-      case _: Exception =>
+      case e: Exception =>
         SupervisorStrategy.Escalate
     }
   }
@@ -38,7 +49,5 @@ case class ApiSession() extends Actor {
 }
 
 object ApiSession {
-  val system = ActorSystem("cw-apisession")
-
   def props() = Props(ApiSession())
 }
