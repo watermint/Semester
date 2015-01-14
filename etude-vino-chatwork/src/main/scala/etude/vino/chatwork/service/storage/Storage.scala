@@ -11,14 +11,16 @@ import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
 object Storage {
-  val storagePath = Paths.get(System.getProperty("user.home"), ".etude-vino-chatwork-dev")
+  val status = "-dev"
+
+  val storagePath = Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork$status")
 
   val useTransportClient = false
 
   def createEmbeddedNode: Node = {
     NodeBuilder
       .nodeBuilder()
-      .clusterName("chatwork")
+      .clusterName(s"chatwork$status")
       .local(false)
       .settings(
         ImmutableSettings

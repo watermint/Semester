@@ -12,9 +12,12 @@ case class UI() extends Actor {
         m.perform()
       }
 
+    case "startup" =>
+      Service.startup()
+
     case "shutdown" =>
-      UI.system.shutdown()
       Service.shutdown()
+      UI.system.shutdown()
   }
 }
 

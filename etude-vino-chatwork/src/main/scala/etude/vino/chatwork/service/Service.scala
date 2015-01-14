@@ -14,7 +14,7 @@ import etude.vino.chatwork.service.updater.Updater
 object Service {
   val logger = LoggerFactory.getLogger(getClass)
 
-  def main(args: Array[String]) {
+  def startup() {
     try {
       val ver = Storage.client.prepareIndex()
         .setIndex("cw-vino")
@@ -35,10 +35,11 @@ object Service {
 //    val updater = Api.system.actorOf(Updater.props(apiHub, 10))
 //    val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
 
-    Api.system.eventStream.subscribe(apiHub, classOf[RefreshSemaphore])
+    Api.system.eventStream.subscribe(apiHub, classOf[NetworkRecovered])
     Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse[_]])
     Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse[_]])
 //    Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse[_]])
+//    Api.system.eventStream.subscribe(updater, classOf[RefreshSemaphore])
 //    Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse[_]])
 //    Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse[_]])
   }
