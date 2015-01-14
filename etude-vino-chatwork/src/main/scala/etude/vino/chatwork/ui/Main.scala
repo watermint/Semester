@@ -41,9 +41,19 @@ object Main extends JFXApp {
             None,
             None,
             RoomTypeDirect(),
-            Some(new URI("http://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png")),
+            None,
+            None
+          ),
+          new Room(
+            RoomId(789),
+            "test789",
+            None,
+            None,
+            RoomTypeDirect(),
+            None,
             None
           )
+
         )
         RoomList.roomListView.items = ObservableBuffer(items)
       }
