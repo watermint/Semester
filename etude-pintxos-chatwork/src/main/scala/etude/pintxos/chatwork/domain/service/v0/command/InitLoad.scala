@@ -37,6 +37,7 @@ object InitLoad
 
     val content = InitLoadResponse(
       json,
+      request,
       contacts = ContactParser.parseContacts(json),
       rooms = RoomParser.parseRooms(json),
       participants = ParticipantParser.parseParticipants(json)

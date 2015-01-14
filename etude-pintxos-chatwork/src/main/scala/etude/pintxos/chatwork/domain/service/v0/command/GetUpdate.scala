@@ -15,6 +15,7 @@ object GetUpdate
 
     GetUpdateResponse(
       json,
+      request,
       GetUpdateParser.parseRoomUpdateInfo(json)
     )
   }

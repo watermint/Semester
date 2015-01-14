@@ -38,11 +38,11 @@ object Main {
     val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
 
     Api.system.eventStream.subscribe(apiHub, classOf[RefreshSemaphore])
-    Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
-    Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse])
-    Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
-    Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
-    Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse[_]])
+    Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse[_]])
+    Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse[_]])
+    Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse[_]])
+    Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse[_]])
   }
 
 

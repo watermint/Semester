@@ -39,6 +39,7 @@ object GetRoomInfo
 
     GetRoomInfoResponse(
       json,
+      request,
       RoomParser.parseRooms(json).last,
       ParticipantParser.parseParticipants(json).last
     )

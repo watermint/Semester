@@ -24,6 +24,7 @@ object EditCategory
     // TODO : parse json
     EditCategoryResponse(
       json,
+      request,
       request.category
     )
   }

@@ -30,7 +30,7 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
       val res = req.execute(chatworkContext)
       self ! res
 
-    case res: ChatWorkResponse =>
+    case res: ChatWorkResponse[_] =>
       Api.system.eventStream.publish(res)
   }
 }

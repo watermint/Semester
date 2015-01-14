@@ -77,7 +77,7 @@ case class ApiHub(clockCycleInSeconds: Int)
         self ! ApiTick()
       }
 
-    case r: ChatWorkResponse =>
+    case r: ChatWorkResponse[_] =>
       semaphore.release()
       schedule()
   }

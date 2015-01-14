@@ -33,6 +33,7 @@ object UpdateRoom
     //TODO: parse json
     UpdateRoomResponse(
       json,
+      request,
       request.participant
     )
 

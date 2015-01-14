@@ -16,6 +16,7 @@ object GetCategory
 
     GetCategoryResponse(
       json,
+      request,
       CategoryParser.parseCategory(json)
     )
   }

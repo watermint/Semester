@@ -22,6 +22,7 @@ object DeleteCategory
 
     DeleteCategoryResponse(
       json,
+      request,
       request.categoryId
     )
   }

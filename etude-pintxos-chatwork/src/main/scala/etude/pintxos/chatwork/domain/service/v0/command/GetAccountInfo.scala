@@ -23,6 +23,7 @@ object GetAccountInfo
 
     GetAccountInfoResponse(
       json,
+      request,
       for {
         JObject(doc) <- json
         JField("account_dat", JObject(contactDat)) <- doc

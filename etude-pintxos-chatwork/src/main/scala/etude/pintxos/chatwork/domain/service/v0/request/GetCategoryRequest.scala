@@ -6,7 +6,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
 case class GetCategoryRequest()
   extends ChatWorkRequest {
-  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse = {
+  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse[_] = {
     GetCategory.execute(this)
   }
 }

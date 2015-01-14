@@ -19,6 +19,7 @@ object LoadOldChat
 
     LoadOldChatResponse(
       json,
+      request,
       request.lastMessage,
       MessageParser.parseMessage(request.lastMessage.roomId, json)
     )

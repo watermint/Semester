@@ -48,6 +48,7 @@ object LoadChat
 
       LoadChatResponse(
         json,
+        request,
         MessageParser.parseMessage(request.room, chatList),
         m.get("description") collect { case JString(d) => d},
         m.get("public_description") collect { case JString(d) => d}

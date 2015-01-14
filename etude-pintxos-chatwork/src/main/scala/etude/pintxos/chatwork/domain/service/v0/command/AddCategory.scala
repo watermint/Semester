@@ -24,6 +24,7 @@ object AddCategory
 
     AddCategoryResponse(
       json,
+      request,
       CategoryParser.parseCategory(json).last
     )
   }

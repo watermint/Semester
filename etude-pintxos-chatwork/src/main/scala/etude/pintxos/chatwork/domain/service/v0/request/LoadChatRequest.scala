@@ -14,7 +14,7 @@ case class LoadChatRequest(room: RoomId,
                            description: Boolean = false,
                            task: Boolean = false)
   extends ChatWorkRequest {
-  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse = {
+  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse[_] = {
     LoadChat.execute(this)
   }
 }

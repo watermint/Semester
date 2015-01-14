@@ -10,7 +10,7 @@ import org.json4s._
 object SendChat
   extends ChatWorkCommand[SendChatRequest, SendChatResponse] {
 
-  def parseSendChatResult(json: JValue, room: RoomId): SendChatResponse = {
+  def parseSendChatResult(json: JValue, room: RoomId, request: SendChatRequest): SendChatResponse = {
     val results: List[SendChatResponse] = for {
       JObject(j) <- json
       JField("storage", storage) <- j
@@ -20,6 +20,7 @@ object SendChat
         case Some(chatList) =>
           SendChatResponse(
             json,
+            request,
             StorageParser.parseStorage(storage),
             BigInt(storageLimit),
             MessageParser.parseMessage(room, chatList)
@@ -27,6 +28,7 @@ object SendChat
         case _ =>
           SendChatResponse(
             json,
+            request,
             StorageParser.parseStorage(storage),
             BigInt(storageLimit),
             Seq()
@@ -51,7 +53,7 @@ object SendChat
         "pdata" -> compact(render(pdata))
       )
     )
-    parseSendChatResult(json, request.room)
+    parseSendChatResult(json, request.room, request)
 
   }
 

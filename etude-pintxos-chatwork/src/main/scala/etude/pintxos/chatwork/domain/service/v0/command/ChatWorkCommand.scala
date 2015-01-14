@@ -4,7 +4,7 @@ import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, ChatWorkIOContext}
 
-trait ChatWorkCommand[RQ <: ChatWorkRequest, RS <: ChatWorkResponse]
+trait ChatWorkCommand[RQ <: ChatWorkRequest, RS <: ChatWorkResponse[_]]
   extends ChatWorkEntityIO {
 
   def execute(request: RQ)(implicit context: ChatWorkIOContext): RS

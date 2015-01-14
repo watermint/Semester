@@ -8,13 +8,13 @@ import org.json4s._
 object Read
   extends ChatWorkCommand[ReadRequest, ReadResponse] {
 
-  private def parseRead(json: JValue): ReadResponse = {
+  private def parseRead(json: JValue, request: ReadRequest): ReadResponse = {
     val results: List[ReadResponse] = for {
       JObject(j) <- json
       JField("read_num", JInt(readNum)) <- j
       JField("mention_num", JInt(mentionNum)) <- j
     } yield {
-      ReadResponse(json, readNum, mentionNum)
+      ReadResponse(json, request, readNum, mentionNum)
     }
     results.last
   }
@@ -29,7 +29,7 @@ object Read
       )
     )
 
-    parseRead(json)
+    parseRead(json, request)
   }
 
 }
