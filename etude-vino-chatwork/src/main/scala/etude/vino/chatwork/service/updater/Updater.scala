@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
-import etude.vino.chatwork.service.api.{Api, ApiEnqueue, ApiHub, PriorityHigh}
+import etude.vino.chatwork.service.api._
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
@@ -21,10 +21,7 @@ case class Updater(apiHub: ActorRef, updateClockCycleInSeconds: Long)
     case u: ScheduledUpdate =>
       apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityHigh)
 
-    case r: InitLoadResponse =>
-      Api.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
-
-    case r: GetUpdateResponse =>
+    case (_: InitLoadResponse | GetUpdateResponse | NetworkRecovered) =>
       Api.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
   }
 }

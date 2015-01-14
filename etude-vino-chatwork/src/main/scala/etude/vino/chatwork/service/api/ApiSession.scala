@@ -23,13 +23,13 @@ case class ApiSession() extends Actor {
       case e: java.net.SocketException =>
         logger.warn("SocketException", e)
         Api.ensureAvailable()
-        Api.system.eventStream.publish(RefreshSemaphore())
+        Api.system.eventStream.publish(NetworkRecovered())
         SupervisorStrategy.Resume
 
       case e: org.apache.http.NoHttpResponseException =>
         logger.warn("No http response", e)
         Api.ensureAvailable()
-        Api.system.eventStream.publish(RefreshSemaphore())
+        Api.system.eventStream.publish(NetworkRecovered())
         SupervisorStrategy.Resume
 
       case e: Exception =>

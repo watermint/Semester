@@ -1,3 +1,3 @@
 package etude.vino.chatwork.service.api
 
-case class RefreshSemaphore()
+case class NetworkRecovered()

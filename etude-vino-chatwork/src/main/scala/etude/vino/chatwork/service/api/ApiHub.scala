@@ -1,5 +1,6 @@
 package etude.vino.chatwork.service.api
 
+import java.io.IOException
 import java.util.concurrent.{ConcurrentLinkedQueue, Semaphore, TimeUnit}
 
 import akka.actor._
@@ -7,7 +8,6 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, SessionTimeoutException}
-import etude.vino.chatwork.service.Service
 
 import scala.concurrent.duration._
 
@@ -41,7 +41,10 @@ case class ApiHub(clockCycleInSeconds: Int)
         semaphore.release()
         SupervisorStrategy.Restart
 
-      case e @ (_ : java.net.SocketException | _ : org.apache.http.NoHttpResponseException) =>
+      case e@(_: java.net.SocketException |
+              _: org.apache.http.NoHttpResponseException |
+              _: IOException) =>
+
         logger.warn("Issue on network connection", e)
         Api.ensureAvailable()
         semaphore.release()
@@ -62,7 +65,7 @@ case class ApiHub(clockCycleInSeconds: Int)
   }
 
   def receive: Receive = {
-    case r: RefreshSemaphore =>
+    case r: NetworkRecovered =>
       semaphore.release()
       schedule()
 
