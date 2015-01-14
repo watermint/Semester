@@ -73,6 +73,9 @@ case class ApiHub(clockCycleInSeconds: Int)
 
     case r: ApiEnqueue =>
       enqueue(r.request)(r.priority)
+      if (r.priority.equals(PriorityHigh)) {
+        self ! ApiTick()
+      }
 
     case r: ChatWorkResponse =>
       semaphore.release()

@@ -34,7 +34,7 @@ object Main {
     val apiHub = Api.system.actorOf(ApiHub.props(2))
     val recorder = Api.system.actorOf(Recorder.props(apiHub))
     val historian = Api.system.actorOf(Historian.props(apiHub))
-    val updater = Api.system.actorOf(Updater.props(apiHub, 30))
+    val updater = Api.system.actorOf(Updater.props(apiHub, 10))
     val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
 
     Api.system.eventStream.subscribe(apiHub, classOf[RefreshSemaphore])
