@@ -41,16 +41,11 @@ case class ApiHub(clockCycleInSeconds: Int)
         semaphore.release()
         SupervisorStrategy.Restart
 
-      case e: java.net.SocketException | org.apache.http.NoHttpResponseException =>
+      case e @ (_ : java.net.SocketException | _ : org.apache.http.NoHttpResponseException) =>
         logger.warn("Issue on network connection", e)
-        if (Api.ensureAvailable()) {
-          semaphore.release()
-          SupervisorStrategy.Resume
-        } else {
-          logger.warn("Cannot connect to network. Trying to shutdown")
-          Main.shutdown()
-          SupervisorStrategy.Stop
-        }
+        Api.ensureAvailable()
+        semaphore.release()
+        SupervisorStrategy.Resume
 
       case e: Exception =>
         logger.debug(s"Unexpected exception: Supervisor stops operation", e)
