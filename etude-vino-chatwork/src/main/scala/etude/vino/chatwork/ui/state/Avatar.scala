@@ -1,5 +1,6 @@
 package etude.vino.chatwork.ui.state
 
+import java.net.URI
 import java.util.concurrent.locks.ReentrantLock
 
 import etude.manieres.domain.model.Identity
@@ -41,6 +42,13 @@ class Avatar[ID <: Identity[_]] {
     identity match {
       case Some(id) => nodeOf(id)
       case None => nodeForEmpty()
+    }
+  }
+
+  def updateAvatar(identity: ID, imageUrl: Option[URI]): Unit ={
+    imageUrl match {
+      case Some(url) => updateAvatar(identity, url.toString)
+      case None =>
     }
   }
 
