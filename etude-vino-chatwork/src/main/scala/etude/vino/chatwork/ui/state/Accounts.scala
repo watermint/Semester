@@ -6,6 +6,7 @@ import akka.actor.{Props, Actor}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 import etude.pintxos.chatwork.domain.service.v0.response.InitLoadResponse
 import etude.vino.chatwork.ui.UI
+import etude.vino.chatwork.ui.pane.AccountList
 
 import scala.collection.mutable
 
@@ -16,6 +17,7 @@ class Accounts extends Actor {
         account =>
           self ! account
       }
+      UI.ref ! AccountList.AccountListUpdate(r.contacts)
 
     case a: Account =>
       Accounts.avatar.updateAvatar(a.accountId, a.avatarImage)

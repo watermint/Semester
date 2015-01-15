@@ -5,7 +5,7 @@ import java.time.Instant
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomTypeDirect}
-import etude.vino.chatwork.ui.pane.{MessageList, RoomList}
+import etude.vino.chatwork.ui.pane.{AccountList, MessageList, RoomList}
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
@@ -27,58 +27,11 @@ object Main extends JFXApp {
 
     center = MessageList.messageList
 
+    right = AccountList.accountList
+
     bottom = new Button {
       text = "update"
       onAction = handle {
-        val rooms = Seq(
-          new Room(
-            RoomId(123),
-            "test123",
-            None,
-            None,
-            RoomTypeDirect(),
-            None,
-            None
-          ),
-          new Room(
-            RoomId(456),
-            "test456",
-            None,
-            None,
-            RoomTypeDirect(),
-            None,
-            None
-          ),
-          new Room(
-            RoomId(789),
-            "test789",
-            None,
-            None,
-            RoomTypeDirect(),
-            None,
-            None
-          )
-        )
-        RoomList.roomListView.items = ObservableBuffer(rooms)
-
-        val messages = Seq(
-          new Message(
-            MessageId(RoomId(123), 1000),
-            AccountId(4001223),
-            Text("ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000 ABC 1000"),
-            Instant.now,
-            None
-          ),
-          new Message(
-            MessageId(RoomId(456), 2000),
-            AccountId(400456),
-            Text("ABC 2000"),
-            Instant.now,
-            None
-          )
-        )
-
-        MessageList.messageList.items = ObservableBuffer(messages)
       }
     }
   }

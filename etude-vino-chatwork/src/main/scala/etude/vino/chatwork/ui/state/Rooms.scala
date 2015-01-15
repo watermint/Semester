@@ -4,7 +4,7 @@ import akka.actor.{Props, Actor}
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 import etude.pintxos.chatwork.domain.service.v0.response.{LoadChatResponse, InitLoadResponse}
 import etude.vino.chatwork.ui.UI
-import etude.vino.chatwork.ui.pane.RoomList
+import etude.vino.chatwork.ui.pane.{MessageList, RoomList}
 
 import scala.collection.mutable
 
@@ -16,6 +16,9 @@ class Rooms extends Actor {
           self ! room
       }
       UI.ref ! RoomList.RoomListUpdate(r.rooms)
+
+    case r: LoadChatResponse =>
+      UI.ref ! MessageList.MessageListUpdate(r.chatList)
 
     case r: Room =>
       Rooms.avatar.updateAvatar(r.roomId, r.avatar)
