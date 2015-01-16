@@ -45,7 +45,8 @@ case class ApiHub(clockCycleInSeconds: Int)
         logger.warn("Issue on network connection", e)
         Api.ensureAvailable()
         semaphore.release()
-        SupervisorStrategy.Resume
+        logger.info("Trying to resume")
+        SupervisorStrategy.Restart
 
       case e: Exception =>
         logger.debug(s"Unexpected exception: Supervisor stops operation", e)
