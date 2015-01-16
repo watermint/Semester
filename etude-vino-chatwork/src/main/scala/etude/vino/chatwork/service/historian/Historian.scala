@@ -7,7 +7,7 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room._
-import etude.vino.chatwork.service.api.{Api, PriorityLower, ApiEnqueue, PriorityLow}
+import etude.vino.chatwork.service.api.{Api, PriorityP4, ApiEnqueue, PriorityP3}
 import etude.vino.chatwork.service.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.service.historian.operation.{NextChunk, Traverse}
 import etude.vino.chatwork.service.storage.Storage
@@ -59,9 +59,9 @@ case class Historian(apiHub: ActorRef)
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))
         val lwm = r.messages.minBy(_.messageId.messageId)
         val priority = if (lwm.ctime.isBefore(Instant.now.minusSeconds(priorityLoadingDurationInSeconds))) {
-          PriorityLower
+          PriorityP4
         } else {
-          PriorityLow
+          PriorityP3
         }
         apiHub ! ApiEnqueue(LoadOldChatRequest(lwm.messageId), priority)
       }

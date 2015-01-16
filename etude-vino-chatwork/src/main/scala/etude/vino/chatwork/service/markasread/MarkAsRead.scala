@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.service.v0.request.ReadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
 import etude.pintxos.chatwork.domain.model.room.RoomId
-import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityNormal}
+import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityP2}
 import etude.vino.chatwork.service.storage.Storage
 import org.json4s.JsonDSL._
 
@@ -20,7 +20,7 @@ case class MarkAsRead(apiHub: ActorRef)
             lastMessage.roomId,
             lastMessage
           ),
-          PriorityNormal
+          PriorityP2
         )
       }
   }

@@ -1,7 +1,7 @@
 package etude.vino.chatwork.service.api
 
 import java.io.IOException
-import java.util.concurrent.{ConcurrentLinkedQueue, Semaphore, TimeUnit}
+import java.util.concurrent.{TimeoutException, ConcurrentLinkedQueue, Semaphore, TimeUnit}
 
 import akka.actor._
 import etude.epice.logging.LoggerFactory
@@ -9,7 +9,6 @@ import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, SessionTimeoutException}
 
-import scala.concurrent.TimeoutException
 import scala.concurrent.duration._
 
 case class ApiHub(clockCycleInSeconds: Int)
@@ -17,13 +16,9 @@ case class ApiHub(clockCycleInSeconds: Int)
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private val highQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
-
-  private val normalQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
-
-  private val lowQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
-
-  private val lowerQueue = new ConcurrentLinkedQueue[ChatWorkRequest]()
+  private val queues: Map[Priority, ConcurrentLinkedQueue[ChatWorkRequest]] = {
+    Priority.priorities.map(p => p -> new ConcurrentLinkedQueue[ChatWorkRequest]()).toMap
+  }
 
   private val semaphore = new Semaphore(1)
 
@@ -78,7 +73,7 @@ case class ApiHub(clockCycleInSeconds: Int)
 
     case r: ApiEnqueue =>
       enqueue(r.request)(r.priority)
-      if (r.priority.equals(PriorityHigh)) {
+      if (r.priority.equals(PriorityP1)) {
         self ! ApiTick()
       }
 
@@ -87,14 +82,9 @@ case class ApiHub(clockCycleInSeconds: Int)
       schedule()
   }
 
-  def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityNormal): Unit = {
+  def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityP2): Unit = {
     logger.debug(s"Enqueue request: $request with priority $priority")
-    priority match {
-      case PriorityHigh => highQueue.add(request)
-      case PriorityNormal => normalQueue.add(request)
-      case PriorityLow => lowQueue.add(request)
-      case PriorityLower => lowerQueue.add(request)
-    }
+    queues(priority).add(request)
   }
 
   protected def execute(): Unit = {
@@ -106,35 +96,15 @@ case class ApiHub(clockCycleInSeconds: Int)
   }
 
   protected def dequeue(): Option[ChatWorkRequest] = {
-    logger.debug(s"Queue size: High: ${highQueue.size()}, Normal: ${normalQueue.size()}, Low: ${lowQueue.size()}, Lower: ${lowerQueue.size()}")
-    highQueue.poll() match {
-      case r: ChatWorkRequest => Some(r)
-      case null => dequeueNormal()
+    logger.debug(s"Queue size: ${Priority.priorities.map(p => s"${p.name}: ${queues(p).size()}").mkString(", ")}")
+    Priority.priorities.foreach {
+      priority =>
+        val q = queues(priority)
+        if (q.size() > 0) {
+          return Some(q.poll())
+        }
     }
-  }
-
-  private def dequeueNormal(): Option[ChatWorkRequest] = {
-    if (normalQueue.size() > 0) {
-      Some(normalQueue.poll())
-    } else {
-      dequeueLow()
-    }
-  }
-
-  private def dequeueLow(): Option[ChatWorkRequest] = {
-    if (lowQueue.size() > 0) {
-      Some(lowQueue.poll())
-    } else {
-      dequeueLower()
-    }
-  }
-
-  private def dequeueLower(): Option[ChatWorkRequest] = {
-    if (lowerQueue.size() > 0) {
-      Some(lowerQueue.poll())
-    } else {
-      None
-    }
+    None
   }
 }
 

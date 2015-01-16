@@ -19,7 +19,7 @@ case class Updater(apiHub: ActorRef, updateClockCycleInSeconds: Long)
 
   def receive: Receive = {
     case u: ScheduledUpdate =>
-      apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityHigh)
+      apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityP1)
 
     case (_: InitLoadResponse |
           _: GetUpdateResponse |
