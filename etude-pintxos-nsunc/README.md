@@ -1,6 +1,6 @@
 # Mac OS X Notification Center Integration
 
-## Requiements
+## Requirements
 
 * Application must be packaged as Mac's execution format .app. See [Packaging a Java App for Distribution on a Mac](http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/packagingAppsForMac.html)
 
