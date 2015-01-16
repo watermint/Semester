@@ -7,6 +7,7 @@ libraryDependencies ++= Seq(
   "org.elasticsearch" % "elasticsearch" % "latest.release",
   "org.elasticsearch" % "elasticsearch-analysis-kuromoji" % "latest.release",
   "org.codehaus.groovy" % "groovy-all" % "latest.release",
-  "org.scalafx" %% "scalafx" % "latest.release"
+  "org.scalafx" %% "scalafx" % "latest.release",
+  "org.controlsfx" % "controlsfx" % "latest.release"
 )
 
