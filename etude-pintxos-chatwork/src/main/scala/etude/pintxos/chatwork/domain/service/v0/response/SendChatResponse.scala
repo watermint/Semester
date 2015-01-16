@@ -11,4 +11,6 @@ case class SendChatResponse(rawResponse: JValue,
                             storage: Storage,
                             storageLimit: BigInt,
                             messages: Seq[Message])
-  extends ChatWorkResponse[SendChatRequest]
+  extends ChatWorkResponse {
+  type Request = SendChatRequest
+}

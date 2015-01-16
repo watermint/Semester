@@ -7,7 +7,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
 case class GetAccountInfoRequest(accountIds: Seq[AccountId])
   extends ChatWorkRequest {
-  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse[_] = {
+  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse = {
     GetAccountInfo.execute(this)
   }
 }

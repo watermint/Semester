@@ -7,4 +7,6 @@ import org.json4s.JValue
 case class UpdateRoomResponse(rawResponse: JValue,
                               request: UpdateRoomRequest,
                               participant: Participant)
-  extends ChatWorkResponse[UpdateRoomRequest]
+  extends ChatWorkResponse {
+  type Request = UpdateRoomRequest
+}

@@ -11,7 +11,7 @@ import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
 object Storage {
-  val status = "-dev"
+  val status = ""
 
   val storagePath = Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork$status")
 
@@ -21,7 +21,7 @@ object Storage {
     NodeBuilder
       .nodeBuilder()
       .clusterName(s"chatwork$status")
-      .local(false)
+      .local(true)
       .settings(
         ImmutableSettings
           .settingsBuilder()
@@ -31,10 +31,10 @@ object Storage {
           .put("index.analysis.analyzer.default.tokenizer", "kuromoji_tokenizer")
           .put("index.number_of_replicas", 0)
           .put("index.number_of_shards", 1)
-          .put("http.enabled", false)
-//          .put("http.port", 9200)
-//          .put("http.cors.enabled", true)
-//          .put("http.cors.allow-origin", "/.*/")
+          .put("http.enabled", true)
+          .put("http.port", 9200)
+          .put("http.cors.enabled", true)
+          .put("http.cors.allow-origin", "/.*/")
       ).node()
   }
 

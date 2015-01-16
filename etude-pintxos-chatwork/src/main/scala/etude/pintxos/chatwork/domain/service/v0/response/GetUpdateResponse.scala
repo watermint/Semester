@@ -7,4 +7,6 @@ import org.json4s.JValue
 case class GetUpdateResponse(rawResponse: JValue,
                              request: GetUpdateRequest,
                              roomUpdateInfo: Seq[RoomUpdateInfo])
-  extends ChatWorkResponse[GetUpdateRequest]
+  extends ChatWorkResponse {
+  type Request = GetUpdateRequest
+}

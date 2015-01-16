@@ -8,7 +8,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 case class DeleteCategoryRequest(categoryId: CategoryId)
   extends ChatWorkRequest {
 
-  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse[_] = {
+  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse = {
     DeleteCategory.execute(this)
   }
 }

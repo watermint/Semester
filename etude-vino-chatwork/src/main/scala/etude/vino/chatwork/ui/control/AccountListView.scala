@@ -5,8 +5,8 @@ import etude.vino.chatwork.ui.state.Accounts
 
 import scalafx.scene.control.ListCell
 
-class AccountListView extends DomainListView[Account] {
-  def listCellForDomain(): ListCell[Account] = {
+class AccountListView extends EntityListView[Account] {
+  def listCellForEntity(): ListCell[Account] = {
     new ListCell[Account] {
       item.onChange {
         (_, _, account) =>

@@ -8,4 +8,6 @@ case class LoadOldChatResponse(rawResponse: JValue,
                                request: LoadOldChatRequest,
                                lastMessage: MessageId,
                                messages: Seq[Message])
-  extends ChatWorkResponse[LoadOldChatRequest]
+  extends ChatWorkResponse {
+  type Request = LoadOldChatRequest
+}

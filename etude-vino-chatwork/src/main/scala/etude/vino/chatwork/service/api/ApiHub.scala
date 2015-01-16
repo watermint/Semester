@@ -9,6 +9,7 @@ import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, SessionTimeoutException}
 
+import scala.concurrent.TimeoutException
 import scala.concurrent.duration._
 
 case class ApiHub(clockCycleInSeconds: Int)
@@ -43,7 +44,8 @@ case class ApiHub(clockCycleInSeconds: Int)
 
       case e@(_: java.net.SocketException |
               _: org.apache.http.NoHttpResponseException |
-              _: IOException) =>
+              _: IOException |
+              _: TimeoutException) =>
 
         logger.warn("Issue on network connection", e)
         Api.ensureAvailable()
@@ -80,7 +82,7 @@ case class ApiHub(clockCycleInSeconds: Int)
         self ! ApiTick()
       }
 
-    case r: ChatWorkResponse[_] =>
+    case r: ChatWorkResponse =>
       semaphore.release()
       schedule()
   }

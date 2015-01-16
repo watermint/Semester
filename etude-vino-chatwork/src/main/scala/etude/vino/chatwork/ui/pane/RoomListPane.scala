@@ -7,7 +7,7 @@ import etude.vino.chatwork.ui.control.RoomListView
 import scalafx.collections.ObservableBuffer
 
 
-object RoomList {
+object RoomListPane {
   val roomListView = new RoomListView()
 
   case class RoomListUpdate(rooms: Seq[Room]) extends UIMessage {

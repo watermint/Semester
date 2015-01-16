@@ -9,4 +9,6 @@ case class LoadChatResponse(rawResponse: JValue,
                             chatList: Seq[Message] = Seq(),
                             description: Option[String] = None,
                             publicDescription: Option[String] = None)
-  extends ChatWorkResponse[LoadChatRequest]
+  extends ChatWorkResponse {
+  type Request = LoadChatRequest
+}

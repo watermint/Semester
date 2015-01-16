@@ -32,17 +32,17 @@ object Service {
 
     val apiHub = Api.system.actorOf(ApiHub.props(2))
     val recorder = Api.system.actorOf(Recorder.props(apiHub))
-//    val historian = Api.system.actorOf(Historian.props(apiHub))
-//    val updater = Api.system.actorOf(Updater.props(apiHub, 10))
-//    val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
+    val historian = Api.system.actorOf(Historian.props(apiHub))
+    val updater = Api.system.actorOf(Updater.props(apiHub, 10))
+    val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
 
     Api.system.eventStream.subscribe(apiHub, classOf[NetworkRecovered])
-    Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse[_]])
-    Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse[_]])
-//    Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse[_]])
-//    Api.system.eventStream.subscribe(updater, classOf[RefreshSemaphore])
-//    Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse[_]])
-//    Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse[_]])
+    Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(updater, classOf[NetworkRecovered])
+    Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
+    //Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
 
     UIState.startup()
   }

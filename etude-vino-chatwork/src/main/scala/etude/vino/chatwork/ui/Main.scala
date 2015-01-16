@@ -1,36 +1,22 @@
 package etude.vino.chatwork.ui
 
-import etude.vino.chatwork.ui.control.PeriodStartView
-import etude.vino.chatwork.ui.pane.{AccountList, MessageList, RoomList}
+import etude.vino.chatwork.ui.pane.ApplicationLogPane
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
-import scalafx.scene.control._
-import scalafx.scene.layout.{BorderPane, HBox}
+import scalafx.scene.layout.BorderPane
 
 object Main extends JFXApp {
-  //UI.ref ! "startup"
-
-  val button: Button = new PeriodStartView
+  UI.ref ! "startup"
 
   val rootPane = new BorderPane {
 
     padding = Insets(UIStyles.spacing)
 
-    left = RoomList.roomListView
-
-    center = MessageList.messageList
-
-    right = AccountList.accountList
-
-    bottom = new HBox {
-      content = Seq(
-        button
-      )
-    }
+    center = ApplicationLogPane.applicationLog
   }
 
   val rootScene = new Scene {
@@ -43,7 +29,7 @@ object Main extends JFXApp {
     height = 600
     scene = rootScene
     onCloseRequest = handle {
-      //      UI.ref ! "shutdown"
+      UI.ref ! "shutdown"
     }
   }
 }

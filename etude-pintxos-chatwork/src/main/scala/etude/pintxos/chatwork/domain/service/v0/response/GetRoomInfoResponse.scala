@@ -8,4 +8,6 @@ case class GetRoomInfoResponse(rawResponse: JValue,
                                request: GetRoomInfoRequest,
                                room: Room,
                                participant: Participant)
-  extends ChatWorkResponse[GetRoomInfoRequest]
+  extends ChatWorkResponse {
+  type Request = GetRoomInfoRequest
+}

@@ -7,5 +7,7 @@ import org.json4s.JValue
 case class EditCategoryResponse(rawResponse: JValue,
                                 request: EditCategoryRequest,
                                 category: Category)
-  extends ChatWorkResponse[EditCategoryRequest]
+  extends ChatWorkResponse {
+  type Request = EditCategoryRequest
+}
 

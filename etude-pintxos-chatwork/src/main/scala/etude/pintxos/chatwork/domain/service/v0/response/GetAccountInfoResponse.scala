@@ -7,4 +7,6 @@ import org.json4s.JValue
 case class GetAccountInfoResponse(rawResponse: JValue,
                                   request: GetAccountInfoRequest,
                                   accounts: Seq[Account])
-  extends ChatWorkResponse[GetAccountInfoRequest]
+  extends ChatWorkResponse {
+  type Request = GetAccountInfoRequest
+}

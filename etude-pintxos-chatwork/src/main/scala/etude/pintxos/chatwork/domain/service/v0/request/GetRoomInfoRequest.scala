@@ -7,7 +7,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
 case class GetRoomInfoRequest(roomId: RoomId)
   extends ChatWorkRequest {
-  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse[_] = {
+  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse = {
     GetRoomInfo.execute(this)
   }
 }

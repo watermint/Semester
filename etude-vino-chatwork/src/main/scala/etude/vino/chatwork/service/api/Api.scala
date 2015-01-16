@@ -11,6 +11,8 @@ import etude.pintxos.chatwork.domain.service.v0._
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
@@ -24,13 +26,20 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
     Api.ensureAvailable()
   }
 
+  val responseTimeoutInSeconds = 20
+
   def receive: Receive = {
     case req: ChatWorkRequest =>
       logger.info(s"Execute request[${counter.incrementAndGet()}]: $req")
-      val res = req.execute(chatworkContext)
-      self ! res
+      Api.system.eventStream.publish(ApiHistory(Instant.now, req))
+      val execute: Future[ChatWorkResponse] = Future {
+        req.execute(chatworkContext)
+      }
+      val response = Await.result(execute, responseTimeoutInSeconds seconds)
 
-    case res: ChatWorkResponse[_] =>
+      self ! response
+
+    case res: ChatWorkResponse =>
       Api.system.eventStream.publish(res)
   }
 }

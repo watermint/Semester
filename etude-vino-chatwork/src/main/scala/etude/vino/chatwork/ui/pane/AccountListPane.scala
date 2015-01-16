@@ -6,7 +6,7 @@ import etude.vino.chatwork.ui.control.AccountListView
 
 import scalafx.collections.ObservableBuffer
 
-object AccountList {
+object AccountListPane {
   val accountList = new AccountListView()
 
   case class AccountListUpdate(accounts: Seq[Account]) extends UIMessage {

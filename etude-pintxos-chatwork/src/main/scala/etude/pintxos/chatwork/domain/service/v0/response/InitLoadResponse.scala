@@ -10,4 +10,6 @@ case class InitLoadResponse(rawResponse: JValue,
                             contacts: List[Account],
                             rooms: List[Room],
                             participants: List[Participant])
-  extends ChatWorkResponse[InitLoadRequest]
+  extends ChatWorkResponse {
+  type Request = InitLoadRequest
+}

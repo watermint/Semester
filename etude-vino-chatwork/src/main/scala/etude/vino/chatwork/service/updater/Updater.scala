@@ -21,7 +21,9 @@ case class Updater(apiHub: ActorRef, updateClockCycleInSeconds: Long)
     case u: ScheduledUpdate =>
       apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityHigh)
 
-    case (_: InitLoadResponse | GetUpdateResponse | NetworkRecovered) =>
+    case (_: InitLoadResponse |
+          _: GetUpdateResponse |
+          _: NetworkRecovered) =>
       Api.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
   }
 }

@@ -7,4 +7,6 @@ case class ReadResponse(rawResponse: JValue,
                         request: ReadRequest,
                         readNum: BigInt,
                         mentionNum: BigInt)
-  extends ChatWorkResponse[ReadRequest]
+  extends ChatWorkResponse {
+  type Request = ReadRequest
+}

@@ -5,8 +5,8 @@ import etude.vino.chatwork.ui.state.Rooms
 
 import scalafx.scene.control.{ListView, ListCell}
 
-class RoomListView extends DomainListView[Room] {
-  def listCellForDomain() = {
+class RoomListView extends EntityListView[Room] {
+  def listCellForEntity() = {
     new ListCell[Room] {
       item.onChange {
         (_, _, room) =>

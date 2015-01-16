@@ -11,7 +11,7 @@ import scalafx.scene.Node
 import scalafx.scene.control.{Label, ListCell}
 import scalafx.scene.layout.{HBox, VBox}
 
-class MessageListView extends DomainListView[Message] {
+class MessageListView extends EntityListView[Message] {
   val displayTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
   def displayTime(time: Instant): String = {
@@ -37,7 +37,7 @@ class MessageListView extends DomainListView[Message] {
     }
   }
 
-  def listCellForDomain() = {
+  def listCellForEntity() = {
     new ListCell[Message] {
       item.onChange {
         (_, _, message) =>

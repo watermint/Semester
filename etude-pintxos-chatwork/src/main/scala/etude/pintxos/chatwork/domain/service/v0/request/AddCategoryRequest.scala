@@ -9,7 +9,7 @@ case class AddCategoryRequest(name: String,
                               rooms: List[RoomId])
   extends ChatWorkRequest {
 
-  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse[_] = {
+  def execute(implicit context: ChatWorkIOContext): ChatWorkResponse = {
     AddCategory.execute(this)
   }
 }
