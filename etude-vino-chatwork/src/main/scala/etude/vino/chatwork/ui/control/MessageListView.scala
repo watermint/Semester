@@ -4,8 +4,8 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, ZoneId}
 
 import etude.pintxos.chatwork.domain.model.message.Message
+import etude.vino.chatwork.model.state.Accounts
 import etude.vino.chatwork.ui.UIStyles
-import etude.vino.chatwork.model.Accounts
 
 import scalafx.scene.Node
 import scalafx.scene.control.{Label, ListCell}

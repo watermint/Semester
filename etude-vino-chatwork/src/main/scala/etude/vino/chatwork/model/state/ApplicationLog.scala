@@ -1,9 +1,9 @@
-package etude.vino.chatwork.model
+package etude.vino.chatwork.model.state
 
-import akka.actor.{Props, Actor}
+import akka.actor.{Actor, Props}
 import etude.vino.chatwork.service.api.ApiHistory
 import etude.vino.chatwork.ui.pane.ApplicationLogPane
-import etude.vino.chatwork.ui.{UIMessage, UI}
+import etude.vino.chatwork.ui.{UI, UIMessage}
 
 import scala.collection.mutable.ArrayBuffer
 import scalafx.collections.ObservableBuffer

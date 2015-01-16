@@ -1,6 +1,7 @@
 package etude.vino.chatwork.model
 
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
+import etude.vino.chatwork.model.state.{Rooms, ApplicationLog, Accounts}
 import etude.vino.chatwork.service.api.{Api, ApiHistory}
 
 object Models {

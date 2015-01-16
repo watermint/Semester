@@ -1,10 +1,9 @@
-package etude.vino.chatwork.model
+package etude.vino.chatwork.model.state
 
-import akka.actor.{Props, Actor}
+import akka.actor.{Actor, Props}
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
-import etude.pintxos.chatwork.domain.service.v0.response.{LoadChatResponse, InitLoadResponse}
+import etude.pintxos.chatwork.domain.service.v0.response.InitLoadResponse
 import etude.vino.chatwork.ui.UI
-import etude.vino.chatwork.ui.pane.{MessageListPane, RoomListPane}
 
 import scala.collection.mutable
 

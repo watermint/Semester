@@ -1,12 +1,9 @@
-package etude.vino.chatwork.model
+package etude.vino.chatwork.model.state
 
-import java.net.URI
-
-import akka.actor.{Props, Actor}
+import akka.actor.{Actor, Props}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 import etude.pintxos.chatwork.domain.service.v0.response.InitLoadResponse
 import etude.vino.chatwork.ui.UI
-import etude.vino.chatwork.ui.pane.AccountListPane
 
 import scala.collection.mutable
 
