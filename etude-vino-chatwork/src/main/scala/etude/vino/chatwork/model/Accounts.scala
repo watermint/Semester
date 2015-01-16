@@ -1,4 +1,4 @@
-package etude.vino.chatwork.ui.state
+package etude.vino.chatwork.model
 
 import java.net.URI
 
@@ -17,7 +17,6 @@ class Accounts extends Actor {
         account =>
           self ! account
       }
-      UI.ref ! AccountListPane.AccountListUpdate(r.contacts)
 
     case a: Account =>
       Accounts.avatar.updateAvatar(a.accountId, a.avatarImage)

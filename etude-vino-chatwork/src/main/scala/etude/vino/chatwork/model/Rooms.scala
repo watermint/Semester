@@ -1,4 +1,4 @@
-package etude.vino.chatwork.ui.state
+package etude.vino.chatwork.model
 
 import akka.actor.{Props, Actor}
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
@@ -15,10 +15,6 @@ class Rooms extends Actor {
         room =>
           self ! room
       }
-      UI.ref ! RoomListPane.RoomListUpdate(r.rooms)
-
-    case r: LoadChatResponse =>
-      UI.ref ! MessageListPane.MessageListUpdate(r.chatList)
 
     case r: Room =>
       Rooms.avatar.updateAvatar(r.roomId, r.avatar)

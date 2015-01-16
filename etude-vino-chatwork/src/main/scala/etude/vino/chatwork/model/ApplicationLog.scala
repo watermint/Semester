@@ -1,4 +1,4 @@
-package etude.vino.chatwork.ui.state
+package etude.vino.chatwork.model
 
 import akka.actor.{Props, Actor}
 import etude.vino.chatwork.service.api.ApiHistory

@@ -1,4 +1,4 @@
-package etude.vino.chatwork.service.storage
+package etude.vino.chatwork.model.storage
 
 import java.nio.file.Paths
 

@@ -10,7 +10,7 @@ import etude.pintxos.chatwork.domain.model.room._
 import etude.vino.chatwork.service.api.{Api, PriorityP4, ApiEnqueue, PriorityP3}
 import etude.vino.chatwork.service.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.service.historian.operation.{NextChunk, Traverse}
-import etude.vino.chatwork.service.storage.Storage
+import etude.vino.chatwork.model.storage.Storage
 
 case class Historian(apiHub: ActorRef)
   extends Actor {

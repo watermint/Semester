@@ -10,7 +10,7 @@ import etude.pintxos.chatwork.domain.model.account.Account
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Participant, Room}
 import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityP2}
-import etude.vino.chatwork.service.storage.Storage
+import etude.vino.chatwork.model.storage.Storage
 import org.json4s.JsonDSL._
 
 case class Recorder(apiHub: ActorRef) extends Actor {

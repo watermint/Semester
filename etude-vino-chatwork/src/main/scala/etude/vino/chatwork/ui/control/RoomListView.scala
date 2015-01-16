@@ -1,7 +1,7 @@
 package etude.vino.chatwork.ui.control
 
 import etude.pintxos.chatwork.domain.model.room.Room
-import etude.vino.chatwork.ui.state.Rooms
+import etude.vino.chatwork.model.Rooms
 
 import scalafx.scene.control.{ListView, ListCell}
 

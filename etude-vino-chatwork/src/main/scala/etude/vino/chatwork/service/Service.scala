@@ -8,9 +8,9 @@ import etude.vino.chatwork.service.api._
 import etude.vino.chatwork.service.historian.Historian
 import etude.vino.chatwork.service.markasread.MarkAsRead
 import etude.vino.chatwork.service.recorder.Recorder
-import etude.vino.chatwork.service.storage.Storage
+import etude.vino.chatwork.model.storage.Storage
 import etude.vino.chatwork.service.updater.Updater
-import etude.vino.chatwork.ui.state.UIState
+import etude.vino.chatwork.model.Models
 
 object Service {
   val logger = LoggerFactory.getLogger(getClass)
@@ -44,7 +44,7 @@ object Service {
     Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
     Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
 
-    UIState.startup()
+    Models.startup()
   }
 
 

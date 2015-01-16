@@ -1,4 +1,4 @@
-package etude.vino.chatwork.ui.state
+package etude.vino.chatwork.model
 
 import java.net.URI
 import java.util.concurrent.locks.ReentrantLock
