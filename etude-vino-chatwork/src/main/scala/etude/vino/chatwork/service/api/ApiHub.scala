@@ -1,7 +1,7 @@
 package etude.vino.chatwork.service.api
 
 import java.io.IOException
-import java.util.concurrent.{TimeoutException, ConcurrentLinkedQueue, Semaphore, TimeUnit}
+import java.util.concurrent.{ConcurrentLinkedQueue, Semaphore, TimeUnit, TimeoutException}
 
 import akka.actor._
 import etude.epice.logging.LoggerFactory
@@ -28,8 +28,6 @@ case class ApiHub(clockCycleInSeconds: Int)
 
   case class ApiTick()
 
-  schedule()
-
   override def supervisorStrategy: SupervisorStrategy = {
     OneForOneStrategy(maxNrOfRetries = 1) {
       case e: SessionTimeoutException =>
@@ -46,7 +44,7 @@ case class ApiHub(clockCycleInSeconds: Int)
         Api.ensureAvailable()
         semaphore.release()
         logger.info("Trying to resume")
-        SupervisorStrategy.Restart
+        SupervisorStrategy.Resume
 
       case e: Exception =>
         logger.debug(s"Unexpected exception: Supervisor stops operation", e)
@@ -54,23 +52,19 @@ case class ApiHub(clockCycleInSeconds: Int)
     }
   }
 
-  def schedule(): Unit = {
-    Api.system.scheduler.scheduleOnce(
-      Duration.create(clockCycleInSeconds, TimeUnit.SECONDS),
-      self,
-      ApiTick()
-    )
-  }
+  Api.system.scheduler.schedule(
+    Duration.create(clockCycleInSeconds, TimeUnit.SECONDS),
+    Duration.create(clockCycleInSeconds, TimeUnit.SECONDS),
+    self,
+    ApiTick()
+  )
 
   def receive: Receive = {
     case r: NetworkRecovered =>
       semaphore.release()
-      schedule()
 
     case r: ApiTick =>
-      if (semaphore.tryAcquire()) {
-        execute()
-      }
+      execute()
 
     case r: ApiEnqueue =>
       enqueue(r.request)(r.priority)
@@ -80,7 +74,6 @@ case class ApiHub(clockCycleInSeconds: Int)
 
     case r: ChatWorkResponse =>
       semaphore.release()
-      schedule()
   }
 
   def enqueue(request: ChatWorkRequest)(priority: Priority = PriorityP2): Unit = {
@@ -89,10 +82,12 @@ case class ApiHub(clockCycleInSeconds: Int)
   }
 
   protected def execute(): Unit = {
-    dequeue() match {
-      case None => // NOP
-      case Some(req) =>
-        api ! req
+    if (semaphore.tryAcquire()) {
+      dequeue() match {
+        case None => // NOP
+        case Some(req) =>
+          api ! req
+      }
     }
   }
 
