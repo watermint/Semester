@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.13.10",
+  version := "0.13.11",
   organization := "org.watermint",
   scalaVersion := "2.11.4",
   crossScalaVersions := Seq("2.11.4"),

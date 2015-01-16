@@ -42,7 +42,7 @@ object Service {
     Api.system.eventStream.subscribe(historian, classOf[ChatWorkResponse])
     Api.system.eventStream.subscribe(updater, classOf[NetworkRecovered])
     Api.system.eventStream.subscribe(updater, classOf[ChatWorkResponse])
-    //Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
+    Api.system.eventStream.subscribe(markasread, classOf[ChatWorkResponse])
 
     UIState.startup()
   }
