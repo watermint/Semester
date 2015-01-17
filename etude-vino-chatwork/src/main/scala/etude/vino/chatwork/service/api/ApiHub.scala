@@ -82,9 +82,12 @@ case class ApiHub(clockCycleInSeconds: Int)
   }
 
   protected def execute(): Unit = {
+    logger.debug(s"Execute: $semaphore")
     if (semaphore.tryAcquire()) {
       dequeue() match {
-        case None => // NOP
+        case None =>
+          semaphore.release()
+
         case Some(req) =>
           api ! req
       }
@@ -97,9 +100,11 @@ case class ApiHub(clockCycleInSeconds: Int)
       priority =>
         val q = queues(priority)
         if (q.size() > 0) {
+          logger.debug(s"Dequeue from priority : $priority")
           return Some(q.poll())
         }
     }
+    logger.debug(s"No task found")
     None
   }
 }
