@@ -5,11 +5,11 @@ import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JField, JInt, JObject, JValue}
 
-object ParticipantRepository extends Repository[Participant] {
+object ParticipantRepository extends SimpleIndexRepository[Participant, RoomId] {
 
-  def indexName(entity: Participant): String = "cw-participant"
+  val indexName: String = "cw-participant"
 
-  def typeName(entity: Participant): String = "participant"
+  val typeName: String = "participant"
 
   def fromJsonSeq(json: JValue): Seq[Participant] = {
     for {
@@ -40,5 +40,5 @@ object ParticipantRepository extends Repository[Participant] {
       ("member" -> entity.member.map(_.value))
   }
 
-  def toIdentity(entity: Participant): String = entity.roomId.value.toString()
+  def toIdentity(identity: RoomId): String = identity.value.toString()
 }

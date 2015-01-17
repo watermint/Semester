@@ -1,11 +1,11 @@
 package etude.vino.chatwork.domain.lifecycle
 
-import etude.manieres.domain.model.Entity
+import etude.manieres.domain.model.{Identity, Entity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.json4s.JValue
 import org.json4s.native.JsonMethods._
 
-trait Repository[E <: Entity[_]] {
+trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def indexName(entity: E): String
 
   def typeName(entity: E): String
@@ -22,13 +22,13 @@ trait Repository[E <: Entity[_]] {
 
   def toJsonString(entity: E): String = compact(render(toJson(entity)))
 
-  def toIdentity(entity: E): String
+  def toIdentity(identity: ID): String
 
   def update(entity: E): Long = {
     ElasticSearch.update(
       indexName(entity),
       typeName(entity),
-      toIdentity(entity),
+      toIdentity(entity.identity),
       toJson(entity)
     )
   }
@@ -37,7 +37,7 @@ trait Repository[E <: Entity[_]] {
     ElasticSearch.delete(
       indexName(entity),
       typeName(entity),
-      toIdentity(entity)
+      toIdentity(entity.identity)
     )
   }
 }

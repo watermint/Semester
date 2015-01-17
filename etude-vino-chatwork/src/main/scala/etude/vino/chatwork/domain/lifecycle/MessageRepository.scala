@@ -8,7 +8,7 @@ import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object MessageRepository extends Repository[Message] {
+object MessageRepository extends Repository[Message, MessageId] {
 
   def indexName(entity: Message): String = {
     val indexDate = entity.ctime.atOffset(ZoneOffset.UTC).getYear
@@ -49,5 +49,5 @@ object MessageRepository extends Repository[Message] {
       ("replyTo" -> replies)
   }
 
-  def toIdentity(entity: Message): String = s"${entity.messageId.roomId.value}-${entity.messageId.messageId}"
+  def toIdentity(identity: MessageId): String = s"${identity.roomId.value}-${identity.messageId}"
 }

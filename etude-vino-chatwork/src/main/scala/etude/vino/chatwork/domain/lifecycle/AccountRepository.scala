@@ -6,11 +6,11 @@ import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object AccountRepository extends Repository[Account] {
+object AccountRepository extends SimpleIndexRepository[Account, AccountId] {
 
-  def indexName(entity: Account): String = "cw-account"
+  val indexName: String = "cw-account"
 
-  def typeName(entity: Account): String = "account"
+  val typeName: String = "account"
 
   def fromJsonSeq(json: JValue): Seq[Account] = {
     for {
@@ -46,5 +46,5 @@ object AccountRepository extends Repository[Account] {
       ("avatarUrl" -> entity.avatarImage.getOrElse(new URI("")).toString)
   }
 
-  def toIdentity(entity: Account): String = entity.accountId.value.toString()
+  def toIdentity(identity: AccountId): String = identity.value.toString()
 }

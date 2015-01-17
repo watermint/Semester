@@ -6,11 +6,11 @@ import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object RoomRepository extends Repository[Room] {
+object RoomRepository extends SimpleIndexRepository[Room, RoomId] {
 
-  def indexName(entity: Room): String = "cw-room"
+  val indexName: String = "cw-room"
 
-  def typeName(entity: Room): String = "room"
+  val typeName: String = "room"
 
   def toJson(entity: Room): JValue = {
     ("roomId" -> entity.roomId.value) ~
@@ -48,5 +48,5 @@ object RoomRepository extends Repository[Room] {
     }
   }
 
-  def toIdentity(entity: Room): String = entity.roomId.value.toString()
+  def toIdentity(identity: RoomId): String = identity.value.toString()
 }
