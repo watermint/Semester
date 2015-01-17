@@ -1,17 +1,23 @@
-package etude.vino.chatwork.model.converter
+package etude.vino.chatwork.model.storage
 
-import java.time.Instant
+import java.time.{ZoneOffset, Instant}
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
-import etude.pintxos.chatwork.domain.model.message.{Text, Message, MessageId}
+import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object MessageConverter extends Converter {
-  type E = Message
+object MessageStorage extends Converter[Message] {
 
-  def fromJsonSeq(json: JValue): Seq[E] = {
+  def indexName(entity: Message): String = {
+    val indexDate = entity.ctime.atOffset(ZoneOffset.UTC).getYear
+    s"cw-message-$indexDate"
+  }
+
+  def typeName(entity: Message): String = "message"
+
+  def fromJsonSeq(json: JValue): Seq[Message] = {
     for {
       JObject(o) <- json
       JField("_source", JObject(source)) <- o
@@ -31,7 +37,7 @@ object MessageConverter extends Converter {
     }
   }
 
-  def toJson(entity: E): JValue = {
+  def toJson(entity: Message): JValue = {
     val toAccount = entity.body.to.map(_.value)
     val replies = entity.body.replyTo.map(_.value)
 
@@ -43,5 +49,5 @@ object MessageConverter extends Converter {
       ("replyTo" -> replies)
   }
 
-  def toIdentity(entity: E): String = s"${entity.messageId.roomId.value}-${entity.messageId.messageId}"
+  def toIdentity(entity: Message): String = s"${entity.messageId.roomId.value}-${entity.messageId.messageId}"
 }

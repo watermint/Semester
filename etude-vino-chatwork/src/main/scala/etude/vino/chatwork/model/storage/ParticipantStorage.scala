@@ -1,14 +1,17 @@
-package etude.vino.chatwork.model.converter
+package etude.vino.chatwork.model.storage
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
-import etude.pintxos.chatwork.domain.model.room.{RoomId, Participant}
+import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 import org.json4s.JsonDSL._
-import org.json4s.{JField, JInt, JObject, JString, JValue, JArray}
+import org.json4s.{JArray, JField, JInt, JObject, JValue}
 
-object ParticipantConverter extends Converter {
-  type E = Participant
+object ParticipantStorage extends Converter[Participant] {
 
-  def fromJsonSeq(json: JValue): Seq[E] = {
+  def indexName(entity: Participant): String = "cw-participant"
+
+  def typeName(entity: Participant): String = "participant"
+
+  def fromJsonSeq(json: JValue): Seq[Participant] = {
     for {
       JObject(o) <- json
       JField("_source", JObject(source)) <- o
@@ -30,12 +33,12 @@ object ParticipantConverter extends Converter {
     }
   }
 
-  def toJson(entity: E): JValue = {
+  def toJson(entity: Participant): JValue = {
     ("roomId" -> entity.roomId.value) ~
       ("admin" -> entity.admin.map(_.value)) ~
       ("readonly" -> entity.readonly.map(_.value)) ~
       ("member" -> entity.member.map(_.value))
   }
 
-  def toIdentity(entity: E): String = entity.roomId.value.toString()
+  def toIdentity(entity: Participant): String = entity.roomId.value.toString()
 }

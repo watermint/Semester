@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.converter
+package etude.vino.chatwork.model.storage
 
 import java.net.URI
 
@@ -6,10 +6,13 @@ import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object RoomConverter extends Converter {
-  type E = Room
+object RoomStorage extends Converter[Room] {
 
-  def toJson(entity: E): JValue = {
+  def indexName(entity: Room): String = "cw-room"
+
+  def typeName(entity: Room): String = "room"
+
+  def toJson(entity: Room): JValue = {
     ("roomId" -> entity.roomId.value) ~
       ("roomType" -> entity.roomType.name) ~
       ("name" -> entity.name) ~
@@ -17,7 +20,7 @@ object RoomConverter extends Converter {
       ("description" -> entity.description.getOrElse(""))
   }
 
-  def fromJsonSeq(json: JValue): Seq[E] = {
+  def fromJsonSeq(json: JValue): Seq[Room] = {
     for {
       JObject(o) <- json
       JField("_source", JObject(source)) <- o
@@ -45,5 +48,5 @@ object RoomConverter extends Converter {
     }
   }
 
-  def toIdentity(entity: E): String = entity.roomId.value.toString()
+  def toIdentity(entity: Room): String = entity.roomId.value.toString()
 }

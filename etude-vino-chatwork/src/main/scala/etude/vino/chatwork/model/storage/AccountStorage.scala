@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.converter
+package etude.vino.chatwork.model.storage
 
 import java.net.URI
 
@@ -6,10 +6,13 @@ import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object AccountConverter extends Converter {
-  type E = Account
+object AccountStorage extends Converter[Account] {
 
-  def fromJsonSeq(json: JValue): Seq[E] = {
+  def indexName(entity: Account): String = "cw-account"
+
+  def typeName(entity: Account): String = "account"
+
+  def fromJsonSeq(json: JValue): Seq[Account] = {
     for {
       JObject(o) <- json
       JField("_source", JObject(source)) <- o
@@ -36,12 +39,12 @@ object AccountConverter extends Converter {
     }
   }
 
-  def toJson(entity: E): JValue = {
+  def toJson(entity: Account): JValue = {
     ("accountId" -> entity.accountId.value) ~
       ("name" -> entity.name.getOrElse("")) ~
       ("department" -> entity.department.getOrElse("")) ~
       ("avatarUrl" -> entity.avatarImage.getOrElse(new URI("")).toString)
   }
 
-  def toIdentity(entity: E): String = entity.accountId.value.toString()
+  def toIdentity(entity: Account): String = entity.accountId.value.toString()
 }
