@@ -5,7 +5,7 @@ import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JField, JInt, JObject, JValue}
 
-object ParticipantStorage extends Converter[Participant] {
+object ParticipantStorage extends EntityStorage[Participant] {
 
   def indexName(entity: Participant): String = "cw-participant"
 

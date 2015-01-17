@@ -8,7 +8,7 @@ import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object MessageStorage extends Converter[Message] {
+object MessageStorage extends EntityStorage[Message] {
 
   def indexName(entity: Message): String = {
     val indexDate = entity.ctime.atOffset(ZoneOffset.UTC).getYear

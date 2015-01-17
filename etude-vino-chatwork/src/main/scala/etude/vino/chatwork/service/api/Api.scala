@@ -70,6 +70,7 @@ object Api {
         if (pingResult.isSuccess) {
           return true
         } else {
+          logger.info(s"Waiting for network become available.")
           Thread.sleep(period)
         }
       } catch {

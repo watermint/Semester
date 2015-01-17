@@ -4,7 +4,7 @@ import etude.manieres.domain.model.Entity
 import org.json4s.JValue
 import org.json4s.native.JsonMethods._
 
-trait Converter[E <: Entity[_]] {
+trait EntityStorage[E <: Entity[_]] {
   def indexName(entity: E): String
 
   def typeName(entity: E): String
