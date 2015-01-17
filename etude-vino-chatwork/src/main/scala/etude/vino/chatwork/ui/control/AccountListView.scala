@@ -1,7 +1,7 @@
 package etude.vino.chatwork.ui.control
 
 import etude.pintxos.chatwork.domain.model.account.Account
-import etude.vino.chatwork.model.state.Accounts
+import etude.vino.chatwork.domain.state.Accounts
 
 import scalafx.scene.control.ListCell
 

@@ -1,10 +1,11 @@
-package etude.vino.chatwork.model.storage
+package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.Entity
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.json4s.JValue
 import org.json4s.native.JsonMethods._
 
-trait EntityStorage[E <: Entity[_]] {
+trait Repository[E <: Entity[_]] {
   def indexName(entity: E): String
 
   def typeName(entity: E): String
@@ -23,8 +24,8 @@ trait EntityStorage[E <: Entity[_]] {
 
   def toIdentity(entity: E): String
 
-  def store(entity: E): Long = {
-    Storage.store(
+  def update(entity: E): Long = {
+    ElasticSearch.update(
       indexName(entity),
       typeName(entity),
       toIdentity(entity),
@@ -33,7 +34,7 @@ trait EntityStorage[E <: Entity[_]] {
   }
 
   def delete(entity: E): Long = {
-    Storage.delete(
+    ElasticSearch.delete(
       indexName(entity),
       typeName(entity),
       toIdentity(entity)

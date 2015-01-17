@@ -7,10 +7,10 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.pintxos.chatwork.domain.model.room._
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import etude.vino.chatwork.service.api.{Api, PriorityP4, ApiEnqueue, PriorityP3}
 import etude.vino.chatwork.service.historian.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.service.historian.operation.{NextChunk, Traverse}
-import etude.vino.chatwork.model.storage.Storage
 
 case class Historian(apiHub: ActorRef)
   extends Actor {
@@ -104,7 +104,7 @@ case class Historian(apiHub: ActorRef)
 object Historian {
 
   def load(roomId: RoomId): Option[RoomChunk] = {
-    Storage.load(indexName, typeName, roomId.value.toString()) match {
+    ElasticSearch.get(indexName, typeName, roomId.value.toString()) match {
       case None =>
         None
       case Some(json) =>
@@ -113,7 +113,7 @@ object Historian {
   }
 
   def store(roomId: RoomId, chunk: RoomChunk): Long = {
-    Storage.store(indexName, typeName, roomId.value.toString(), chunk.toJSON)
+    ElasticSearch.update(indexName, typeName, roomId.value.toString(), chunk.toJSON)
   }
 
   val indexName = "cw-historian-room"

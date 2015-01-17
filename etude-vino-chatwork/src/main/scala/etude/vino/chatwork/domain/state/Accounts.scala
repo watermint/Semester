@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.state
+package etude.vino.chatwork.domain.state
 
 import akka.actor.{Actor, Props}
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}

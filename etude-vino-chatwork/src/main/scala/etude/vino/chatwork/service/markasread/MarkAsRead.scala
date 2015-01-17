@@ -4,8 +4,8 @@ import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.service.v0.request.ReadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
 import etude.pintxos.chatwork.domain.model.room.RoomId
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityP2}
-import etude.vino.chatwork.model.storage.Storage
 import org.json4s.JsonDSL._
 
 case class MarkAsRead(apiHub: ActorRef)
@@ -34,7 +34,7 @@ object MarkAsRead {
   def props(apiHub: ActorRef): Props = Props(MarkAsRead(apiHub))
 
   def load(roomId: RoomId): Boolean = {
-    Storage.load(indexName, typeName, roomId.value.toString()) match {
+    ElasticSearch.get(indexName, typeName, roomId.value.toString()) match {
       case None =>
         false
 
@@ -48,9 +48,9 @@ object MarkAsRead {
       val value = ("roomId" -> roomId.value) ~
         ("markasread" -> true)
 
-      Storage.store(indexName, typeName, roomId.value.toString(), value)
+      ElasticSearch.update(indexName, typeName, roomId.value.toString(), value)
     } else {
-      Storage.delete(indexName, typeName, roomId.value.toString())
+      ElasticSearch.delete(indexName, typeName, roomId.value.toString())
     }
   }
 }

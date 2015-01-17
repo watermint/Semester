@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.storage
+package etude.vino.chatwork.domain.infrastructure
 
 import java.nio.file.Paths
 
@@ -10,7 +10,7 @@ import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
-object Storage {
+object ElasticSearch {
   val status = ""
 
   val storagePath = Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork$status")
@@ -42,10 +42,10 @@ object Storage {
 
   lazy val client: Client = node.client()
 
-  def store(indexName: String,
-            typeName: String,
-            idName: String,
-            source: JValue): Long = {
+  def update(indexName: String,
+             typeName: String,
+             idName: String,
+             source: JValue): Long = {
 
     val response = client.prepareIndex()
       .setIndex(indexName)
@@ -59,9 +59,9 @@ object Storage {
 
   }
 
-  def load(indexName: String,
-           typeName: String,
-           idName: String): Option[JValue] = {
+  def get(indexName: String,
+          typeName: String,
+          idName: String): Option[JValue] = {
     try {
       val response = client.prepareGet()
         .setIndex(indexName)

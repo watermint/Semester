@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.storage
+package etude.vino.chatwork.domain.lifecycle
 
 import java.net.URI
 
@@ -6,7 +6,7 @@ import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object RoomStorage extends EntityStorage[Room] {
+object RoomRepository extends Repository[Room] {
 
   def indexName(entity: Room): String = "cw-room"
 

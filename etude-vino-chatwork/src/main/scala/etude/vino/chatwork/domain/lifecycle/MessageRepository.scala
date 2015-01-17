@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.storage
+package etude.vino.chatwork.domain.lifecycle
 
 import java.time.{ZoneOffset, Instant}
 
@@ -8,7 +8,7 @@ import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object MessageStorage extends EntityStorage[Message] {
+object MessageRepository extends Repository[Message] {
 
   def indexName(entity: Message): String = {
     val indexDate = entity.ctime.atOffset(ZoneOffset.UTC).getYear

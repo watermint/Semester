@@ -1,4 +1,4 @@
-package etude.vino.chatwork.model.storage
+package etude.vino.chatwork.domain.lifecycle
 
 import java.net.URI
 
@@ -6,7 +6,7 @@ import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object AccountStorage extends EntityStorage[Account] {
+object AccountRepository extends Repository[Account] {
 
   def indexName(entity: Account): String = "cw-account"
 
