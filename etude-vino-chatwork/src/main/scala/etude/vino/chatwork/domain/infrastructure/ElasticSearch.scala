@@ -38,7 +38,33 @@ case class ElasticSearch(status: String = "") {
 
   lazy val node = createEmbeddedNode
 
-  lazy val client: Client = node.client()
+  lazy val client: Client = {
+    val c = node.client()
+    c.admin()
+      .cluster()
+      .prepareHealth()
+      .setWaitForGreenStatus()
+      .execute()
+      .get()
+    c
+  }
+
+  def flushAndRefresh(): Unit = {
+    flush()
+    refresh()
+  }
+
+  def flush(): Unit = {
+    client.admin()
+      .indices().prepareFlush()
+      .execute().get
+  }
+
+  def refresh(): Unit = {
+    client.admin()
+      .indices().prepareRefresh()
+      .execute().get
+  }
 
   def update(indexName: String,
              typeName: String,
