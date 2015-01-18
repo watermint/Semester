@@ -2,7 +2,9 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
+import org.elasticsearch.index.query.{FilterBuilder, QueryBuilder}
 import org.json4s.JValue
+import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {
@@ -10,7 +12,7 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
 
   def indexName(entity: E): String
 
-  def typeName(entity: E): String
+  val typeName: String
 
   def fromJsonSeq(id: Option[String], source: JValue): Seq[E]
 
@@ -25,7 +27,7 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def update(entity: E): Long = {
     engine.update(
       indexName(entity),
-      typeName(entity),
+      typeName,
       toIdentity(entity.identity),
       toJson(entity)
     )
@@ -34,8 +36,34 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def delete(entity: E): Long = {
     engine.delete(
       indexName(entity),
-      typeName(entity),
+      typeName,
       toIdentity(entity.identity)
     )
   }
+
+  def get(identity: ID): Option[E]
+
+  def search(indices: String,
+             query: QueryBuilder,
+             postFilter: Option[FilterBuilder]): Seq[E] = {
+
+    val reqWithQuery = engine.client
+      .prepareSearch()
+      .setIndices(indices)
+      .setTypes(typeName)
+      .setQuery(query)
+
+    val req = postFilter match {
+      case Some(f) => reqWithQuery.setPostFilter(f)
+      case _ => reqWithQuery
+    }
+
+    val response = req.execute().actionGet()
+
+    response.getHits.hits() map {
+      h =>
+        fromJson(Some(h.getId), JsonMethods.parse(h.getSourceAsString))
+    }
+  }
+
 }

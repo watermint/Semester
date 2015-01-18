@@ -6,6 +6,7 @@ import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.{Text, MessageId, Message}
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
+import org.elasticsearch.index.query.QueryBuilders
 import org.junit.runner.RunWith
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -49,6 +50,32 @@ class MessageRepositorySpec
       serializeDeserialize(message1)
       serializeDeserialize(message2)
       serializeDeserialize(message3)
+    }
+
+    "Delete/Update/Get/Search" in {
+      def deleteUpdateGet(message: Message): MatchResult[_] = {
+        messageRepo.delete(message)
+        messageRepo.update(message) >= 0 must beTrue
+
+        engine.flushAndRefresh()
+
+        val m = messageRepo.get(message.messageId)
+        m must beSome
+        m.get must equalTo(message)
+      }
+
+      deleteUpdateGet(message1)
+      deleteUpdateGet(message2)
+      deleteUpdateGet(message3)
+
+      def searchTerm(): MatchResult[_] = {
+        val result = messageRepo.search(QueryBuilders.termQuery("account", "234002"))
+        result.size must equalTo(2)
+        result must contain(message2)
+        result must contain(message3)
+      }
+
+      searchTerm()
     }
   }
 

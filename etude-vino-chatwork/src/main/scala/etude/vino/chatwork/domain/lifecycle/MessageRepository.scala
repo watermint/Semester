@@ -18,7 +18,7 @@ case class MessageRepository(engine: ElasticSearch) extends MultiIndexRepository
     s"$indexNamePrefix$indexDate"
   }
 
-  def typeName(entity: Message): String = "message"
+  val typeName: String = "message"
 
   def fromJsonSeq(id: Option[String], source: JValue): Seq[Message] = {
     for {

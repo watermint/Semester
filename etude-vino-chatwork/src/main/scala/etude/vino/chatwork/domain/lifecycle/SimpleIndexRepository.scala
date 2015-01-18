@@ -7,11 +7,7 @@ import org.json4s.native.JsonMethods
 trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Repository[E, ID] {
   val indexName: String
 
-  val typeName: String
-
   def indexName(entity: E): String = indexName
-
-  def typeName(entity: E): String = typeName
 
   def get(identity: ID): Option[E] = {
     engine.get(
@@ -26,23 +22,7 @@ trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Reposito
 
   def search(query: QueryBuilder,
              postFilter: Option[FilterBuilder] = None): Seq[E] = {
-
-    val reqWithQuery = engine.client
-      .prepareSearch()
-      .setIndices(indexName)
-      .setTypes(typeName)
-      .setQuery(query)
-
-    val req = postFilter match {
-      case Some(f) => reqWithQuery.setPostFilter(f)
-      case _ => reqWithQuery
-    }
-
-    val response = req.execute().actionGet()
-
-    response.getHits.hits() map {
-      h =>
-        fromJson(Some(h.getId), JsonMethods.parse(h.getSourceAsString))
-    }
+    search(indexName, query, postFilter)
   }
+
 }
