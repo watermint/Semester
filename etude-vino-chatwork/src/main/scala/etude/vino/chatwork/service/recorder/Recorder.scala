@@ -4,7 +4,6 @@ import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.service.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.vino.chatwork.domain.Models
-import etude.vino.chatwork.domain.lifecycle._
 import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityP2}
 
 case class Recorder(apiHub: ActorRef) extends Actor {

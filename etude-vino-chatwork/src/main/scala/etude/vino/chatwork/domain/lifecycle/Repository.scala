@@ -1,8 +1,8 @@
 package etude.vino.chatwork.domain.lifecycle
 
-import etude.manieres.domain.model.{Identity, Entity}
+import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import org.json4s.JValue
+import org.json4s.{JString, JValue}
 import org.json4s.native.JsonMethods._
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {
@@ -14,7 +14,14 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
 
   def fromJsonSeq(json: String): Seq[E] = fromJsonSeq(parse(json))
 
-  def fromJsonSeq(json: JValue): Seq[E]
+  def fromJsonSeq(json: JValue): Seq[E] = {
+    val id: String = (json \ "_id").asInstanceOf[JString].values
+    val source: JValue = json \ "_source"
+
+    fromJsonSeq(id, source)
+  }
+
+  def fromJsonSeq(id: String, source: JValue): Seq[E]
 
   def fromJson(json: String): E = fromJson(parse(json))
 

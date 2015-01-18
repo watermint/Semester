@@ -21,15 +21,14 @@ case class RoomRepository(engine: ElasticSearch) extends SimpleIndexRepository[R
       ("description" -> entity.description.getOrElse(""))
   }
 
-  def fromJsonSeq(json: JValue): Seq[Room] = {
+  def fromJsonSeq(id: String, source: JValue): Seq[Room] = {
     for {
-      JObject(o) <- json
-      JField("_source", JObject(source)) <- o
-      JField("roomId", JInt(roomId)) <- source
-      JField("roomType", JString(roomType)) <- source
-      JField("name", JString(name)) <- source
-      JField("avatarUrl", JString(url)) <- source
-      JField("description", JString(description)) <- source
+      JObject(o) <- source
+      JField("roomId", JInt(roomId)) <- o
+      JField("roomType", JString(roomType)) <- o
+      JField("name", JString(name)) <- o
+      JField("avatarUrl", JString(url)) <- o
+      JField("description", JString(description)) <- o
     } yield {
       new Room(
         roomId = RoomId(roomId),

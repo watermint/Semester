@@ -13,14 +13,13 @@ case class AccountRepository(engine: ElasticSearch) extends SimpleIndexRepositor
 
   val typeName: String = "account"
 
-  def fromJsonSeq(json: JValue): Seq[Account] = {
+  def fromJsonSeq(id: String, source: JValue): Seq[Account] = {
     for {
-      JObject(o) <- json
-      JField("_source", JObject(source)) <- o
-      JField("accountId", JInt(accountId)) <- source
-      JField("name", JString(name)) <- source
-      JField("department", JString(department)) <- source
-      JField("avatarUrl", JString(avatar)) <- source
+      JObject(o) <- source
+      JField("accountId", JInt(accountId)) <- o
+      JField("name", JString(name)) <- o
+      JField("department", JString(department)) <- o
+      JField("avatarUrl", JString(avatar)) <- o
     } yield {
       new Account(
         accountId = AccountId(accountId),

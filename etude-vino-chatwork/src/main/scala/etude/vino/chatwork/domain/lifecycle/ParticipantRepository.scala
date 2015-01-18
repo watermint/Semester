@@ -12,14 +12,13 @@ case class ParticipantRepository(engine: ElasticSearch) extends SimpleIndexRepos
 
   val typeName: String = "participant"
 
-  def fromJsonSeq(json: JValue): Seq[Participant] = {
+  def fromJsonSeq(id: String, source: JValue): Seq[Participant] = {
     for {
-      JObject(o) <- json
-      JField("_source", JObject(source)) <- o
-      JField("roomId", JInt(roomId)) <- source
-      JField("admin", JArray(admin)) <- source
-      JField("readonly", JArray(readonly)) <- source
-      JField("member", JArray(member)) <- source
+      JObject(o) <- source
+      JField("roomId", JInt(roomId)) <- o
+      JField("admin", JArray(admin)) <- o
+      JField("readonly", JArray(readonly)) <- o
+      JField("member", JArray(member)) <- o
     } yield {
       val adminIds = for { JInt(a) <- admin } yield { AccountId(a) }
       val readonlyIds = for { JInt(r) <- readonly } yield { AccountId(r) }
