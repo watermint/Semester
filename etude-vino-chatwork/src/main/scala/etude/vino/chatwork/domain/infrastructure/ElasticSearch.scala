@@ -10,9 +10,7 @@ import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
-object ElasticSearch {
-  val status = ""
-
+case class ElasticSearch(status: String = "") {
   val storagePath = Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork$status")
 
   val useTransportClient = false

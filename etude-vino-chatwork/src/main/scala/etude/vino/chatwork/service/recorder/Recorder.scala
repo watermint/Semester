@@ -3,6 +3,7 @@ package etude.vino.chatwork.service.recorder
 import akka.actor.{Actor, ActorRef, Props}
 import etude.pintxos.chatwork.domain.service.v0.request.LoadChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
+import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.lifecycle._
 import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityP2}
 
@@ -10,9 +11,9 @@ case class Recorder(apiHub: ActorRef) extends Actor {
 
   def receive: Receive = {
     case r: InitLoadResponse =>
-      r.contacts.foreach { c => AccountRepository.update(c)}
-      r.participants.foreach { p => ParticipantRepository.update(p)}
-      r.rooms.foreach { r => RoomRepository.update(r)}
+      r.contacts.foreach { c => Models.accountRepository.update(c)}
+      r.participants.foreach { p => Models.participantRepository.update(p)}
+      r.rooms.foreach { r => Models.roomRepository.update(r)}
       r.rooms
         .filter(_.attributes.isDefined)
         .filter(_.attributes.get.unreadCount > 0)
@@ -28,10 +29,10 @@ case class Recorder(apiHub: ActorRef) extends Actor {
       }
 
     case r: LoadChatResponse =>
-      r.chatList.foreach(MessageRepository.update)
+      r.chatList.foreach(Models.messageRepository.update)
 
     case r: LoadOldChatResponse =>
-      r.messages.foreach(MessageRepository.update)
+      r.messages.foreach(Models.messageRepository.update)
   }
 
 }

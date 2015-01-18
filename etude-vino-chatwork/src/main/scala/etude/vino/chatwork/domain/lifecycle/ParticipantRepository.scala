@@ -2,10 +2,11 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.json4s.JsonDSL._
 import org.json4s.{JArray, JField, JInt, JObject, JValue}
 
-object ParticipantRepository extends SimpleIndexRepository[Participant, RoomId] {
+case class ParticipantRepository(engine: ElasticSearch) extends SimpleIndexRepository[Participant, RoomId] {
 
   val indexName: String = "cw-participant"
 

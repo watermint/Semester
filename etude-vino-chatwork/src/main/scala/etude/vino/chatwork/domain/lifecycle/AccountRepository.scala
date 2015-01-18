@@ -3,10 +3,11 @@ package etude.vino.chatwork.domain.lifecycle
 import java.net.URI
 
 import etude.pintxos.chatwork.domain.model.account.{Account, AccountId}
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object AccountRepository extends SimpleIndexRepository[Account, AccountId] {
+case class AccountRepository(engine: ElasticSearch) extends SimpleIndexRepository[Account, AccountId] {
 
   val indexName: String = "cw-account"
 

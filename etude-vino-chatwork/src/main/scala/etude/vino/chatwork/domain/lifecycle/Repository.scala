@@ -6,6 +6,8 @@ import org.json4s.JValue
 import org.json4s.native.JsonMethods._
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {
+  val engine: ElasticSearch
+
   def indexName(entity: E): String
 
   def typeName(entity: E): String
@@ -25,7 +27,7 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def toIdentity(identity: ID): String
 
   def update(entity: E): Long = {
-    ElasticSearch.update(
+    engine.update(
       indexName(entity),
       typeName(entity),
       toIdentity(entity.identity),
@@ -34,7 +36,7 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   }
 
   def delete(entity: E): Long = {
-    ElasticSearch.delete(
+    engine.delete(
       indexName(entity),
       typeName(entity),
       toIdentity(entity.identity)

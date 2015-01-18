@@ -17,7 +17,7 @@ object Service {
 
   def startup() {
     try {
-      val ver = ElasticSearch.client.prepareIndex()
+      val ver = Models.engine.client.prepareIndex()
         .setIndex("cw-vino")
         .setType("main")
         .setId("main")
@@ -50,6 +50,6 @@ object Service {
 
   def shutdown(): Unit = {
     Api.system.shutdown()
-    ElasticSearch.shutdown()
+    Models.engine.shutdown()
   }
 }

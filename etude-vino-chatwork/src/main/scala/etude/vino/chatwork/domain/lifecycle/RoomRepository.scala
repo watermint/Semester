@@ -3,10 +3,11 @@ package etude.vino.chatwork.domain.lifecycle
 import java.net.URI
 
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object RoomRepository extends SimpleIndexRepository[Room, RoomId] {
+case class RoomRepository(engine: ElasticSearch) extends SimpleIndexRepository[Room, RoomId] {
 
   val indexName: String = "cw-room"
 

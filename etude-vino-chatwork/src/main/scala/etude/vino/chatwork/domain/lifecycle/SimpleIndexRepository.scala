@@ -13,7 +13,7 @@ trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Reposito
   def typeName(entity: E): String = typeName
 
   def get(identity: ID): Option[E] = {
-    ElasticSearch.get(
+    engine.get(
       indexName,
       typeName,
       toIdentity(identity)

@@ -5,14 +5,17 @@ import java.time.{ZoneOffset, Instant}
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.pintxos.chatwork.domain.model.room.RoomId
+import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.json4s.JsonDSL._
 import org.json4s.{JField, JInt, JObject, JString, JValue}
 
-object MessageRepository extends Repository[Message, MessageId] {
+case class MessageRepository(engine: ElasticSearch) extends MultiIndexRepository[Message, MessageId] {
+
+  val indexNamePrefix: String = "cw-message-"
 
   def indexName(entity: Message): String = {
     val indexDate = entity.ctime.atOffset(ZoneOffset.UTC).getYear
-    s"cw-message-$indexDate"
+    s"$indexNamePrefix$indexDate"
   }
 
   def typeName(entity: Message): String = "message"
