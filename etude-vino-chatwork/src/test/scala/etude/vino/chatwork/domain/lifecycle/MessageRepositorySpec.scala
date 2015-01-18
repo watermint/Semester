@@ -6,7 +6,7 @@ import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.{Text, MessageId, Message}
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.index.query.{FilterBuilders, QueryBuilders}
 import org.junit.runner.RunWith
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -74,8 +74,18 @@ class MessageRepositorySpec
         result must contain(message2)
         result must contain(message3)
       }
+      def searchTermWithDateRange(): MatchResult[_] = {
+        val result = messageRepo.search(
+          QueryBuilders.boolQuery()
+            .must(QueryBuilders.termQuery("account", "234002"))
+            .must(QueryBuilders.rangeQuery("@timestamp").from("2014-05-01T00:00:00Z").to("2014-07-01T00:00:00Z")))
+
+        result.size must equalTo(1)
+        result must contain(message2)
+      }
 
       searchTerm()
+      searchTermWithDateRange()
     }
   }
 
