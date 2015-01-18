@@ -20,14 +20,14 @@ case class MessageRepository(engine: ElasticSearch) extends MultiIndexRepository
 
   def typeName(entity: Message): String = "message"
 
-  def fromJsonSeq(id: String, source: JValue): Seq[Message] = {
+  def fromJsonSeq(id: Option[String], source: JValue): Seq[Message] = {
     for {
       JObject(o) <- source
       JField("@timestamp", JString(timestamp)) <- o
       JField("account", JInt(accountId)) <- o
       JField("body", JString(body)) <- o
     } yield {
-      val idPair = id.split("-")
+      val idPair = id.get.split("-")
       new Message(
         MessageId(RoomId(BigInt(idPair(0))), BigInt(idPair(1))),
         AccountId(accountId),

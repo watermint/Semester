@@ -24,9 +24,18 @@ class AccountRepositorySpec extends Specification {
   "AccountRepository" should {
     "JSON serialize/deserialize" in {
       val json = accountRepo.toJson(account)
-      val a = accountRepo.fromJsonSeq("", json).last
+      val a = accountRepo.fromJsonSeq(None, json).last
 
       account must equalTo(a)
+    }
+
+    "Delete/Update/Get" in {
+      accountRepo.delete(account)
+      accountRepo.update(account) >= 0 must beTrue
+      val a = accountRepo.get(account.accountId)
+
+      a must beSome[Account]
+      a.get must equalTo(account)
     }
   }
 

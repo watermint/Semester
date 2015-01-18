@@ -2,8 +2,9 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import org.json4s.{JString, JValue}
+import org.json4s.JsonAST.JObject
 import org.json4s.native.JsonMethods._
+import org.json4s.{JString, JValue}
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   val engine: ElasticSearch
@@ -15,13 +16,19 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def fromJsonSeq(json: String): Seq[E] = fromJsonSeq(parse(json))
 
   def fromJsonSeq(json: JValue): Seq[E] = {
-    val id: String = (json \ "_id").asInstanceOf[JString].values
-    val source: JValue = json \ "_source"
+    val id: Option[String] = json \ "_id" match {
+      case JString(i) => Some(i)
+      case _ => None
+    }
+    val source: JValue = json \ "_source" match {
+      case s: JObject => s
+      case s => json
+    }
 
     fromJsonSeq(id, source)
   }
 
-  def fromJsonSeq(id: String, source: JValue): Seq[E]
+  def fromJsonSeq(id: Option[String], source: JValue): Seq[E]
 
   def fromJson(json: String): E = fromJson(parse(json))
 

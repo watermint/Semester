@@ -12,7 +12,7 @@ case class ParticipantRepository(engine: ElasticSearch) extends SimpleIndexRepos
 
   val typeName: String = "participant"
 
-  def fromJsonSeq(id: String, source: JValue): Seq[Participant] = {
+  def fromJsonSeq(id: Option[String], source: JValue): Seq[Participant] = {
     for {
       JObject(o) <- source
       JField("roomId", JInt(roomId)) <- o
