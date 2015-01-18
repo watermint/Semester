@@ -12,7 +12,7 @@ import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class AccountRepositorySpec extends Specification {
-  val engine = ElasticSearch("unit-test")
+  val engine = ElasticSearch(testMode = true)
   val accountRepo = AccountRepository(engine)
   val account1 = new Account(
     AccountId(12345),
@@ -41,13 +41,18 @@ class AccountRepositorySpec extends Specification {
 
   "AccountRepository" should {
     "JSON serialize/deserialize" in {
-      val json = accountRepo.toJson(account1)
-      val a = accountRepo.fromJsonSeq(None, json).last
+      def serializeDeserialize(account: Account): MatchResult[_] = {
+        val json = accountRepo.toJson(account)
+        val a = accountRepo.fromJsonSeq(None, json).last
+        a must equalTo(account)
+      }
 
-      account1 must equalTo(a)
+      serializeDeserialize(account1)
+      serializeDeserialize(account2)
+      serializeDeserialize(account3)
     }
 
-    "Delete/Update/Get" in {
+    "Delete/Update/Get/Search" in {
       def deleteUpdateGet(account: Account): MatchResult[_] = {
         accountRepo.delete(account)
         accountRepo.update(account) >= 0 must beTrue
@@ -65,9 +70,7 @@ class AccountRepositorySpec extends Specification {
       } finally {
         engine.flushAndRefresh()
       }
-    }
 
-    "Search : exact match" in {
       def exactMatch(account: Account): MatchResult[_] = {
         val accountByGet = accountRepo.get(account.accountId)
         accountByGet must beSome[Account]
@@ -81,15 +84,17 @@ class AccountRepositorySpec extends Specification {
       exactMatch(account1)
       exactMatch(account2)
       exactMatch(account3)
-    }
 
-    "Search : term" in {
-      val result = accountRepo.search(QueryBuilders.termQuery("name", "Red"))
-      result.size must equalTo(2)
-      result must contain(account2)
-      result must contain(account3)
+      def searchTerm(): MatchResult[_] = {
+        val result = accountRepo.search(QueryBuilders.termQuery("name", "Red"))
+        result.size must equalTo(2)
+        result must contain(account2)
+        result must contain(account3)
+      }
+
+      searchTerm()
     }
   }
 
-  engine.client.close()
+  engine.shutdown()
 }

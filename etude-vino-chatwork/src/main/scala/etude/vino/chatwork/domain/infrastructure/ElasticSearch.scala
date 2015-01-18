@@ -1,6 +1,7 @@
 package etude.vino.chatwork.domain.infrastructure
 
-import java.nio.file.Paths
+import java.nio.file.{Files, Paths}
+import java.util.UUID
 
 import org.elasticsearch.client.Client
 import org.elasticsearch.common.settings.ImmutableSettings
@@ -10,30 +11,50 @@ import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
-case class ElasticSearch(status: String = "") {
-  val storagePath = Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork$status")
+case class ElasticSearch(testMode: Boolean = false) {
+  val clusterName = {
+    if (testMode) {
+      s"chatwork-${UUID.randomUUID()}"
+    } else {
+      "chatwork"
+    }
+  }
+
+  val storagePath = {
+    if (testMode) {
+      Files.createTempDirectory(clusterName)
+    } else {
+      Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork")
+    }
+  }
 
   val useTransportClient = false
 
   def createEmbeddedNode: Node = {
+    val baseSettings = ImmutableSettings
+      .settingsBuilder()
+      .put("path.home", storagePath)
+      .put("path.logs", storagePath.resolve("logs"))
+      .put("index.analysis.analyzer.default.type", "custom")
+      .put("index.analysis.analyzer.default.tokenizer", "kuromoji_tokenizer")
+      .put("index.number_of_replicas", 0)
+      .put("index.number_of_shards", 1)
+
+    val settings = if (testMode) {
+      baseSettings
+    } else {
+      baseSettings
+        .put("http.enabled", true)
+        .put("http.port", 9200)
+        .put("http.cors.enabled", true)
+        .put("http.cors.allow-origin", "/.*/")
+    }
+
     NodeBuilder
       .nodeBuilder()
-      .clusterName(s"chatwork$status")
-      .local(true)
-      .settings(
-        ImmutableSettings
-          .settingsBuilder()
-          .put("path.home", storagePath)
-          .put("path.logs", storagePath.resolve("logs"))
-          .put("index.analysis.analyzer.default.type", "custom")
-          .put("index.analysis.analyzer.default.tokenizer", "kuromoji_tokenizer")
-          .put("index.number_of_replicas", 0)
-          .put("index.number_of_shards", 1)
-          .put("http.enabled", true)
-          .put("http.port", 9200)
-          .put("http.cors.enabled", true)
-          .put("http.cors.allow-origin", "/.*/")
-      ).node()
+      .clusterName(clusterName)
+      .local(testMode)
+      .settings(settings).node()
   }
 
   lazy val node = createEmbeddedNode
@@ -124,6 +145,5 @@ case class ElasticSearch(status: String = "") {
 
   def shutdown(): Unit = {
     client.close()
-    node.stop()
   }
 }
