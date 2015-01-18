@@ -21,21 +21,21 @@ class MessageRepositorySpec
   val message1 = new Message(
     MessageId(RoomId(123), 1001),
     AccountId(123001),
-    Text("message text by 123001"),
+    Text("オリーブオイルと生ハム"),
     Instant.parse("2014-01-01T00:00:00Z"),
     None
   )
   val message2 = new Message(
     MessageId(RoomId(123), 1002),
     AccountId(234002),
-    Text("message text bu 234002"),
+    Text("バルサミコ酢とフォカッチャ"),
     Instant.parse("2015-01-01T00:00:00Z"),
     None
   )
   val message3 = new Message(
     MessageId(RoomId(123), 1002),
     AccountId(234002),
-    Text("message text bu 234002"),
+    Text("オリーブとローストビーフ"),
     Instant.parse("2014-06-01T00:00:00Z"),
     None
   )
@@ -83,9 +83,16 @@ class MessageRepositorySpec
         result.size must equalTo(1)
         result must contain(message2)
       }
+      def searchJapaneseTerm(): MatchResult[_] = {
+        val result = messageRepo.search(QueryBuilders.termQuery("body", "オリーブ"))
+        result.size must equalTo(2)
+        result must contain(message1)
+        result must contain(message3)
+      }
 
       searchTerm()
       searchTermWithDateRange()
+      searchJapaneseTerm()
     }
   }
 
