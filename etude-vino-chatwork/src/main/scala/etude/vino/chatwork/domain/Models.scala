@@ -19,6 +19,8 @@ object Models {
 
   val roomChunkRepository: RoomChunkRepository = RoomChunkRepository(engine)
 
+  val markAsReadRepository: MarkAsReadRepository = MarkAsReadRepository(engine)
+
   def startup(): Unit = {
     Api.system.eventStream.subscribe(Accounts.actorRef, classOf[ChatWorkResponse])
     Api.system.eventStream.subscribe(Rooms.actorRef, classOf[ChatWorkResponse])

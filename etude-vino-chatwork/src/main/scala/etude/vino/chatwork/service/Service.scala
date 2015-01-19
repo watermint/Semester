@@ -7,7 +7,7 @@ import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.service.api._
 import etude.vino.chatwork.service.historian.Historian
-import etude.vino.chatwork.service.markasread.MarkAsRead
+import etude.vino.chatwork.service.markasread.AutoMarkAsRead
 import etude.vino.chatwork.service.recorder.Recorder
 import etude.vino.chatwork.service.updater.Updater
 
@@ -33,7 +33,7 @@ object Service {
     val recorder = Api.system.actorOf(Recorder.props(apiHub))
     val historian = Api.system.actorOf(Historian.props(apiHub))
     val updater = Api.system.actorOf(Updater.props(apiHub, 10))
-    val markasread = Api.system.actorOf(MarkAsRead.props(apiHub))
+    val markasread = Api.system.actorOf(AutoMarkAsRead.props(apiHub))
 
     Api.system.eventStream.subscribe(apiHub, classOf[NetworkRecovered])
     Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
