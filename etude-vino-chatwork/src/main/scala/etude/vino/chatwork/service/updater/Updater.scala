@@ -3,6 +3,7 @@ package etude.vino.chatwork.service.updater
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, ActorRef, Props}
+import etude.epice.utility.qos.TimeoutSemaphore
 import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
 import etude.vino.chatwork.service.api._
@@ -15,16 +16,26 @@ case class Updater(apiHub: ActorRef, updateClockCycleInSeconds: Long)
 
   implicit val executionContext: ExecutionContext = Api.system.dispatcher
 
+  private val semaphore = new TimeoutSemaphore(java.time.Duration.ofSeconds(60))
+
   case class ScheduledUpdate()
 
   def receive: Receive = {
     case u: ScheduledUpdate =>
-      apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityP1)
+      if (semaphore.tryAcquire()) {
+        apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityP1)
+      }
 
-    case (_: InitLoadResponse |
-          _: GetUpdateResponse |
-          _: NetworkRecovered) =>
-      Api.system.scheduler.scheduleOnce(Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS), self, ScheduledUpdate())
+    case _: GetUpdateResponse =>
+      semaphore.release()
+
+    case _: InitLoadResponse =>
+      Api.system.scheduler.schedule(
+        Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS),
+        Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS),
+        self,
+        ScheduledUpdate()
+      )
   }
 }
 

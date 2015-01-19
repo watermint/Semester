@@ -5,6 +5,7 @@ import java.util.concurrent.{ConcurrentLinkedQueue, Semaphore, TimeUnit, Timeout
 
 import akka.actor._
 import etude.epice.logging.LoggerFactory
+import etude.epice.utility.qos.TimeoutSemaphore
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, SessionTimeoutException}
@@ -20,7 +21,7 @@ case class ApiHub(clockCycleInSeconds: Int)
     Priority.priorities.map(p => p -> new ConcurrentLinkedQueue[ChatWorkRequest]()).toMap
   }
 
-  private val semaphore = new Semaphore(1)
+  private val semaphore = new TimeoutSemaphore(java.time.Duration.ofSeconds(60))
 
   private val api = context.actorOf(ApiSession.props())
 
@@ -43,6 +44,7 @@ case class ApiHub(clockCycleInSeconds: Int)
         logger.warn("Issue on network connection", e)
         Api.ensureAvailable()
         semaphore.release()
+        Api.system.eventStream.publish(NetworkRecovered())
         logger.info("Trying to resume")
         SupervisorStrategy.Resume
 
