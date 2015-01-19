@@ -70,9 +70,9 @@ class MessageRepositorySpec
 
       def searchTerm(): MatchResult[_] = {
         val result = messageRepo.search(QueryBuilders.termQuery("account", "234002"))
-        result.size must equalTo(2)
-        result must contain(message2)
-        result must contain(message3)
+        result.entities.size must equalTo(2)
+        result.entities must contain(message2)
+        result.entities must contain(message3)
       }
       def searchTermWithDateRange(): MatchResult[_] = {
         val result = messageRepo.search(
@@ -80,14 +80,14 @@ class MessageRepositorySpec
             .must(QueryBuilders.termQuery("account", "234002"))
             .must(QueryBuilders.rangeQuery("@timestamp").from("2014-05-01T00:00:00Z").to("2014-07-01T00:00:00Z")))
 
-        result.size must equalTo(1)
-        result must contain(message2)
+        result.entities.size must equalTo(1)
+        result.entities must contain(message2)
       }
       def searchJapaneseTerm(): MatchResult[_] = {
         val result = messageRepo.search(QueryBuilders.termQuery("body", "オリーブ"))
-        result.size must equalTo(2)
-        result must contain(message1)
-        result must contain(message3)
+        result.entities.size must equalTo(2)
+        result.entities must contain(message1)
+        result.entities must contain(message3)
       }
 
       searchTerm()

@@ -77,8 +77,8 @@ class AccountRepositorySpec extends Specification {
         accountByGet.get must equalTo(account)
 
         val result = accountRepo.search(QueryBuilders.matchQuery("accountId", accountRepo.toIdentity(account.accountId)))
-        result.size must equalTo(1)
-        result must contain(account)
+        result.entities.size must equalTo(1)
+        result.entities must contain(account)
       }
 
       exactMatch(account1)
@@ -87,9 +87,9 @@ class AccountRepositorySpec extends Specification {
 
       def searchTerm(): MatchResult[_] = {
         val result = accountRepo.search(QueryBuilders.termQuery("name", "Red"))
-        result.size must equalTo(2)
-        result must contain(account2)
-        result must contain(account3)
+        result.entities.size must equalTo(2)
+        result.entities must contain(account2)
+        result.entities must contain(account3)
       }
 
       searchTerm()

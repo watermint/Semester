@@ -2,10 +2,13 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import org.elasticsearch.index.query.{FilterBuilder, QueryBuilder}
+import org.elasticsearch.index.query.QueryBuilder
+import org.elasticsearch.search.aggregations.AggregationBuilder
 import org.json4s.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
+
+import scala.collection.JavaConverters._
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   val engine: ElasticSearch
@@ -44,26 +47,21 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def get(identity: ID): Option[E]
 
   def search(indices: String,
-             query: QueryBuilder,
-             postFilter: Option[FilterBuilder]): Seq[E] = {
-
+             query: QueryBuilder): SearchResult[E, ID] = {
     val reqWithQuery = engine.client
       .prepareSearch()
       .setIndices(indices)
       .setTypes(typeName)
       .setQuery(query)
 
-    val req = postFilter match {
-      case Some(f) => reqWithQuery.setPostFilter(f)
-      case _ => reqWithQuery
-    }
+    val response = reqWithQuery.execute().get()
 
-    val response = req.execute().actionGet()
-
-    response.getHits.hits() map {
-      h =>
-        fromJson(Some(h.getId), JsonMethods.parse(h.getSourceAsString))
-    }
+    SearchResult[E, ID](
+      response.getHits.hits() map {
+        h =>
+          fromJson(Some(h.getId), JsonMethods.parse(h.getSourceAsString))
+      }
+    )
   }
 
 }
