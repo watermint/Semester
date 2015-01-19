@@ -71,7 +71,7 @@ case class Historian(apiHub: ActorRef)
   def touchTimes(rooms: Seq[Room]): Seq[TouchTime] = {
     rooms.map {
       room =>
-        Models.roomChunkRepository.get(RoomChunkId(room.roomId)) match {
+        Models.roomChunkRepository.get(room.roomId) match {
           case Some(chunk) =>
             TouchTime(room, chunk.chunks.maxBy(_.touchTime).touchTime)
           case None =>
@@ -81,17 +81,17 @@ case class Historian(apiHub: ActorRef)
   }
 
   def updateChunk(roomId: RoomId, chunk: Chunk): Unit = {
-    Models.roomChunkRepository.get(RoomChunkId(roomId)) match {
+    Models.roomChunkRepository.get(roomId) match {
       case None =>
         val roomChunk = RoomChunk(
-          RoomChunkId(roomId.value),
+          RoomId(roomId.value),
           Seq(chunk)
         )
         Models.roomChunkRepository.update(roomChunk)
 
       case Some(roomChunk) =>
         val updatedRoomChunk = RoomChunk(
-          RoomChunkId(roomId.value),
+          RoomId(roomId.value),
           Chunk.compaction(roomChunk.chunks :+ chunk)
         )
         Models.roomChunkRepository.update(updatedRoomChunk)

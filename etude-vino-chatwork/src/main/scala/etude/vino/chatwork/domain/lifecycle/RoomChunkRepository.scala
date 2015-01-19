@@ -1,12 +1,13 @@
 package etude.vino.chatwork.domain.lifecycle
 
+import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import etude.vino.chatwork.domain.model.{Chunk, RoomChunk, RoomChunkId}
 import org.json4s.JValue
 import org.json4s.JsonAST.{JArray, JInt, JField, JObject}
 import org.json4s.JsonDSL._
 
-case class RoomChunkRepository(engine: ElasticSearch) extends SimpleIndexRepository[RoomChunk, RoomChunkId] {
+case class RoomChunkRepository(engine: ElasticSearch) extends SimpleIndexRepository[RoomChunk, RoomId] {
   val indexName = "cw-historian-room"
 
   val typeName = "room-chunk"
@@ -18,7 +19,7 @@ case class RoomChunkRepository(engine: ElasticSearch) extends SimpleIndexReposit
       JField("chunks", JArray(chunks)) <- o
     } yield {
       RoomChunk(
-        RoomChunkId(roomId),
+        RoomId(roomId),
         Chunk.ofChunks(chunks)
       )
     }
@@ -29,5 +30,5 @@ case class RoomChunkRepository(engine: ElasticSearch) extends SimpleIndexReposit
       ("chunks" -> entity.chunks.map(_.toJSON))
   }
 
-  def toIdentity(identity: RoomChunkId): String = identity.value.toString()
+  def toIdentity(identity: RoomId): String = identity.value.toString()
 }

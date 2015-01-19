@@ -37,7 +37,7 @@ case class Traverse(apiHub: ActorRef) extends Actor {
 
   def traverse(traverse: TraverseRoom): Unit = {
     val room = traverse.room
-    Models.roomChunkRepository.get(RoomChunkId(room.roomId)) match {
+    Models.roomChunkRepository.get(room.roomId) match {
       case None =>
         apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), priorityOf(room))
       case Some(chunk) =>
@@ -60,7 +60,7 @@ case class Traverse(apiHub: ActorRef) extends Actor {
 
   def nextChunk(nextChunk: NextChunk): Unit = {
     val lastMessageId = nextChunk.lastMessageId
-    Models.roomChunkRepository.get(RoomChunkId(lastMessageId.roomId)) match {
+    Models.roomChunkRepository.get(lastMessageId.roomId) match {
       case None => // NOP
       case Some(chunk) =>
         Chunk.nextChunkMessageId(chunk.chunks, nextChunkTerm) match {

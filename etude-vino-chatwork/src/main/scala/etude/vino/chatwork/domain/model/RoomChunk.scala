@@ -1,15 +1,16 @@
 package etude.vino.chatwork.domain.model
 
 import etude.manieres.domain.model.{Identity, Entity}
+import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonDSL._
 import org.json4s._
 
 
 
-case class RoomChunk(roomId: RoomChunkId,
-                     chunks: Seq[Chunk]) extends Entity[RoomChunkId] {
+case class RoomChunk(roomId: RoomId,
+                     chunks: Seq[Chunk]) extends Entity[RoomId] {
 
-  val identity: RoomChunkId = roomId
+  val identity: RoomId = roomId
 
   def toJSON: JValue = {
     ("roomId" -> roomId.value) ~
@@ -25,7 +26,7 @@ object RoomChunk {
       JField("chunks", JArray(chunks)) <- o
     } yield {
       RoomChunk(
-        RoomChunkId(roomId),
+        RoomId(roomId),
         Chunk.ofChunks(chunks)
       )
     }).last
