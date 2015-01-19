@@ -1,4 +1,4 @@
-package etude.vino.chatwork.service.historian.model
+package etude.vino.chatwork.domain.model
 
 import java.time.Instant
 

@@ -2,7 +2,7 @@ package etude.vino.chatwork.domain
 
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import etude.vino.chatwork.domain.lifecycle.{RoomRepository, ParticipantRepository, MessageRepository, AccountRepository}
+import etude.vino.chatwork.domain.lifecycle._
 import etude.vino.chatwork.domain.state.{Rooms, ApplicationLog, Accounts}
 import etude.vino.chatwork.service.api.{Api, ApiHistory}
 
@@ -16,6 +16,8 @@ object Models {
   val participantRepository: ParticipantRepository = ParticipantRepository(engine)
 
   val roomRepository: RoomRepository = RoomRepository(engine)
+
+  val roomChunkRepository: RoomChunkRepository = RoomChunkRepository(engine)
 
   def startup(): Unit = {
     Api.system.eventStream.subscribe(Accounts.actorRef, classOf[ChatWorkResponse])

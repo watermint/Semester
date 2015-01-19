@@ -4,16 +4,16 @@ import java.time.{Duration, Instant}
 
 import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.logging.LoggerFactory
-import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.model.message.MessageId
-import etude.pintxos.chatwork.domain.model.room.{RoomType, RoomTypeGroup, Room, RoomId}
+import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
+import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}
+import etude.vino.chatwork.domain.Models
+import etude.vino.chatwork.domain.model.{RoomChunkId, Chunk, RoomChunk}
 import etude.vino.chatwork.service.api._
-import etude.vino.chatwork.service.historian.model.{Chunk, RoomChunk}
-import etude.vino.chatwork.service.historian.operation.{NextChunk, Traverse}
 
-case class Assistant(apiHub: ActorRef) extends Actor {
+case class Traverse(apiHub: ActorRef) extends Actor {
   def receive: Receive = {
-    case t: Traverse =>
+    case t: TraverseRoom =>
       traverse(t)
 
     case n: NextChunk =>
@@ -35,9 +35,9 @@ case class Assistant(apiHub: ActorRef) extends Actor {
     }
   }
 
-  def traverse(traverse: Traverse): Unit = {
+  def traverse(traverse: TraverseRoom): Unit = {
     val room = traverse.room
-    Historian.load(room.roomId) match {
+    Models.roomChunkRepository.get(RoomChunkId(room.roomId)) match {
       case None =>
         apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), priorityOf(room))
       case Some(chunk) =>
@@ -46,7 +46,7 @@ case class Assistant(apiHub: ActorRef) extends Actor {
   }
 
   def traverseChunk(roomChunk: RoomChunk, room: Room): Unit = {
-    val roomId = RoomId(roomChunk.roomId)
+    val roomId = RoomId(roomChunk.roomId.value)
     if (roomChunk.chunks.maxBy(_.touchTime).touchTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
       apiHub ! ApiEnqueue(LoadChatRequest(roomId), priorityOf(room))
     } else {
@@ -60,7 +60,7 @@ case class Assistant(apiHub: ActorRef) extends Actor {
 
   def nextChunk(nextChunk: NextChunk): Unit = {
     val lastMessageId = nextChunk.lastMessageId
-    Historian.load(lastMessageId.roomId) match {
+    Models.roomChunkRepository.get(RoomChunkId(lastMessageId.roomId)) match {
       case None => // NOP
       case Some(chunk) =>
         Chunk.nextChunkMessageId(chunk.chunks, nextChunkTerm) match {
@@ -72,6 +72,6 @@ case class Assistant(apiHub: ActorRef) extends Actor {
   }
 }
 
-object Assistant {
-  def props(apiHub: ActorRef): Props = Props(Assistant(apiHub))
+object Traverse {
+  def props(apiHub: ActorRef): Props = Props(Traverse(apiHub))
 }

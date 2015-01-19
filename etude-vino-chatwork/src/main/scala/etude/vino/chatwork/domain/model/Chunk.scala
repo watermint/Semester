@@ -1,4 +1,4 @@
-package etude.vino.chatwork.service.historian.model
+package etude.vino.chatwork.domain.model
 
 import java.time.Instant
 
@@ -12,7 +12,7 @@ case class Chunk(lowTime: Instant,
                  highTime: Instant,
                  touchTime: Instant,
                  low: BigInt,
-                 high: BigInt) extends Entity {
+                 high: BigInt) {
   def toJSON: JValue = {
     ("lowTime" -> lowTime.toString) ~
       ("highTime" -> highTime.toString) ~
@@ -26,7 +26,7 @@ case class Chunk(lowTime: Instant,
   }
 }
 
-object Chunk extends Parser[Chunk] {
+object Chunk {
   /**
    * a.low < b.low
    *

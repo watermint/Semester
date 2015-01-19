@@ -1,19 +1,23 @@
-package etude.vino.chatwork.service.historian.model
+package etude.vino.chatwork.domain.model
 
+import etude.manieres.domain.model.{Identity, Entity}
 import org.json4s.JsonDSL._
 import org.json4s._
 
-case class RoomChunk(roomId: BigInt,
-                     chunks: Seq[Chunk])
-  extends Entity {
+
+
+case class RoomChunk(roomId: RoomChunkId,
+                     chunks: Seq[Chunk]) extends Entity[RoomChunkId] {
+
+  val identity: RoomChunkId = roomId
 
   def toJSON: JValue = {
-    ("roomId" -> roomId) ~
+    ("roomId" -> roomId.value) ~
       ("chunks" -> chunks.map(_.toJSON))
   }
 }
 
-object RoomChunk extends Parser[RoomChunk] {
+object RoomChunk {
   def fromJSON(json: JValue): RoomChunk = {
     (for {
       JObject(o) <- json
@@ -21,7 +25,7 @@ object RoomChunk extends Parser[RoomChunk] {
       JField("chunks", JArray(chunks)) <- o
     } yield {
       RoomChunk(
-        roomId,
+        RoomChunkId(roomId),
         Chunk.ofChunks(chunks)
       )
     }).last
