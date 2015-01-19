@@ -4,13 +4,12 @@ import java.time.Instant
 
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
-import etude.vino.chatwork.domain.infrastructure.ElasticSearch
+import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.service.api._
 import etude.vino.chatwork.service.historian.Historian
 import etude.vino.chatwork.service.markasread.MarkAsRead
 import etude.vino.chatwork.service.recorder.Recorder
 import etude.vino.chatwork.service.updater.Updater
-import etude.vino.chatwork.domain.Models
 
 object Service {
   val logger = LoggerFactory.getLogger(getClass)

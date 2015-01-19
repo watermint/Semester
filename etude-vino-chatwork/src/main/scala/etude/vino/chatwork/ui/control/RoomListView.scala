@@ -3,7 +3,7 @@ package etude.vino.chatwork.ui.control
 import etude.pintxos.chatwork.domain.model.room.Room
 import etude.vino.chatwork.domain.state.Rooms
 
-import scalafx.scene.control.{ListView, ListCell}
+import scalafx.scene.control.ListCell
 
 class RoomListView extends EntityListView[Room] {
   def listCellForEntity() = {

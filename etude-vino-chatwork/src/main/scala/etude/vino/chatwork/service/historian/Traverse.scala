@@ -8,7 +8,7 @@ import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomType}
 import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}
 import etude.vino.chatwork.domain.Models
-import etude.vino.chatwork.domain.model.{RoomChunkId, Chunk, RoomChunk}
+import etude.vino.chatwork.domain.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.service.api._
 
 case class Traverse(apiHub: ActorRef) extends Actor {

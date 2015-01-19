@@ -8,7 +8,7 @@ import etude.pintxos.chatwork.domain.model.room._
 import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.vino.chatwork.domain.Models
-import etude.vino.chatwork.domain.model.{RoomChunkId, Chunk, RoomChunk}
+import etude.vino.chatwork.domain.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.service.api.{Api, ApiEnqueue, PriorityP3, PriorityP4}
 
 case class Historian(apiHub: ActorRef)

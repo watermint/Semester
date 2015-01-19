@@ -2,9 +2,9 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import etude.vino.chatwork.domain.model.{Chunk, RoomChunk, RoomChunkId}
+import etude.vino.chatwork.domain.model.{Chunk, RoomChunk}
 import org.json4s.JValue
-import org.json4s.JsonAST.{JArray, JInt, JField, JObject}
+import org.json4s.JsonAST.{JArray, JField, JInt, JObject}
 import org.json4s.JsonDSL._
 
 case class RoomChunkRepository(engine: ElasticSearch) extends SimpleIndexRepository[RoomChunk, RoomId] {

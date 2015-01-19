@@ -1,6 +1,6 @@
 package etude.vino.chatwork.domain.lifecycle
 
-import java.time.{ZoneOffset, Instant}
+import java.time.{Instant, ZoneOffset}
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
 import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}

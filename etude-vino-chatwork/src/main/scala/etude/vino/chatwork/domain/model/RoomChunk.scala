@@ -1,6 +1,6 @@
 package etude.vino.chatwork.domain.model
 
-import etude.manieres.domain.model.{Identity, Entity}
+import etude.manieres.domain.model.Entity
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import org.json4s.JsonDSL._
 import org.json4s._

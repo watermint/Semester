@@ -1,11 +1,10 @@
 package etude.vino.chatwork.service.markasread
 
 import akka.actor.{Actor, ActorRef, Props}
+import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.pintxos.chatwork.domain.service.v0.request.ReadRequest
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
-import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.domain.Models
-import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import etude.vino.chatwork.service.api.{ApiEnqueue, PriorityP2}
 import org.json4s.JsonDSL._
 
