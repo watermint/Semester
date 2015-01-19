@@ -68,6 +68,12 @@ object Text extends RegexParsers {
     }
   }
 
+  val code: Parser[Fragment] = {
+    "[code]" ~> (codeText | emptyText) <~ "[/code]" ^^ {
+      c => Code(c.text)
+    }
+  }
+
   val reply: Parser[Fragment] = {
     "[rp aid=" ~> """\d+""".r ~ " to=" ~ """\d+""".r ~ "-" ~ """\d+""".r <~ "]" ^^ {
       case aid ~ to ~ roomId ~ dash ~ messageId =>
@@ -85,7 +91,40 @@ object Text extends RegexParsers {
     }
   }
 
-  val emptyText: Parser[PlainText] = "" ^^ { text => PlainText(text) }
+  val emptyText: Parser[PlainText] = "" ^^ { text => PlainText(text)}
+
+  val codeText: Parser[PlainText] = new Parser[PlainText] {
+    def snoopCode(in: Reader[Char], position: Int): Int = {
+      if (in.atEnd) {
+        // terminate at the end.
+        position
+      } else {
+        if (codeEndTag.apply(in).successful) {
+          // terminate when tag or end tag found.
+          position
+        } else {
+          // proceed next
+          snoopCode(in.rest, position + 1)
+        }
+      }
+    }
+
+    def apply(in: Reader[Char]): Text.ParseResult[PlainText] = {
+      val position = snoopCode(in, in.offset)
+
+      if (position == in.offset) {
+        Failure(
+          msg = "No plain text found",
+          next = in
+        )
+      } else {
+        Success(
+          result = PlainText(in.source.subSequence(in.offset, position).toString),
+          next = in.drop(position - in.offset)
+        )
+      }
+    }
+  }
 
   val text: Parser[PlainText] = new Parser[PlainText] {
     def snoop(in: Reader[Char], position: Int): Int = {
@@ -120,6 +159,8 @@ object Text extends RegexParsers {
     }
   }
 
+  val codeEndTag: Parser[String] = "[/code]"
+
   val endTag: Parser[String] =
     "[/info]" |||
       "[/qt]" |||
@@ -127,6 +168,7 @@ object Text extends RegexParsers {
 
   val tag: Parser[Fragment] = {
     horizontalRule |||
+      code |||
       icon |||
       iconWithName |||
       info |||
