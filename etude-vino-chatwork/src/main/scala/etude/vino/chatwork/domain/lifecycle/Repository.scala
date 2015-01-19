@@ -16,7 +16,7 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
 
   def fromJsonSeq(id: Option[String], source: JValue): Seq[E]
 
-  def fromJson(id: Option[String], json: JValue): E = fromJsonSeq(id, json).last
+  def fromJson(id: Option[String], json: JValue): Option[E] = fromJsonSeq(id, json).lastOption
 
   def toJson(entity: E): JValue
 
@@ -54,7 +54,7 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
     val response = reqWithQuery.execute().get()
 
     SearchResult[E, ID](
-      response.getHits.hits() map {
+      response.getHits.hits() flatMap {
         h =>
           fromJson(Some(h.getId), JsonMethods.parse(h.getSourceAsString))
       }

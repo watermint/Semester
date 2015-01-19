@@ -13,7 +13,7 @@ trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Reposito
       indexName,
       typeName,
       toIdentity(identity)
-    ) map {
+    ) flatMap {
       json =>
         fromJson(None, json)
     }
