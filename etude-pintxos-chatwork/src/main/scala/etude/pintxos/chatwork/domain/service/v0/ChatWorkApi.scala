@@ -58,7 +58,9 @@ object ChatWorkApi
     }
   }
 
-  private[v0] def apiResponseParser(command: String, response: Response): Try[JValue] = {
+  private[v0] def apiResponseParser(command: String,
+                                    response: Response,
+                                    params: Map[String, String]): Try[JValue] = {
     response.contentAsJson map {
       json =>
         val JBool(success) = json \ "status" \ "success"
@@ -67,11 +69,23 @@ object ChatWorkApi
         if (success) {
           result
         } else {
-          val JString(message) = json \ "status" \ "message"
-          if (message.contains("NO LOGIN")) {
-            throw SessionTimeoutException(message)
-          } else {
-            throw CommandFailureException(command, message)
+          json match {
+            case JObject(j) =>
+              val JString(message) = json \ "status" \ "message"
+              if (message.contains("NO LOGIN")) {
+                throw SessionTimeoutException(message)
+              } else {
+                throw CommandFailureException(command, message)
+              }
+            case JArray(a) =>
+              val JString(message) = a.head
+              if (message.contains("You don't have permission")) {
+                throw CommandPermissionException(command, params)
+              } else {
+                throw CommandFailureException(command, message)
+              }
+            case j =>
+              throw CommandFailureException(command, s"Unexpected JSON format: $j")
           }
         }
     }
@@ -92,7 +106,7 @@ object ChatWorkApi
       case _ => client.post(gatewayUri, data).get
     }
 
-    apiResponseParser(command, response) match {
+    apiResponseParser(command, response, params) match {
       case Failure(e) => throw e
       case Success(result) => result
     }
