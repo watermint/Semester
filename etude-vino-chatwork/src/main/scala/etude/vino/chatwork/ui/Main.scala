@@ -11,7 +11,7 @@ import scalafx.scene.control.{TextField, Tab, TabPane}
 import scalafx.scene.layout.{Priority, VBox, BorderPane}
 
 object Main extends JFXApp {
-//  UI.ref ! "startup"
+  UI.ref ! "startup"
 
   val rootPane = new BorderPane {
 
@@ -19,24 +19,24 @@ object Main extends JFXApp {
 
     center = new TabPane() {
       tabs = Seq(
-        new Tab() {
-          text = "Message Search"
-          closable = false
-          content = new VBox {
-            spacing = UIStyles.spacing
-            padding = Insets(UIStyles.padding)
-            hgrow = Priority.Always
-            vgrow = Priority.Always
-            content = Seq(
-              new TextField {
-                onAction = handle {
-
-                }
-              },
-              MessageListPane.messageList
-            )
-          }
-        },
+//        new Tab() {
+//          text = "Message Search"
+//          closable = false
+//          content = new VBox {
+//            spacing = UIStyles.spacing
+//            padding = Insets(UIStyles.padding)
+//            hgrow = Priority.Always
+//            vgrow = Priority.Always
+//            content = Seq(
+//              new TextField {
+//                onAction = handle {
+//
+//                }
+//              },
+//              MessageListPane.messageList
+//            )
+//          }
+//        },
         new Tab() {
           text = "Application log"
           content = ApplicationLogPane.applicationLog
@@ -56,7 +56,7 @@ object Main extends JFXApp {
     height = 600
     scene = rootScene
     onCloseRequest = handle {
-//      UI.ref ! "shutdown"
+      UI.ref ! "shutdown"
     }
   }
 }

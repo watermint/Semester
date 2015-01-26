@@ -1,26 +1,33 @@
 package etude.vino.chatwork.service.historian
 
-import java.time.Instant
+import java.time.{Duration, Instant}
 
 import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.logging.LoggerFactory
+import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
-import etude.pintxos.chatwork.domain.service.v0.request.LoadOldChatRequest
+import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}
 import etude.pintxos.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.model.{Chunk, RoomChunk}
-import etude.vino.chatwork.service.api.{Api, ApiEnqueue, PriorityP3, PriorityP4}
+import etude.vino.chatwork.service.api._
 
 case class Historian(apiHub: ActorRef)
   extends Actor {
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  val traverse = Api.system.actorOf(Traverse.props(apiHub))
-
   val priorityLoadingDurationInSeconds = 86400 * 2
 
+  case class TouchTime(room: Room, touchTime: Instant)
+
   def receive: Receive = {
+    case t: TraverseRoom =>
+      traverse(t)
+
+    case n: NextChunk =>
+      nextChunk(n)
+
     case r: InitLoadResponse =>
       val touches = touchTimes(r.rooms)
       touches
@@ -28,14 +35,14 @@ case class Historian(apiHub: ActorRef)
         .sortBy(_.touchTime)
         .foreach {
         t =>
-          traverse ! TraverseRoom(t.room)
+          self ! TraverseRoom(t.room)
       }
       touches
         .filter(_.room.roomType.equals(RoomTypeDirect()))
         .sortBy(_.touchTime)
         .foreach {
         t =>
-          traverse ! TraverseRoom(t.room)
+          self ! TraverseRoom(t.room)
       }
 
     case r: LoadChatResponse =>
@@ -47,7 +54,7 @@ case class Historian(apiHub: ActorRef)
           r.chatList.last.messageId.roomId,
           Chunk.fromMessages(r.chatList)
         )
-        traverse ! NextChunk(r.chatList.seq.minBy(_.messageId.messageId).messageId)
+        self ! NextChunk(r.chatList.seq.minBy(_.messageId.messageId).messageId)
       }
 
     case r: LoadOldChatResponse =>
@@ -66,7 +73,54 @@ case class Historian(apiHub: ActorRef)
       }
   }
 
-  case class TouchTime(room: Room, touchTime: Instant)
+  val latestTimeGapInSeconds = 600
+
+  val deferLoadingDurationInSeconds = 86400 * 7
+
+  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365 * 2))
+
+  def priorityOf(room: Room): Priority = {
+    room.roomType match {
+      case t if RoomType.isGroupRoom(t) => PriorityP4
+      case _ => PriorityP5
+    }
+  }
+
+  def traverse(traverse: TraverseRoom): Unit = {
+    val room = traverse.room
+    Models.roomChunkRepository.get(room.roomId) match {
+      case None =>
+        apiHub ! ApiEnqueue(LoadChatRequest(room.roomId), priorityOf(room))
+      case Some(chunk) =>
+        traverseChunk(chunk, room)
+    }
+  }
+
+  def traverseChunk(roomChunk: RoomChunk, room: Room): Unit = {
+    val roomId = RoomId(roomChunk.roomId.value)
+    if (roomChunk.chunks.maxBy(_.touchTime).touchTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
+      apiHub ! ApiEnqueue(LoadChatRequest(roomId), priorityOf(room))
+    } else {
+      Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
+        case None => // NOP
+        case Some(msgId) =>
+          apiHub ! ApiEnqueue(LoadOldChatRequest(MessageId(roomId, msgId)), PriorityP3)
+      }
+    }
+  }
+
+  def nextChunk(nextChunk: NextChunk): Unit = {
+    val lastMessageId = nextChunk.lastMessageId
+    Models.roomChunkRepository.get(lastMessageId.roomId) match {
+      case None => // NOP
+      case Some(chunk) =>
+        Chunk.nextChunkMessageId(chunk.chunks, nextChunkTerm) match {
+          case None => // NOP
+          case Some(msgId) =>
+            apiHub ! ApiEnqueue(LoadOldChatRequest(MessageId(lastMessageId.roomId, msgId)), PriorityP3)
+        }
+    }
+  }
 
   def touchTimes(rooms: Seq[Room]): Seq[TouchTime] = {
     rooms.map {

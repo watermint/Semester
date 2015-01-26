@@ -11,3 +11,4 @@ libraryDependencies ++= Seq(
   "org.controlsfx" % "controlsfx" % "latest.release"
 )
 
+fork in run := true
