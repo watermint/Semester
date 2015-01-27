@@ -15,7 +15,7 @@ object Main extends JFXApp {
 
   val rootPane = new BorderPane {
 
-    padding = Insets(UIStyles.spacing)
+    padding = UIStyles.paddingInsets
 
     center = new TabPane() {
       tabs = Seq(
@@ -23,12 +23,12 @@ object Main extends JFXApp {
           text = "Message Search"
           closable = false
           content = new VBox {
-            spacing = UIStyles.spacing
-            padding = Insets(UIStyles.padding)
+            spacing = UIStyles.spacingWidth
             hgrow = Priority.Always
             vgrow = Priority.Always
             content = Seq(
               new TextField {
+                padding = UIStyles.paddingInsets
                 onAction = handle {
 
                 }

@@ -25,9 +25,9 @@ class PeriodStartView extends Button {
 
   popOver.setContentNode(
     new GridPane {
-      padding = Insets(UIStyles.padding)
-      hgap = UIStyles.spacing
-      vgap = UIStyles.spacing
+      padding = Insets(UIStyles.paddingPixel)
+      hgap = UIStyles.spacingWidth
+      vgap = UIStyles.spacingWidth
 
       add(
         child = new Label {

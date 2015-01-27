@@ -8,7 +8,7 @@ import scalafx.scene.control.{ListCell, ListView}
 trait EntityListView[E] extends ListView[E] {
   def listCellForEntity(): ListCell[E]
 
-  margin = Insets(UIStyles.spacing)
+  margin = UIStyles.paddingInsets
 
   cellFactory = {
     _ =>

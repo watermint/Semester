@@ -1,10 +1,13 @@
 package etude.vino.chatwork.ui
 
+import scalafx.geometry.Insets
+
 object UIStyles {
   val avatarThumbnail = 30
   val accountNameWidth = avatarThumbnail * 3
-  val spacing = 5
-  val padding = spacing * 2
+  val spacingWidth = 5
+  val paddingPixel = spacingWidth * 2
+  val paddingInsets = Insets(spacingWidth)
 
   private val headerStyle =
     """

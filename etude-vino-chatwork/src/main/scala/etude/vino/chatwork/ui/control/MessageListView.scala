@@ -22,7 +22,7 @@ class MessageListView extends EntityListView[Message] {
     new VBox {
       content = Seq(
         new HBox {
-          spacing = UIStyles.spacing
+          spacing = UIStyles.spacingWidth
           content = Seq(
             Accounts.avatar.nodeOf(message.accountId),
             new Label {
