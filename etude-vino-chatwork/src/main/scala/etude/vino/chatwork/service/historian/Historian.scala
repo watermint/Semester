@@ -1,6 +1,7 @@
 package etude.vino.chatwork.service.historian
 
 import java.time.{Duration, Instant}
+import java.util.concurrent.locks.ReentrantLock
 
 import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.logging.LoggerFactory
@@ -12,12 +13,20 @@ import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.model.{Chunk, RoomChunk}
 import etude.vino.chatwork.service.api._
 
+import scala.collection.mutable
+
 case class Historian(apiHub: ActorRef)
   extends Actor {
 
   val logger = LoggerFactory.getLogger(getClass)
 
+  val latestTimeGapInSeconds = 600
+
   val priorityLoadingDurationInSeconds = 86400 * 2
+
+  val deferLoadingDurationInSeconds = 86400 * 7
+
+  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365 * 2))
 
   case class TouchTime(room: Room, touchTime: Instant)
 
@@ -58,6 +67,7 @@ case class Historian(apiHub: ActorRef)
       }
 
     case r: LoadOldChatResponse =>
+      Historian.releaseForLoadOldChat(r.lastMessage.roomId)
       if (r.messages.size == 0) {
         logger.debug(s"Loading chat for room ${r.lastMessage.roomId} reached EPOCH.")
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
@@ -69,15 +79,9 @@ case class Historian(apiHub: ActorRef)
         } else {
           PriorityP3
         }
-        apiHub ! ApiEnqueue(LoadOldChatRequest(lwm.messageId), priority)
+        enqueueLoadOldChatRequest(lwm.messageId, priority)
       }
   }
-
-  val latestTimeGapInSeconds = 600
-
-  val deferLoadingDurationInSeconds = 86400 * 7
-
-  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365 * 2))
 
   def priorityOf(room: Room): Priority = {
     room.roomType match {
@@ -104,7 +108,7 @@ case class Historian(apiHub: ActorRef)
       Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
         case None => // NOP
         case Some(msgId) =>
-          apiHub ! ApiEnqueue(LoadOldChatRequest(MessageId(roomId, msgId)), PriorityP3)
+          enqueueLoadOldChatRequest(MessageId(roomId, msgId), PriorityP3)
       }
     }
   }
@@ -117,8 +121,14 @@ case class Historian(apiHub: ActorRef)
         Chunk.nextChunkMessageId(chunk.chunks, nextChunkTerm) match {
           case None => // NOP
           case Some(msgId) =>
-            apiHub ! ApiEnqueue(LoadOldChatRequest(MessageId(lastMessageId.roomId, msgId)), PriorityP3)
+            enqueueLoadOldChatRequest(MessageId(lastMessageId.roomId, msgId), PriorityP3)
         }
+    }
+  }
+
+  def enqueueLoadOldChatRequest(messageId: MessageId, priority: Priority): Unit = {
+    if (Historian.tryAcquireForLoadOldChat(messageId.roomId)) {
+      apiHub ! ApiEnqueue(LoadOldChatRequest(messageId), priority)
     }
   }
 
@@ -156,4 +166,40 @@ case class Historian(apiHub: ActorRef)
 
 object Historian {
   def props(apiHub: ActorRef): Props = Props(Historian(apiHub))
+
+  private val autoLockTimeout = java.time.Duration.ofMinutes(30)
+
+  private val loadOldChatLock = new mutable.HashMap[RoomId, Instant]()
+
+  private val operationLock = new ReentrantLock()
+
+  def tryAcquireForLoadOldChat(roomId: RoomId): Boolean = {
+    operationLock.lock()
+    def updateLock(roomId: RoomId): Boolean = {
+      loadOldChatLock.put(roomId, Instant.now.plus(autoLockTimeout))
+      true
+    }
+    try {
+      loadOldChatLock.get(roomId) match {
+        case None => updateLock(roomId)
+        case Some(t) =>
+          if (t.isAfter(Instant.now())) {
+            updateLock(roomId)
+          } else {
+            false
+          }
+      }
+    } finally {
+      operationLock.unlock()
+    }
+  }
+
+  def releaseForLoadOldChat(roomId: RoomId): Unit = {
+    operationLock.lock()
+    try {
+      loadOldChatLock.remove(roomId)
+    } finally {
+      operationLock.unlock()
+    }
+  }
 }

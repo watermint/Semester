@@ -19,24 +19,24 @@ object Main extends JFXApp {
 
     center = new TabPane() {
       tabs = Seq(
-//        new Tab() {
-//          text = "Message Search"
-//          closable = false
-//          content = new VBox {
-//            spacing = UIStyles.spacing
-//            padding = Insets(UIStyles.padding)
-//            hgrow = Priority.Always
-//            vgrow = Priority.Always
-//            content = Seq(
-//              new TextField {
-//                onAction = handle {
-//
-//                }
-//              },
-//              MessageListPane.messageList
-//            )
-//          }
-//        },
+        new Tab() {
+          text = "Message Search"
+          closable = false
+          content = new VBox {
+            spacing = UIStyles.spacing
+            padding = Insets(UIStyles.padding)
+            hgrow = Priority.Always
+            vgrow = Priority.Always
+            content = Seq(
+              new TextField {
+                onAction = handle {
+
+                }
+              },
+              MessageListPane.messageList
+            )
+          }
+        },
         new Tab() {
           text = "Application log"
           content = ApplicationLogPane.applicationLog
