@@ -23,12 +23,13 @@ object Main extends JFXApp {
           text = "Message Search"
           closable = false
           content = new VBox {
+            padding = UIStyles.paddingInsets
             spacing = UIStyles.spacingWidth
             hgrow = Priority.Always
             vgrow = Priority.Always
             content = Seq(
               new TextField {
-                padding = UIStyles.paddingInsets
+                spacing = UIStyles.spacingWidth
                 onAction = handle {
 
                 }
