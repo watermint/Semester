@@ -5,6 +5,7 @@ import java.util.concurrent.locks.ReentrantLock
 
 import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.logging.LoggerFactory
+import etude.epice.utility.qos.CapacityQueue
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
 import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}
@@ -67,7 +68,6 @@ case class Historian(apiHub: ActorRef)
       }
 
     case r: LoadOldChatResponse =>
-      Historian.releaseForLoadOldChat(r.lastMessage.roomId)
       if (r.messages.size == 0) {
         logger.debug(s"Loading chat for room ${r.lastMessage.roomId} reached EPOCH.")
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
@@ -127,7 +127,7 @@ case class Historian(apiHub: ActorRef)
   }
 
   def enqueueLoadOldChatRequest(messageId: MessageId, priority: Priority): Unit = {
-    if (Historian.tryAcquireForLoadOldChat(messageId.roomId)) {
+    if (Historian.tryAcquireForLoadOldChat(messageId)) {
       apiHub ! ApiEnqueue(LoadOldChatRequest(messageId), priority)
     }
   }
@@ -167,37 +167,29 @@ case class Historian(apiHub: ActorRef)
 object Historian {
   def props(apiHub: ActorRef): Props = Props(Historian(apiHub))
 
-  private val autoLockTimeout = java.time.Duration.ofMinutes(30)
+  private val loadOldChatLock = new mutable.HashMap[RoomId, CapacityQueue[MessageId]]()
 
-  private val loadOldChatLock = new mutable.HashMap[RoomId, Instant]()
+  private val loadOldChatHistorySize = 15
 
   private val operationLock = new ReentrantLock()
 
-  def tryAcquireForLoadOldChat(roomId: RoomId): Boolean = {
+  def tryAcquireForLoadOldChat(messageId: MessageId): Boolean = {
     operationLock.lock()
-    def updateLock(roomId: RoomId): Boolean = {
-      loadOldChatLock.put(roomId, Instant.now.plus(autoLockTimeout))
-      true
-    }
     try {
-      loadOldChatLock.get(roomId) match {
-        case None => updateLock(roomId)
-        case Some(t) =>
-          if (t.isAfter(Instant.now())) {
-            updateLock(roomId)
-          } else {
-            false
-          }
+      val queue = loadOldChatLock.get(messageId.roomId) match {
+        case Some(q) => q
+        case None =>
+          val q = new CapacityQueue[MessageId](loadOldChatHistorySize)
+          loadOldChatLock.put(messageId.roomId, q)
+          q
       }
-    } finally {
-      operationLock.unlock()
-    }
-  }
 
-  def releaseForLoadOldChat(roomId: RoomId): Unit = {
-    operationLock.lock()
-    try {
-      loadOldChatLock.remove(roomId)
+      if (queue.toSeq.contains(messageId)) {
+        false
+      } else {
+        queue.enqueue(messageId)
+        true
+      }
     } finally {
       operationLock.unlock()
     }

@@ -27,7 +27,7 @@ object Main extends JFXApp {
             spacing = UIStyles.spacingWidth
             hgrow = Priority.Always
             vgrow = Priority.Always
-            content = Seq(
+            children = Seq(
               new TextField {
                 spacing = UIStyles.spacingWidth
                 onAction = handle {
