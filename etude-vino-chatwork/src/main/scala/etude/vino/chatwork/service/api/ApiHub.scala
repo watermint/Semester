@@ -8,7 +8,7 @@ import etude.epice.logging.LoggerFactory
 import etude.epice.utility.qos.TimeoutSemaphore
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
-import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, SessionTimeoutException}
+import etude.pintxos.chatwork.domain.service.v0.{CommandPermissionException, CommandFailureException, ChatWorkEntityIO, SessionTimeoutException}
 
 import scala.concurrent.duration._
 
@@ -46,6 +46,11 @@ case class ApiHub(clockCycleInSeconds: Int)
         semaphore.release()
         Api.system.eventStream.publish(NetworkRecovered())
         logger.info("Trying to resume")
+        SupervisorStrategy.Resume
+
+      case e@(_: CommandFailureException |
+              _: CommandPermissionException) =>
+        logger.warn("Issue on API", e)
         SupervisorStrategy.Resume
 
       case e: Exception =>
