@@ -69,23 +69,28 @@ object ChatWorkApi
         if (success) {
           result
         } else {
-          json match {
-            case JObject(j) =>
-              val JString(message) = json \ "status" \ "message"
-              if (message.contains("NO LOGIN")) {
-                throw SessionTimeoutException(message)
-              } else {
-                throw CommandFailureException(command, message)
-              }
-            case JArray(a) =>
-              val JString(message) = a.head
-              if (message.contains("You don't have permission")) {
-                throw CommandPermissionException(command, params)
-              } else {
-                throw CommandFailureException(command, message)
-              }
-            case j =>
-              throw CommandFailureException(command, s"Unexpected JSON format: $j")
+          try {
+            json match {
+              case JObject(j) =>
+                val JString(message) = json \ "status" \ "message"
+                if (message.contains("NO LOGIN")) {
+                  throw SessionTimeoutException(message)
+                } else {
+                  throw CommandFailureException(command, message)
+                }
+              case JArray(a) =>
+                val JString(message) = a.head
+                if (message.contains("You don't have permission")) {
+                  throw CommandPermissionException(command, params)
+                } else {
+                  throw CommandFailureException(command, message)
+                }
+              case j =>
+                throw CommandFailureException(command, s"Unexpected JSON format: $j")
+            }
+          } catch {
+            case m: scala.MatchError =>
+              throw CommandFailureException(command, s"Unexpected JSON format: $json")
           }
         }
     }
