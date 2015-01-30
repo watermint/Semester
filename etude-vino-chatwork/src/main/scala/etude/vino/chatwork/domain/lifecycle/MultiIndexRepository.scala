@@ -2,6 +2,7 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.{Entity, Identity}
 import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
+import org.elasticsearch.search.sort.SortBuilder
 
 trait MultiIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Repository[E, ID] {
   val indexNamePrefix: String
@@ -10,7 +11,7 @@ trait MultiIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Repositor
     search(QueryBuilders.matchQuery("_id", toIdentity(identity))).entities.lastOption
   }
 
-  def search(query: QueryBuilder): SearchResult[E, ID] = {
-    search(s"$indexNamePrefix*", query)
+  def search(query: QueryBuilder, sort: Option[SortBuilder] = None): SearchResult[E, ID] = {
+    search(s"$indexNamePrefix*", query, sort)
   }
 }

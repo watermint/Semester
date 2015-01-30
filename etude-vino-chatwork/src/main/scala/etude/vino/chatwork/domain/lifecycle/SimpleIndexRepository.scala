@@ -2,6 +2,7 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.{Entity, Identity}
 import org.elasticsearch.index.query.QueryBuilder
+import org.elasticsearch.search.sort.SortBuilder
 
 trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Repository[E, ID] {
   val indexName: String
@@ -19,8 +20,8 @@ trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Reposito
     }
   }
 
-  def search(query: QueryBuilder): SearchResult[E, ID] = {
-    search(indexName, query)
+  def search(query: QueryBuilder, sort: Option[SortBuilder]): SearchResult[E, ID] = {
+    search(indexName, query, sort)
   }
 
 }

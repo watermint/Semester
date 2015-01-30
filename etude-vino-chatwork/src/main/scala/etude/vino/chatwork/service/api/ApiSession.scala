@@ -2,27 +2,24 @@ package etude.vino.chatwork.service.api
 
 import java.io.IOException
 import java.util.concurrent.TimeoutException
+import java.util.concurrent.atomic.AtomicReference
 
 import akka.actor._
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.{ChatWorkRequest, InitLoadRequest}
-import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, ChatWorkApi, ChatWorkIOContext}
 
-import scala.concurrent.duration._
-
-case class ApiSession() extends Actor {
+case class ApiSession() extends Actor with ChatWorkEntityIO {
   val chatworkContext = ChatWorkIOContext.fromThinConfig()
 
   val api = context.actorOf(Api.props(chatworkContext))
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  case class ContextInitialization()
-
-  self ! ContextInitialization()
+  self ! "login"
 
   override def supervisorStrategy: SupervisorStrategy = {
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 10 minutes) {
+    OneForOneStrategy() {
       case e@(_: java.net.SocketException |
               _: org.apache.http.NoHttpResponseException |
               _: IOException |
@@ -39,8 +36,12 @@ case class ApiSession() extends Actor {
   }
 
   def receive = {
-    case _: ContextInitialization =>
+    case "login" =>
       ChatWorkApi.login(chatworkContext)
+      getMyId(chatworkContext).map(BigInt(_)) match {
+        case Some(id) => ApiSession.myId.set(id)
+        case None => ApiSession.myId.set(null)
+      }
       api ! InitLoadRequest()
 
     case r: ChatWorkRequest =>
@@ -51,4 +52,11 @@ case class ApiSession() extends Actor {
 
 object ApiSession {
   def props() = Props(ApiSession())
+
+  val myId = new AtomicReference[BigInt]()
+
+  def myIdOption: Option[BigInt] = myId.get() match {
+    case null => None
+    case id => Some(id)
+  }
 }

@@ -3,6 +3,7 @@ package etude.vino.chatwork.domain.lifecycle
 import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.elasticsearch.index.query.QueryBuilder
+import org.elasticsearch.search.sort.SortBuilder
 import org.json4s.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
@@ -44,14 +45,20 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   def get(identity: ID): Option[E]
 
   def search(indices: String,
-             query: QueryBuilder): SearchResult[E, ID] = {
+             query: QueryBuilder,
+             sort: Option[SortBuilder]): SearchResult[E, ID] = {
     val reqWithQuery = engine.client
       .prepareSearch()
       .setIndices(indices)
       .setTypes(typeName)
       .setQuery(query)
 
-    val response = reqWithQuery.execute().get()
+    val reqWithSort = sort match {
+      case Some(s) => reqWithQuery.addSort(s)
+      case _ => reqWithQuery
+    }
+
+    val response = reqWithSort.execute().get()
 
     SearchResult[E, ID](
       response.getHits.hits() flatMap {
