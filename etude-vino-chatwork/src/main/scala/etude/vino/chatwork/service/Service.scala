@@ -14,7 +14,7 @@ import etude.vino.chatwork.service.updater.Updater
 object Service {
   val logger = LoggerFactory.getLogger(getClass)
 
-  lazy val apiHub = Api.system.actorOf(ApiHub.props(2))
+  lazy val apiHub = Api.system.actorOf(ApiHub.props(3))
   lazy val recorder = Api.system.actorOf(Recorder.props(apiHub))
   lazy val historian = Api.system.actorOf(Historian.props(apiHub))
   lazy val updater = Api.system.actorOf(Updater.props(apiHub, 10))
