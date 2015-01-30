@@ -1,12 +1,15 @@
 package etude.vino.chatwork.ui.control
 
+import java.awt.Desktop
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, ZoneId}
 
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.vino.chatwork.domain.state.Accounts
+import etude.vino.chatwork.service.api.ApiSession
 import etude.vino.chatwork.ui.UIStyles
 
+import scalafx.Includes._
 import scalafx.scene.Node
 import scalafx.scene.control.{Label, ListCell}
 import scalafx.scene.layout.{HBox, VBox}
@@ -51,4 +54,14 @@ class MessageListView extends EntityListView[Message] {
       }
     }
   }
+
+  onMouseClicked = handle {
+    val message = delegate.getSelectionModel.getSelectedItem
+    ApiSession.chatworkIOContextOption match {
+      case None =>
+      case Some(context) =>
+        Desktop.getDesktop.browse(message.uri(context))
+    }
+  }
+
 }

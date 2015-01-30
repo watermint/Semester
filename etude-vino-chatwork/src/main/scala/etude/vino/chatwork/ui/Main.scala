@@ -19,6 +19,11 @@ object Main extends JFXApp {
     center = new TabPane() {
       tabs = Seq(
         new Tab() {
+          text = "Timeline"
+          closable = false
+          content = MessageListPane.messageTimeline
+        },
+        new Tab() {
           text = "To/ReplyTo Me"
           closable = false
           content = MessageListPane.toMeMessageList
