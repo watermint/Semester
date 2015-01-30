@@ -11,7 +11,7 @@ trait MultiIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Repositor
     search(QueryBuilders.matchQuery("_id", toIdentity(identity))).entities.lastOption
   }
 
-  def search(query: QueryBuilder, sort: Option[SortBuilder] = None): SearchResult[E, ID] = {
-    search(s"$indexNamePrefix*", query, sort)
+  def search(query: QueryBuilder, options: SearchOptions = SearchOptions()): SearchResult[E, ID] = {
+    search(s"$indexNamePrefix*", query, options)
   }
 }

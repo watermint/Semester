@@ -20,8 +20,8 @@ trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Reposito
     }
   }
 
-  def search(query: QueryBuilder, sort: Option[SortBuilder]): SearchResult[E, ID] = {
-    search(indexName, query, sort)
+  def search(query: QueryBuilder, options: SearchOptions = SearchOptions()): SearchResult[E, ID] = {
+    search(indexName, query, options)
   }
 
 }

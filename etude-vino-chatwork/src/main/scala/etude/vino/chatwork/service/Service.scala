@@ -49,5 +49,6 @@ object Service {
   def shutdown(): Unit = {
     Api.system.shutdown()
     Models.engine.shutdown()
+    System.exit(0)
   }
 }

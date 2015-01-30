@@ -46,19 +46,24 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
 
   def search(indices: String,
              query: QueryBuilder,
-             sort: Option[SortBuilder]): SearchResult[E, ID] = {
+             options: SearchOptions): SearchResult[E, ID] = {
     val reqWithQuery = engine.client
       .prepareSearch()
       .setIndices(indices)
       .setTypes(typeName)
       .setQuery(query)
 
-    val reqWithSort = sort match {
+    val reqWithSort = options.sort match {
       case Some(s) => reqWithQuery.addSort(s)
       case _ => reqWithQuery
     }
 
-    val response = reqWithSort.execute().get()
+    val reqWithSize = options.size match {
+      case Some(s) => reqWithSort.setSize(s)
+      case _ => reqWithSort
+    }
+
+    val response = reqWithSize.execute().get()
 
     SearchResult[E, ID](
       response.getHits.hits() flatMap {

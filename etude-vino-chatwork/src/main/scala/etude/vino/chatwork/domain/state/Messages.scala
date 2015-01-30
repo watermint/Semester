@@ -3,6 +3,7 @@ package etude.vino.chatwork.domain.state
 import akka.actor.{Actor, Props}
 import etude.pintxos.chatwork.domain.service.v0.response.LoadChatResponse
 import etude.vino.chatwork.domain.Models
+import etude.vino.chatwork.domain.lifecycle.SearchOptions
 import etude.vino.chatwork.service.api.ApiSession
 import etude.vino.chatwork.ui.UI
 import etude.vino.chatwork.ui.pane.MessageListPane.UpdateToMeMessages
@@ -22,7 +23,10 @@ class Messages extends Actor {
           query = QueryBuilders.boolQuery()
             .should(QueryBuilders.matchQuery("to", myId))
             .should(QueryBuilders.matchQuery("replyTo", myId)),
-          sort = Some(SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC))
+          options = SearchOptions(
+            sort = Some(SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC)),
+            size = Some(50)
+          )
         )
         UI.ref ! UpdateToMeMessages(response.entities)
       }
