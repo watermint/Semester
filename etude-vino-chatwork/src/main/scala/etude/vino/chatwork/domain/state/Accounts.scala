@@ -27,7 +27,7 @@ object Accounts {
   val avatar = new Avatar[AccountId]()
 
   def nameFor(accountId: AccountId): String = {
-    accounts.get(accountId).flatMap(_.name).getOrElse(s"$accountId")
+    accounts.get(accountId).flatMap(_.name).getOrElse(s"${accountId.value}")
   }
 
   val actorRef = UI.system.actorOf(Props[Accounts])
