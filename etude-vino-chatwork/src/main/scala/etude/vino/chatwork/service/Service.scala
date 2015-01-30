@@ -14,6 +14,12 @@ import etude.vino.chatwork.service.updater.Updater
 object Service {
   val logger = LoggerFactory.getLogger(getClass)
 
+  lazy val apiHub = Api.system.actorOf(ApiHub.props(2))
+  lazy val recorder = Api.system.actorOf(Recorder.props(apiHub))
+  lazy val historian = Api.system.actorOf(Historian.props(apiHub))
+  lazy val updater = Api.system.actorOf(Updater.props(apiHub, 10))
+  lazy val markasread = Api.system.actorOf(AutoMarkAsRead.props(apiHub))
+
   def startup() {
     try {
       val ver = Models.engine.client.prepareIndex()
@@ -29,12 +35,6 @@ object Service {
       case _: Exception => // ignore
     }
 
-    val apiHub = Api.system.actorOf(ApiHub.props(2))
-    val recorder = Api.system.actorOf(Recorder.props(apiHub))
-    val historian = Api.system.actorOf(Historian.props(apiHub))
-    val updater = Api.system.actorOf(Updater.props(apiHub, 10))
-    val markasread = Api.system.actorOf(AutoMarkAsRead.props(apiHub))
-
     Api.system.eventStream.subscribe(apiHub, classOf[NetworkRecovered])
     Api.system.eventStream.subscribe(apiHub, classOf[ChatWorkResponse])
     Api.system.eventStream.subscribe(recorder, classOf[ChatWorkResponse])
@@ -45,7 +45,6 @@ object Service {
 
     Models.startup()
   }
-
 
   def shutdown(): Unit = {
     Api.system.shutdown()

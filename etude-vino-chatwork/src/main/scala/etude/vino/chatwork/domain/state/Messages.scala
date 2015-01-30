@@ -7,7 +7,7 @@ import etude.vino.chatwork.service.api.ApiSession
 import etude.vino.chatwork.ui.UI
 import etude.vino.chatwork.ui.pane.MessageListPane.UpdateToMeMessages
 import org.elasticsearch.index.query.QueryBuilders
-import org.elasticsearch.search.sort.{SortOrder, SortBuilders}
+import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scala.concurrent.Future
 

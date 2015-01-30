@@ -20,10 +20,10 @@ class MessageListView extends EntityListView[Message] {
 
   def iconForMessage(message: Message): Node = {
     new VBox {
-      content = Seq(
+      children = Seq(
         new HBox {
           spacing = UIStyles.spacingWidth
-          content = Seq(
+          children = Seq(
             Accounts.avatar.nodeOf(message.accountId),
             new Label {
               maxWidth = UIStyles.accountNameWidth

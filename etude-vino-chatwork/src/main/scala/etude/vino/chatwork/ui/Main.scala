@@ -1,14 +1,13 @@
 package etude.vino.chatwork.ui
 
-import etude.vino.chatwork.ui.pane.{MessageListPane, ApplicationLogPane}
+import etude.vino.chatwork.ui.pane.{ApplicationLogPane, MessageListPane}
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
-import scalafx.geometry.Insets
 import scalafx.scene.Scene
-import scalafx.scene.control.{TextField, Tab, TabPane}
-import scalafx.scene.layout.{Priority, VBox, BorderPane}
+import scalafx.scene.control.{Tab, TabPane}
+import scalafx.scene.layout.BorderPane
 
 object Main extends JFXApp {
   UI.ref ! "startup"
@@ -20,7 +19,7 @@ object Main extends JFXApp {
     center = new TabPane() {
       tabs = Seq(
         new Tab() {
-          text = "Messages to Me"
+          text = "To/ReplyTo Me"
           closable = false
           content = MessageListPane.toMeMessageList
         },

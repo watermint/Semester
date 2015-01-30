@@ -3,7 +3,9 @@ package etude.pintxos.chatwork.domain.model.room
 import java.net.URI
 import java.time.Instant
 
+import etude.epice.http._
 import etude.manieres.domain.model.Entity
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
 
 import scala.language.higherKinds
 
@@ -34,4 +36,10 @@ class Room(val roomId: RoomId,
       lastUpdateTime = this.lastUpdateTime
     )
   }
+
+  def uri(implicit context: ChatWorkIOContext): URI = {
+    ChatWorkApi.baseUri(context)
+      .withFragment(s"!rid${roomId.value}")
+  }
+
 }

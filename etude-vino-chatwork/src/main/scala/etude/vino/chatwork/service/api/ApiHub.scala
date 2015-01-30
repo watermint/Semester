@@ -1,14 +1,14 @@
 package etude.vino.chatwork.service.api
 
 import java.io.IOException
-import java.util.concurrent.{ConcurrentLinkedQueue, Semaphore, TimeUnit, TimeoutException}
+import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit, TimeoutException}
 
 import akka.actor._
 import etude.epice.logging.LoggerFactory
 import etude.epice.utility.qos.TimeoutSemaphore
 import etude.pintxos.chatwork.domain.service.v0.request.ChatWorkRequest
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
-import etude.pintxos.chatwork.domain.service.v0.{CommandPermissionException, CommandFailureException, ChatWorkEntityIO, SessionTimeoutException}
+import etude.pintxos.chatwork.domain.service.v0.{ChatWorkEntityIO, CommandFailureException, CommandPermissionException, SessionTimeoutException}
 
 import scala.concurrent.duration._
 

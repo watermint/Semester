@@ -5,7 +5,7 @@ import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import etude.vino.chatwork.domain.model.MarkAsRead
 import org.json4s.JsonAST.JString
 import org.json4s.JsonDSL._
-import org.json4s.{JBool, JField, JInt, JObject, JValue}
+import org.json4s.{JBool, JField, JObject, JValue}
 
 case class MarkAsReadRepository(engine: ElasticSearch) extends SimpleIndexRepository[MarkAsRead, RoomId] {
   val indexName = "cw-markasread"

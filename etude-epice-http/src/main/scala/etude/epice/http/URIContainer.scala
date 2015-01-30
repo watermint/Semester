@@ -15,6 +15,12 @@ case class URIContainer(uri: URI) {
     )
   }
 
+  def withFragment(fragment: String): URIContainer = {
+    new URIContainer(
+      new URIBuilder(uri).setFragment(fragment).build()
+    )
+  }
+
   def withQuery(query: (String, String)): URIContainer = {
     new URIContainer(
       new URIBuilder(uri).addParameter(query._1, query._2).build
