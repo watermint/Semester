@@ -37,7 +37,6 @@ Project names are categorized like below.
 ## etude-manieres
 
 * [Domain](etude-manieres-domain) - Core Libraries for Domain Driven Design (DDD).
-* [Domain Event](etude-manieres-event) - Domain Event for DDD.
 
 ## etude-pintxos
 
