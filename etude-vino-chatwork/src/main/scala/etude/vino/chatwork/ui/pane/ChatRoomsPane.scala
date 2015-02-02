@@ -11,7 +11,8 @@ import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scalafx.Includes._
 import scalafx.collections.ObservableBuffer
-import scalafx.scene.control.SplitPane
+import scalafx.scene.control.{Label, SplitPane}
+import scalafx.scene.layout.{FlowPane, BorderPane}
 
 object ChatRoomsPane {
 
@@ -41,19 +42,39 @@ object ChatRoomsPane {
     }
   }
 
-
   case class UpdateTimelineForRoom(messages: Seq[Message]) extends UIMessage {
     def perform(): Unit = {
-      chatRoomPane.items.remove(1)
-      chatRoomPane.items.add(1, new MessageListView {
+      messagePane.center = new MessageListView {
         items = ObservableBuffer(messages)
-      }.delegate)
+      }
     }
   }
 
-  val chatRoomPane = new SplitPane {
+  val messagePane = new BorderPane {
+    top = new FlowPane {
+      padding = UIStyles.paddingInsets
+      children = Seq(
+        new Label("Mute")
+      )
+    }
+    center = new MessageListView()
+  }
+
+  val chatRoomCenterPane = new SplitPane {
     padding = UIStyles.paddingInsets
     dividerPositions_=(0.2, 0.8)
-    items ++= Seq(roomListView, new MessageListView())
+    items ++= Seq(roomListView, messagePane)
   }
+
+  val chatRoomPane = new BorderPane {
+    padding = UIStyles.paddingInsets
+    top = new FlowPane {
+      padding = UIStyles.paddingInsets
+      children = Seq(
+        new Label("Room")
+      )
+    }
+    center = chatRoomCenterPane
+  }
+
 }
