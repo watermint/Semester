@@ -5,6 +5,7 @@ import java.time.Instant
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.response.ChatWorkResponse
 import etude.vino.chatwork.domain.Models
+import etude.vino.chatwork.domain.lifecycle.SystemRepository
 import etude.vino.chatwork.service.api._
 import etude.vino.chatwork.service.historian.Historian
 import etude.vino.chatwork.service.markasread.AutoMarkAsRead
@@ -22,15 +23,7 @@ object Service {
 
   def startup() {
     try {
-      val ver = Models.engine.client.prepareIndex()
-        .setIndex("cw-vino")
-        .setType("main")
-        .setId("main")
-        .setSource(s"""{"@timestamp":"${Instant.now.toString}"}""")
-        .get()
-        .getVersion
-
-      logger.info(s"etude-vino-chatwork: launch data version: $ver")
+      logger.info(s"etude-vino-chatwork: launch data version: ${SystemRepository.vinoVersion()}")
     } catch {
       case _: Exception => // ignore
     }

@@ -6,6 +6,7 @@ import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.utility.qos.TimeoutSemaphore
 import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
+import etude.vino.chatwork.domain.lifecycle.SystemRepository
 import etude.vino.chatwork.service.api._
 
 import scala.concurrent.ExecutionContext
@@ -20,16 +21,27 @@ case class Updater(apiHub: ActorRef, updateClockCycleInSeconds: Long)
 
   case class ScheduledUpdate()
 
+  case class GetUpdateOfOffline(lastId: String)
+
+  SystemRepository.lastId().foreach {
+    lastId =>
+      self ! GetUpdateOfOffline(lastId)
+  }
+
   def receive: Receive = {
     case u: ScheduledUpdate =>
       if (semaphore.tryAcquire()) {
         apiHub ! ApiEnqueue(GetUpdateRequest(), PriorityP1)
       }
 
-    case _: GetUpdateResponse =>
-      semaphore.release()
+    case g: GetUpdateOfOffline =>
+      apiHub ! ApiEnqueue(GetUpdateRequest(lastId = Some(g.lastId)), PriorityP1)
 
-    case _: InitLoadResponse =>
+    case r: GetUpdateResponse =>
+      semaphore.release()
+      r.lastId.foreach(SystemRepository.updateLastId)
+
+    case r: InitLoadResponse =>
       Api.system.scheduler.schedule(
         Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS),
         Duration.create(updateClockCycleInSeconds, TimeUnit.SECONDS),

@@ -11,7 +11,8 @@ import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
-case class ElasticSearch(testMode: Boolean = false) {
+case class ElasticSearch(testMode: Boolean = false,
+                         httpEnabled: Boolean = false) {
   val clusterName = {
     if (testMode) {
       s"chatwork-${UUID.randomUUID()}"
@@ -40,14 +41,14 @@ case class ElasticSearch(testMode: Boolean = false) {
       .put("index.number_of_replicas", 0)
       .put("index.number_of_shards", 1)
 
-    val settings = if (testMode) {
-      baseSettings
-    } else {
+    val settings = if (httpEnabled) {
       baseSettings
         .put("http.enabled", true)
         .put("http.port", 9200)
         .put("http.cors.enabled", true)
         .put("http.cors.allow-origin", "/.*/")
+    } else {
+      baseSettings
     }
 
     NodeBuilder

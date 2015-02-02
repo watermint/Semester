@@ -29,21 +29,19 @@ object InitLoad
   def execute(request: InitLoadRequest)(implicit context: ChatWorkIOContext): InitLoadResponse = {
 
     val json = ChatWorkApi.api("init_load", Map())
+    val lastId = parseLastId(json)
 
-    parseLastId(json) match {
-      case Some(lastId) => setLastId(lastId, context)
-      case _ =>
-    }
+    lastId.foreach(setLastId(_, context))
 
     val content = InitLoadResponse(
       json,
       request,
       contacts = ContactParser.parseContacts(json),
       rooms = RoomParser.parseRooms(json),
-      participants = ParticipantParser.parseParticipants(json)
+      participants = ParticipantParser.parseParticipants(json),
+      lastId = lastId
     )
 
     content
-
   }
 }
