@@ -5,7 +5,7 @@ import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 import etude.pintxos.chatwork.domain.service.v0.response.InitLoadResponse
 import etude.vino.chatwork.ui.Main.ApplicationReady
 import etude.vino.chatwork.ui.UI
-import etude.vino.chatwork.ui.pane.RoomListPane.RoomListUpdate
+import etude.vino.chatwork.ui.pane.ChatRoomsPane.RoomListUpdate
 
 import scala.collection.mutable
 

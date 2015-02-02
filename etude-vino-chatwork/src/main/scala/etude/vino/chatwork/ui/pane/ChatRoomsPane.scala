@@ -1,19 +1,20 @@
 package etude.vino.chatwork.ui.pane
 
+import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.Room
 import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.lifecycle.SearchOptions
-import etude.vino.chatwork.ui.control.RoomListView
-import etude.vino.chatwork.ui.pane.MessageListPane.UpdateTimelineForRoom
-import etude.vino.chatwork.ui.{UI, UILogic, UIMessage}
+import etude.vino.chatwork.ui.control.{MessageListView, RoomListView}
+import etude.vino.chatwork.ui.{UI, UILogic, UIMessage, UIStyles}
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scalafx.Includes._
 import scalafx.collections.ObservableBuffer
+import scalafx.scene.control.SplitPane
 
+object ChatRoomsPane {
 
-object RoomListPane {
   val roomListView = new RoomListView() {
     onMouseClicked = handle {
       val room = delegate.getSelectionModel.getSelectedItem
@@ -40,4 +41,19 @@ object RoomListPane {
     }
   }
 
+
+  case class UpdateTimelineForRoom(messages: Seq[Message]) extends UIMessage {
+    def perform(): Unit = {
+      chatRoomPane.items.remove(1)
+      chatRoomPane.items.add(1, new MessageListView {
+        items = ObservableBuffer(messages)
+      }.delegate)
+    }
+  }
+
+  val chatRoomPane = new SplitPane {
+    padding = UIStyles.paddingInsets
+    dividerPositions_=(0.2, 0.8)
+    items ++= Seq(roomListView, new MessageListView())
+  }
 }

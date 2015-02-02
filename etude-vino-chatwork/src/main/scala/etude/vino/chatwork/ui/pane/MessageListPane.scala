@@ -17,12 +17,6 @@ object MessageListPane {
 
   val toMeMessageList = new MessageListView()
 
-  case class UpdateTimelineForRoom(messages: Seq[Message]) extends UIMessage {
-    def perform(): Unit = {
-      timelineOfRoom.items = ObservableBuffer(messages)
-    }
-  }
-  
   case class UpdateTimeline(messages: Seq[Message]) extends UIMessage {
     def perform(): Unit = {
       messageTimeline.items = ObservableBuffer(messages)

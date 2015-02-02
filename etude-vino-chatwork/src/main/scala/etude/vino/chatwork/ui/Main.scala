@@ -1,6 +1,6 @@
 package etude.vino.chatwork.ui
 
-import etude.vino.chatwork.ui.pane.{RoomListPane, ApplicationLogPane, MessageListPane}
+import etude.vino.chatwork.ui.pane.{ApplicationLogPane, ChatRoomsPane, MessageListPane}
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
@@ -8,7 +8,7 @@ import scalafx.application.JFXApp.PrimaryStage
 import scalafx.geometry.Pos
 import scalafx.scene.Scene
 import scalafx.scene.control.{ProgressIndicator, Tab, TabPane}
-import scalafx.scene.layout.{FlowPane, Priority, HBox, BorderPane}
+import scalafx.scene.layout.{BorderPane, HBox}
 
 object Main extends JFXApp {
   UI.ref ! "startup"
@@ -24,15 +24,7 @@ object Main extends JFXApp {
       new Tab() {
         text = "Chat Rooms"
         closable = false
-        content = new HBox {
-          spacing = UIStyles.spacingWidth
-          hgrow = Priority.Always
-          vgrow = Priority.Always
-          children = Seq(
-            RoomListPane.roomListView,
-            MessageListPane.timelineOfRoom
-          )
-        }
+        content = ChatRoomsPane.chatRoomPane
       },
       new Tab() {
         text = "Timeline"
