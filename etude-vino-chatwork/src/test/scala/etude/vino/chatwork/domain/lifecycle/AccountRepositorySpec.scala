@@ -12,7 +12,7 @@ import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class AccountRepositorySpec extends Specification {
-  val engine = ElasticSearch(testMode = true)
+  val engine = ElasticSearch(testMode = true, httpEnabled = false)
   val accountRepo = AccountRepository(engine)
   val account1 = new Account(
     AccountId(12345),

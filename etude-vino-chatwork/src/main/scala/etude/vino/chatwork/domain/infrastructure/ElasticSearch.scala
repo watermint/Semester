@@ -12,7 +12,7 @@ import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
 
 case class ElasticSearch(testMode: Boolean = false,
-                         httpEnabled: Boolean = false) {
+                         httpEnabled: Boolean = true) {
   val clusterName = {
     if (testMode) {
       s"chatwork-${UUID.randomUUID()}"

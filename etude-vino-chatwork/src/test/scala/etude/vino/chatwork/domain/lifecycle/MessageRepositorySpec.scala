@@ -16,7 +16,7 @@ import org.specs2.runner.JUnitRunner
 class MessageRepositorySpec
   extends Specification {
 
-  val engine = ElasticSearch(testMode = true)
+  val engine = ElasticSearch(testMode = true, httpEnabled = false)
   val messageRepo = MessageRepository(engine)
   val message1 = new Message(
     MessageId(RoomId(123), 1001),

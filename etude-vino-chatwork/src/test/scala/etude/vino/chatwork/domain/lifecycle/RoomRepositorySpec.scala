@@ -15,7 +15,7 @@ import org.specs2.runner.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class RoomRepositorySpec
   extends Specification {
-  val engine = ElasticSearch(testMode = true)
+  val engine = ElasticSearch(testMode = true, httpEnabled = false)
   val repository = RoomRepository(engine)
   val room1 = new Room(
     roomId = RoomId(123),
