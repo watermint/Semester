@@ -20,12 +20,11 @@ class Rooms extends Actor {
         room =>
           self ! room
       }
-      UI.ref ! ApplicationReady()
+      publishToUI()
 
     case r: Room =>
       Rooms.avatar.updateAvatar(r.roomId, r.avatar)
       Rooms.rooms.put(r.roomId, r)
-      publishToUI()
   }
 }
 

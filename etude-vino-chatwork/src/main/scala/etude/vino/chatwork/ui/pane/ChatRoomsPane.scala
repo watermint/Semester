@@ -1,5 +1,7 @@
 package etude.vino.chatwork.ui.pane
 
+import java.time.{Duration, Instant}
+
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.Room
 import etude.vino.chatwork.domain.Models
@@ -21,6 +23,10 @@ object ChatRoomsPane {
       val room = delegate.getSelectionModel.getSelectedItem
       UI.ref ! RoomUIUpdate(room)
     }
+  }
+
+  def searchStartDate(): Instant = {
+    Instant.now().minus(Duration.ofDays(14))
   }
 
   case class RoomUIUpdate(room: Room) extends UILogic {
