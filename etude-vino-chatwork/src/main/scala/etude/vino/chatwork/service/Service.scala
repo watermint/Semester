@@ -18,7 +18,7 @@ object Service {
   lazy val apiHub = Api.system.actorOf(ApiHub.props(3))
   lazy val recorder = Api.system.actorOf(Recorder.props(apiHub))
   lazy val historian = Api.system.actorOf(Historian.props(apiHub))
-  lazy val updater = Api.system.actorOf(Updater.props(apiHub, 10))
+  lazy val updater = Api.system.actorOf(Updater.props(apiHub, 15))
   lazy val markasread = Api.system.actorOf(AutoMarkAsRead.props(apiHub))
 
   def startup() {

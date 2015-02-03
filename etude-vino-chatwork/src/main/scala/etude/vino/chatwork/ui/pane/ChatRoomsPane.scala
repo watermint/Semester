@@ -2,6 +2,7 @@ package etude.vino.chatwork.ui.pane
 
 import java.time.{Duration, Instant}
 
+import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{RoomId, Room}
 import etude.vino.chatwork.domain.Models
@@ -20,6 +21,7 @@ import scalafx.scene.control.{Label, SplitPane}
 import scalafx.scene.layout.{FlowPane, BorderPane}
 
 object ChatRoomsPane {
+  val logger = LoggerFactory.getLogger(getClass)
 
   val roomListView = new RoomListView() {
     onMouseClicked = handle {
@@ -55,7 +57,7 @@ object ChatRoomsPane {
     def perform(): UIMessage = {
       val result = Models.messageRepository.search(
         query = QueryBuilders.boolQuery().must(
-          QueryBuilders.rangeQuery("message").from(searchStartDate().toString)
+          QueryBuilders.rangeQuery("@timestamp").gte(searchStartDate().toString)
         ),
         options = SearchOptions(
           aggregations = Some(
@@ -77,7 +79,7 @@ object ChatRoomsPane {
           Seq()
       }
 
-      RoomListUpdateFromList(filteredRooms)
+      RoomListUpdateFromList(filteredRooms.sortBy(_.name))
     }
   }
 
