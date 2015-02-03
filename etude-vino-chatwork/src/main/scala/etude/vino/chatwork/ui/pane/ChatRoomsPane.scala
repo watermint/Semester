@@ -3,12 +3,15 @@ package etude.vino.chatwork.ui.pane
 import java.time.{Duration, Instant}
 
 import etude.pintxos.chatwork.domain.model.message.Message
-import etude.pintxos.chatwork.domain.model.room.Room
+import etude.pintxos.chatwork.domain.model.room.{RoomId, Room}
 import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.lifecycle.SearchOptions
+import etude.vino.chatwork.domain.state.Rooms
 import etude.vino.chatwork.ui.control.{MessageListView, RoomListView}
 import etude.vino.chatwork.ui.{UI, UILogic, UIMessage, UIStyles}
 import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.search.aggregations.bucket.terms.Terms
+import org.elasticsearch.search.aggregations.{Aggregation, AggregationBuilders}
 import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scalafx.Includes._
@@ -42,9 +45,39 @@ object ChatRoomsPane {
     }
   }
 
-  case class RoomListUpdate(rooms: Seq[Room]) extends UIMessage {
+  private case class RoomListUpdateFromList(rooms: Seq[Room]) extends UIMessage {
     def perform(): Unit = {
       roomListView.items = ObservableBuffer(rooms)
+    }
+  }
+
+  case class RoomListUpdate(rooms: Seq[Room]) extends UILogic {
+    def perform(): UIMessage = {
+      val result = Models.messageRepository.search(
+        query = QueryBuilders.boolQuery().must(
+          QueryBuilders.rangeQuery("message").from(searchStartDate().toString)
+        ),
+        options = SearchOptions(
+          aggregations = Some(
+            AggregationBuilders.terms("aggs_room").field("room").size(100)
+          )
+        )
+      )
+
+      val filteredRooms: Seq[Room] = result.aggregations.get("aggs_room") match {
+        case Some(terms: Terms) =>
+          Range.inclusive(0, terms.getBuckets.size() - 1).flatMap {
+            i =>
+              val bucket = terms.getBuckets.get(i)
+              val roomId = RoomId(BigInt(bucket.getKey))
+              Rooms.room(roomId)
+          }
+
+        case _ =>
+          Seq()
+      }
+
+      RoomListUpdateFromList(filteredRooms)
     }
   }
 

@@ -34,4 +34,8 @@ object Rooms {
   val avatar = new Avatar[RoomId]()
 
   val actorRef = UI.system.actorOf(Props[Rooms])
+
+  def room(roomId: RoomId): Option[Room] = {
+    rooms.get(roomId)
+  }
 }

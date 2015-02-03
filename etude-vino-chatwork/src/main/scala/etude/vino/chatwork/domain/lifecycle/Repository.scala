@@ -3,10 +3,12 @@ package etude.vino.chatwork.domain.lifecycle
 import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.elasticsearch.index.query.QueryBuilder
+import org.elasticsearch.search.aggregations.Aggregations
 import org.elasticsearch.search.sort.SortBuilder
 import org.json4s.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
+import scala.collection.JavaConverters._
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {
   val engine: ElasticSearch
@@ -53,22 +55,16 @@ trait Repository[E <: Entity[ID], ID <: Identity[_]] {
       .setTypes(typeName)
       .setQuery(query)
 
-    val reqWithSort = options.sort match {
-      case Some(s) => reqWithQuery.addSort(s)
-      case _ => reqWithQuery
-    }
-
-    val reqWithSize = options.size match {
-      case Some(s) => reqWithSort.setSize(s)
-      case _ => reqWithSort
-    }
-
-    val response = reqWithSize.execute().get()
+    val response = options.withOptions(reqWithQuery).execute().get()
 
     SearchResult[E, ID](
-      response.getHits.hits() flatMap {
+      entities = response.getHits.hits() flatMap {
         h =>
           fromJson(Some(h.getId), JsonMethods.parse(h.getSourceAsString))
+      },
+      aggregations = response.getAggregations match {
+        case null => Map()
+        case a: Aggregations => a.asMap().asScala.toMap
       }
     )
   }

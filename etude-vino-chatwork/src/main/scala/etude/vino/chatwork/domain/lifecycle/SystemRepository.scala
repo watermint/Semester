@@ -29,7 +29,6 @@ object SystemRepository {
   def lastId(): Option[String] = {
     Models.engine.get(indexName, "lastId", "0") map {
       json =>
-        println(json)
         val result: Seq[String] = for {
           JObject(o) <- json
           JField("lastId", JString(lastId)) <- o
