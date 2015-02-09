@@ -6,18 +6,19 @@ import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{RoomId, Room}
 import etude.vino.chatwork.domain.Models
-import etude.vino.chatwork.domain.lifecycle.SearchOptions
+import etude.vino.chatwork.domain.lifecycle.{MarkAsReadRepository, SearchOptions}
+import etude.vino.chatwork.domain.model.MarkAsRead
 import etude.vino.chatwork.domain.state.Rooms
 import etude.vino.chatwork.ui.control.{MessageListView, RoomListView}
 import etude.vino.chatwork.ui.{UI, UILogic, UIMessage, UIStyles}
-import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
 import org.elasticsearch.search.aggregations.bucket.terms.Terms
 import org.elasticsearch.search.aggregations.{Aggregation, AggregationBuilders}
 import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scalafx.Includes._
 import scalafx.collections.ObservableBuffer
-import scalafx.scene.control.{Label, SplitPane}
+import scalafx.scene.control.{CheckBox, ToggleButton, Label, SplitPane}
 import scalafx.scene.layout.{FlowPane, BorderPane}
 
 object ChatRoomsPane {
@@ -34,6 +35,12 @@ object ChatRoomsPane {
     Instant.now().minus(Duration.ofDays(14))
   }
 
+  def queryForRooms(): QueryBuilder = {
+    QueryBuilders.boolQuery().must(
+      QueryBuilders.rangeQuery("@timestamp").gte(searchStartDate().toString)
+    )
+  }
+
   case class RoomUIUpdate(room: Room) extends UILogic {
     def perform(): UIMessage = {
       val messages = Models.messageRepository.search(
@@ -43,7 +50,20 @@ object ChatRoomsPane {
           size = Some(50)
         )
       )
+      Models.markAsReadRepository.get(room.roomId) match {
+        case Some(m) =>
+          UI.ref ! UpdateRoomMuteCheck(room, m.markAsRead)
+        case None =>
+          UI.ref ! UpdateRoomMuteCheck(room, false)
+      }
+
       UpdateTimelineForRoom(messages.entities)
+    }
+  }
+
+  private case class UpdateRoomMuteCheck(room: Room, selected: Boolean) extends UIMessage {
+    def perform(): Unit = {
+      muteCheck.selected = selected
     }
   }
 
@@ -56,9 +76,7 @@ object ChatRoomsPane {
   case class RoomListUpdate(rooms: Seq[Room]) extends UILogic {
     def perform(): UIMessage = {
       val result = Models.messageRepository.search(
-        query = QueryBuilders.boolQuery().must(
-          QueryBuilders.rangeQuery("@timestamp").gte(searchStartDate().toString)
-        ),
+        query = queryForRooms(),
         options = SearchOptions(
           aggregations = Some(
             AggregationBuilders.terms("aggs_room").field("room").size(100)
@@ -91,11 +109,33 @@ object ChatRoomsPane {
     }
   }
 
+  case class MuteRoom(room: Room, muteEnabled: Boolean) extends UILogic {
+    def perform(): UIMessage = {
+      if (muteEnabled) {
+        Models.markAsReadRepository.update(MarkAsRead(room.roomId, markAsRead = true))
+      } else {
+        Models.markAsReadRepository.delete(MarkAsRead(room.roomId, markAsRead = false))
+      }
+
+      // nop
+      new UIMessage() {
+        def perform(): Unit = {}
+      }
+    }
+  }
+
+  val muteCheck = new CheckBox {
+    text = "Mute"
+    onAction = handle {
+      UI.ref ! MuteRoom(roomListView.getSelectionModel.getSelectedItem, this.selected.value)
+    }
+  }
+
   val messagePane = new BorderPane {
     top = new FlowPane {
       padding = UIStyles.paddingInsets
       children = Seq(
-        new Label("Mute")
+        muteCheck
       )
     }
     center = new MessageListView()
