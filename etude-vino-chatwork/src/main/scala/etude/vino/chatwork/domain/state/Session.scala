@@ -1,6 +1,6 @@
 package etude.vino.chatwork.domain.state
 
-import akka.actor.{Props, Actor}
+import akka.actor.{Actor, Props}
 import etude.pintxos.chatwork.domain.service.v0.response.InitLoadResponse
 import etude.vino.chatwork.ui.Main.ApplicationReady
 import etude.vino.chatwork.ui.UI

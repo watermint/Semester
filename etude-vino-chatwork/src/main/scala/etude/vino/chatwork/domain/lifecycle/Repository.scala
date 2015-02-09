@@ -4,10 +4,10 @@ import etude.manieres.domain.model.{Entity, Identity}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.elasticsearch.index.query.QueryBuilder
 import org.elasticsearch.search.aggregations.Aggregations
-import org.elasticsearch.search.sort.SortBuilder
 import org.json4s.JValue
 import org.json4s.native.JsonMethods
 import org.json4s.native.JsonMethods._
+
 import scala.collection.JavaConverters._
 
 trait Repository[E <: Entity[ID], ID <: Identity[_]] {

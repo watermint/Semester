@@ -2,7 +2,7 @@ package etude.vino.chatwork.domain.lifecycle
 
 import java.net.URI
 
-import etude.pintxos.chatwork.domain.model.room.{RoomTypeGroup, RoomId, Room}
+import etude.pintxos.chatwork.domain.model.room.{Room, RoomId, RoomTypeGroup}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.junit.runner.RunWith
 import org.specs2.matcher.MatchResult

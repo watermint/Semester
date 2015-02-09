@@ -4,22 +4,22 @@ import java.time.{Duration, Instant}
 
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.message.Message
-import etude.pintxos.chatwork.domain.model.room.{RoomId, Room}
+import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
 import etude.vino.chatwork.domain.Models
-import etude.vino.chatwork.domain.lifecycle.{MarkAsReadRepository, SearchOptions}
+import etude.vino.chatwork.domain.lifecycle.SearchOptions
 import etude.vino.chatwork.domain.model.MarkAsRead
 import etude.vino.chatwork.domain.state.Rooms
 import etude.vino.chatwork.ui.control.{MessageListView, RoomListView}
 import etude.vino.chatwork.ui.{UI, UILogic, UIMessage, UIStyles}
 import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
+import org.elasticsearch.search.aggregations.AggregationBuilders
 import org.elasticsearch.search.aggregations.bucket.terms.Terms
-import org.elasticsearch.search.aggregations.{Aggregation, AggregationBuilders}
 import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scalafx.Includes._
 import scalafx.collections.ObservableBuffer
-import scalafx.scene.control.{CheckBox, ToggleButton, Label, SplitPane}
-import scalafx.scene.layout.{FlowPane, BorderPane}
+import scalafx.scene.control.{CheckBox, Label, SplitPane}
+import scalafx.scene.layout.{BorderPane, FlowPane}
 
 object ChatRoomsPane {
   val logger = LoggerFactory.getLogger(getClass)

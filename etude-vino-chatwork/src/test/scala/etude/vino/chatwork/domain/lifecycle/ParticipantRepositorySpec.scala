@@ -1,7 +1,7 @@
 package etude.vino.chatwork.domain.lifecycle
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
-import etude.pintxos.chatwork.domain.model.room.{RoomId, Participant}
+import etude.pintxos.chatwork.domain.model.room.{Participant, RoomId}
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
 import org.junit.runner.RunWith
 import org.specs2.matcher.MatchResult

@@ -3,10 +3,10 @@ package etude.vino.chatwork.domain.lifecycle
 import java.time.Instant
 
 import etude.pintxos.chatwork.domain.model.account.AccountId
-import etude.pintxos.chatwork.domain.model.message.{Text, MessageId, Message}
+import etude.pintxos.chatwork.domain.model.message.{Message, MessageId, Text}
 import etude.pintxos.chatwork.domain.model.room.RoomId
 import etude.vino.chatwork.domain.infrastructure.ElasticSearch
-import org.elasticsearch.index.query.{FilterBuilders, QueryBuilders}
+import org.elasticsearch.index.query.QueryBuilders
 import org.junit.runner.RunWith
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification

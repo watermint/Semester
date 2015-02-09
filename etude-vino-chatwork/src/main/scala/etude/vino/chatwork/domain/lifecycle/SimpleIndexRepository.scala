@@ -2,7 +2,6 @@ package etude.vino.chatwork.domain.lifecycle
 
 import etude.manieres.domain.model.{Entity, Identity}
 import org.elasticsearch.index.query.QueryBuilder
-import org.elasticsearch.search.sort.SortBuilder
 
 trait SimpleIndexRepository[E <: Entity[ID], ID <: Identity[_]] extends Repository[E, ID] {
   val indexName: String
