@@ -100,7 +100,7 @@ class PeriodStartView extends Button {
 
     def labelForStartButton: String = s"$value hours"
 
-    def value: TimeValue = TimeValueMinutes(valueControlHours.value.get)
+    def value: TimeValue = TimeValueHours(valueControlHours.value.get)
   }
 
   case object TimeTypeDays extends TimeType {
@@ -108,7 +108,7 @@ class PeriodStartView extends Button {
 
     def labelForStartButton: String = s"$value days"
 
-    def value: TimeValue = TimeValueMinutes(valueControlDays.value.get)
+    def value: TimeValue = TimeValueDays(valueControlDays.value.get)
   }
 
   val timeTypes = Seq(

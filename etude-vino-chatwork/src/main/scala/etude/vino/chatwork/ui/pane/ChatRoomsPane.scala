@@ -1,6 +1,6 @@
 package etude.vino.chatwork.ui.pane
 
-import java.time.{Duration, Instant}
+import java.util.concurrent.atomic.AtomicReference
 
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.message.Message
@@ -9,16 +9,16 @@ import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.lifecycle.SearchOptions
 import etude.vino.chatwork.domain.model.MarkAsRead
 import etude.vino.chatwork.domain.state.Rooms
-import etude.vino.chatwork.ui.control.{PeriodStartView, MessageListView, RoomListView}
+import etude.vino.chatwork.ui.control.{MessageListView, PeriodStartView, RoomListView}
 import etude.vino.chatwork.ui.{UI, UILogic, UIMessage, UIStyles}
 import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
 import org.elasticsearch.search.aggregations.AggregationBuilders
 import org.elasticsearch.search.aggregations.bucket.terms.Terms
-import org.elasticsearch.search.sort.{SortOrder, SortBuilders}
+import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 
 import scalafx.Includes._
 import scalafx.collections.ObservableBuffer
-import scalafx.scene.control.{CheckBox, SplitPane}
+import scalafx.scene.control.{CheckBox, SplitPane, TextField}
 import scalafx.scene.layout.{BorderPane, FlowPane, HBox}
 
 object ChatRoomsPane {
@@ -32,22 +32,28 @@ object ChatRoomsPane {
   }
 
   def startDateQuery(): Option[QueryBuilder] = {
-    logger.info(s"Selected date: ${searchStartSelector.selectedTime}")
     searchStartSelector.selectedTime map {
       case t =>
         QueryBuilders.rangeQuery("@timestamp").gte(t.toString)
     }
   }
 
+  def searchTermQuery(): Option[QueryBuilder] = {
+    currentSearchTerm.get() match {
+      case null => None
+      case s if s.trim.length == 0 => None
+      case term => Some(QueryBuilders.termQuery("body", term))
+    }
+  }
+
   def currentQueries(): Seq[QueryBuilder] = {
     Seq(
-      startDateQuery()
+      startDateQuery(),
+      searchTermQuery()
     ).flatten.toSeq
   }
 
-  def queryForRooms(): QueryBuilder = {
-    val queries = currentQueries()
-    logger.info(s"Queries: $queries")
+  def compositeQueries(queries: Seq[QueryBuilder]): QueryBuilder = {
     queries.size match {
       case 0 => QueryBuilders.matchAllQuery()
       case _ =>
@@ -58,10 +64,16 @@ object ChatRoomsPane {
     }
   }
 
+  def queryForRooms(): QueryBuilder = {
+    compositeQueries(currentQueries())
+  }
+
   case class RoomUIUpdate(room: Room) extends UILogic {
     def perform(): UIMessage = {
       val messages = Models.messageRepository.search(
-        query = QueryBuilders.matchQuery("room", room.roomId.value),
+        query = compositeQueries(
+          currentQueries() :+ QueryBuilders.matchQuery("room", room.roomId.value)
+        ),
         options = SearchOptions(
           sort = Some(SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC)),
           size = Some(50)
@@ -170,11 +182,24 @@ object ChatRoomsPane {
     }
   }
 
+  val currentSearchTerm = new AtomicReference[String]()
+
+  val searchTerm = new TextField {
+    onAction = handle {
+      UI.ref ! RoomListUpdate()
+    }
+    onKeyTyped = handle {
+      currentSearchTerm.set(text.value)
+    }
+    promptText = "Search"
+  }
+
   val searchPane = new HBox {
     padding = UIStyles.paddingInsets
     spacing = UIStyles.spacingWidth
     children = Seq(
-      searchStartSelector
+      searchStartSelector,
+      searchTerm
     )
   }
 
