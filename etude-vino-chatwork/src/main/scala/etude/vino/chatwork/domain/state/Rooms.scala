@@ -11,7 +11,7 @@ import scala.collection.mutable
 
 class Rooms extends Actor {
   def publishToUI(): Unit = {
-    UI.ref ! RoomListUpdate(Rooms.rooms.values.toSeq)
+    UI.ref ! RoomListUpdate()
   }
 
   def receive: Receive = {

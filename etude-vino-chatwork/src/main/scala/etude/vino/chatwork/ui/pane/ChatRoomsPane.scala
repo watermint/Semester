@@ -9,20 +9,20 @@ import etude.vino.chatwork.domain.Models
 import etude.vino.chatwork.domain.lifecycle.SearchOptions
 import etude.vino.chatwork.domain.model.MarkAsRead
 import etude.vino.chatwork.domain.state.Rooms
-import etude.vino.chatwork.ui.control.{MessageListView, RoomListView}
+import etude.vino.chatwork.ui.control.{PeriodStartView, MessageListView, RoomListView}
 import etude.vino.chatwork.ui.{UI, UILogic, UIMessage, UIStyles}
 import org.elasticsearch.index.query.{QueryBuilder, QueryBuilders}
 import org.elasticsearch.search.aggregations.AggregationBuilders
 import org.elasticsearch.search.aggregations.bucket.terms.Terms
-import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
+import org.elasticsearch.search.sort.{SortOrder, SortBuilders}
 
 import scalafx.Includes._
 import scalafx.collections.ObservableBuffer
-import scalafx.scene.control.{CheckBox, Label, SplitPane}
-import scalafx.scene.layout.{BorderPane, FlowPane}
+import scalafx.scene.control.{CheckBox, SplitPane}
+import scalafx.scene.layout.{BorderPane, FlowPane, HBox}
 
 object ChatRoomsPane {
-  val logger = LoggerFactory.getLogger(getClass)
+  val logger = LoggerFactory.getLogger(ChatRoomsPane.getClass)
 
   val roomListView = new RoomListView() {
     onMouseClicked = handle {
@@ -31,14 +31,31 @@ object ChatRoomsPane {
     }
   }
 
-  def searchStartDate(): Instant = {
-    Instant.now().minus(Duration.ofDays(14))
+  def startDateQuery(): Option[QueryBuilder] = {
+    logger.info(s"Selected date: ${searchStartSelector.selectedTime}")
+    searchStartSelector.selectedTime map {
+      case t =>
+        QueryBuilders.rangeQuery("@timestamp").gte(t.toString)
+    }
+  }
+
+  def currentQueries(): Seq[QueryBuilder] = {
+    Seq(
+      startDateQuery()
+    ).flatten.toSeq
   }
 
   def queryForRooms(): QueryBuilder = {
-    QueryBuilders.boolQuery().must(
-      QueryBuilders.rangeQuery("@timestamp").gte(searchStartDate().toString)
-    )
+    val queries = currentQueries()
+    logger.info(s"Queries: $queries")
+    queries.size match {
+      case 0 => QueryBuilders.matchAllQuery()
+      case _ =>
+        queries.foldLeft(QueryBuilders.boolQuery()) {
+          (composite, query) =>
+            composite.must(query)
+        }
+    }
   }
 
   case class RoomUIUpdate(room: Room) extends UILogic {
@@ -52,9 +69,9 @@ object ChatRoomsPane {
       )
       Models.markAsReadRepository.get(room.roomId) match {
         case Some(m) =>
-          UI.ref ! UpdateRoomMuteCheck(room, m.markAsRead)
+          UI.ref ! UpdateRoomMuteCheck(room, selected = m.markAsRead)
         case None =>
-          UI.ref ! UpdateRoomMuteCheck(room, false)
+          UI.ref ! UpdateRoomMuteCheck(room, selected = false)
       }
 
       UpdateTimelineForRoom(messages.entities)
@@ -73,7 +90,7 @@ object ChatRoomsPane {
     }
   }
 
-  case class RoomListUpdate(rooms: Seq[Room]) extends UILogic {
+  case class RoomListUpdate() extends UILogic {
     def perform(): UIMessage = {
       val result = Models.messageRepository.search(
         query = queryForRooms(),
@@ -147,13 +164,25 @@ object ChatRoomsPane {
     items ++= Seq(roomListView, messagePane)
   }
 
+  val searchStartSelector = new PeriodStartView {
+    override def onSelect(time: TimeValue): Unit = {
+      UI.ref ! RoomListUpdate()
+    }
+  }
+
+  val searchPane = new HBox {
+    padding = UIStyles.paddingInsets
+    spacing = UIStyles.spacingWidth
+    children = Seq(
+      searchStartSelector
+    )
+  }
+
   val chatRoomPane = new BorderPane {
     padding = UIStyles.paddingInsets
     top = new FlowPane {
       padding = UIStyles.paddingInsets
-      children = Seq(
-        new Label("Room")
-      )
+      children = searchPane
     }
     center = chatRoomCenterPane
   }

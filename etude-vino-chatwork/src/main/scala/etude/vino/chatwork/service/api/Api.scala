@@ -30,7 +30,7 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
 
   def receive: Receive = {
     case req: ChatWorkRequest =>
-      logger.info(s"Execute request[${counter.incrementAndGet()}]: $req")
+      logger.debug(s"Execute request[${counter.incrementAndGet()}]: $req")
       Api.system.eventStream.publish(ApiHistory(Instant.now, req))
       val execute: Future[ChatWorkResponse] = Future {
         req.execute(chatworkContext)
