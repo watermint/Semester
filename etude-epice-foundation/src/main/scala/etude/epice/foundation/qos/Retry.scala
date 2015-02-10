@@ -1,4 +1,4 @@
-package etude.epice.utility.qos
+package etude.epice.foundation.qos
 
 /**
  * forked from: https://gist.github.com/xuwei-k/2996927

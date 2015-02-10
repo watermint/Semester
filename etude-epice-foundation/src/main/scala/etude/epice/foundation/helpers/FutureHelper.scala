@@ -1,4 +1,4 @@
-package etude.epice.utility.helpers
+package etude.epice.foundation.helpers
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}

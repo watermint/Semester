@@ -4,7 +4,7 @@ import java.net.{URI, URL}
 
 import etude.epice.http.{Client, Response}
 import etude.epice.logging.LoggerFactory
-import etude.epice.utility.qos.Throttle
+import etude.epice.foundation.qos.Throttle
 import etude.pintxos.pocket.domain.model.{Item, ItemEntry}
 
 import scala.concurrent.Future

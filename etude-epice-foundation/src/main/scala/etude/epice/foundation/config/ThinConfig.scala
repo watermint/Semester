@@ -1,10 +1,10 @@
-package etude.epice.utility.config
+package etude.epice.foundation.config
 
 import java.io.{File, FileInputStream}
 import java.nio.file.Files
 import java.util.Properties
 
-import etude.epice.utility.helpers.PropertiesHelper
+import etude.epice.foundation.helpers.PropertiesHelper
 
 object ThinConfig {
   def ofName(name: String, pathPrefix: String = ".etude/properties"): Option[Map[String, String]] = {

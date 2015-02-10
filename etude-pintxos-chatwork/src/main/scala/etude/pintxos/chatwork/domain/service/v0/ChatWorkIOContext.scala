@@ -3,7 +3,7 @@ package etude.pintxos.chatwork.domain.service.v0
 import java.util.concurrent.atomic.AtomicReference
 
 import etude.epice.http.Client
-import etude.epice.utility.config.ThinConfig
+import etude.epice.foundation.config.ThinConfig
 
 import scala.concurrent.SyncVar
 import scala.language.higherKinds

@@ -1,4 +1,4 @@
-package etude.epice.utility.qos
+package etude.epice.foundation.qos
 
 import java.time.{Duration, Instant}
 

@@ -3,7 +3,7 @@ package etude.vino.chatwork.service.updater
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, ActorRef, Props}
-import etude.epice.utility.qos.TimeoutSemaphore
+import etude.epice.foundation.qos.TimeoutSemaphore
 import etude.pintxos.chatwork.domain.service.v0.request.GetUpdateRequest
 import etude.pintxos.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
 import etude.vino.chatwork.domain.lifecycle.SystemRepository

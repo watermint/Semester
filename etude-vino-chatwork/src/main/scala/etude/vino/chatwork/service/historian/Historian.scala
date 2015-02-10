@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock
 
 import akka.actor.{Actor, ActorRef, Props}
 import etude.epice.logging.LoggerFactory
-import etude.epice.utility.qos.CapacityQueue
+import etude.epice.foundation.qos.CapacityQueue
 import etude.pintxos.chatwork.domain.model.message.MessageId
 import etude.pintxos.chatwork.domain.model.room._
 import etude.pintxos.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}

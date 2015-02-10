@@ -50,7 +50,7 @@ lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
   .dependsOn(manieresDomain)
   .dependsOn(painRangement)
   .dependsOn(epiceHttp)
-  .dependsOn(epiceUtility)
+  .dependsOn(epiceFoundation)
   .dependsOn(epiceLogging)
   .dependsOn(epiceUndisclosed % "test")
 
@@ -83,10 +83,10 @@ lazy val epiceLogging = project.in(file("etude-epice-logging"))
 
 lazy val epiceHttp = project.in(file("etude-epice-http"))
   .settings(buildSettings: _*)
-  .dependsOn(epiceUtility)
+  .dependsOn(epiceFoundation)
   .dependsOn(epiceLogging)
 
-lazy val epiceUtility = project.in(file("etude-epice-utility"))
+lazy val epiceFoundation = project.in(file("etude-epice-foundation"))
   .settings(buildSettings: _*)
 
 lazy val epiceUndisclosed = project.in(file("etude-epice-undisclosed"))

@@ -1,4 +1,4 @@
-package etude.epice.utility.helpers
+package etude.epice.foundation.helpers
 
 import java.util.Properties
 import scala.collection.JavaConverters._

@@ -1,4 +1,4 @@
-package etude.epice.utility.qos
+package etude.epice.foundation.qos
 
 import java.util.concurrent.locks.ReentrantLock
 
