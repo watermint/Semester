@@ -5,8 +5,10 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.ReentrantLock
 
+import etude.epice.foundation.atomic.Reference
+
 case class TimeoutSemaphore(timeout: Duration) {
-  private val semaphoreTimeOut: AtomicReference[Instant] = new AtomicReference[Instant]()
+  private val semaphoreTimeOut: Reference[Instant] = new Reference[Instant]()
 
   private val semaphore: Semaphore = new Semaphore(1)
 
@@ -20,12 +22,14 @@ case class TimeoutSemaphore(timeout: Duration) {
         true
       } else {
         semaphoreTimeOut.get() match {
-          case null => throw new IllegalStateException("Semaphore acquired without setting timeout")
-          case t if t.isAfter(Instant.now()) =>
-            semaphore.release() // Release semaphore by timeout
-            true
-          case _ =>
-            false
+          case None => throw new IllegalStateException("Semaphore acquired without setting timeout")
+          case Some(t) =>
+            if (t.isAfter(Instant.now())) {
+              semaphore.release() // Release semaphore by timeout
+              true
+            } else {
+              false
+            }
         }
       }
     } finally {

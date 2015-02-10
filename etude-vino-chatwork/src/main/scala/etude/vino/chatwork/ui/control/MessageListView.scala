@@ -57,7 +57,7 @@ class MessageListView extends EntityListView[Message] {
 
   onMouseClicked = handle {
     val message = delegate.getSelectionModel.getSelectedItem
-    ApiSession.chatworkIOContextOption match {
+    ApiSession.chatWorkIOContext.get() match {
       case None =>
       case Some(context) =>
         Desktop.getDesktop.browse(message.uri(context))

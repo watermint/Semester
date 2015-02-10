@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 
+import etude.epice.foundation.atomic.Reference
 import etude.vino.chatwork.ui.{UI, UIMessage, UIStyles}
 import org.controlsfx.control.PopOver
 
@@ -238,14 +239,11 @@ class PeriodStartView extends Button {
     )
   }
 
-  val selectedTimeType = new AtomicReference[TimeType]()
+  val selectedTimeType = Reference[TimeType]()
 
-  val selectedTimeValue = new AtomicReference[TimeValue]()
+  val selectedTimeValue = Reference[TimeValue]()
 
-  def selectedTime: Option[Instant] = selectedTimeValue.get() match {
-    case null => None
-    case v: TimeValue => v.asInstant
-  }
+  def selectedTime: Option[Instant] = selectedTimeValue.get().map(_.asInstant).flatten
 
   def onSelect(time: TimeValue) = {}
 

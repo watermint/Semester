@@ -2,6 +2,7 @@ package etude.vino.chatwork.ui.pane
 
 import java.util.concurrent.atomic.AtomicReference
 
+import etude.epice.foundation.atomic.Reference
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.model.message.Message
 import etude.pintxos.chatwork.domain.model.room.{Room, RoomId}
@@ -40,9 +41,13 @@ object ChatRoomsPane {
 
   def searchTermQuery(): Option[QueryBuilder] = {
     currentSearchTerm.get() match {
-      case null => None
-      case s if s.trim.length == 0 => None
-      case term => Some(QueryBuilders.termQuery("body", term))
+      case None => None
+      case Some(term) =>
+        if (term.trim.length < 1) {
+          None
+        } else {
+          Some(QueryBuilders.termQuery("body", term))
+        }
     }
   }
 
@@ -156,13 +161,12 @@ object ChatRoomsPane {
     }
   }
 
-  val currentRoom = new AtomicReference[Room]()
+  val currentRoom = Reference[Room]()
 
   val muteCheck = new CheckBox {
     text = "Mute"
     onAction = handle {
-      currentRoom.get match {
-        case null =>
+      currentRoom.get foreach {
         case room =>
           UI.ref ! MuteRoom(room, this.selected.value)
       }
@@ -195,7 +199,7 @@ object ChatRoomsPane {
     }
   }
 
-  val currentSearchTerm = new AtomicReference[String]()
+  val currentSearchTerm = Reference[String]()
 
   val searchTerm = new TextField {
     onAction = handle {

@@ -34,10 +34,7 @@ trait ChatWorkEntityIO {
   }
 
   protected def getLastId(context: ChatWorkIOContext): Option[String] = {
-    context.lastId.get() match {
-      case null => None
-      case l => Some(l)
-    }
+    context.lastId.get()
   }
 
   protected def setAccessToken(accessToken: String, context: ChatWorkIOContext): Unit = {

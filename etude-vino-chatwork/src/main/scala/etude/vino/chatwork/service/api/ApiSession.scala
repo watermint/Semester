@@ -5,6 +5,7 @@ import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicReference
 
 import akka.actor._
+import etude.epice.foundation.atomic.Reference
 import etude.epice.logging.LoggerFactory
 import etude.pintxos.chatwork.domain.service.v0.request.{ChatWorkRequest, InitLoadRequest}
 import etude.pintxos.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkEntityIO, ChatWorkIOContext}
@@ -55,17 +56,9 @@ case class ApiSession() extends Actor with ChatWorkEntityIO {
 object ApiSession {
   def props() = Props(ApiSession())
 
-  val myId = new AtomicReference[BigInt]()
+  val myId = Reference[BigInt]()
 
-  val chatWorkIOContext = new AtomicReference[ChatWorkIOContext]()
+  val chatWorkIOContext = Reference[ChatWorkIOContext]()
 
-  def chatworkIOContextOption: Option[ChatWorkIOContext] = chatWorkIOContext.get match {
-    case null => None
-    case c => Some(c)
-  }
-
-  def myIdOption: Option[BigInt] = myId.get() match {
-    case null => None
-    case id => Some(id)
-  }
+  def myIdOption: Option[BigInt] = myId.get()
 }

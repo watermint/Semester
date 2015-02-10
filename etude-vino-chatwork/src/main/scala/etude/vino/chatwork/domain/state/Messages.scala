@@ -17,7 +17,7 @@ class Messages extends Actor {
 
   def updateToMeMessages(): Unit = {
     Future {
-      val myId = ApiSession.myIdOption.getOrElse("")
+      val myId = ApiSession.myId.get().getOrElse("")
       val response = Models.messageRepository.search(
         query = QueryBuilders.boolQuery()
           .should(QueryBuilders.matchQuery("to", myId))

@@ -2,6 +2,7 @@ package etude.pintxos.chatwork.domain.service.v0
 
 import java.util.concurrent.atomic.AtomicReference
 
+import etude.epice.foundation.atomic.Reference
 import etude.epice.http.Client
 import etude.epice.foundation.config.ThinConfig
 
@@ -22,7 +23,7 @@ trait ChatWorkIOContext {
 
   val myId: SyncVar[String] = new SyncVar[String]
 
-  val lastId: AtomicReference[String] = new AtomicReference[String]
+  val lastId: Reference[String] = Reference[String]()
 }
 
 object ChatWorkIOContext {
