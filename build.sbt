@@ -31,6 +31,9 @@ lazy val buildSettings = Seq(
 lazy val foundationDomain = project.in(file("semester-foundation-domain"))
   .settings(buildSettings: _*)
 
+lazy val foundationFextile = project.in(file("semester-foundation-fextile"))
+  .settings(buildSettings: _*)
+
 lazy val foundationUtility = project.in(file("semester-foundation-utility"))
   .settings(buildSettings: _*)
   .dependsOn(foundationLogging)
@@ -78,6 +81,9 @@ lazy val serviceChatwork = project.in(file("semester-service-chatwork"))
 //
 // ready made wrapper api/configuration for libraries
 //
+
+lazy val readymadeElasticsearch = project.in(file("semester-readymade-elasticsearch"))
+  .settings(buildSettings: _*)
 
 lazy val readymadeSpray = project.in(file("semester-readymade-spray"))
   .settings(buildSettings: _*)
