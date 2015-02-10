@@ -24,80 +24,88 @@ lazy val buildSettings = Seq(
     </dependencies>
 )
 
-// ---- table
+//
+// foundation libraries
+// 
 
-lazy val tableChitarra = project.in(file("etude-table-chitarra"))
+lazy val foundationDomain = project.in(file("semester-foundation-domain"))
   .settings(buildSettings: _*)
+
+lazy val foundationUtility = project.in(file("semester-foundation-utility"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationLogging)
+
+lazy val foundationLogging = project.in(file("semester-foundation-logging"))
+  .settings(buildSettings: _*)
+
+lazy val foundationHttp = project.in(file("semester-foundation-http"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationUtility)
+  .dependsOn(foundationLogging)
+
+lazy val foundationUndisclosed = project.in(file("semester-foundation-undisclosed"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationLogging)
+
+
+//
+// wrapper api for external services
+//
+
+lazy val servicePocket = project.in(file("semester-service-pocket"))
+  .dependsOn(foundationDomain)
+  .dependsOn(foundationLogging)
+  .dependsOn(foundationHttp)
+  .dependsOn(readymadeSpray)
+  .settings(buildSettings: _*)
+
+lazy val serviceNsunc = project.in(file("semester-service-nsunc"))
+  .dependsOn(readymadeCf)
+  .settings(buildSettings: _*)
+
+lazy val serviceThings = project.in(file("semester-service-things"))
+  .settings(buildSettings: _*)
+
+lazy val serviceChatwork = project.in(file("semester-service-chatwork"))
+  .settings(buildSettings: _*)
+  .dependsOn(foundationDomain)
+  .dependsOn(foundationHttp)
+  .dependsOn(foundationUtility)
+  .dependsOn(foundationLogging)
+  .dependsOn(foundationUndisclosed % "test")
+
+
+//
+// ready made wrapper api/configuration for libraries
+//
+
+lazy val readymadeSpray = project.in(file("semester-readymade-spray"))
+  .settings(buildSettings: _*)
+
+lazy val readymadeHtml = project.in(file("semester-readymade-html"))
+  .settings(buildSettings: _*)
+
+lazy val readymadeHighlight = project.in(file("semester-readymade-highlight"))
+  .settings(buildSettings: _*)
+
+lazy val readymadeTika = project.in(file("semester-readymade-tika"))
+  .settings(buildSettings: _*)
+
+lazy val readymadeCf = project.in(file("semester-readymade-cf"))
+  .settings(buildSettings: _*)
+
+
+//
+// applications
+//
+
+lazy val applicationVino = project.in(file("semester-application-vino"))
+  .settings(buildSettings: _*)
+  .dependsOn(serviceChatwork)
+  .dependsOn(serviceNsunc)
   .settings(assemblySettings: _*)
 
-// ---- pintxos
-lazy val pintxosPocket = project.in(file("etude-pintxos-pocket"))
-  .dependsOn(manieresDomain)
-  .dependsOn(epiceLogging)
-  .dependsOn(epiceHttp)
-  .dependsOn(gazpachoSpray)
+lazy val applicationChitarra = project.in(file("semester-application-chitarra"))
   .settings(buildSettings: _*)
-
-lazy val pintxosNsunc = project.in(file("etude-pintxos-nsunc"))
-  .dependsOn(painFoundation)
-  .settings(buildSettings: _*)
-
-lazy val pintxosThings = project.in(file("etude-pintxos-things"))
-  .settings(buildSettings: _*)
-
-lazy val pintxosChatwork = project.in(file("etude-pintxos-chatwork"))
-  .settings(buildSettings: _*)
-  .dependsOn(manieresDomain)
-  .dependsOn(painRangement)
-  .dependsOn(epiceHttp)
-  .dependsOn(epiceFoundation)
-  .dependsOn(epiceLogging)
-  .dependsOn(epiceUndisclosed % "test")
-
-
-// ---- manieres
-lazy val manieresDomain = project.in(file("etude-manieres-domain"))
-  .settings(buildSettings: _*)
-
-// ---- gazpacho
-lazy val gazpachoSpray = project.in(file("etude-gazpacho-spray"))
-  .settings(buildSettings: _*)
-
-// ---- pain
-lazy val painFoundation = project.in(file("etude-pain-foundation"))
-  .settings(buildSettings: _*)
-  .dependsOn(epiceLogging)
-
-lazy val painRangement = project.in(file("etude-pain-rangement"))
-  .settings(buildSettings: _*)
-
-lazy val painHighlight = project.in(file("etude-pain-highlight"))
-  .settings(buildSettings: _*)
-
-lazy val painTika = project.in(file("etude-pain-tika"))
-  .settings(buildSettings: _*)
-
-// ---- epice
-lazy val epiceLogging = project.in(file("etude-epice-logging"))
-  .settings(buildSettings: _*)
-
-lazy val epiceHttp = project.in(file("etude-epice-http"))
-  .settings(buildSettings: _*)
-  .dependsOn(epiceFoundation)
-  .dependsOn(epiceLogging)
-
-lazy val epiceFoundation = project.in(file("etude-epice-foundation"))
-  .settings(buildSettings: _*)
-
-lazy val epiceUndisclosed = project.in(file("etude-epice-undisclosed"))
-  .settings(buildSettings: _*)
-  .dependsOn(epiceLogging)
-
-
-// ---- kitchenette
-lazy val vinoChatwork = project.in(file("etude-vino-chatwork"))
-  .settings(buildSettings: _*)
-  .dependsOn(pintxosChatwork)
-  .dependsOn(pintxosNsunc)
   .settings(assemblySettings: _*)
 

@@ -6,57 +6,38 @@ Collection of small apps and libraries. This project collection is the practice 
 
 # Projects
 
-Project names are categorized like below.
+## Foundation libraries
 
-* etude-epice ... Basic utilities
-* etude-pain ... Wrapper for external libraries.
-* etude-gazpacho ... Frontend framework, or wrapper for frontend framework.
-* etude-manieres ... Design convention, or rules.
-* etude-pintxos ... Wrapper for external services.
-* etude-vino ... Business logic.
-* etude-table ... Application, or assembled logics.
+* [Domain](semester-foundation-domain) - Core Libraries for Domain Driven Design (DDD).
+* [Http](semester-foundation-http) - HTTP Client wrapper API
+* [Logging](semester-foundation-logging) - Logging API
+* [Undisclosed tests](semester-foundation-undisclosed) - Test wrapper. Separate secret keys for specific tests.
+* [Utility](semester-foundation-utility) - Generic utilities
 
-## etude-epice
+## Ready made wrapper API/configuration
 
-* [Http](etude-epice-http) - HTTP Client wrapper API
-* [Logging](etude-epice-logging) - Logging API
-* [Undisclosed tests](etude-epice-undisclosed) - Test wrapper. Separate secret keys for specific tests.
-* [Utility](etude-epice-utility) - Generic utilities
+* [CF](semester-readymade-cf) - Core Foundation Kit integration API on Mac OS X
+* [Highlight](semester-readymade-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
+* [HTML](semester-readymade-html) - HTML normalizer wrapper API
+* [Spray](semester-readymade-spray) - [Spray](http://spray.io) configuration base
+* [Tika](semester-readymade-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
 
-## etude-pain
+## Service API
 
-* [Highlight](etude-pain-highlight) - Source code highlighter by [highlight.js](http://highlightjs.org)
-* [Rangement](etude-pain-rangement) - HTML normalizer wrapper API
-* [Tika](etude-pain-tika) - File description detector by [Apache Tika](http://tika.apache.org) 
-* [Foundation](etude-pain-foundation) - Foundation Kit integration API on Mac OS X
+* [ChatWork](semester-service-chatwork) - [ChatWork](http://chatwork.com) API
+* [NSUserNotification](semester-service-nsunc) - Notification Center of Mac OS X integration.
+* [Pocket](semester-service-pocket) - [Pocket](http://getpocket.com) API
+* [Things](semester-service-things) - [Things](https://culturedcode.com/things/) app integration.
 
-## etude-gazpacho
+## Applications
 
-* [Spray](etude-gazpacho-spray) - [Spray](http://spray.io) configuration base
-
-## etude-manieres
-
-* [Domain](etude-manieres-domain) - Core Libraries for Domain Driven Design (DDD).
-
-## etude-pintxos
-
-* [ChatWork](etude-pintxos-chatwork) - [ChatWork](http://chatwork.com) API
-* [Pocket](etude-pintxos-pocket) - [Pocket](http://getpocket.com) API
-* [Things](etude-pintxos-things) - [Things](https://culturedcode.com/things/) app integration.
-* [NSUserNotification](etude-pintxos-nsunc) - Notification Center of Mac OS X integration.
-
-## etude-vino
-
-* [ChatWork](etude-vino-chatwork) - Productivity for ChatWork
-
-## etude-table
-
-* [Chitarra](etude-table-chitarra) - OPML to Markdown
+* [ChatWork](semester-application-chatwork) - Productivity for ChatWork
+* [Chitarra](semester-application-chitarra) - OPML to Markdown
 
 # Requirements
 
-* JDK 8 or later
-* Scala 2.11.4 or later
+* JDK 8
+* Scala 2.11
 
 # License
 
