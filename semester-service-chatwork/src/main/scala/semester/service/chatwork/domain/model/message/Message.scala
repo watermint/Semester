@@ -3,10 +3,10 @@ package semester.service.chatwork.domain.model.message
 import java.net.URI
 import java.time.Instant
 
-import semester.foundation.http._
 import semester.foundation.domain.model.Entity
+import semester.foundation.http._
 import semester.service.chatwork.domain.model.account.AccountId
-import semester.service.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
+import semester.service.chatwork.domain.service.{ChatWorkApi, ChatWorkIOContext}
 
 class Message(val messageId: MessageId,
               val accountId: AccountId,

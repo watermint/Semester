@@ -3,9 +3,9 @@ package semester.service.chatwork.domain.model.room
 import java.net.URI
 import java.time.Instant
 
-import semester.foundation.http._
 import semester.foundation.domain.model.Entity
-import semester.service.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkIOContext}
+import semester.foundation.http._
+import semester.service.chatwork.domain.service.{ChatWorkApi, ChatWorkIOContext}
 
 import scala.language.higherKinds
 

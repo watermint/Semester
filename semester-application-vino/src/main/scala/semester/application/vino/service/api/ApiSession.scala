@@ -2,13 +2,12 @@ package semester.application.vino.service.api
 
 import java.io.IOException
 import java.util.concurrent.TimeoutException
-import java.util.concurrent.atomic.AtomicReference
 
 import akka.actor._
-import semester.foundation.utilities.atomic.Reference
 import semester.foundation.logging.LoggerFactory
-import semester.service.chatwork.domain.service.v0.request.{ChatWorkRequest, InitLoadRequest}
-import semester.service.chatwork.domain.service.v0.{ChatWorkApi, ChatWorkEntityIO, ChatWorkIOContext}
+import semester.foundation.utilities.atomic.Reference
+import semester.service.chatwork.domain.service.request.{ChatWorkRequest, InitLoadRequest}
+import semester.service.chatwork.domain.service.{ChatWorkApi, ChatWorkEntityIO, ChatWorkIOContext}
 
 case class ApiSession() extends Actor with ChatWorkEntityIO {
   val chatworkContext = ChatWorkIOContext.fromThinConfig()

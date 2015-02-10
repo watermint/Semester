@@ -2,7 +2,7 @@ package semester.application.vino.domain.state
 
 import akka.actor.{Actor, Props}
 import semester.service.chatwork.domain.model.account.{Account, AccountId}
-import semester.service.chatwork.domain.service.v0.response.InitLoadResponse
+import semester.service.chatwork.domain.service.response.InitLoadResponse
 import semester.application.vino.ui.UI
 
 import scala.collection.mutable

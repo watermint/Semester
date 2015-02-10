@@ -1,6 +1,6 @@
 package semester.application.vino.domain
 
-import semester.service.chatwork.domain.service.v0.response.ChatWorkResponse
+import semester.service.chatwork.domain.service.response.ChatWorkResponse
 import semester.application.vino.domain.infrastructure.ElasticSearch
 import semester.application.vino.domain.lifecycle._
 import semester.application.vino.domain.state._

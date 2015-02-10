@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor._
 import semester.foundation.http.{Client, Response}
 import semester.foundation.logging.LoggerFactory
-import semester.service.chatwork.domain.service.v0._
-import semester.service.chatwork.domain.service.v0.request.ChatWorkRequest
-import semester.service.chatwork.domain.service.v0.response.ChatWorkResponse
+import semester.service.chatwork.domain.service.ChatWorkIOContext
+import semester.service.chatwork.domain.service.request.ChatWorkRequest
+import semester.service.chatwork.domain.service.response.ChatWorkResponse
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}

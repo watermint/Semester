@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, ActorRef, Props}
 import semester.foundation.utilities.qos.TimeoutSemaphore
-import semester.service.chatwork.domain.service.v0.request.GetUpdateRequest
-import semester.service.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
+import semester.service.chatwork.domain.service.request.GetUpdateRequest
+import semester.service.chatwork.domain.service.response.{GetUpdateResponse, InitLoadResponse}
 import semester.application.vino.domain.lifecycle.SystemRepository
 import semester.application.vino.service.api._
 

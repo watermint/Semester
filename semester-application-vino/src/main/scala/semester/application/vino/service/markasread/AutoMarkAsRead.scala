@@ -1,8 +1,8 @@
 package semester.application.vino.service.markasread
 
 import akka.actor.{Actor, ActorRef, Props}
-import semester.service.chatwork.domain.service.v0.request.ReadRequest
-import semester.service.chatwork.domain.service.v0.response.LoadChatResponse
+import semester.service.chatwork.domain.service.request.ReadRequest
+import semester.service.chatwork.domain.service.response.LoadChatResponse
 import semester.application.vino.domain.Models
 import semester.application.vino.service.api.{ApiEnqueue, PriorityP2}
 

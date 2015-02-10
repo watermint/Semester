@@ -8,8 +8,8 @@ import semester.foundation.logging.LoggerFactory
 import semester.foundation.utilities.qos.CapacityQueue
 import semester.service.chatwork.domain.model.message.MessageId
 import semester.service.chatwork.domain.model.room._
-import semester.service.chatwork.domain.service.v0.request.{LoadChatRequest, LoadOldChatRequest}
-import semester.service.chatwork.domain.service.v0.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
+import semester.service.chatwork.domain.service.request.{LoadChatRequest, LoadOldChatRequest}
+import semester.service.chatwork.domain.service.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import semester.application.vino.domain.Models
 import semester.application.vino.domain.model.{Chunk, RoomChunk}
 import semester.application.vino.service.api._

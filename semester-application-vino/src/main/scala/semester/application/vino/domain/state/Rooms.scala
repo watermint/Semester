@@ -2,7 +2,7 @@ package semester.application.vino.domain.state
 
 import akka.actor.{Actor, Props}
 import semester.service.chatwork.domain.model.room.{Room, RoomId}
-import semester.service.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse}
+import semester.service.chatwork.domain.service.response.{GetUpdateResponse, InitLoadResponse}
 import semester.application.vino.domain.Models
 import semester.application.vino.ui.UI
 import semester.application.vino.ui.pane.ChatRoomsPane.RoomListUpdate

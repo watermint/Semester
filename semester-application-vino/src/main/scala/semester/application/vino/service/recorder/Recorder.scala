@@ -1,8 +1,8 @@
 package semester.application.vino.service.recorder
 
 import akka.actor.{Actor, ActorRef, Props}
-import semester.service.chatwork.domain.service.v0.request.LoadChatRequest
-import semester.service.chatwork.domain.service.v0.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
+import semester.service.chatwork.domain.service.request.LoadChatRequest
+import semester.service.chatwork.domain.service.response.{GetUpdateResponse, InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
 import semester.application.vino.domain.Models
 import semester.application.vino.service.api.{ApiEnqueue, PriorityP2}
 

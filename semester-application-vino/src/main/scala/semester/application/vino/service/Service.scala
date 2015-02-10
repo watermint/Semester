@@ -1,7 +1,7 @@
 package semester.application.vino.service
 
 import semester.foundation.logging.LoggerFactory
-import semester.service.chatwork.domain.service.v0.response.ChatWorkResponse
+import semester.service.chatwork.domain.service.response.ChatWorkResponse
 import semester.application.vino.domain.Models
 import semester.application.vino.domain.lifecycle.SystemRepository
 import semester.application.vino.service.api._

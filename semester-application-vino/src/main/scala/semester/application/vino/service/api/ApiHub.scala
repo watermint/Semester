@@ -6,9 +6,9 @@ import java.util.concurrent.{ConcurrentLinkedQueue, TimeUnit, TimeoutException}
 import akka.actor._
 import semester.foundation.logging.LoggerFactory
 import semester.foundation.utilities.qos.TimeoutSemaphore
-import semester.service.chatwork.domain.service.v0.request.ChatWorkRequest
-import semester.service.chatwork.domain.service.v0.response.ChatWorkResponse
-import semester.service.chatwork.domain.service.v0.{ChatWorkEntityIO, CommandFailureException, CommandPermissionException, SessionTimeoutException}
+import semester.service.chatwork.domain.service.request.ChatWorkRequest
+import semester.service.chatwork.domain.service.response.ChatWorkResponse
+import semester.service.chatwork.domain.service.{ChatWorkEntityIO, CommandFailureException, CommandPermissionException, SessionTimeoutException}
 
 import scala.concurrent.duration._
 

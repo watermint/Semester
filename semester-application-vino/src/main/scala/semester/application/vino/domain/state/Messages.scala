@@ -1,7 +1,7 @@
 package semester.application.vino.domain.state
 
 import akka.actor.{Actor, Props}
-import semester.service.chatwork.domain.service.v0.response.LoadChatResponse
+import semester.service.chatwork.domain.service.response.LoadChatResponse
 import semester.application.vino.domain.Models
 import semester.application.vino.domain.lifecycle.SearchOptions
 import semester.application.vino.service.api.ApiSession
