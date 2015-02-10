@@ -24,7 +24,7 @@ import scalafx.scene.layout.{BorderPane, FlowPane, HBox}
 object ChatRoomsPane {
   val logger = LoggerFactory.getLogger(ChatRoomsPane.getClass)
 
-  val roomListView = new RoomListView() {
+  class RoomListViewWithUIUpdate extends RoomListView {
     onMouseClicked = handle {
       val room = delegate.getSelectionModel.getSelectedItem
       UI.ref ! RoomUIUpdate(room)
@@ -85,6 +85,7 @@ object ChatRoomsPane {
         case None =>
           UI.ref ! UpdateRoomMuteCheck(room, selected = false)
       }
+      currentRoom.set(room)
 
       UpdateTimelineForRoom(messages.entities)
     }
@@ -98,7 +99,9 @@ object ChatRoomsPane {
 
   private case class RoomListUpdateFromList(rooms: Seq[Room]) extends UIMessage {
     def perform(): Unit = {
-      roomListView.items = ObservableBuffer(rooms)
+      roomPane.center = new RoomListViewWithUIUpdate {
+        items = ObservableBuffer(rooms)
+      }
     }
   }
 
@@ -153,10 +156,16 @@ object ChatRoomsPane {
     }
   }
 
+  val currentRoom = new AtomicReference[Room]()
+
   val muteCheck = new CheckBox {
     text = "Mute"
     onAction = handle {
-      UI.ref ! MuteRoom(roomListView.getSelectionModel.getSelectedItem, this.selected.value)
+      currentRoom.get match {
+        case null =>
+        case room =>
+          UI.ref ! MuteRoom(room, this.selected.value)
+      }
     }
   }
 
@@ -170,10 +179,14 @@ object ChatRoomsPane {
     center = new MessageListView()
   }
 
+  val roomPane = new BorderPane {
+    center = new RoomListViewWithUIUpdate()
+  }
+
   val chatRoomCenterPane = new SplitPane {
     padding = UIStyles.paddingInsets
     dividerPositions_=(0.2, 0.8)
-    items ++= Seq(roomListView, messagePane)
+    items ++= Seq(roomPane, messagePane)
   }
 
   val searchStartSelector = new PeriodStartView {
