@@ -1,6 +1,7 @@
 package semester.foundation.utilities.helpers
 
 import java.util.Properties
+
 import scala.collection.JavaConverters._
 
 object PropertiesHelper {

@@ -3,16 +3,14 @@ package semester.foundation.http
 import java.io.InputStream
 import java.net.URI
 
-import semester.foundation.logging.LoggerFactory
 import org.apache.http.HttpEntity
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpGet, HttpPost, HttpPut, HttpUriRequest}
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.impl.NoConnectionReuseStrategy
 import org.apache.http.impl.client._
 import org.apache.http.message.BasicNameValuePair
+import semester.foundation.logging.LoggerFactory
 
 import scala.collection.JavaConverters._
 import scala.language.higherKinds

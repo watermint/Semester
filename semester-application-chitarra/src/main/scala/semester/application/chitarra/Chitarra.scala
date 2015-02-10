@@ -1,11 +1,11 @@
 package semester.application.chitarra
 
-import java.nio.file.{Paths, Files}
+import java.nio.file.{Files, Paths}
 
 import scopt.OptionParser
 
 import scala.io.Source
-import scala.xml.{XML, Node, Elem}
+import scala.xml.{Elem, Node, XML}
 
 case class Chitarra(source: Elem,
                     preferredChildCount: Int = 15,

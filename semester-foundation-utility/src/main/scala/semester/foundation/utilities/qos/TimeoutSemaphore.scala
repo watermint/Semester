@@ -1,8 +1,7 @@
 package semester.foundation.utilities.qos
 
-import java.time.{Instant, Duration}
+import java.time.{Duration, Instant}
 import java.util.concurrent.Semaphore
-import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.ReentrantLock
 
 import semester.foundation.utilities.atomic.Reference

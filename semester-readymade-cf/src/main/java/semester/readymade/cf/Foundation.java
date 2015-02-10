@@ -16,10 +16,10 @@
 package semester.readymade.cf;
 
 import com.sun.jna.*;
-import semester.readymade.cf.util.HashMap;
-import semester.readymade.cf.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import semester.readymade.cf.util.HashMap;
+import semester.readymade.cf.util.StringUtil;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

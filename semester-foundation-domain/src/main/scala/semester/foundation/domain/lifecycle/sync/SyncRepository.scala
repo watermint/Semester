@@ -1,7 +1,7 @@
 package semester.foundation.domain.lifecycle.sync
 
 import semester.foundation.domain.lifecycle.Repository
-import semester.foundation.domain.model.{Identity, Entity}
+import semester.foundation.domain.model.{Entity, Identity}
 
 import scala.util.Try
 

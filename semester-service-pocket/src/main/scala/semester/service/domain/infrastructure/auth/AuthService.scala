@@ -4,11 +4,11 @@ import java.net.{URI, URLEncoder}
 import java.util.concurrent.{ExecutorService, Executors}
 
 import akka.actor.ActorSystem
-import semester.foundation.http.{Client, Response}
-import semester.readymade.spray.SecureConfiguration
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.native.JsonMethods._
+import semester.foundation.http.{Client, Response}
+import semester.readymade.spray.SecureConfiguration
 import spray.http.{HttpCookie, StatusCodes}
 import spray.routing.{Route, SimpleRoutingApp}
 

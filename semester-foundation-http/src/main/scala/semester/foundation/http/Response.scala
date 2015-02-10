@@ -3,12 +3,12 @@ package semester.foundation.http
 import java.net.URI
 import java.nio.charset.StandardCharsets
 
-import semester.foundation.utilities.helpers.InputStreamHelper
-import InputStreamHelper._
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.{Header, HttpResponse}
 import org.json4s.JValue
 import org.json4s.native.JsonMethods
+import semester.foundation.utilities.helpers.InputStreamHelper
+import semester.foundation.utilities.helpers.InputStreamHelper._
 
 import scala.collection.JavaConverters._
 import scala.util.Try

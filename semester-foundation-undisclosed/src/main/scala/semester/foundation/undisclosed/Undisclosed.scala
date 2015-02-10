@@ -4,8 +4,8 @@ import java.io.{File, FileInputStream}
 import java.nio.file.Files
 import java.util.Properties
 
-import semester.foundation.logging.{Logger, LoggerFactory}
 import org.specs2.execute.Result
+import semester.foundation.logging.{Logger, LoggerFactory}
 
 case class Undisclosed(clazzName: String) {
   lazy val logger: Logger = LoggerFactory.getLogger(getClass)
