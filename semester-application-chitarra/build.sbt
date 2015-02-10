@@ -1,4 +1,4 @@
-name := "etude-table-chitarra"
+name := "semester-application-chitarra"
 
 libraryDependencies ++= Seq(
   "com.github.scopt" %% "scopt" % "latest.release",

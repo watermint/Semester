@@ -1,4 +1,4 @@
-name := "etude-vino-chatwork"
+name := "semester-application-vino"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "latest.release",

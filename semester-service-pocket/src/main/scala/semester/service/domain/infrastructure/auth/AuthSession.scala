@@ -18,7 +18,7 @@ case class AuthSession(userName: String,
 
 object AuthSession {
 
-  val sessionDirectory = Paths.get(System.getProperty("user.home"), ".etude-pocket")
+  val sessionDirectory = Paths.get(System.getProperty("user.home"), ".semester-pocket")
   val sessionFile = sessionDirectory.resolve("session.json")
 
   def storeSession(session: AuthSession): Unit = {

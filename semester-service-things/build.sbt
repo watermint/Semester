@@ -1,1 +1,1 @@
-name := "etude-pintxos-things"
+name := "semester-service-things"

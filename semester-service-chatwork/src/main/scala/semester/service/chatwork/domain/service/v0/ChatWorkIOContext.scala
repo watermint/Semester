@@ -28,7 +28,7 @@ trait ChatWorkIOContext {
 
 object ChatWorkIOContext {
   def fromThinConfig(): ChatWorkIOContext = {
-    ThinConfig.ofName("AsyncEntityIOContextOnV0Api") match {
+    ThinConfig.ofName("ChatWorkIOContext") match {
       case None => throw new IllegalStateException("thin config file not found")
       case Some(p) =>
         (p.get("org"), p.get("username"), p.get("password")) match {

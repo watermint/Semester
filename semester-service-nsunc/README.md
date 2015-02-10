@@ -17,10 +17,10 @@
     <target name="bundle">
         <bundleapp outputdirectory="."
             name="Semester"
-            displayname="etude-pintxos-nsunc"
-            identifier="etude.pintxos-nsunc"
-            mainclassname="etude.pintxos.nsunc.Notification">
-            <classpath file="etude-pintxos-nsunc-assembly-0.8.0.jar" />
+            displayname="semester-service-nsunc"
+            identifier="semester.service-nsunc"
+            mainclassname="semester.service.nsunc.Notification">
+            <classpath file="semester-service-nsunc-assembly-0.14.5.jar" />
         </bundleapp>
     </target>
 

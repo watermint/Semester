@@ -1,4 +1,4 @@
-# etude-pain-foundation
+# semester-readymade-cf
 
 Wrapper for [Foundation Kit](http://en.wikipedia.org/wiki/Foundation_Kit) of Mac OS X.
 

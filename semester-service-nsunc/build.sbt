@@ -1,1 +1,1 @@
-name := "etude-pintxos-nsunc"
+name := "semester-service-nsunc"

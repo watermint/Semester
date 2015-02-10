@@ -24,7 +24,7 @@ object AuthService
   val serverPort = 7443
   val defaultRedirectUri = s"https://$serverInterface:$serverPort/auth/callback"
   val defaultConsumerKey = "26663-4732e33333464d2f63b63ed3"
-  val consumerKey = System.getProperty("etude.bookmark.pocket.consumerKey", defaultConsumerKey)
+  val consumerKey = System.getProperty("semester.service.pocket.consumerKey", defaultConsumerKey)
 
   val executorsPool: ExecutorService = Executors.newCachedThreadPool()
   implicit val executors = ExecutionContext.fromExecutorService(executorsPool)

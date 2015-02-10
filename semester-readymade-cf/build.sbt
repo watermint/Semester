@@ -1,4 +1,4 @@
-name := "etude-pain-foundation"
+name := "semester-readymade-cf"
 
 libraryDependencies ++= Seq(
 // "net.java.dev.jna" % "jna" % "latest.release",

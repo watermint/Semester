@@ -21,7 +21,7 @@ object Service {
 
   def startup() {
     try {
-      logger.info(s"etude-vino-chatwork: launch data version: ${SystemRepository.vinoVersion()}")
+      logger.info(s"vino: launch data version: ${SystemRepository.vinoVersion()}")
     } catch {
       case _: Exception => // ignore
     }

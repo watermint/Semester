@@ -1,2 +1,2 @@
-name := "etude-epice-utility"
+name := "semester-foundation-utility"
 

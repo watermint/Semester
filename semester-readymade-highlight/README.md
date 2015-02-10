@@ -4,7 +4,7 @@ Highlight source code inside Java VM with highlight.js and nashorn.
 
 # License
 
-## etude-kitchenette-highlight
+## semester-readymade-highlight
 
 The MIT License (MIT) Copyright (c) 2013, 2014 Takayuki Okazaki
 

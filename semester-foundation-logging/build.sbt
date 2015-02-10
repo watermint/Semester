@@ -1,4 +1,4 @@
-name := "etude-epice-logging"
+name := "semester-foundation-logging"
 
 libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "latest.release",

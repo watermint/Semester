@@ -1,4 +1,4 @@
-name := "etude-epice-undisclosed"
+name := "semester-foundation-undisclosed"
 
 libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "latest.release",

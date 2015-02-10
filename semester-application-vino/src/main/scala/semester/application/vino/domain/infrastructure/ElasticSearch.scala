@@ -25,7 +25,7 @@ case class ElasticSearch(testMode: Boolean = false,
     if (testMode) {
       Files.createTempDirectory(clusterName)
     } else {
-      Paths.get(System.getProperty("user.home"), s".etude-vino-chatwork")
+      Paths.get(System.getProperty("user.home"), s".semester-vino")
     }
   }
 

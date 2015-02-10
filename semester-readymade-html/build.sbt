@@ -1,4 +1,4 @@
-name := "etude-pain-rangement"
+name := "semester-readymade-html"
 
 libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "latest.release",

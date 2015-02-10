@@ -7,7 +7,7 @@ import java.util.Properties
 import semester.foundation.utilities.helpers.PropertiesHelper
 
 object ThinConfig {
-  def ofName(name: String, pathPrefix: String = ".etude/properties"): Option[Map[String, String]] = {
+  def ofName(name: String, pathPrefix: String = ".semester/properties"): Option[Map[String, String]] = {
     val home: File = new File(System.getProperty("user.home"), pathPrefix)
     val file: File = new File(home, name + ".properties")
     if (Files.exists(file.toPath)) {

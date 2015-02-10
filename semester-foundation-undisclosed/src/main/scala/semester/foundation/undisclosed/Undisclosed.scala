@@ -10,7 +10,7 @@ import org.specs2.execute.Result
 case class Undisclosed(clazzName: String) {
   lazy val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  val pathPrefix: String = ".etude-test/undisclosed"
+  val pathPrefix: String = ".semester-test/undisclosed"
 
   val home: File = new File(System.getProperty("user.home"), pathPrefix)
 

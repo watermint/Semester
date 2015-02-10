@@ -1,1 +1,1 @@
-name := "etude-manieres-domain"
+name := "semester-foundation-domain"

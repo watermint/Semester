@@ -20,7 +20,7 @@ trait V0AsyncApiSpecBase {
   }
 
   def withContext(spec: ChatWorkIOContext => Result): Result = {
-    undisclosed("etude.chatwork.infrastructure.api.v0.V0AsyncApi") {
+    undisclosed("semester.service.chatwork.domain.service.ChatWorkIOContext") {
       properties =>
         spec(getEntityIOContext(properties))
     }

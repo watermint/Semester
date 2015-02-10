@@ -1,1 +1,1 @@
-name := "etude-pintxos-chatwork"
+name := "semester-service-chatwork"

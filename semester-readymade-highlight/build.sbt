@@ -1,3 +1,3 @@
-name := "etude-pain-highlight"
+name := "semester-readymade-highlight"
 
 fork in Test := true

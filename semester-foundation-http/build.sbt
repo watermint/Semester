@@ -1,4 +1,4 @@
-name := "etude-epice-http"
+name := "semester-foundation-http"
 
 libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-native" % "latest.release",
