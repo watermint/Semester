@@ -62,7 +62,7 @@ object Main extends JFXApp {
   }
 
   stage = new PrimaryStage {
-    title = "Vino Chatwork"
+    title = "Vino"
     width = 800
     height = 600
     scene = rootScene
