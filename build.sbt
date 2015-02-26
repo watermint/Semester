@@ -62,10 +62,6 @@ lazy val servicePocket = project.in(file("semester-service-pocket"))
   .dependsOn(readymadeSpray)
   .settings(buildSettings: _*)
 
-lazy val serviceNsunc = project.in(file("semester-service-nsunc"))
-  .dependsOn(readymadeCf)
-  .settings(buildSettings: _*)
-
 lazy val serviceChatwork = project.in(file("semester-service-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
@@ -94,9 +90,6 @@ lazy val readymadeHighlight = project.in(file("semester-readymade-highlight"))
 lazy val readymadeTika = project.in(file("semester-readymade-tika"))
   .settings(buildSettings: _*)
 
-lazy val readymadeCf = project.in(file("semester-readymade-cf"))
-  .settings(buildSettings: _*)
-
 
 //
 // applications
@@ -105,7 +98,6 @@ lazy val readymadeCf = project.in(file("semester-readymade-cf"))
 lazy val applicationVino = project.in(file("semester-application-vino"))
   .settings(buildSettings: _*)
   .dependsOn(serviceChatwork)
-  .dependsOn(serviceNsunc)
   .settings(assemblySettings: _*)
 
 lazy val applicationChitarra = project.in(file("semester-application-chitarra"))
