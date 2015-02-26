@@ -66,9 +66,6 @@ lazy val serviceNsunc = project.in(file("semester-service-nsunc"))
   .dependsOn(readymadeCf)
   .settings(buildSettings: _*)
 
-lazy val serviceThings = project.in(file("semester-service-things"))
-  .settings(buildSettings: _*)
-
 lazy val serviceChatwork = project.in(file("semester-service-chatwork"))
   .settings(buildSettings: _*)
   .dependsOn(foundationDomain)
