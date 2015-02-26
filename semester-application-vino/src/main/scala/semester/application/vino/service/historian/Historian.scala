@@ -1,18 +1,19 @@
 package semester.application.vino.service.historian
 
+import java.time.temporal.ChronoUnit
 import java.time.{Duration, Instant}
 import java.util.concurrent.locks.ReentrantLock
 
 import akka.actor.{Actor, ActorRef, Props}
+import semester.application.vino.domain.Models
+import semester.application.vino.domain.model.{Chunk, RoomChunk}
+import semester.application.vino.service.api._
 import semester.foundation.logging.LoggerFactory
 import semester.foundation.utilities.qos.CapacityQueue
 import semester.service.chatwork.domain.model.message.MessageId
 import semester.service.chatwork.domain.model.room._
 import semester.service.chatwork.domain.service.request.{LoadChatRequest, LoadOldChatRequest}
 import semester.service.chatwork.domain.service.response.{InitLoadResponse, LoadChatResponse, LoadOldChatResponse}
-import semester.application.vino.domain.Models
-import semester.application.vino.domain.model.{Chunk, RoomChunk}
-import semester.application.vino.service.api._
 
 import scala.collection.mutable
 
@@ -21,13 +22,13 @@ case class Historian(apiHub: ActorRef)
 
   val logger = LoggerFactory.getLogger(getClass)
 
-  val latestTimeGapInSeconds = 600
+  val latestTimeGap = Duration.ofMinutes(10)
 
-  val priorityLoadingDurationInSeconds = 86400 * 2
+  val priorityLoadingDuration = Duration.ofDays(2)
 
-  val deferLoadingDurationInSeconds = 86400 * 7
+  val noTraverseDuration = Duration.of(3, ChronoUnit.WEEKS)
 
-  val nextChunkTerm =  Instant.now.minus(Duration.ofDays(365 * 2))
+  val nextChunkTerm = Instant.now.minus(Duration.of(6, ChronoUnit.WEEKS))
 
   case class TouchTime(room: Room, touchTime: Instant)
 
@@ -40,8 +41,10 @@ case class Historian(apiHub: ActorRef)
 
     case r: InitLoadResponse =>
       val touches = touchTimes(r.rooms)
+      val noEarlierThan = Instant.now().minus(noTraverseDuration)
       touches
         .filter(_.room.roomType.equals(RoomTypeGroup()))
+        .filter(_.touchTime.isAfter(noEarlierThan))
         .sortBy(_.touchTime)
         .foreach {
         t =>
@@ -49,6 +52,7 @@ case class Historian(apiHub: ActorRef)
       }
       touches
         .filter(_.room.roomType.equals(RoomTypeDirect()))
+        .filter(_.touchTime.isAfter(noEarlierThan))
         .sortBy(_.touchTime)
         .foreach {
         t =>
@@ -74,7 +78,7 @@ case class Historian(apiHub: ActorRef)
       } else {
         updateChunk(r.lastMessage.roomId, Chunk.fromMessages(r.messages))
         val lwm = r.messages.minBy(_.messageId.messageId)
-        val priority = if (lwm.ctime.isBefore(Instant.now.minusSeconds(priorityLoadingDurationInSeconds))) {
+        val priority = if (lwm.ctime.isBefore(Instant.now.minus(priorityLoadingDuration))) {
           PriorityP4
         } else {
           PriorityP3
@@ -102,7 +106,7 @@ case class Historian(apiHub: ActorRef)
 
   def traverseChunk(roomChunk: RoomChunk, room: Room): Unit = {
     val roomId = RoomId(roomChunk.roomId.value)
-    if (roomChunk.chunks.maxBy(_.touchTime).touchTime.isBefore(Instant.now.minusSeconds(latestTimeGapInSeconds))) {
+    if (roomChunk.chunks.maxBy(_.touchTime).touchTime.isBefore(Instant.now.minus(latestTimeGap))) {
       apiHub ! ApiEnqueue(LoadChatRequest(roomId), priorityOf(room))
     } else {
       Chunk.nextChunkMessageId(roomChunk.chunks, nextChunkTerm) match {
