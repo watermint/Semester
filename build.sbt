@@ -98,9 +98,7 @@ lazy val readymadeTika = project.in(file("semester-readymade-tika"))
 lazy val applicationVino = project.in(file("semester-application-vino"))
   .settings(buildSettings: _*)
   .dependsOn(serviceChatwork)
-  .settings(assemblySettings: _*)
 
 lazy val applicationChitarra = project.in(file("semester-application-chitarra"))
   .settings(buildSettings: _*)
-  .settings(assemblySettings: _*)
 
