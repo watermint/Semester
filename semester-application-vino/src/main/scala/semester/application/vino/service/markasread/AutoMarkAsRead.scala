@@ -1,10 +1,10 @@
 package semester.application.vino.service.markasread
 
 import akka.actor.{Actor, ActorRef, Props}
+import semester.application.vino.domain.Models
+import semester.application.vino.service.api.{ApiEnqueue, PriorityP1}
 import semester.service.chatwork.domain.service.request.ReadRequest
 import semester.service.chatwork.domain.service.response.LoadChatResponse
-import semester.application.vino.domain.Models
-import semester.application.vino.service.api.{ApiEnqueue, PriorityP2}
 
 case class AutoMarkAsRead(apiHub: ActorRef)
   extends Actor {
@@ -18,7 +18,7 @@ case class AutoMarkAsRead(apiHub: ActorRef)
             lastMessage.roomId,
             lastMessage
           ),
-          PriorityP2
+          PriorityP1
         )
       }
   }
