@@ -17,7 +17,7 @@ lazy val buildSettings = Seq(
     "org.specs2" %% "specs2-junit" % "latest.release" % "test",
     "junit" % "junit" % "latest.release" % "test"
   ),
-  assemblyOutputPath in assembly := file(s"dist/${name.value}-${version.value}.jar"),
+  assemblyOutputPath in assembly := file(s"dist/assembly/${name.value}-${version.value}.jar"),
   ivyXML :=
     <dependencies>
       <exclude org="log4j" name="log4j" />
