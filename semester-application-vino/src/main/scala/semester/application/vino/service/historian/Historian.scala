@@ -26,9 +26,9 @@ case class Historian(apiHub: ActorRef)
 
   val priorityLoadingDuration = Duration.ofDays(2)
 
-  val noTraverseDuration = Duration.of(3, ChronoUnit.WEEKS)
+  val noTraverseDuration = Duration.ofDays(21)
 
-  val nextChunkTerm = Instant.now.minus(Duration.of(6, ChronoUnit.WEEKS))
+  val nextChunkTerm = Instant.now.minus(Duration.ofDays(42))
 
   case class TouchTime(room: Room, touchTime: Instant)
 
