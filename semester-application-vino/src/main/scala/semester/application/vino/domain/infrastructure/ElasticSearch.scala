@@ -49,6 +49,7 @@ case class ElasticSearch(testMode: Boolean = false,
         .put("http.cors.allow-origin", "/.*/")
     } else {
       baseSettings
+        .put("http.enabled", false)
     }
 
     NodeBuilder

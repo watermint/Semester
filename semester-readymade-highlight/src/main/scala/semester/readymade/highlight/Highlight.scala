@@ -1,11 +1,10 @@
 package semester.readymade.highlight
 
 import java.io.{BufferedReader, InputStreamReader}
+import java.util.concurrent.locks.ReentrantLock
 import javax.script.{ScriptEngine, ScriptEngineManager}
 
 import jdk.nashorn.api.scripting.JSObject
-
-import scala.concurrent.{Lock, ExecutionContext, Future}
 
 class Highlight {
   private lazy val engine: ScriptEngine = {
@@ -37,14 +36,14 @@ class Highlight {
     jsEngine
   }
 
-  private lazy val engineLock: Lock = new Lock
+  private lazy val engineLock = new ReentrantLock()
 
   private def evalOnEngine(js: String): JSObject = {
-    engineLock.acquire()
+    engineLock.lock()
     try {
       engine.eval(js).asInstanceOf[JSObject]
     } finally {
-      engineLock.release()
+      engineLock.unlock()
     }
   }
 
