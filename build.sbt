@@ -2,9 +2,9 @@
 lazy val buildSettings = Seq(
   version := "0.14.9",
   organization := "org.watermint",
+  scalacOptions ++= Seq("-deprecation", "-feature"),
   scalaVersion := "2.11.5",
   crossScalaVersions := Seq("2.11.5"),
-  target <<= name { file("/tmp/sbt/") / _ },
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
