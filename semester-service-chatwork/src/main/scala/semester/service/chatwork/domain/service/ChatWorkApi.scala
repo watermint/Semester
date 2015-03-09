@@ -18,11 +18,11 @@ object ChatWorkApi
     }
   }
 
-  def baseUri(implicit context: ChatWorkIOContext): URI = {
+  def baseUri(implicit context: ChatWorkIOContext): URIContainer = {
     if (isKddiChatwork) {
-      new URI("https://kcw.kddi.ne.jp/")
+      URIContainer(new URI("https://kcw.kddi.ne.jp/"))
     } else {
-      new URI("https://www.chatwork.com/")
+      URIContainer(new URI("https://www.chatwork.com/"))
     }
   }
 
@@ -53,6 +53,7 @@ object ChatWorkApi
           .withQuery("_t", token)
           .withQuery("ln", "en")
           .withQuery("_", System.currentTimeMillis().toString)
+          .uri
       case _ =>
         throw new IllegalStateException(s"$context has no accessToken")
     }

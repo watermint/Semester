@@ -19,6 +19,6 @@ class Message(val messageId: MessageId,
 
   def uri(implicit context: ChatWorkIOContext): URI = {
     ChatWorkApi.baseUri(context)
-      .withFragment(s"!rid${messageId.roomId.value}-${messageId.messageId}")
+      .withFragment(s"!rid${messageId.roomId.value}-${messageId.messageId}").uri
   }
 }

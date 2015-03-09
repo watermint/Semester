@@ -44,10 +44,12 @@ object Auth extends ChatWorkEntityIO {
           .withQuery("s" -> s)
           .withQuery("lang" -> "en")
           .withQuery("package" -> "chatwork")
+          .uri
       case _ =>
         baseUri
           .withPath("/login.php")
           .withQuery("lang" -> "en")
+          .uri
     }
   }
 

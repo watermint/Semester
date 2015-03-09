@@ -62,7 +62,7 @@ case class Client(context: ClientContext = ClientContext()) {
     }
   }
 
-  def get(uri: URIContainer,
+  def get(uri: URI,
           headers: Map[String, String] = Map.empty): Try[Response] = {
 
     val get = new HttpGet(uri)
@@ -70,7 +70,7 @@ case class Client(context: ClientContext = ClientContext()) {
     request(get)
   }
 
-  def post(uri: URIContainer,
+  def post(uri: URI,
            formData: Map[String, String] = Map.empty,
            headers: Map[String, String] = Map.empty): Try[Response] = {
 
@@ -80,7 +80,7 @@ case class Client(context: ClientContext = ClientContext()) {
     request(post)
   }
 
-  def postWithString(uri: URIContainer,
+  def postWithString(uri: URI,
                      formData: String,
                      headers: Map[String, String] = Map.empty): Try[Response] = {
 
@@ -90,7 +90,7 @@ case class Client(context: ClientContext = ClientContext()) {
     request(post)
   }
 
-  def postWithInputStream(uri: URIContainer,
+  def postWithInputStream(uri: URI,
                           formData: Map[String, String] = Map.empty,
                           binaries: Map[String, InputStream] = Map.empty,
                           headers: Map[String, String] = Map.empty): Try[Response] = {
@@ -107,7 +107,7 @@ case class Client(context: ClientContext = ClientContext()) {
     request(post)
   }
 
-  def put(uri: URIContainer,
+  def put(uri: URI,
           formData: Map[String, String] = Map.empty,
           headers: Map[String, String] = Map.empty): Try[Response] = {
 
@@ -117,7 +117,7 @@ case class Client(context: ClientContext = ClientContext()) {
     request(put)
   }
 
-  def delete(uri: URIContainer,
+  def delete(uri: URI,
              formData: Map[String, String] = Map.empty,
              headers: Map[String, String] = Map.empty): Try[Response] = {
 

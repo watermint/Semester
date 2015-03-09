@@ -39,7 +39,7 @@ class Room(val roomId: RoomId,
 
   def uri(implicit context: ChatWorkIOContext): URI = {
     ChatWorkApi.baseUri(context)
-      .withFragment(s"!rid${roomId.value}")
+      .withFragment(s"!rid${roomId.value}").uri
   }
 
 }

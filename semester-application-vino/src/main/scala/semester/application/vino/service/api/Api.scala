@@ -35,7 +35,7 @@ case class Api(chatworkContext: ChatWorkIOContext) extends Actor {
       val execute: Future[ChatWorkResponse] = Future {
         req.execute(chatworkContext)
       }
-      val response = Await.result(execute, responseTimeoutInSeconds seconds)
+      val response = Await.result(execute, Duration(responseTimeoutInSeconds, SECONDS))
 
       self ! response
 
@@ -66,7 +66,7 @@ object Api {
         client.get(new URI("http://www.chatwork.com"))
       }
       try {
-        val pingResult: Try[Response] = Await.result(ping, minimumPeriod milliseconds)
+        val pingResult: Try[Response] = Await.result(ping, Duration(minimumPeriod, MILLISECONDS))
         if (pingResult.isSuccess) {
           return true
         } else {

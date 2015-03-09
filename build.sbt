@@ -4,7 +4,6 @@ lazy val buildSettings = Seq(
   organization := "org.watermint",
   scalacOptions ++= Seq("-deprecation", "-feature"),
   scalaVersion := "2.11.5",
-  crossScalaVersions := Seq("2.11.5"),
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "atlassian-public" at "https://maven.atlassian.com/repository/public",
