@@ -65,7 +65,7 @@ object Api {
         client.get(new URI("http://www.chatwork.com"))
       }
       try {
-        val pingResult: Try[Response] = Await.result(ping, duration.Duration(minimumPeriod.get(ChronoUnit.MILLIS), duration.NANOSECONDS))
+        val pingResult: Try[Response] = Await.result(ping, duration.Duration(minimumPeriod.get(ChronoUnit.MILLIS), duration.MILLISECONDS))
         if (pingResult.isSuccess) {
           return true
         } else {
