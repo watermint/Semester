@@ -55,6 +55,11 @@ lazy val foundationUndisclosed = project.in(file("semester-foundation-undisclose
 // wrapper api for external services
 //
 
+lazy val serviceBox = project.in(file("semester-service-box"))
+  .dependsOn(foundationLogging)
+  .dependsOn(readymadeSpray)
+  .settings(buildSettings: _*)
+
 lazy val servicePocket = project.in(file("semester-service-pocket"))
   .dependsOn(foundationDomain)
   .dependsOn(foundationLogging)
