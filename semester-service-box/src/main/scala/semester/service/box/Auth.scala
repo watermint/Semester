@@ -5,8 +5,6 @@ import java.util.UUID
 
 import akka.actor.ActorSystem
 import com.box.sdk.BoxAPIConnection
-import org.json4s.DefaultFormats
-import org.json4s.native.Serialization
 import semester.readymade.spray.SecureConfiguration
 import spray.http._
 import spray.routing.{Route, SimpleRoutingApp}
@@ -70,14 +68,12 @@ object Auth
 
   def routeVerifyCode(code: String, tokenKey: String, tokenSecret: String): Route = {
     if (tokenSecretForKey(tokenKey).forall(_.equals(tokenSecret))) {
-      implicit val formats = DefaultFormats
       val connection = new BoxAPIConnection(clientId, clientSecret, code)
-      val token = AuthToken(connection.getAccessToken, connection.getRefreshToken)
-      val json = Serialization.write(token)
+      val token = AuthToken(connection)
       complete {
         HttpEntity(
           contentType = ContentTypes.`application/json`,
-          string = json
+          string = token.json
         )
       }
     } else {

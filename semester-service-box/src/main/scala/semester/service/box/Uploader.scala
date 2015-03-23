@@ -7,7 +7,6 @@ import com.box.sdk.{BoxFolder, BoxAPIConnection}
 import org.json4s.DefaultFormats
 import org.json4s.native.Serialization
 import scopt.OptionParser
-import scala.collection.JavaConverters._
 
 object Uploader extends AppConfig {
 
@@ -15,19 +14,12 @@ object Uploader extends AppConfig {
                        tokenFile: Option[String] = None,
                        destination: Option[String] = None)
 
-  def tokenFromFile(file: Path): AuthToken = {
-    implicit val formats = DefaultFormats
-    val json = Files.readAllLines(file).asScala.mkString
-
-    Serialization.read[AuthToken](json)
-  }
-
   def connection(token: AuthToken): BoxAPIConnection = {
     new BoxAPIConnection(clientId, clientSecret, token.accessToken, token.refreshToken)
   }
 
   def connection(operation: Operation): BoxAPIConnection = {
-    connection(tokenFromFile(Paths.get(operation.tokenFile.get)))
+    connection(AuthToken.read(Paths.get(operation.tokenFile.get)))
   }
 
   val argParser = new OptionParser[Operation]("box uploader") {
@@ -59,7 +51,7 @@ object Uploader extends AppConfig {
     } validate {
       i =>
         try {
-          tokenFromFile(Paths.get(i))
+          AuthToken.read(Paths.get(i))
           success
         } catch {
           case e: Exception =>
@@ -78,13 +70,12 @@ object Uploader extends AppConfig {
         val uploadFile = Paths.get(operation.inputFile.get)
         val uploadFileStream = new FileInputStream(uploadFile.toFile)
 
-        box.refresh()
-        println(s"Upload to : ${folder.getInfo.getName}")
-
         try {
+          box.refresh()
           val upload = folder.uploadFile(uploadFileStream, uploadFile.getFileName.toString)
           println(upload.getID)
         } finally {
+          AuthToken(box).write(Paths.get(operation.tokenFile.get))
           uploadFileStream.close()
         }
     }
