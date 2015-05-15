@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Semester Bundle" default="bundle" basedir=".">
+
+  <taskdef name="bundleapp"
+           classname="com.oracle.appbundler.AppBundlerTask"
+           classpath="appbundler-1.0.jar" />
+
+  <target name="bundle">
+    <bundleapp outputdirectory="."
+        name="ChatWork Vino"
+        displayname="ChatWork Vino"
+        identifier="semester.application.vino"
+        icon="Vino.icns"
+        mainclassname="semester.application.vino.ui.Main">
+      <classpath file="${assembly-jar}" />
+    </bundleapp>
+  </target>
+
+</project>
