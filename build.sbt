@@ -3,7 +3,7 @@ lazy val buildSettings = Seq(
   version := "0.15.1",
   organization := "org.watermint",
   scalacOptions ++= Seq("-deprecation", "-feature"),
-  scalaVersion := "2.11.5",
+  scalaVersion := "2.11.6",
   resolvers ++= Seq(
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "maven-central" at "http://repo1.maven.org/maven2",
