@@ -1,10 +1,11 @@
 
 lazy val buildSettings = Seq(
-  version := "0.15.1",
+  version := "0.16.0",
   organization := "org.watermint",
   scalacOptions ++= Seq("-deprecation", "-feature"),
   scalaVersion := "2.11.6",
   resolvers ++= Seq(
+    "bintray/non" at "http://dl.bintray.com/non/maven", // kind-projector
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "maven-central" at "http://repo1.maven.org/maven2",
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
