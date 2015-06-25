@@ -1,0 +1,1 @@
+name := "semester-service-nsunc"

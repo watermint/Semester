@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.16.0",
+  version := "0.16.1",
   organization := "org.watermint",
   scalacOptions ++= Seq("-deprecation", "-feature"),
   scalaVersion := "2.11.6",
@@ -76,6 +76,10 @@ lazy val serviceChatwork = project.in(file("semester-service-chatwork"))
   .dependsOn(foundationLogging)
   .dependsOn(foundationUndisclosed % "test")
 
+lazy val serviceNsunc = project.in(file("semester-service-nsunc"))
+  .dependsOn(readymadeCf)
+  .settings(buildSettings: _*)
+
 
 //
 // ready made wrapper api/configuration for libraries
@@ -96,6 +100,8 @@ lazy val readymadeHighlight = project.in(file("semester-readymade-highlight"))
 lazy val readymadeTika = project.in(file("semester-readymade-tika"))
   .settings(buildSettings: _*)
 
+lazy val readymadeCf = project.in(file("semester-readymade-cf"))
+  .settings(buildSettings: _*)
 
 //
 // applications
@@ -107,4 +113,3 @@ lazy val applicationVino = project.in(file("semester-application-vino"))
 
 lazy val applicationChitarra = project.in(file("semester-application-chitarra"))
   .settings(buildSettings: _*)
-
