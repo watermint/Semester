@@ -72,7 +72,7 @@ case class Historian(apiHub: ActorRef)
       }
 
     case r: LoadOldChatResponse =>
-      if (r.messages.size == 0) {
+      if (r.messages.isEmpty) {
         logger.debug(s"Loading chat for room ${r.lastMessage.roomId} reached EPOCH.")
         updateChunk(r.lastMessage.roomId, Chunk.epochChunk(r.lastMessage))
       } else {

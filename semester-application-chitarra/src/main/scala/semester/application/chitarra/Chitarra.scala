@@ -40,7 +40,7 @@ case class Chitarra(source: Elem,
   }
 
   def depth(n: Node, currentDepth: Int = 1): Int = {
-    if (n.child.size == 0) {
+    if (n.child.isEmpty) {
       currentDepth
     } else {
       n.child.map(c => depth(c, currentDepth + 1)).max
@@ -58,7 +58,7 @@ case class Chitarra(source: Elem,
 
   def markdown(n: Node, currentDepth: Int = 0): String = {
     Seq(
-      n.attribute("text").lastOption.collect { case t => line(currentDepth, t.text)}.getOrElse(""),
+      n.attribute("text").collect { case t => line(currentDepth, t.text)}.getOrElse(""),
       (n \ "outline").map {
         outline =>
           markdown(outline, currentDepth + 1)

@@ -243,7 +243,7 @@ class PeriodStartView extends Button {
 
   val selectedTimeValue = Reference[TimeValue]()
 
-  def selectedTime: Option[Instant] = selectedTimeValue.get().map(_.asInstant).flatten
+  def selectedTime: Option[Instant] = selectedTimeValue.get().flatMap(_.asInstant)
 
   def onSelect(time: TimeValue) = {}
 

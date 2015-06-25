@@ -55,7 +55,7 @@ object ChatRoomsPane {
     Seq(
       startDateQuery(),
       searchTermQuery()
-    ).flatten.toSeq
+    ).flatten
   }
 
   def compositeQueries(queries: Seq[QueryBuilder]): QueryBuilder = {
