@@ -27,7 +27,7 @@ case class UI() extends Actor {
 
     case "shutdown" =>
       Service.shutdown()
-      UI.system.shutdown()
+      UI.system.terminate()
   }
 }
 

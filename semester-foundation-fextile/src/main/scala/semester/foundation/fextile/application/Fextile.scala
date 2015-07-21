@@ -33,7 +33,7 @@ class Fextile extends Actor with Stash {
 object Fextile {
   def shutdown() = {
     fxa.Platform.exit()
-    system.shutdown()
+    system.terminate()
   }
 
   val system = ActorSystem("fextile")
