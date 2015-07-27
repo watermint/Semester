@@ -1,6 +1,6 @@
 
 lazy val buildSettings = Seq(
-  version := "0.17.0",
+  version := "0.17.1",
   organization := "org.watermint",
   scalacOptions ++= Seq("-deprecation", "-feature"),
   scalaVersion := "2.11.7",
