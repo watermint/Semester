@@ -39,6 +39,7 @@ case class ElasticSearch(testMode: Boolean = false,
       .put("index.analysis.analyzer.default.type", "custom")
       .put("index.analysis.analyzer.default.tokenizer", "kuromoji_tokenizer")
       .put("index.number_of_replicas", 0)
+      .put("index.auto_expand_replicas", false)
       .put("index.number_of_shards", 1)
 
     val settings = if (httpEnabled) {

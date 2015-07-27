@@ -51,7 +51,7 @@ object Api {
 
   def props(chatworkContext: ChatWorkIOContext) = Props(Api(chatworkContext))
 
-  def ensureAvailable(): Boolean = ensureAvailable(Duration.ofHours(1))
+  def ensureAvailable(): Boolean = true // ensureAvailable(Duration.ofHours(1))
 
   def ensureAvailable(maxWait: Duration): Boolean = {
     implicit val executors = Api.system.dispatcher
